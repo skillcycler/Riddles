@@ -14,6 +14,8 @@ public class MadScientist : Role
     public CharacterData fakeMinion = GetGenericMinion();
     public CharacterData fakeMinion2 = GetGenericMinion();
     public CharacterData fakeOutcast = GetGenericOutcast();
+    public CharacterData fakeOutcast2 = GetGenericOutcast();
+    public Character chargedActor = new Character();
     public override ActedInfo GetInfo(Character charRef)
     {
         if (fakeMinion.name == "Minion")
@@ -23,6 +25,10 @@ public class MadScientist : Role
         if (fakeOutcast.name == "Doppelganger")
         {
             return new ActedInfo("Something went wrong and I don't have an Outcast ability");
+        }
+        if (fakeOutcast.name == "Renegade")
+        {
+            return new ActedInfo(string.Format("I have the {0} and {1} abilities", fakeMinion2.name, fakeOutcast2.name));
         }
         return new ActedInfo(string.Format("I have the {0} and {1} abilities", fakeMinion.name, fakeOutcast.name));
     }
@@ -97,12 +103,19 @@ public class MadScientist : Role
             }
 
             fakeMinion = listMin[r1];
-            fakeOutcast = listOut[UnityEngine.Random.RandomRangeInt(0, listOut.Count)];
+            int s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
+            int s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
+            while (s1 == s2 && listOut.Count > 1)
+            {
+                s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
+            }
+            fakeOutcast = listOut[s1];
+            fakeOutcast2 = listOut[s2]; // Never actually adds this. It's for the rare case when it needs to lie
             gameplay.AddScriptCharacter(ECharacterType.Minion, fakeMinion);
             gameplay.AddScriptCharacter(ECharacterType.Outcast, fakeOutcast);
 
             fakeMinion2 = listMin[r2];
-            if (UnityEngine.Random.RandomRangeInt(0, 2) == 0)
+            if (UnityEngine.Random.RandomRangeInt(0, 2) == 0 || fakeOutcast.name == "Renegade")
             {
                 gameplay.AddScriptCharacter(ECharacterType.Minion, fakeMinion2);
             }
@@ -110,32 +123,42 @@ public class MadScientist : Role
             {
                 fakeMinion.role.Act(trigger, charRef);
                 fakeOutcast.role.Act(trigger, charRef);
-                // check if I should turn evil
-                if (fakeOutcast.characterId == "Renegade_WING")
-                {
-                    charRef.alignment = EAlignment.Evil;
-                }
-                if (fakeOutcast.characterId == "Mayor_VP")
-                {
-                    Il2CppSystem.Collections.Generic.List<Character> charList = new Il2CppSystem.Collections.Generic.List<Character>(Gameplay.CurrentCharacters.Pointer);
-                    charList = CharactersHelper.GetSortedListWithCharacterFirst(charList, charRef);
+            }
+            // check if I should turn evil
+            if (fakeOutcast.characterId == "Renegade_WING")
+            {
+                charRef.ChangeAlignment(EAlignment.Evil);
+            }
+            if (fakeOutcast.characterId == "Mayor_VP")
+            {
+                Il2CppSystem.Collections.Generic.List<Character> charList = new Il2CppSystem.Collections.Generic.List<Character>(Gameplay.CurrentCharacters.Pointer);
+                charList = CharactersHelper.GetSortedListWithCharacterFirst(charList, charRef);
 
-                    charList.RemoveAt(0);
-                    Il2CppSystem.Collections.Generic.List<Character> ajacentEvils = new Il2CppSystem.Collections.Generic.List<Character>();
-                    if (charList[0].alignment == EAlignment.Evil)
-                    {
-                        ajacentEvils.Add(charList[0]);
-                    }
-                    if (charList[charList.Count - 1].alignment == EAlignment.Evil)
-                    {
-                        ajacentEvils.Add(charList[charList.Count - 1]);
-                    }
-
-                    if (ajacentEvils.Count > 0)
-                    {
-                        charRef.alignment = EAlignment.Evil;
-                    }
+                charList.RemoveAt(0);
+                Il2CppSystem.Collections.Generic.List<Character> adjacentEvils = new Il2CppSystem.Collections.Generic.List<Character>();
+                if (charList[0].alignment == EAlignment.Evil)
+                {
+                    adjacentEvils.Add(charList[0]);
                 }
+                if (charList[charList.Count - 1].alignment == EAlignment.Evil)
+                {
+                    adjacentEvils.Add(charList[charList.Count - 1]);
+                }
+
+                if (adjacentEvils.Count > 0)
+                {
+                    charRef.ChangeAlignment(EAlignment.Evil);
+                }
+            }
+            if (fakeMinion.characterId == "Lycaon_VP")
+            {
+                Il2CppSystem.Collections.Generic.List<Character> list = new Il2CppSystem.Collections.Generic.List<Character>(Gameplay.CurrentCharacters.Pointer);
+                list = Characters.Instance.FilterCharacterMissingStatus(list, ECharacterStatus.UnkillableByDemon);
+                list = Characters.Instance.FilterAlignmentCharacters(list, EAlignment.Good);
+                chargedActor = list[UnityEngine.Random.Range(0, list.Count)];
+                chargedActor.statuses.AddStatus(ModCompatibilityIssue.modCompatibilityIssue, charRef);
+                chargedActor.KillByDemon(charRef);
+                PlayerController.PlayerInfo.health.Damage(3);
             }
         }
         if (trigger == ETriggerPhase.Day)
@@ -158,6 +181,11 @@ public class MadScientist : Role
         {
             fakeMinion.role.ActOnDied(charRef);
             fakeOutcast.role.ActOnDied(charRef);
+            if (fakeMinion.characterId == "Lycaon_VP")
+            {
+                chargedActor.InitWithNoReset(chargedActor.GetRegisterAs());
+                chargedActor.statuses.statuses.Remove(ModCompatibilityIssue.modCompatibilityIssue);
+            }
         }
     }
     public override int GetDamageToYou()
@@ -213,5 +241,22 @@ public class MadScientist : Role
             return ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619");
         }
         return ProjectContext.Instance.gameData.GetCharacterDataOfId("MadScientist");
+    }
+}
+public static class ModCompatibilityIssue
+{
+    public static ECharacterStatus modCompatibilityIssue = (ECharacterStatus)875;
+    [HarmonyPatch(typeof(Character), nameof(Character.ShowDescription))]
+    public static class ChangeKillByDemonText
+    {
+        public static void Postfix(Character __instance)
+        {
+            if (__instance.killedByDemon && __instance.statuses.Contains(modCompatibilityIssue))
+            {
+                HintInfo info = new HintInfo();
+                info.text = "Killed by a minion\ncan not be revealed";
+                UIEvents.OnShowHint.Invoke(info, __instance.hintPivot);
+            }
+        }
     }
 }

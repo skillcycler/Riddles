@@ -56,6 +56,10 @@ public class Necromancer : Role
         CharacterPicker.OnCharactersPicked -= action1;
         CharacterPicker.OnStopPick -= action2;
         Character c1 = CharacterPicker.PickedCharacters[0];
+        if (c1.alignment == EAlignment.Evil)
+        {
+            return;
+        }
 
         if (c1.state != ECharacterState.Dead)
         {

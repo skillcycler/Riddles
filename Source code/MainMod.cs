@@ -12,7 +12,7 @@ using UnityEngine;
 using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.4", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.4.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -186,7 +186,7 @@ public class MainMod : MelonMod
         CharacterData Necromancer = new CharacterData();
         Necromancer.role = new Necromancer();
         Necromancer.name = "Necromancer";
-        Necromancer.description = "Pick 1 dead card: Revive it and lose 3 Health.";
+        Necromancer.description = "Pick 1 dead card: Revive it and lose 3 Health. I cannot revive Evils.";
         Necromancer.flavorText = "\"Second chances are real. Just like Empaths and Mayors.\"";
         Necromancer.hints = "";
         Necromancer.ifLies = "The card will lie with its new info no matter what.";

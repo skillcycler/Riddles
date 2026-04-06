@@ -25,7 +25,7 @@ public class Riddler : Role
     {
         List<string> infos = new List<string>();
         infos.Add("It is impossible for an Alchemist to claim to have cured 4 Corruptions.");
-        infos.Add("The Wretch can register as a different minion to different characters.");
+        infos.Add("The Wretch must register as the same minion to different characters.");
         infos.Add("A Gemcrafter or Medium referencing herself must be Evil.");
         infos.Add("A bard claiming to be 5 cards away from a Corrupted character is always truthful.");
         infos.Add("A Druid that claims to have seen a Wretch is lying.");
@@ -84,7 +84,7 @@ public class Riddler : Role
     {
         List<string> infos = new List<string>();
         infos.Add("It is possible for an Alchemist to claim to have cured 4 Corruptions.");
-        infos.Add("The Wretch must register as the same minion to every character.");
+        infos.Add("The Wretch can register as different minions to different characters.");
         infos.Add("A Gemcrafter or Medium referencing herself can be Good.");
         infos.Add("A bard claiming to be 5 cards away from a Corrupted character is always lying.");
         infos.Add("A bard claiming to be 4 cards away from a Corrupted character is always lying.");
