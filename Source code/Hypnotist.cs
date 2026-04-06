@@ -2,15 +2,19 @@
 using System.ComponentModel.Design;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppFIMSpace.Basics;
+using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppSystem;
+using Il2CppSystem.Collections.Generic;
 using MelonLoader;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
 
 public class Hypnotist : Minion
 {
+    public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();
     public override string Description
     {
         get
@@ -32,28 +36,42 @@ public class Hypnotist : Minion
     }
     public override CharacterData GetBluffIfAble(Character charRef)
     {
-
-        Gameplay gameplay = Gameplay.Instance;
-        Characters instance = Characters.Instance;
-        Il2CppSystem.Collections.Generic.List<CharacterData> chars = gameplay.GetAscensionAllStartingCharacters();
-        Il2CppSystem.Collections.Generic.List<CharacterData> villagers = instance.FilterRealCharacterType(chars, ECharacterType.Villager);
-
-        Il2CppSystem.Collections.Generic.List<CharacterData> listV = new Il2CppSystem.Collections.Generic.List<CharacterData>();
-        Il2CppSystem.Collections.Generic.List<string> whitelistCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
-
-        whitelistCharacterIDs.Add("Confessor_18741708");
-        whitelistCharacterIDs.Add("Baker_22847064");
-        whitelistCharacterIDs.Add("Alchemist_94446803");
-        for (int i = 0; i < villagers.Count; i++)
+        if (allDatas.Length == 0)
         {
-            if (whitelistCharacterIDs.Contains(villagers[i].characterId))
-                listV.Add(villagers[i]);
+            var loadedCharList = Resources.FindObjectsOfTypeAll(Il2CppType.Of<CharacterData>());
+            if (loadedCharList != null)
+            {
+                allDatas = new CharacterData[loadedCharList.Length];
+                for (int i = 0; i < loadedCharList.Length; i++)
+                {
+                    allDatas[i] = loadedCharList[i]!.Cast<CharacterData>();
+                }
+            }
         }
-
-        CharacterData bluff = listV[UnityEngine.Random.RandomRangeInt(0, listV.Count)];
-        gameplay.AddScriptCharacterIfAble(ECharacterType.Villager, bluff);
-        charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
-        charRef.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
+        CharacterData bluff = new CharacterData();
+        Il2CppSystem.Collections.Generic.List<CharacterData> possibleBluffs = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        for(int i = 0; i < allDatas.Length; i++)
+        {
+            if (allDatas[i].characterId == "HypnotistBluff")
+                bluff = allDatas[i];
+            else if (allDatas[i].characterId == "Alchemist_94446803")
+                possibleBluffs.Add(allDatas[i]);
+            else if (allDatas[i].characterId == "Confessor_18741708")
+                possibleBluffs.Add(allDatas[i]);
+            else if (allDatas[i].characterId == "Baker_22847064")
+                possibleBluffs.Add(allDatas[i]);
+            else if (allDatas[i].characterId == "Witness_25155076")
+                possibleBluffs.Add(allDatas[i]);
+        }
+        CharacterData chosenBluff = new CharacterData();
+        chosenBluff = possibleBluffs[UnityEngine.Random.Range(0, possibleBluffs.Count)];
+        bluff.name = chosenBluff.name;
+        bluff.description = chosenBluff.description;
+        bluff.flavorText = chosenBluff.flavorText;
+        bluff.hints = chosenBluff.hints;
+        bluff.ifLies = chosenBluff.ifLies;
+        bluff.art_cute = chosenBluff.art_cute;
+        bluff.backgroundArt = chosenBluff.backgroundArt;
         return bluff;
     }
 
