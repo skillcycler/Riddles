@@ -75,7 +75,7 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Renegade_WING");
 
             // Carlz
-            whitelistMinionCharacterIDs.Add("Lycaon_VP");
+            //whitelistMinionCharacterIDs.Add("Lycaon_VP"); This has been causing too many bugs
             whitelistMinionCharacterIDs.Add("Blackmailer_VP");
             whitelistOutcastCharacterIDs.Add("Rook_VP");
             whitelistOutcastCharacterIDs.Add("Mayor_VP");
@@ -150,16 +150,6 @@ public class MadScientist : Role
                     charRef.ChangeAlignment(EAlignment.Evil);
                 }
             }
-            if (fakeMinion.characterId == "Lycaon_VP")
-            {
-                Il2CppSystem.Collections.Generic.List<Character> list = new Il2CppSystem.Collections.Generic.List<Character>(Gameplay.CurrentCharacters.Pointer);
-                list = Characters.Instance.FilterCharacterMissingStatus(list, ECharacterStatus.UnkillableByDemon);
-                list = Characters.Instance.FilterAlignmentCharacters(list, EAlignment.Good);
-                chargedActor = list[UnityEngine.Random.Range(0, list.Count)];
-                chargedActor.statuses.AddStatus(ModCompatibilityIssue.modCompatibilityIssue, charRef);
-                chargedActor.KillByDemon(charRef);
-                PlayerController.PlayerInfo.health.Damage(3);
-            }
         }
         if (trigger == ETriggerPhase.Day)
         {
@@ -181,11 +171,6 @@ public class MadScientist : Role
         {
             fakeMinion.role.ActOnDied(charRef);
             fakeOutcast.role.ActOnDied(charRef);
-            if (fakeMinion.characterId == "Lycaon_VP")
-            {
-                chargedActor.InitWithNoReset(chargedActor.GetRegisterAs());
-                chargedActor.statuses.statuses.Remove(ModCompatibilityIssue.modCompatibilityIssue);
-            }
         }
     }
     public override int GetDamageToYou()
@@ -241,22 +226,5 @@ public class MadScientist : Role
             return ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619");
         }
         return ProjectContext.Instance.gameData.GetCharacterDataOfId("MadScientist");
-    }
-}
-public static class ModCompatibilityIssue
-{
-    public static ECharacterStatus modCompatibilityIssue = (ECharacterStatus)875;
-    [HarmonyPatch(typeof(Character), nameof(Character.ShowDescription))]
-    public static class ChangeKillByDemonText
-    {
-        public static void Postfix(Character __instance)
-        {
-            if (__instance.killedByDemon && __instance.statuses.Contains(modCompatibilityIssue))
-            {
-                HintInfo info = new HintInfo();
-                info.text = "Killed by a minion\ncan not be revealed";
-                UIEvents.OnShowHint.Invoke(info, __instance.hintPivot);
-            }
-        }
     }
 }

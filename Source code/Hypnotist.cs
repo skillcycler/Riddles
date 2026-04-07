@@ -9,6 +9,7 @@ using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppSystem;
 using Il2CppSystem.Collections.Generic;
 using MelonLoader;
+using RiddlerMod;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
 
@@ -72,9 +73,18 @@ public class Hypnotist : Minion
         bluff.ifLies = chosenBluff.ifLies;
         bluff.art_cute = chosenBluff.art_cute;
         bluff.backgroundArt = chosenBluff.backgroundArt;
+        bluff.artBgColor = chosenBluff.artBgColor;
+        bluff.cardBgColor = chosenBluff.cardBgColor;
+        bluff.cardBorderColor = chosenBluff.cardBorderColor;
+        bluff.color = chosenBluff.color;
+        bluff.ChangeSkin(chosenBluff.currentSkin);
+        bluff.art = GetArt(chosenBluff);
         return bluff;
     }
-
+    public Sprite GetArt(CharacterData character)
+    {
+        return character.currentSkin.art;
+    }
     public Hypnotist() : base(ClassInjector.DerivedConstructorPointer<Hypnotist>())
     {
         ClassInjector.DerivedConstructorBody((Il2CppObjectBase)this);

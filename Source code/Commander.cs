@@ -83,7 +83,7 @@ public class Commander : Role
     private void CharacterPickedLiar()
     {
 
-        CharacterPicker.OnCharactersPicked -= action1;
+        CharacterPicker.OnCharactersPicked -= action3;
         CharacterPicker.OnStopPick -= action2;
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
 

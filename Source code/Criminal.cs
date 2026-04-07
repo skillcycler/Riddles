@@ -14,21 +14,24 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class Criminal : Role
 {
+    /*
     public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         foreach (Character character in characters)
         {
             // make sure no other night cycles exist
-            if (character.name == "Lilis" || character.name == "Agmeres" || character.name == "Viciyon" || character.name == "Caedoccidere" || character.name == "Sanguitaurus")
+            if (character.name == "Lilis" || character.name == "Follower" || character.name == "Agmeres" || character.name == "Viciyon" || character.name == "Caedoccidere" || character.name == "Sanguitaurus")
             {
                 return new Il2CppSystem.Collections.Generic.List<SpecialRule>();
             }
         }
+        
         Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
         sr.Add(new NightModeRule(4));
         return sr;
     }
+    */
     public override string Description
     {
         get

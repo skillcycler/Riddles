@@ -34,10 +34,6 @@ public class Accuser : Minion
             if (neighbors.Count > 0)
             {
                 Character randomChar = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
-                Il2CppSystem.Collections.Generic.List<CharacterData> allChars = Gameplay.Instance.GetScriptCharacters();
-                allChars = Characters.Instance.FilterAlignmentCharacters(allChars, EAlignment.Evil);
-
-                CharacterData randomEvil = allChars[UnityEngine.Random.Range(0, allChars.Count)];
                 randomChar.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 randomChar.statuses.AddStatus(Accused.accused, charRef);
                 randomChar.GiveBluff(randomChar.dataRef);
