@@ -26,44 +26,23 @@ public class Scanner : Role
     public override ActedInfo GetInfo(Character charRef)
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        System.Collections.Generic.List<int> evils = new System.Collections.Generic.List<int>();
+        int counter = 0;
         foreach (Character character in characters)
         {
-            if (character.GetAlignment() == EAlignment.Evil)
+            if (character.bluff && character.dataRef.type == ECharacterType.Outcast)
             {
-                evils.Add(character.id);
+                counter++;
+            } else if (character.bluff)
+            {
+                if (character.bluff.type == ECharacterType.Outcast)
+                    counter++;
             }
         }
-        if (evils.Count < 2)
-        {
-            return new ActedInfo("There is only 1 Evil");
-        }
-        System.Collections.Generic.List<int> possibleStart = new System.Collections.Generic.List<int>();
-        System.Collections.Generic.List<int> possibleEnd = new System.Collections.Generic.List<int>();
-        // inefficient ahh triple for loop
-        for (int i = 1; i < characters.Count; i++)
-        {
-            for (int j = characters.Count; j > i; j--)
-            {
-                int evilsFound = 0;
-                for (int k = i; k <= j; k++)
-                {
-                    if (evils.Contains(k))
-                    {
-                        evilsFound++;
-                    }
-                }
-                if (evilsFound == 2)
-                {
-                    possibleStart.Add(i);
-                    possibleEnd.Add(j);
-                }
-            }
-        }
-        int chosen = UnityEngine.Random.RandomRangeInt(0, possibleStart.Count);
-        int chosenStart = possibleStart[chosen];
-        int chosenEnd = possibleEnd[chosen];
-        string info = string.Format("There are 2 evils from #{0} to #{1}", chosenStart, chosenEnd);
+        string info = string.Format("{0} Outcasts are Disguised or being used as a Disguise", counter);
+        if (counter == 0)
+            info = "NO Outcasts are Disguised or being used as a Disguise";
+        if (counter == 1)
+            info = "1 Outcast is Disguised or being used as a Disguise";
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
@@ -71,40 +50,25 @@ public class Scanner : Role
     public override ActedInfo GetBluffInfo(Character charRef)
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        System.Collections.Generic.List<int> evils = new System.Collections.Generic.List<int>();
+        int counter = 0;
         foreach (Character character in characters)
         {
-            if (character.GetAlignment() == EAlignment.Evil)
+            if (character.bluff && character.dataRef.type == ECharacterType.Outcast)
             {
-                evils.Add(character.id);
+                counter++;
+            }
+            else if (character.bluff)
+            {
+                if (character.bluff.type == ECharacterType.Outcast)
+                    counter++;
             }
         }
-        System.Collections.Generic.List<int> possibleStart = new System.Collections.Generic.List<int>();
-        System.Collections.Generic.List<int> possibleEnd = new System.Collections.Generic.List<int>();
-        // inefficient ahh triple for loop
-        for (int i = 1; i < characters.Count; i++)
-        {
-            for (int j = characters.Count; j > i; j--)
-            {
-                int evilsFound = 0;
-                for (int k = i; k <= j; k++)
-                {
-                    if (evils.Contains(k))
-                    {
-                        evilsFound++;
-                    }
-                }
-                if (evilsFound != 2)
-                {
-                    possibleStart.Add(i);
-                    possibleEnd.Add(j);
-                }
-            }
-        }
-        int chosen = UnityEngine.Random.RandomRangeInt(0, possibleStart.Count);
-        int chosenStart = possibleStart[chosen];
-        int chosenEnd = possibleEnd[chosen];
-        string info = string.Format("There are 2 evils from #{0} to #{1}", chosenStart, chosenEnd);
+        int counterLie = UnityEngine.Random.RandomRangeInt(0, Characters.Instance.FilterCharacterType(Gameplay.CurrentCharacters, ECharacterType.Outcast).Count);
+        string info = string.Format("{0} Outcasts are Disguised or being used as a Disguise", counterLie);
+        if (counterLie == 0)
+            info = "NO Outcasts are Disguised or being used as a Disguise";
+        if (counterLie == 1)
+            info = "1 Outcast is Disguised or being used as a Disguise";
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }

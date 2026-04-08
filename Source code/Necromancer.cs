@@ -80,7 +80,7 @@ public class Necromancer : Role
         c1.state = ECharacterState.Alive;
         c1.InitWithNoReset(c1.GetRegisterAs());
         c1.Act(ETriggerPhase.Day);
-        PlayerController.PlayerInfo.health.Damage(3);
+        PlayerController.PlayerInfo.health.Damage(2);
         string info = ConjureInfo(c1);
         onActed?.Invoke(new ActedInfo(info));
     }
@@ -91,6 +91,10 @@ public class Necromancer : Role
         CharacterPicker.OnStopPick -= action2;
 
         Character c1 = CharacterPicker.PickedCharacters[0];
+        if (c1.GetAlignment() == EAlignment.Evil)
+        {
+            return;
+        }
 
         if (c1.state != ECharacterState.Dead)
         {
@@ -114,7 +118,7 @@ public class Necromancer : Role
         c1.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
         c1.InitWithNoReset(c1.GetRegisterAs());
         c1.Act(ETriggerPhase.Day);
-        PlayerController.PlayerInfo.health.Damage(3);
+        PlayerController.PlayerInfo.health.Damage(2);
         string info = ConjureInfo(c1);
         onActed?.Invoke(new ActedInfo(info));
     }

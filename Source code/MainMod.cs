@@ -13,7 +13,7 @@ using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.5.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.6", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -27,13 +27,16 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Mathematician>();
         ClassInjector.RegisterTypeInIl2Cpp<Commander>();
         ClassInjector.RegisterTypeInIl2Cpp<Director>();
-        //ClassInjector.RegisterTypeInIl2Cpp<Scanner>();
+        ClassInjector.RegisterTypeInIl2Cpp<Scanner>();
 
         // Outcasts
 
         ClassInjector.RegisterTypeInIl2Cpp<MadScientist>();
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
         ClassInjector.RegisterTypeInIl2Cpp<Criminal>();
+        ClassInjector.RegisterTypeInIl2Cpp<Trickster_o>();
+        ClassInjector.RegisterTypeInIl2Cpp<Trickster_v>();
+        ClassInjector.RegisterTypeInIl2Cpp<Trickster_m>();
 
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
@@ -153,12 +156,12 @@ public class MainMod : MelonMod
         Director.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Director.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Director.color = new Color(1f, 0.935f, 0.7302f);
-        /* I don't think this is actually gonna be useful in small villages
+
         CharacterData Scanner = new CharacterData();
         Scanner.role = new Scanner();
         Scanner.name = "Scanner";
-        Scanner.description = "Learn the 2 Outcasts that are closest to each other, bypassing misregistration. Picks randomly if tied.";
-        Scanner.flavorText = "\"I spy with my two little eyes, two Outcasts having a party!\"";
+        Scanner.description = "Learn how many Outcasts are Disguised or being used as a Disguise.";
+        Scanner.flavorText = "\"I spy with my two little eyes, two Outcasts in disguise!\"";
         Scanner.hints = "";
         Scanner.ifLies = "";
         Scanner.picking = false;
@@ -169,7 +172,7 @@ public class MainMod : MelonMod
         Scanner.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Scanner.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Scanner.color = new Color(1f, 0.935f, 0.7302f);
-        */
+        
 
         CharacterData MadScientist = new CharacterData();
         MadScientist.role = new MadScientist();
@@ -190,7 +193,7 @@ public class MainMod : MelonMod
         CharacterData Necromancer = new CharacterData();
         Necromancer.role = new Necromancer();
         Necromancer.name = "Necromancer";
-        Necromancer.description = "Pick 1 dead card: Revive it and lose 3 Health. I cannot revive Evils.";
+        Necromancer.description = "Pick 1 dead card: Revive it and lose 2 Health. I cannot revive Evils.";
         Necromancer.flavorText = "\"Second chances are real. Just like Empaths and Mayors.\"";
         Necromancer.hints = "";
         Necromancer.ifLies = "The card will lie with its new info no matter what.";
@@ -218,6 +221,54 @@ public class MainMod : MelonMod
         Criminal.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
         Criminal.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
         Criminal.color = new Color(0.9659f, 1f, 0.4472f);
+
+        CharacterData Trickster_v = new CharacterData();
+        Trickster_v.role = new Trickster_v();
+        Trickster_v.name = "Trickster";
+        Trickster_v.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nYou don't know which is which.\nLearn a card that is the same character type as me.";
+        Trickster_v.flavorText = "\"If you thought the Minion twins were bad, get ready for the three of us!\"";
+        Trickster_v.hints = "";
+        Trickster_v.ifLies = "";
+        Trickster_v.picking = false;
+        Trickster_v.startingAlignment = EAlignment.Good;
+        Trickster_v.type = ECharacterType.Villager;
+        Trickster_v.bluffable = false;
+        Trickster_v.characterId = "Trickster_v";
+        Trickster_v.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Trickster_v.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Trickster_v.color = new Color(1f, 0.935f, 0.7302f);
+
+        CharacterData Trickster_o = new CharacterData();
+        Trickster_o.role = new Trickster_o();
+        Trickster_o.name = "Trickster";
+        Trickster_o.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nYou don't know which is which.\nLearn a card that is the same character type as me.";
+        Trickster_o.flavorText = "";
+        Trickster_o.hints = "";
+        Trickster_o.ifLies = "";
+        Trickster_o.picking = false;
+        Trickster_o.startingAlignment = EAlignment.Good;
+        Trickster_o.type = ECharacterType.Outcast;
+        Trickster_o.bluffable = false;
+        Trickster_o.characterId = "Trickster_o";
+        Trickster_o.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Trickster_o.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Trickster_o.color = new Color(1f, 0.935f, 0.7302f);
+
+        CharacterData Trickster_m = new CharacterData();
+        Trickster_m.role = new Trickster_m();
+        Trickster_m.name = "Trickster";
+        Trickster_m.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nYou don't know which is which.\nLearn a card that is the same character type as me.";
+        Trickster_m.flavorText = "";
+        Trickster_m.hints = "";
+        Trickster_m.ifLies = "";
+        Trickster_m.picking = false;
+        Trickster_m.startingAlignment = EAlignment.Good;
+        Trickster_m.type = ECharacterType.Minion;
+        Trickster_m.bluffable = false;
+        Trickster_m.characterId = "Trickster_m";
+        Trickster_m.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Trickster_m.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Trickster_m.color = new Color(1f, 0.935f, 0.7302f);
 
         CharacterData Accuser = new CharacterData();
         Accuser.role = new Accuser();
@@ -256,7 +307,7 @@ public class MainMod : MelonMod
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
         Follower.name = "Follower";
-        Follower.description = "Night falls every 3 ticks.\n<b>At Night:</b>\nKill 1 card, prioritizing more valuable targets.\nDeal 2 damage to you.\n\nI Lie and Disguise.";
+        Follower.description = "You have slightly more HP in larger villages.\nNight falls every 3 ticks.\n<b>At Night:</b>\nKill 1 card, prioritizing more valuable targets.\nDeal 2 damage to you.\n\nI Lie and Disguise.";
         Follower.flavorText = "\"I'm playing chess and you're playing checkers.\"";
         Follower.hints = "Valuable targets are those with unused active abilities and strong information roles.";
         Follower.ifLies = "";
@@ -277,9 +328,11 @@ public class MainMod : MelonMod
 
 
         // Characters.Instance.startGameActOrder = InsertAfterAct("Baa", Sleeper);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", MadScientist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Accuser);
         Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Hypnotist);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", MadScientist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
 
 
         CustomScriptData followerScriptData = new CustomScriptData();
@@ -350,7 +403,8 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Mathematician);
             AddRole(script.startingTownsfolks, Commander);
             AddRole(script.startingTownsfolks, Director);
-            //AddRole(script.startingTownsfolks, Scanner);
+            AddRole(script.startingTownsfolks, Scanner);
+            AddRole(script.startingTownsfolks, Trickster_v);
 
 
             AddRole(script.startingOutsiders, MadScientist);

@@ -88,6 +88,15 @@ public class Follower : Demon
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Start)
+        {
+            if (Gameplay.CurrentCharacters.Count >= 11)
+            {
+                Health health = PlayerController.PlayerInfo.health;
+                health.AddMaxHp(2);
+                health.Heal(100);
+            }
+        }
         if (trigger == ETriggerPhase.Night)
         {
             if (charRef.state == ECharacterState.Dead) return;
