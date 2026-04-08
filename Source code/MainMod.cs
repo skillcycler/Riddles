@@ -253,24 +253,6 @@ public class MainMod : MelonMod
         Hypnotist.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Hypnotist.color = new Color(0.8491f, 0.4555f, 0f);
 
-        CharacterData HypnotistBluff = new CharacterData();
-        HypnotistBluff.role = new HypnotistBluff();
-        HypnotistBluff.name = "";
-        HypnotistBluff.description = "";
-        HypnotistBluff.flavorText = "\"\"";
-        HypnotistBluff.hints = "";
-        HypnotistBluff.ifLies = "";
-        HypnotistBluff.picking = false;
-        HypnotistBluff.startingAlignment = EAlignment.Good;
-        HypnotistBluff.type = ECharacterType.Villager;
-        HypnotistBluff.abilityUsage = EAbilityUsage.Once;
-        HypnotistBluff.bluffable = false;
-        HypnotistBluff.characterId = "HypnotistBluff";
-        HypnotistBluff.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        HypnotistBluff.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        HypnotistBluff.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        HypnotistBluff.color = new Color(1f, 0.935f, 0.7302f);
-
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
         Follower.name = "Follower";
@@ -619,6 +601,36 @@ public class MainMod : MelonMod
             {
                 roles.Add(name, data);
             }
+        }
+    }
+    [HarmonyPatch(typeof(Confessor), nameof(Confessor.Act))]
+    private static class GetHypnotistConfessorInfo
+    {
+        private static bool Prefix(Confessor __instance, ETriggerPhase trigger, Character charRef)
+        {
+            if (trigger != ETriggerPhase.Day) return true;
+            if (charRef.bluff)
+            {
+                if (charRef.bluff.characterId != "Confessor_18741708")
+                {
+                    return true;
+                }
+            }
+            else if (charRef.dataRef.characterId != "Confessor_18741708")
+            {
+                return true;
+            }
+            ActedInfo myInfo = new ActedInfo("I am Good");
+            if (charRef.statuses.Contains(ECharacterStatus.Corrupted) || charRef.alignment == EAlignment.Evil)
+            {
+                myInfo = new ActedInfo("I am dizzy");
+            }
+            if (charRef.bluff && charRef.dataRef.characterId == "Hypnotist")
+            {
+                myInfo = new ActedInfo("I am Good");
+            }
+            __instance.onActed?.Invoke(myInfo);
+            return false;
         }
     }
 }
