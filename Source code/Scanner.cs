@@ -63,7 +63,17 @@ public class Scanner : Role
                     counter++;
             }
         }
-        int counterLie = UnityEngine.Random.RandomRangeInt(0, Characters.Instance.FilterCharacterType(Gameplay.CurrentCharacters, ECharacterType.Outcast).Count);
+        int max = Characters.Instance.FilterCharacterType(Gameplay.CurrentCharacters, ECharacterType.Outcast).Count+1;
+        int counterLie = 1;
+        if (max > 1)
+        {
+            counterLie = UnityEngine.Random.RandomRangeInt(0, max);
+
+            while (counterLie == counter)
+            {
+                counterLie = UnityEngine.Random.RandomRangeInt(0, max);
+            }
+        }
         string info = string.Format("{0} Outcasts are Disguised or being used as a Disguise", counterLie);
         if (counterLie == 0)
             info = "NO Outcasts are Disguised or being used as a Disguise";

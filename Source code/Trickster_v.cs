@@ -74,6 +74,7 @@ public class Trickster_v : Role
             }
             Il2CppSystem.Collections.Generic.List<Character> converts = Gameplay.CurrentCharacters;
             converts = Characters.Instance.FilterRealCharacterType(converts, ECharacterType.Villager);
+            converts.Remove(charRef);
             if (converts.Count > 1) {
                 converted = true;
                 int c1 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
@@ -118,6 +119,7 @@ public class Trickster_v : Role
             }
             Il2CppSystem.Collections.Generic.List<Character> converts = Gameplay.CurrentCharacters;
             converts = Characters.Instance.FilterRealCharacterType(converts, ECharacterType.Villager);
+            converts.Remove(charRef);
             if (converts.Count > 1)
             {
                 converted = true;

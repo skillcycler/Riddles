@@ -13,7 +13,7 @@ using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.6", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.6.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -49,7 +49,7 @@ public class MainMod : MelonMod
     {
         GameObject content = GameObject.Find("Game/Gameplay/Content");
         NightPhase nightPhase = content.GetComponent<NightPhase>();
-
+        MelonLogger.Msg(typeof(Confessor).ToString(), typeof(Gossip).ToString(), nameof(Confessor.Act), nameof(Gossip.Act));
 
         CharacterData Riddler = new CharacterData();
         Riddler.role = new Riddler();
@@ -329,7 +329,7 @@ public class MainMod : MelonMod
 
         // Characters.Instance.startGameActOrder = InsertAfterAct("Baa", Sleeper);
         Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", MadScientist);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Trickster_v);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Accuser);
         Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
@@ -657,12 +657,11 @@ public class MainMod : MelonMod
             }
         }
     }
-    [HarmonyPatch(typeof(Confessor), nameof(Confessor.Act))]
+    [HarmonyPatch(typeof(Confessor), nameof(Confessor.GetInfo))]
     private static class GetHypnotistConfessorInfo
     {
-        private static bool Prefix(Confessor __instance, ETriggerPhase trigger, Character charRef)
+        private static bool Prefix(Confessor __instance, Character charRef)
         {
-            if (trigger != ETriggerPhase.Day) return true;
             if (charRef.bluff)
             {
                 if (charRef.bluff.characterId != "Confessor_18741708")
@@ -675,7 +674,7 @@ public class MainMod : MelonMod
                 return true;
             }
             ActedInfo myInfo = new ActedInfo("I am Good");
-            if (charRef.statuses.Contains(ECharacterStatus.Corrupted) || charRef.alignment == EAlignment.Evil)
+            if (charRef.statuses.Contains(ECharacterStatus.Corrupted) || charRef.GetAlignment() == EAlignment.Evil)
             {
                 myInfo = new ActedInfo("I am dizzy");
             }
