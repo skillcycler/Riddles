@@ -70,6 +70,7 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
             // riddler
             whitelistMinionCharacterIDs.Add("Accuser");
+            whitelistMinionCharacterIDs.Add("Ghost");
             // Wingidon
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
@@ -238,7 +239,7 @@ public class MadScientist : Role
     {
         if (fakeOutcast.characterId == "Drunk_15369527")
         {
-            CharacterData bluff = Characters.Instance.GetRandomUniqueBluff();
+            CharacterData bluff = Characters.Instance.GetRandomUniqueVillagerBluff();
             Gameplay.Instance.AddScriptCharacterIfAble(bluff.type, bluff);
             charRef.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
 

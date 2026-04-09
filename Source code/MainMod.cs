@@ -13,7 +13,7 @@ using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.6.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.7", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -28,22 +28,27 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Commander>();
         ClassInjector.RegisterTypeInIl2Cpp<Director>();
         ClassInjector.RegisterTypeInIl2Cpp<Scanner>();
+        ClassInjector.RegisterTypeInIl2Cpp<Trickster_o>();
+        ClassInjector.RegisterTypeInIl2Cpp<Trickster_v>();
+        ClassInjector.RegisterTypeInIl2Cpp<Trickster_m>();
+        ClassInjector.RegisterTypeInIl2Cpp<Obsessor>();
+        ClassInjector.RegisterTypeInIl2Cpp<Lawyer>();
 
         // Outcasts
 
         ClassInjector.RegisterTypeInIl2Cpp<MadScientist>();
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
         ClassInjector.RegisterTypeInIl2Cpp<Criminal>();
-        ClassInjector.RegisterTypeInIl2Cpp<Trickster_o>();
-        ClassInjector.RegisterTypeInIl2Cpp<Trickster_v>();
-        ClassInjector.RegisterTypeInIl2Cpp<Trickster_m>();
+        ClassInjector.RegisterTypeInIl2Cpp<Ghost>();
 
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
         ClassInjector.RegisterTypeInIl2Cpp<Hypnotist>();
+        ClassInjector.RegisterTypeInIl2Cpp<Apprentice>();
 
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
+        ClassInjector.RegisterTypeInIl2Cpp<Veil>();
     }
     public override void OnLateInitializeMelon()
     {
@@ -162,7 +167,7 @@ public class MainMod : MelonMod
         Scanner.name = "Scanner";
         Scanner.description = "Learn how many Outcasts are Disguised or being used as a Disguise.";
         Scanner.flavorText = "\"I spy with my two little eyes, two Outcasts in disguise!\"";
-        Scanner.hints = "";
+        Scanner.hints = "The Outcast Trickster and Accused villager both count towards this.";
         Scanner.ifLies = "";
         Scanner.picking = false;
         Scanner.startingAlignment = EAlignment.Good;
@@ -172,55 +177,38 @@ public class MainMod : MelonMod
         Scanner.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Scanner.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Scanner.color = new Color(1f, 0.935f, 0.7302f);
-        
 
-        CharacterData MadScientist = new CharacterData();
-        MadScientist.role = new MadScientist();
-        MadScientist.name = "Mad Scientist";
-        MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
-        MadScientist.flavorText = "\"Lil bro is ANGRY at the village\"";
-        MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.";
-        MadScientist.ifLies = "I will only Lie if I am somehow guaranteed to be Evil.\nIf I have the Doppelganger, Drunk, or Lunatic (from Wingidon's mod) abilities I will disguise accordingly.";
-        MadScientist.picking = false;
-        MadScientist.startingAlignment = EAlignment.Good;
-        MadScientist.type = ECharacterType.Outcast;
-        MadScientist.bluffable = false;
-        MadScientist.characterId = "MadScientist";
-        MadScientist.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        MadScientist.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        MadScientist.color = new Color(0.9659f, 1f, 0.4472f);
+        CharacterData Obsessor = new CharacterData();
+        Obsessor.role = new Obsessor();
+        Obsessor.name = "Obsessor";
+        Obsessor.description = "Learn how many Evils are next to a certain role.";
+        Obsessor.flavorText = "\"Once snuck into the Lover's house at night. You'll never guess what happened next\"";
+        Obsessor.hints = "";
+        Obsessor.ifLies = "";
+        Obsessor.picking = false;
+        Obsessor.startingAlignment = EAlignment.Good;
+        Obsessor.type = ECharacterType.Villager;
+        Obsessor.bluffable = true;
+        Obsessor.characterId = "Obsessor";
+        Obsessor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Obsessor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Obsessor.color = new Color(1f, 0.935f, 0.7302f);
 
-        CharacterData Necromancer = new CharacterData();
-        Necromancer.role = new Necromancer();
-        Necromancer.name = "Necromancer";
-        Necromancer.description = "Pick 1 dead card: Revive it and lose 2 Health. I cannot revive Evils.";
-        Necromancer.flavorText = "\"Second chances are real. Just like Empaths and Mayors.\"";
-        Necromancer.hints = "";
-        Necromancer.ifLies = "The card will lie with its new info no matter what.";
-        Necromancer.picking = true;
-        Necromancer.startingAlignment = EAlignment.Good;
-        Necromancer.type = ECharacterType.Outcast;
-        Necromancer.bluffable = true;
-        Necromancer.characterId = "Necromancer";
-        Necromancer.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        Necromancer.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        Necromancer.color = new Color(0.9659f, 1f, 0.4472f);
-
-        CharacterData Criminal = new CharacterData();
-        Criminal.role = new Criminal();
-        Criminal.name = "Hitman";
-        Criminal.description = "I Lie and Disguise.\n\nAt night: Kill a random card and lose 3 HP.";
-        Criminal.flavorText = "\"No one is safe from me, not even myself\"";
-        Criminal.hints = "I can kill any card, including Knights, Demons, and myself.\nIf there is no night cycle, I'm just a regular Evil Outcast.";
-        Criminal.ifLies = "";
-        Criminal.picking = false;
-        Criminal.startingAlignment = EAlignment.Evil;
-        Criminal.type = ECharacterType.Outcast;
-        Criminal.bluffable = false;
-        Criminal.characterId = "Criminal";
-        Criminal.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        Criminal.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        Criminal.color = new Color(0.9659f, 1f, 0.4472f);
+        CharacterData Lawyer = new CharacterData();
+        Lawyer.role = new Lawyer();
+        Lawyer.name = "Lawyer";
+        Lawyer.description = "My neighbors tell the truth. Learn a truthful character.";
+        Lawyer.flavorText = "\"Do you swear to tell the truth, the whole truth, and nothing but the truth?\"";
+        Lawyer.hints = "";
+        Lawyer.ifLies = "My neighbors will lie.";
+        Lawyer.picking = false;
+        Lawyer.startingAlignment = EAlignment.Good;
+        Lawyer.type = ECharacterType.Villager;
+        Lawyer.bluffable = true;
+        Lawyer.characterId = "Lawyer";
+        Lawyer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Lawyer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Lawyer.color = new Color(1f, 0.935f, 0.7302f);
 
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
@@ -270,6 +258,70 @@ public class MainMod : MelonMod
         Trickster_m.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Trickster_m.color = new Color(1f, 0.935f, 0.7302f);
 
+        CharacterData MadScientist = new CharacterData();
+        MadScientist.role = new MadScientist();
+        MadScientist.name = "Mad Scientist";
+        MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
+        MadScientist.flavorText = "\"Lil bro is ANGRY at the village\"";
+        MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.";
+        MadScientist.ifLies = "I will only Lie if I am somehow guaranteed to be Evil.\nIf I have the Doppelganger, Drunk, or Lunatic (from Wingidon's mod) abilities I will disguise accordingly.";
+        MadScientist.picking = false;
+        MadScientist.startingAlignment = EAlignment.Good;
+        MadScientist.type = ECharacterType.Outcast;
+        MadScientist.bluffable = false;
+        MadScientist.characterId = "MadScientist";
+        MadScientist.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
+        MadScientist.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
+        MadScientist.color = new Color(0.9659f, 1f, 0.4472f);
+
+        CharacterData Necromancer = new CharacterData();
+        Necromancer.role = new Necromancer();
+        Necromancer.name = "Necromancer";
+        Necromancer.description = "Pick 1 dead card: Revive it and lose 2 Health. I cannot revive Evils.";
+        Necromancer.flavorText = "\"Second chances are real. Just like Empaths and Mayors.\"";
+        Necromancer.hints = "";
+        Necromancer.ifLies = "The card will lie with its new info no matter what.";
+        Necromancer.picking = true;
+        Necromancer.startingAlignment = EAlignment.Good;
+        Necromancer.type = ECharacterType.Outcast;
+        Necromancer.bluffable = true;
+        Necromancer.characterId = "Necromancer";
+        Necromancer.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
+        Necromancer.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
+        Necromancer.color = new Color(0.9659f, 1f, 0.4472f);
+
+        CharacterData Criminal = new CharacterData();
+        Criminal.role = new Criminal();
+        Criminal.name = "Hitman";
+        Criminal.description = "I Lie and Disguise.\n\nAt night: Kill a random card and lose 3 HP.";
+        Criminal.flavorText = "\"No one is safe from me, not even myself\"";
+        Criminal.hints = "I can kill any card, including Knights, Demons, and myself.\nIf there is no night cycle, I'm just a regular Evil Outcast.";
+        Criminal.ifLies = "";
+        Criminal.picking = false;
+        Criminal.startingAlignment = EAlignment.Evil;
+        Criminal.type = ECharacterType.Outcast;
+        Criminal.bluffable = false;
+        Criminal.characterId = "Criminal";
+        Criminal.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
+        Criminal.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
+        Criminal.color = new Color(0.9659f, 1f, 0.4472f);
+
+        CharacterData Ghost = new CharacterData();
+        Ghost.role = new Ghost();
+        Ghost.name = "Ghost";
+        Ghost.description = "On Reveal: Die and Corrupt 1 unrevealed Villager, dealing 1 damage to you.";
+        Ghost.flavorText = "\"I would say 'Boo!' but that's not scary anymore.\"";
+        Ghost.hints = "I cannot be revived.";
+        Ghost.ifLies = "";
+        Ghost.picking = false;
+        Ghost.startingAlignment = EAlignment.Good;
+        Ghost.type = ECharacterType.Outcast;
+        Ghost.bluffable = false;
+        Ghost.characterId = "Ghost";
+        Ghost.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
+        Ghost.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
+        Ghost.color = new Color(0.9659f, 1f, 0.4472f);
+
         CharacterData Accuser = new CharacterData();
         Accuser.role = new Accuser();
         Accuser.name = "Accuser";
@@ -304,6 +356,23 @@ public class MainMod : MelonMod
         Hypnotist.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Hypnotist.color = new Color(0.8491f, 0.4555f, 0f);
 
+        CharacterData Apprentice = new CharacterData();
+        Apprentice.role = new Apprentice();
+        Apprentice.name = "Channeler";
+        Apprentice.description = "I copy the ability of another Evil.";
+        Apprentice.flavorText = "\"I will follow in your footsteps.\"";
+        Apprentice.hints = "";
+        Apprentice.ifLies = "";
+        Apprentice.picking = false;
+        Apprentice.startingAlignment = EAlignment.Evil;
+        Apprentice.type = ECharacterType.Minion;
+        Apprentice.abilityUsage = EAbilityUsage.Once;
+        Apprentice.bluffable = false;
+        Apprentice.characterId = "Apprentice";
+        Apprentice.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Apprentice.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
+        Apprentice.color = new Color(0.8491f, 0.4555f, 0f);
+
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
         Follower.name = "Follower";
@@ -322,6 +391,24 @@ public class MainMod : MelonMod
         Follower.color = new Color(1f, 0.3804f, 0.3804f);
 
 
+        CharacterData Veil = new CharacterData();
+        Veil.role = new Veil();
+        Veil.name = "Veil";
+        Veil.description = "You can reveal 3 less cards. Villages are much bigger to compensate.\n\nI Lie and Disguise.";
+        Veil.flavorText = "\"I cannot see anyone's role through this dense fog!\"";
+        Veil.hints = "";
+        Veil.ifLies = "";
+        Veil.picking = false;
+        Veil.startingAlignment = EAlignment.Evil;
+        Veil.type = ECharacterType.Demon;
+        Veil.bluffable = false;
+        Veil.characterId = "Veil";
+        Veil.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Veil.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Veil.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
+        Veil.color = new Color(1f, 0.3804f, 0.3804f);
+
+
 
         nightPhase.nightCharactersOrder.Add(Follower);
         nightPhase.nightCharactersOrder.Add(Criminal);
@@ -333,6 +420,8 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Accuser);
         Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Apprentice);
 
 
         CustomScriptData followerScriptData = new CustomScriptData();
@@ -391,8 +480,49 @@ public class MainMod : MelonMod
         followerScript.characterCounts = followerCounterList;
         followerScriptData.scriptInfo = followerScript;
 
+        CustomScriptData veilScriptData = new CustomScriptData();
+        veilScriptData.name = "Veil_1";
+        ScriptInfo veilScript = new ScriptInfo();
+        Il2CppSystem.Collections.Generic.List<CharacterData> veilList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        veilList.Add(Veil);
+        veilScript.mustInclude = veilList;
+        veilScript.startingDemons = veilList;
+        veilScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
+        veilScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
+        veilScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
+        CharactersCount veil_13a = setCharacterCount(8, 1, 3, 1);
+        CharactersCount veil_13b = setCharacterCount(9, 0, 3, 1);
+        CharactersCount veil_13c = setCharacterCount(9, 1, 2, 1);
+        CharactersCount veil_13d = setCharacterCount(8, 2, 2, 1);
+        CharactersCount veil_14a = setCharacterCount(8, 2, 3, 1);
+        CharactersCount veil_14b = setCharacterCount(9, 1, 3, 1);
+        CharactersCount veil_14c = setCharacterCount(10, 0, 3, 1);
+        CharactersCount veil_15a = setCharacterCount(11, 0, 3, 1);
+        CharactersCount veil_15b = setCharacterCount(10, 1, 3, 1);
+        CharactersCount veil_15c = setCharacterCount(9, 2, 3, 1);
+        Il2CppSystem.Collections.Generic.List<CharactersCount> veilCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
+
+
+        veilCounterList.Add(veil_13a);
+        veilCounterList.Add(veil_13b);
+        veilCounterList.Add(veil_13c);
+        veilCounterList.Add(veil_13d);
+        veilCounterList.Add(veil_14a);
+        veilCounterList.Add(veil_14b);
+        veilCounterList.Add(veil_14c);
+        veilCounterList.Add(veil_15a);
+        veilCounterList.Add(veil_15b);
+        veilCounterList.Add(veil_15c);
+        veilCounterList.Add(veil_14b);
+        veilCounterList.Add(veil_14c);
+        veilCounterList.Add(veil_15a);
+        veilCounterList.Add(veil_15b);
+        veilScript.characterCounts = veilCounterList;
+        veilScriptData.scriptInfo = veilScript;
+
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
         addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
+        addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
@@ -405,15 +535,19 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Director);
             AddRole(script.startingTownsfolks, Scanner);
             AddRole(script.startingTownsfolks, Trickster_v);
+            AddRole(script.startingTownsfolks, Obsessor);
+            AddRole(script.startingTownsfolks, Lawyer);
 
 
             AddRole(script.startingOutsiders, MadScientist);
             AddRole(script.startingOutsiders, Necromancer);
             AddRole(script.startingOutsiders, Criminal);
+            AddRole(script.startingOutsiders, Ghost);
 
 
             AddRole(script.startingMinions, Accuser);
             AddRole(script.startingMinions, Hypnotist);
+            AddRole(script.startingMinions, Apprentice);
         }
     }
     public void AddRole(Il2CppSystem.Collections.Generic.List<CharacterData> list, CharacterData data)
