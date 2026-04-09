@@ -13,7 +13,7 @@ using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.6.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.6.3", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -180,7 +180,7 @@ public class MainMod : MelonMod
         MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
         MadScientist.flavorText = "\"Lil bro is ANGRY at the village\"";
         MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.";
-        MadScientist.ifLies = "I will only Lie if I am somehow guaranteed to be Evil.";
+        MadScientist.ifLies = "I will only Lie if I am somehow guaranteed to be Evil.\nIf I have the Doppelganger, Drunk, or Lunatic (from Wingidon's mod) abilities I will disguise accordingly.";
         MadScientist.picking = false;
         MadScientist.startingAlignment = EAlignment.Good;
         MadScientist.type = ECharacterType.Outcast;

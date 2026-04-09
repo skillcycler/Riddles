@@ -62,18 +62,24 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Poisoner_64796285");
             whitelistMinionCharacterIDs.Add("Witch_25286521");
             whitelistMinionCharacterIDs.Add("Shaman_26945607");
+            whitelistMinionCharacterIDs.Add("Baron_04539999");
             whitelistOutcastCharacterIDs.Add("Plague Doctor_49312486");
             whitelistOutcastCharacterIDs.Add("Wretch_80988916");
             whitelistOutcastCharacterIDs.Add("Bombardier_79093372");
+            whitelistOutcastCharacterIDs.Add("Drunk_15369527");
+            whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
             // riddler
             whitelistMinionCharacterIDs.Add("Accuser");
             // Wingidon
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
+            whitelistMinionCharacterIDs.Add("Swarm_Good_WING");
+            
             whitelistOutcastCharacterIDs.Add("Chatterbox_WING");
             whitelistOutcastCharacterIDs.Add("Revolutionary_WING");
             whitelistOutcastCharacterIDs.Add("Marionette_WING");
             whitelistOutcastCharacterIDs.Add("Renegade_WING");
+            whitelistOutcastCharacterIDs.Add("Lunatic_WING");
 
             // Carlz
             //whitelistMinionCharacterIDs.Add("Lycaon_VP"); This has been causing too many bugs
@@ -227,5 +233,57 @@ public class MadScientist : Role
             return ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619");
         }
         return ProjectContext.Instance.gameData.GetCharacterDataOfId("MadScientist");
+    }
+    public override CharacterData GetBluffIfAble(Character charRef)
+    {
+        if (fakeOutcast.characterId == "Drunk_15369527")
+        {
+            CharacterData bluff = Characters.Instance.GetRandomUniqueBluff();
+            Gameplay.Instance.AddScriptCharacterIfAble(bluff.type, bluff);
+            charRef.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+
+            return bluff;
+        }
+        if (fakeOutcast.characterId == "Doppleganger_52694042")
+        {
+            charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+            Il2CppSystem.Collections.Generic.List<Character> characters = new Il2CppSystem.Collections.Generic.List<Character>();
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                characters.Add(c);
+            }
+            characters = Characters.Instance.FilterBluffableCharacters(characters);
+            characters = Characters.Instance.FilterCharacterType(characters, ECharacterType.Villager);
+            characters = Characters.Instance.FilterAlignmentCharacters(characters, EAlignment.Good);
+            CharacterData character = characters[UnityEngine.Random.Range(0, characters.Count)].dataRef;
+
+            return character;
+        }
+        if (fakeOutcast.characterId == "Lunatic_WING")
+        {
+            int diceRoll2 = Calculator.RollDice(10);
+            if (diceRoll2 < 6 && !charRef.statuses.Contains(ECharacterStatus.Corrupted))
+            {
+                charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+            }
+            else
+            {
+                charRef.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+            }
+            int diceRoll = Calculator.RollDice(10);
+            if (diceRoll < 5)
+            {
+                return Characters.Instance.GetRandomDuplicateBluff();
+            }
+            else
+            {
+                CharacterData bluff = Characters.Instance.GetRandomUniqueBluff();
+                Gameplay.Instance.AddScriptCharacterIfAble(bluff.type, bluff);
+
+                return bluff;
+            }
+        }
+        // if not one of those don't disguise
+        return null;
     }
 }
