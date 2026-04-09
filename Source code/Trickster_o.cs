@@ -51,6 +51,25 @@ public class Trickster_o : Role
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
+    public override CharacterData GetBluffIfAble(Character charRef)
+    {
+        Gameplay gameplay = Gameplay.Instance;
+        Characters instance = Characters.Instance;
+        Il2CppSystem.Collections.Generic.List<CharacterData> chars = gameplay.GetAscensionAllStartingCharacters();
+        Il2CppSystem.Collections.Generic.List<CharacterData> villagers = instance.FilterRealCharacterType(chars, ECharacterType.Villager);
+
+        Il2CppSystem.Collections.Generic.List<CharacterData> listV = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        Il2CppSystem.Collections.Generic.List<string> whitelistCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
+
+        whitelistCharacterIDs.Add("Trickster_v");
+        for (int i = 0; i < villagers.Count; i++)
+        {
+            if (whitelistCharacterIDs.Contains(villagers[i].characterId))
+                listV.Add(villagers[i]);
+        }
+        CharacterData bluff = listV[0];
+        return bluff;
+    }
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {

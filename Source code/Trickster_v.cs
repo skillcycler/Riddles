@@ -41,6 +41,10 @@ public class Trickster_v : Role
 
     public override ActedInfo GetBluffInfo(Character charRef)
     {
+        if (charRef.GetCharacterType() == ECharacterType.Outcast || charRef.GetCharacterType() == ECharacterType.Minion)
+        {
+            return GetInfo(charRef);
+        }
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         Il2CppSystem.Collections.Generic.List<Character> wrongType = new Il2CppSystem.Collections.Generic.List<Character>();
         foreach (Character character in characters)
@@ -103,7 +107,7 @@ public class Trickster_v : Role
     }
     public override void BluffAct(ETriggerPhase trigger, Character charRef)
     {
-        if (trigger == ETriggerPhase.Start)
+        if (trigger == ETriggerPhase.Start && charRef.GetCharacterType() == ECharacterType.Villager)
         {
             if (allDatas.Length == 0)
             {

@@ -69,6 +69,7 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Accuser");
             // Wingidon
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
+            whitelistMinionCharacterIDs.Add("Undying_WING");
             whitelistOutcastCharacterIDs.Add("Chatterbox_WING");
             whitelistOutcastCharacterIDs.Add("Revolutionary_WING");
             whitelistOutcastCharacterIDs.Add("Marionette_WING");
