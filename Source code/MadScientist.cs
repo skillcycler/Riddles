@@ -71,6 +71,7 @@ public class MadScientist : Role
             // riddler
             whitelistMinionCharacterIDs.Add("Accuser");
             whitelistMinionCharacterIDs.Add("Ghost");
+            whitelistMinionCharacterIDs.Add("Apprentice");
             // Wingidon
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
@@ -191,7 +192,15 @@ public class MadScientist : Role
         {
             return 3;
         }
-        if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Mayor_VP")
+        if (fakeOutcast.characterId == "Drunk_15369527")
+        {
+            return 2;
+        }
+        if (fakeOutcast.characterId == "Ghost")
+        {
+            return 1;
+        }
+        if (fakeOutcast.characterId == "Renegade_WING")
         {
             return 0;
         }

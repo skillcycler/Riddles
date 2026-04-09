@@ -55,7 +55,7 @@ public class Lawyer : Role
             truthfulCharacters.Remove(charRef);
         Character chosenCharacter = truthfulCharacters[UnityEngine.Random.RandomRangeInt(0, truthfulCharacters.Count)];
         
-        string info = string.Format("#{0} is Truthful", chosenCharacter);
+        string info = string.Format("#{0} is Truthful", chosenCharacter.id);
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
@@ -93,7 +93,7 @@ public class Lawyer : Role
             untruthfulCharacters.Remove(charRef);
         Character chosenCharacter = untruthfulCharacters[UnityEngine.Random.RandomRangeInt(0, untruthfulCharacters.Count)];
 
-        string info = string.Format("#{0} is Truthful", chosenCharacter);
+        string info = string.Format("#{0} is Truthful", chosenCharacter.id);
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
