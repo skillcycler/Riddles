@@ -26,11 +26,7 @@ public class Lawyer : Role
     public override ActedInfo GetInfo(Character charRef)
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
-        foreach (Character character in adjacentCharacters)
-        {
-            character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
-        }
+        
         Il2CppSystem.Collections.Generic.List<Character> truthfulCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
         foreach (Character character in characters)
         {
@@ -63,12 +59,7 @@ public class Lawyer : Role
     public override ActedInfo GetBluffInfo(Character charRef)
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
-        foreach (Character character in adjacentCharacters)
-        {
-            character.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-            character.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
-        }
+        
         Il2CppSystem.Collections.Generic.List<Character> untruthfulCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
         foreach (Character character in characters)
         {
@@ -100,6 +91,14 @@ public class Lawyer : Role
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Start)
+        {
+            Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
+            foreach (Character character in adjacentCharacters)
+            {
+                character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+            }
+        }    
         if (trigger == ETriggerPhase.Day)
         {
             onActed.Invoke(GetInfo(charRef));
@@ -107,6 +106,15 @@ public class Lawyer : Role
     }
     public override void BluffAct(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Start)
+        {
+            Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
+            foreach (Character character in adjacentCharacters)
+            {
+                character.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                character.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+            }
+        }
         if (trigger == ETriggerPhase.Day)
         {
             onActed.Invoke(GetBluffInfo(charRef));
