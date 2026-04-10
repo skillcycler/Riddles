@@ -59,12 +59,14 @@ public class Criminal : Role
             if (!(newList.Count == 0))
             {
                 Character myTarget = newList[UnityEngine.Random.Range(0, newList.Count)];
+                myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
+                myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
+                myTarget.statuses.statuses.Remove(ECharacterStatus.UnkillableByDemon);
+                myTarget.killedByDemon = true;
+                myTarget.state = ECharacterState.Dead;
                 myTarget.Reveal();
                 myTarget.onReveal.Invoke();
                 myTarget.RevealReal();
-                myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
-                myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
-                myTarget.KillByDemon(charRef);
                 if (myTarget.dataRef.picking)
                 {
                     myTarget.uses = 0;

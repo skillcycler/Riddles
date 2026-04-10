@@ -119,7 +119,8 @@ public class MadScientist : Role
             fakeMinion = listMin[r1];
             int s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
             int s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
-            while ((s1 == s2 && listOut.Count > 1) || listOut[s2].name == "Hitman" || listOut[s2].name == "Renegade")
+            while ((s1 == s2 && listOut.Count > 1) || listOut[s2].name == "Hitman" || listOut[s2].name == "Renegade"
+                || listOut[s2].name == "Drunk" || listOut[s2].name == "Doppelganger" || listOut[s2].name == "Lunatic")
             {
                 s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
             }
@@ -164,7 +165,6 @@ public class MadScientist : Role
                     charRef.ChangeAlignment(EAlignment.Evil);
                 }
             }
-            MelonLogger.Msg(string.Format("I have the {0} and {1} abilities", fakeMinion.name, fakeOutcast.name));
         }
         if (trigger == ETriggerPhase.Day)
         {

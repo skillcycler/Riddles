@@ -11,14 +11,14 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class Ghost : Role
 {
-    public Character target;
+    public int target = 0;
     public override ActedInfo GetInfo(Character charRef)
     {
-        if (!target)
+        if (target == 0)
         {
             return new ActedInfo("I couldn't haunt anyone");
         }
-        return new ActedInfo(string.Format("I haunted #{0}", target.id));
+        return new ActedInfo(string.Format("I haunted #{0}", target));
     }
     public override ActedInfo GetBluffInfo(Character charRef)
     {
@@ -47,9 +47,10 @@ public class Ghost : Role
                 onActed.Invoke(GetInfo(charRef));
                 return;
             }
-            target = unrevealedCharacters[UnityEngine.Random.RandomRangeInt(0, unrevealedCharacters.Count)];
-            target.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-            target.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+            Character targetChar = unrevealedCharacters[UnityEngine.Random.RandomRangeInt(0, unrevealedCharacters.Count)];
+            targetChar.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+            targetChar.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+            target = targetChar.id;
             onActed.Invoke(GetInfo(charRef));
         }
     }
