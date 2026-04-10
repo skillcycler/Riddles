@@ -96,7 +96,9 @@ public class Lawyer : Role
             Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
             foreach (Character character in adjacentCharacters)
             {
-                character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+                if (character.bluff)
+                    character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+                character.statuses.statuses.Remove(ECharacterStatus.Corrupted);
             }
         }    
         if (trigger == ETriggerPhase.Day)
@@ -112,7 +114,8 @@ public class Lawyer : Role
             foreach (Character character in adjacentCharacters)
             {
                 character.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                character.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+                if (character.bluff)
+                    character.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
             }
         }
         if (trigger == ETriggerPhase.Day)

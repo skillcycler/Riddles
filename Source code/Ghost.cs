@@ -38,15 +38,19 @@ public class Ghost : Role
             charRef.state = ECharacterState.Dead;
             PlayerController.PlayerInfo.health.Damage(1);
             Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
-            unrevealedCharacters = Characters.Instance.FilterCharacterType(unrevealedCharacters, ECharacterType.Villager);
             unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
             unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
             charRef.RevealAllReal();
             charRef.RefreshCharacter();
-            onActed.Invoke(GetInfo(charRef));
-            if (unrevealedCharacters.Count == 0) return;
+            if (unrevealedCharacters.Count == 0)
+            {
+                onActed.Invoke(GetInfo(charRef));
+                return;
+            }
             target = unrevealedCharacters[UnityEngine.Random.RandomRangeInt(0, unrevealedCharacters.Count)];
             target.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+            target.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+            onActed.Invoke(GetInfo(charRef));
         }
     }
     public Ghost() : base(ClassInjector.DerivedConstructorPointer<Ghost>())

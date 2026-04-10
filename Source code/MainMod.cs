@@ -13,7 +13,7 @@ using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.7.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.7.3", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -309,7 +309,7 @@ public class MainMod : MelonMod
         CharacterData Ghost = new CharacterData();
         Ghost.role = new Ghost();
         Ghost.name = "Ghost";
-        Ghost.description = "On Reveal: Die and Corrupt 1 unrevealed Villager, dealing 1 damage to you.";
+        Ghost.description = "On Reveal: Die, dealing 1 damage to you. One unrevealed Good character is Corrupted.";
         Ghost.flavorText = "\"I would say 'Boo!' but that's not scary anymore.\"";
         Ghost.hints = "I cannot be revived.";
         Ghost.ifLies = "";

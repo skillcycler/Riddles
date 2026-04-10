@@ -27,8 +27,16 @@ public class Obsessor : Role
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         Il2CppSystem.Collections.Generic.List<Character> actualCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
+        bool isSpecularusVillage = true;
+        foreach (Character character in characters)
+        {
+            if (!character.bluff)
+                isSpecularusVillage = false;
+        }
         foreach (Character character in characters) {
-            actualCharacters.Add(character);
+            // gonna make it not useless in Specularus villages
+            if (!isSpecularusVillage || character.GetAlignment() == EAlignment.Evil)
+                actualCharacters.Add(character);
         }
         Character chosenCharacter = actualCharacters[UnityEngine.Random.RandomRangeInt(0, actualCharacters.Count)];
         int evils = 0;

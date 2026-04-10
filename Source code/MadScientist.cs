@@ -34,7 +34,7 @@ public class MadScientist : Role
     }
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        return new ActedInfo(string.Format("I totally definitely 100% have the {0} and {1} abilities for real!", fakeMinion.name, fakeOutcast.name));
+        return new ActedInfo("This statement should never appear");
     }
     public override string Description
     {
@@ -42,6 +42,10 @@ public class MadScientist : Role
         {
             return "";
         }
+    }
+    public override void BluffAct(ETriggerPhase trigger, Character charRef)
+    { 
+        Act(trigger, charRef);
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
