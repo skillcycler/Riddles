@@ -26,7 +26,7 @@ public class MadScientist : Role
         {
             return new ActedInfo("Something went wrong and I don't have an Outcast ability");
         }
-        if (fakeOutcast.name == "Renegade")
+        if (fakeOutcast.name == "Renegade" || fakeOutcast.name == "Hitman")
         {
             return new ActedInfo(string.Format("I have the {0} and {1} abilities", fakeMinion2.name, fakeOutcast2.name));
         }
@@ -70,8 +70,9 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
             // riddler
             whitelistMinionCharacterIDs.Add("Accuser");
-            whitelistMinionCharacterIDs.Add("Ghost");
             whitelistMinionCharacterIDs.Add("Apprentice");
+            whitelistMinionCharacterIDs.Add("Ghost");
+            whitelistMinionCharacterIDs.Add("Hitman");
             // Wingidon
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
@@ -114,7 +115,7 @@ public class MadScientist : Role
             fakeMinion = listMin[r1];
             int s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
             int s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
-            while (s1 == s2 && listOut.Count > 1)
+            while ((s1 == s2 && listOut.Count > 1) || listOut[s2].name == "Hitman" || listOut[s2].name == "Renegade")
             {
                 s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
             }
@@ -124,7 +125,7 @@ public class MadScientist : Role
             gameplay.AddScriptCharacter(ECharacterType.Outcast, fakeOutcast);
 
             fakeMinion2 = listMin[r2];
-            if (UnityEngine.Random.RandomRangeInt(0, 2) == 0 || fakeOutcast.name == "Renegade")
+            if (UnityEngine.Random.RandomRangeInt(0, 2) == 0 || fakeOutcast.name == "Renegade" || fakeOutcast.name == "Hitman")
             {
                 gameplay.AddScriptCharacter(ECharacterType.Minion, fakeMinion2);
             }
@@ -134,7 +135,7 @@ public class MadScientist : Role
                 fakeOutcast.role.Act(trigger, charRef);
             }
             // check if I should turn evil
-            if (fakeOutcast.characterId == "Renegade_WING")
+            if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Criminal")
             {
                 charRef.ChangeAlignment(EAlignment.Evil);
             }
@@ -159,6 +160,7 @@ public class MadScientist : Role
                     charRef.ChangeAlignment(EAlignment.Evil);
                 }
             }
+            MelonLogger.Msg(string.Format("I have the {0} and {1} abilities", fakeMinion.name, fakeOutcast.name));
         }
         if (trigger == ETriggerPhase.Day)
         {
@@ -200,7 +202,7 @@ public class MadScientist : Role
         {
             return 1;
         }
-        if (fakeOutcast.characterId == "Renegade_WING")
+        if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Criminal")
         {
             return 0;
         }

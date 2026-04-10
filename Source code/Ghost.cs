@@ -41,12 +41,12 @@ public class Ghost : Role
             unrevealedCharacters = Characters.Instance.FilterCharacterType(unrevealedCharacters, ECharacterType.Villager);
             unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
             unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
-            if (unrevealedCharacters.Count == 0) return;
-            target = unrevealedCharacters[UnityEngine.Random.RandomRangeInt(0, unrevealedCharacters.Count)];
-            target.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
             charRef.RevealAllReal();
             charRef.RefreshCharacter();
             onActed.Invoke(GetInfo(charRef));
+            if (unrevealedCharacters.Count == 0) return;
+            target = unrevealedCharacters[UnityEngine.Random.RandomRangeInt(0, unrevealedCharacters.Count)];
+            target.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
         }
     }
     public Ghost() : base(ClassInjector.DerivedConstructorPointer<Ghost>())
