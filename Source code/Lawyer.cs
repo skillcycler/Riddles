@@ -88,7 +88,6 @@ public class Lawyer : Role
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
-
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (trigger == ETriggerPhase.Start)
@@ -96,9 +95,9 @@ public class Lawyer : Role
             Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
             foreach (Character character in adjacentCharacters)
             {
-                if (character.bluff)
-                    character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+                character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
                 character.statuses.statuses.Remove(ECharacterStatus.Corrupted);
+                
             }
         }    
         if (trigger == ETriggerPhase.Day)
@@ -114,8 +113,7 @@ public class Lawyer : Role
             foreach (Character character in adjacentCharacters)
             {
                 character.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                if (character.bluff)
-                    character.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+                character.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
             }
         }
         if (trigger == ETriggerPhase.Day)

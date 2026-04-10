@@ -13,7 +13,7 @@ using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.7.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.7.4", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -420,11 +420,11 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Accuser);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Lawyer);
         Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Apprentice);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Lawyer);
 
 
         CustomScriptData followerScriptData = new CustomScriptData();
