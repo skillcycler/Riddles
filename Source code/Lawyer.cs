@@ -88,17 +88,6 @@ public class Lawyer : Role
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
-    private async void postSetup(Character charRef)
-    {
-        await Task.Delay(1200);
-        Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
-        foreach (Character character in adjacentCharacters)
-        {
-            if (!character.bluff)
-                character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
-        }
-        return;
-    }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (trigger == ETriggerPhase.Start)
@@ -106,11 +95,11 @@ public class Lawyer : Role
             Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
             foreach (Character character in adjacentCharacters)
             {
-                character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+                if (character.dataRef.role.GetBluffIfAble(charRef) != null)
+                    character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
                 character.statuses.statuses.Remove(ECharacterStatus.Corrupted);
                 
             }
-            postSetup(charRef);
         }    
         if (trigger == ETriggerPhase.Day)
         {
