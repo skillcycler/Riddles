@@ -1,5 +1,5 @@
 # Riddles
-A Demon Bluff mod that adds a few characters.
+A Demon Bluff mod that adds 24 brand new characters to the game!
 ## Villagers
 - Riddler: Gives you a fun fact about the game. 
 - Swapper: Swaps the disguises of two cards. Corrupts chosen villagers if lying.
@@ -10,6 +10,10 @@ A Demon Bluff mod that adds a few characters.
 - Trickster Triplets: One Villager, one Outcast, one Good Minion. You don't know which is which but they tell you someone of their character type.
 - Obsessor: Learn how many Evils are adjacent to a certain character.
 - Lawyer: Forces both neighbors to tell the truth. Tells you one truthful character.
+- Psychic: Learn that 1 of 2 characters is in play.
+- Weaver: Learn how many pairs of Villagers there are.
+- Stylist: Pick a Disguised character and change their disguise.
+- Nurse: Pick a card. If they are corrupted, uncorrupt them and refresh their ability.
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
 - Hitman: An evil outcast that lies and disguises and kills a random card every night, dealing 3 damage. This can be any card, including normally unkillable cards, Demons, and even itself.
@@ -22,3 +26,5 @@ A Demon Bluff mod that adds a few characters.
 ## Demons
 - Follower: Kills smartly. Night is 3 ticks long.
 - Veil: 3 cards are unable to be revealed.
+- Summoner: There are no minions, but there are many Demons.
+- Infestation: One random character is Corrupted. The corruption spreads at night.

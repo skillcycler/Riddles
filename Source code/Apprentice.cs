@@ -33,12 +33,35 @@ public class Apprentice : Minion
             Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
             characters = Characters.Instance.FilterRealAlignmentCharacters(characters, EAlignment.Evil);
             characters.Remove(charRef);
-            copy = characters[UnityEngine.Random.RandomRangeInt(0, characters.Count)].dataRef;
+            Il2CppSystem.Collections.Generic.List<Character> allowedCharacters = new();
+            foreach (Character character in characters) { // two characters that will end up causing problems if copied
+                if (character.dataRef.characterId != "Undying_WING" && character.dataRef.characterId != "MadScientist")
+                    allowedCharacters.Add(character);
+            }
+            copy = allowedCharacters[UnityEngine.Random.RandomRangeInt(0, allowedCharacters.Count)].dataRef;
             copy.role.Act(trigger, charRef);
         }
         if (trigger != ETriggerPhase.Start)
         {
             copy.role.Act(trigger, charRef);
+        }
+    }
+    public override CharacterData GetBluffIfAble(Character charRef)
+    {
+        if (copy.characterId == "Illusionist_WING") // no disguise for a Channeler copying Emenverax
+            return null;
+        int diceRoll = Calculator.RollDice(10);
+
+        if (diceRoll < 5)
+        {
+            return Characters.Instance.GetRandomDuplicateBluff();
+        }
+        else
+        {
+            CharacterData bluff = Characters.Instance.GetRandomUniqueBluff();
+            Gameplay.Instance.AddScriptCharacterIfAble(bluff.type, bluff);
+
+            return bluff;
         }
     }
     public override void ActOnDied(Character charRef)

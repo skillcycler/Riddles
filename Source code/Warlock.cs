@@ -37,14 +37,20 @@ public class Warlock : Demon
                 }
             }
         }
-
+        List<string> bannedDemons = new List<string>();
+        bannedDemons.Add("Warlock"); // don't turn something into another summoner
+        bannedDemons.Add("Pandemonium_WING"); // This just might cause problems.
+        bannedDemons.Add("Tenecaligo_WING"); // Adds minions which is not good.
+        bannedDemons.Add("Praesect_WING"); // Adds minions which is not good.
+        bannedDemons.Add("Hypnotist_ER"); // Adds minions which is not good.
+        bannedDemons.Add("Hydra_VP"); // Corrupted hydra telling the truth sucks
+        bannedDemons.Add("Mutant_84675843"); // Why is this one even in the list of demons
         for (int j = 0; j < allDatas.Length; j++)
         {
             CharacterData d = allDatas[j];
-            if (d.type == ECharacterType.Demon && d.characterId != "Warlock" && d.characterId != "Pandemonium_WING" && d.characterId != "Mutant_84675843")
+            if (d.type == ECharacterType.Demon && !bannedDemons.Contains(d.characterId))
             {
                 possibleDemons.Add(d);
-                Gameplay.Instance.AddScriptCharacterIfAble(ECharacterType.Demon, d);
             }
         }
         Il2CppSystem.Collections.Generic.List<Character> summons = new Il2CppSystem.Collections.Generic.List<Character>();

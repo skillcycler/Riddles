@@ -30,6 +30,14 @@ public class Lawyer : Role
         Il2CppSystem.Collections.Generic.List<Character> truthfulCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
         foreach (Character character in characters)
         {
+            bool isAdjacent = false;
+            foreach (Character c in Characters.Instance.GetAdjacentCharacters(character))
+            {
+                if (c.id == charRef.id)
+                {
+                    isAdjacent = true;
+                }
+            }
             bool lying = false;
             if (character.bluff)
                 lying = true;
@@ -42,7 +50,7 @@ public class Lawyer : Role
             if (character.bluff)
                 if (character.bluff.role is Confessor)
                     lying = false;
-            if (!lying)
+            if (!lying && !isAdjacent)
             {
                 truthfulCharacters.Add(character);
             }
@@ -63,6 +71,14 @@ public class Lawyer : Role
         Il2CppSystem.Collections.Generic.List<Character> untruthfulCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
         foreach (Character character in characters)
         {
+            bool isAdjacent = false;
+            foreach (Character c in Characters.Instance.GetAdjacentCharacters(character))
+            {
+                if (c.id == charRef.id)
+                {
+                    isAdjacent = true;
+                }
+            }
             bool lying = false;
             if (character.bluff)
                 lying = true;
@@ -75,7 +91,7 @@ public class Lawyer : Role
             if (character.bluff)
                 if (character.bluff.role is Confessor)
                     lying = false;
-            if (lying)
+            if (lying && !isAdjacent)
             {
                 untruthfulCharacters.Add(character);
             }
@@ -98,6 +114,8 @@ public class Lawyer : Role
                 if (character.dataRef.role.GetBluffIfAble(charRef) != null)
                     character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
                 character.statuses.statuses.Remove(ECharacterStatus.Corrupted);
+                if (character.dataRef.characterId == "Trickster_m" || character.dataRef.characterId == "Trickster_o")
+                    character.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
                 
             }
         }    

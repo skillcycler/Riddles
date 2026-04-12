@@ -35,7 +35,9 @@ public class Trickster_v : Role
             characters.Remove(charRef);
         Character chosen = characters[UnityEngine.Random.RandomRangeInt(0, characters.Count)];
         string info = string.Format("#{0} is my Type", chosen.id);
-        ActedInfo actedInfo = new ActedInfo(info);
+        Il2CppSystem.Collections.Generic.List<Character> hint = new();
+        hint.Add(chosen);
+        ActedInfo actedInfo = new ActedInfo(info, hint);
         return actedInfo;
     }
 
@@ -56,12 +58,16 @@ public class Trickster_v : Role
         }
         Character chosen = wrongType[UnityEngine.Random.RandomRangeInt(0, characters.Count)];
         string info = string.Format("#{0} is my Type", chosen.id);
-        ActedInfo actedInfo = new ActedInfo(info);
+        Il2CppSystem.Collections.Generic.List<Character> hint = new();
+        hint.Add(chosen);
+        ActedInfo actedInfo = new ActedInfo(info, hint);
         return actedInfo;
     }
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (charRef.statuses.Contains(ECharacterStatus.BrokenAbility))
+            return;
         if (trigger == ETriggerPhase.Start)
         {
             if (allDatas.Length == 0)
@@ -107,6 +113,8 @@ public class Trickster_v : Role
     }
     public override void BluffAct(ETriggerPhase trigger, Character charRef)
     {
+        if (charRef.statuses.Contains(ECharacterStatus.BrokenAbility))
+            return;
         if (trigger == ETriggerPhase.Start && charRef.GetCharacterType() == ECharacterType.Villager)
         {
             if (allDatas.Length == 0)

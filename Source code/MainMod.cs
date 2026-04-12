@@ -13,7 +13,7 @@ using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.8", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -35,6 +35,8 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Lawyer>();
         ClassInjector.RegisterTypeInIl2Cpp<Psychic>();
         ClassInjector.RegisterTypeInIl2Cpp<Weaver>();
+        ClassInjector.RegisterTypeInIl2Cpp<Nurse>();
+        ClassInjector.RegisterTypeInIl2Cpp<Stylist>();
 
         // Outcasts
 
@@ -52,6 +54,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
         ClassInjector.RegisterTypeInIl2Cpp<Veil>();
         ClassInjector.RegisterTypeInIl2Cpp<Warlock>();
+        ClassInjector.RegisterTypeInIl2Cpp<Infestation>();
     }
     public override void OnLateInitializeMelon()
     {
@@ -235,7 +238,7 @@ public class MainMod : MelonMod
         Weaver.description = "Learn how many pairs of Villagers there are.";
         Weaver.flavorText = "\"The Knitter's younger sister. Still recovering from that incident with the Evil Villagers.\"";
         Weaver.hints = "";
-        Weaver.ifLies = "Neither or both are in play.";
+        Weaver.ifLies = "";
         Weaver.picking = false;
         Weaver.startingAlignment = EAlignment.Good;
         Weaver.type = ECharacterType.Villager;
@@ -244,6 +247,39 @@ public class MainMod : MelonMod
         Weaver.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Weaver.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Weaver.color = new Color(1f, 0.935f, 0.7302f);
+
+        CharacterData Nurse = new CharacterData();
+        Nurse.role = new Nurse();
+        Nurse.name = "Nurse";
+        Nurse.description = "Pick 1 alive card: If Corrupted, cure and refresh their ability.";
+        Nurse.flavorText = "\"I can cure the Drunk, I promise!\"";
+        Nurse.hints = "My ability refreshes every night.";
+        Nurse.ifLies = "\"I couldn't cure #x\"";
+        Nurse.picking = true;
+        Nurse.abilityUsage = EAbilityUsage.ResetAfterNight;
+        Nurse.startingAlignment = EAlignment.Good;
+        Nurse.type = ECharacterType.Villager;
+        Nurse.bluffable = true;
+        Nurse.characterId = "Nurse";
+        Nurse.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Nurse.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Nurse.color = new Color(1f, 0.935f, 0.7302f);
+
+        CharacterData Stylist = new CharacterData();
+        Stylist.role = new Stylist();
+        Stylist.name = "Stylist";
+        Stylist.description = "Pick an alive Disguised character. Change their Disguise.";
+        Stylist.flavorText = "\"Taking clients from the Swapper since 2025\"";
+        Stylist.hints = "";
+        Stylist.ifLies = "\"I couldn't change #x's Disguise\"";
+        Stylist.picking = true;
+        Stylist.startingAlignment = EAlignment.Good;
+        Stylist.type = ECharacterType.Villager;
+        Stylist.bluffable = true;
+        Stylist.characterId = "Stylist";
+        Stylist.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Stylist.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Stylist.color = new Color(1f, 0.935f, 0.7302f);
 
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
@@ -460,6 +496,24 @@ public class MainMod : MelonMod
         Warlock.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
         Warlock.color = new Color(1f, 0.3804f, 0.3804f);
 
+        CharacterData Infestation = new CharacterData();
+        Infestation.role = new Infestation();
+        Infestation.name = "Infestation";
+        Infestation.description = "Game Start: 1 random character is Corrupted.\n\nAt Night: Kill all Good Corrupted characters, dealing 1 damage each. Good Characters adjacent to alive Corrupted characters are Corrupted.\n\nI Lie and Disguise.";
+        Infestation.flavorText = "\"The one zombie apocalypse you'll stand no chance in\"";
+        Infestation.hints = "Certain characters that remove Corruptions will stop my ability from working.";
+        Infestation.ifLies = "";
+        Infestation.picking = false;
+        Infestation.startingAlignment = EAlignment.Evil;
+        Infestation.type = ECharacterType.Demon;
+        Infestation.bluffable = false;
+        Infestation.characterId = "Infestation";
+        Infestation.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Infestation.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Infestation.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
+        Infestation.color = new Color(1f, 0.3804f, 0.3804f);
+
+        nightPhase.nightCharactersOrder.Add(Infestation);
         nightPhase.nightCharactersOrder.Add(Follower);
         nightPhase.nightCharactersOrder.Add(Apprentice);
         nightPhase.nightCharactersOrder.Add(Criminal);
@@ -473,6 +527,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Apprentice);
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Warlock);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
@@ -630,10 +685,43 @@ public class MainMod : MelonMod
         warlockScript.characterCounts = warlockCounterList;
         warlockScriptData.scriptInfo = warlockScript;
 
+        CustomScriptData infestationScriptData = new CustomScriptData();
+        infestationScriptData.name = "Infestation_1";
+        ScriptInfo infestationScript = new ScriptInfo();
+        Il2CppSystem.Collections.Generic.List<CharacterData> infestationList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        infestationList.Add(Infestation);
+        infestationScript.mustInclude = infestationList;
+        infestationScript.startingDemons = infestationList;
+        infestationScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
+        infestationScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
+        infestationScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
+        CharactersCount infestation_8 = setCharacterCount(5, 1, 1, 1);
+        CharactersCount infestation_9 = setCharacterCount(5, 2, 1, 1);
+        CharactersCount infestation_10 = setCharacterCount(7, 0, 2, 1);
+        CharactersCount infestation_11 = setCharacterCount(7, 1, 2, 1);
+        CharactersCount infestation_12 = setCharacterCount(7, 2, 2, 1);
+        CharactersCount infestation_13 = setCharacterCount(9, 0, 3, 1);
+        CharactersCount infestation_14 = setCharacterCount(9, 1, 3, 1);
+        CharactersCount infestation_15 = setCharacterCount(9, 2, 3, 1);
+        Il2CppSystem.Collections.Generic.List<CharactersCount> infestationCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
+
+
+        infestationCounterList.Add(infestation_8);
+        infestationCounterList.Add(infestation_9);
+        infestationCounterList.Add(infestation_10);
+        infestationCounterList.Add(infestation_11);
+        infestationCounterList.Add(infestation_12);
+        infestationCounterList.Add(infestation_13);
+        infestationCounterList.Add(infestation_14);
+        infestationCounterList.Add(infestation_15);
+        infestationScript.characterCounts = infestationCounterList;
+        infestationScriptData.scriptInfo = infestationScript;
+
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
         addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
         addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
         addDemonRole(advancedAscension, Warlock, "Baa_Difficult", "Warlock_1", warlockScriptData, 2);
+        addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
@@ -650,6 +738,8 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Lawyer);
             AddRole(script.startingTownsfolks, Psychic);
             AddRole(script.startingTownsfolks, Weaver);
+            AddRole(script.startingTownsfolks, Nurse);
+            AddRole(script.startingTownsfolks, Stylist);
 
 
             AddRole(script.startingOutsiders, MadScientist);

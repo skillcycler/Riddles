@@ -64,7 +64,16 @@ public class Director : Role
         int chosenStart = possibleStart[chosen];
         int chosenEnd = possibleEnd[chosen];
         string info = string.Format("There are 2 evils from #{0} to #{1}", chosenStart, chosenEnd);
-        ActedInfo actedInfo = new ActedInfo(info);
+        Il2CppSystem.Collections.Generic.List<Character> hint = new();
+        for (int i = chosenStart; i <= chosenEnd; i++)
+        {
+            foreach (Character character in Gameplay.CurrentCharacters)
+            {
+                if (character.id == i)
+                    hint.Add(character);
+            }
+        }
+        ActedInfo actedInfo = new ActedInfo(info, hint);
         return actedInfo;
     }
 
@@ -105,7 +114,16 @@ public class Director : Role
         int chosenStart = possibleStart[chosen];
         int chosenEnd = possibleEnd[chosen];
         string info = string.Format("There are 2 evils from #{0} to #{1}", chosenStart, chosenEnd);
-        ActedInfo actedInfo = new ActedInfo(info);
+        Il2CppSystem.Collections.Generic.List<Character> hint = new();
+        for (int i = chosenStart; i <= chosenEnd; i++)
+        {
+            foreach (Character character in Gameplay.CurrentCharacters)
+            {
+                if (character.id == i)
+                    hint.Add(character);
+            }
+        }
+        ActedInfo actedInfo = new ActedInfo(info, hint);
         return actedInfo;
     }
 

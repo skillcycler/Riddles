@@ -44,6 +44,7 @@ public class Ghost : Role
             charRef.RefreshCharacter();
             if (unrevealedCharacters.Count == 0)
             {
+                target = 0;
                 onActed.Invoke(GetInfo(charRef));
                 return;
             }
