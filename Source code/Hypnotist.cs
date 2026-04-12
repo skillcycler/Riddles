@@ -13,7 +13,7 @@ using RiddlerMod;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
 
-public class Hypnotist : Minion
+public class Hypnotist : Spy
 {
     public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();
     public override string Description
@@ -58,6 +58,10 @@ public class Hypnotist : Minion
         charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
         charRef.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
         return bluff;
+    }
+    public override CharacterData GetRegisterAsRole(Character charRef)
+    {
+        return null;
     }
     public Hypnotist() : base(ClassInjector.DerivedConstructorPointer<Hypnotist>())
     {

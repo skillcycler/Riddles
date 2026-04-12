@@ -13,7 +13,7 @@ using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.7.6", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.8", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -33,6 +33,8 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Trickster_m>();
         ClassInjector.RegisterTypeInIl2Cpp<Obsessor>();
         ClassInjector.RegisterTypeInIl2Cpp<Lawyer>();
+        ClassInjector.RegisterTypeInIl2Cpp<Psychic>();
+        ClassInjector.RegisterTypeInIl2Cpp<Weaver>();
 
         // Outcasts
 
@@ -49,6 +51,7 @@ public class MainMod : MelonMod
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
         ClassInjector.RegisterTypeInIl2Cpp<Veil>();
+        ClassInjector.RegisterTypeInIl2Cpp<Warlock>();
     }
     public override void OnLateInitializeMelon()
     {
@@ -209,6 +212,38 @@ public class MainMod : MelonMod
         Lawyer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Lawyer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Lawyer.color = new Color(1f, 0.935f, 0.7302f);
+
+        CharacterData Psychic = new CharacterData();
+        Psychic.role = new Psychic();
+        Psychic.name = "Psychic";
+        Psychic.description = "Learn 2 characters. Exactly 1 is in play.";
+        Psychic.flavorText = "\"I may be able to read your mind.\"";
+        Psychic.hints = "";
+        Psychic.ifLies = "Neither or both are in play.";
+        Psychic.picking = false;
+        Psychic.startingAlignment = EAlignment.Good;
+        Psychic.type = ECharacterType.Villager;
+        Psychic.bluffable = true;
+        Psychic.characterId = "Psychic";
+        Psychic.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Psychic.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Psychic.color = new Color(1f, 0.935f, 0.7302f);
+
+        CharacterData Weaver = new CharacterData();
+        Weaver.role = new Weaver();
+        Weaver.name = "Weaver";
+        Weaver.description = "Learn how many pairs of Villagers there are.";
+        Weaver.flavorText = "\"The Knitter's younger sister. Still recovering from that incident with the Evil Villagers.\"";
+        Weaver.hints = "";
+        Weaver.ifLies = "Neither or both are in play.";
+        Weaver.picking = false;
+        Weaver.startingAlignment = EAlignment.Good;
+        Weaver.type = ECharacterType.Villager;
+        Weaver.bluffable = true;
+        Weaver.characterId = "Weaver";
+        Weaver.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Weaver.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Weaver.color = new Color(1f, 0.935f, 0.7302f);
 
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
@@ -408,7 +443,22 @@ public class MainMod : MelonMod
         Veil.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
         Veil.color = new Color(1f, 0.3804f, 0.3804f);
 
-
+        CharacterData Warlock = new CharacterData();
+        Warlock.role = new Warlock();
+        Warlock.name = "Summoner";
+        Warlock.description = "Game Start: There are no Minions in play. 1-3 other cards become Demons and there are many fake Demons in the deck.\n\nI Lie and Disguise.\n\nYou start with 5 extra HP.";
+        Warlock.flavorText = "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"";
+        Warlock.hints = "The night cycle is always active if I am in play.";
+        Warlock.ifLies = "";
+        Warlock.picking = false;
+        Warlock.startingAlignment = EAlignment.Evil;
+        Warlock.type = ECharacterType.Demon;
+        Warlock.bluffable = false;
+        Warlock.characterId = "Warlock";
+        Warlock.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Warlock.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Warlock.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
+        Warlock.color = new Color(1f, 0.3804f, 0.3804f);
 
         nightPhase.nightCharactersOrder.Add(Follower);
         nightPhase.nightCharactersOrder.Add(Apprentice);
@@ -424,7 +474,8 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Apprentice);
-        Characters.Instance.startGameActOrder = insertAtEndOfActOrder(Lawyer);
+        Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Warlock);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
 
 
         CustomScriptData followerScriptData = new CustomScriptData();
@@ -523,9 +574,66 @@ public class MainMod : MelonMod
         veilScript.characterCounts = veilCounterList;
         veilScriptData.scriptInfo = veilScript;
 
+        CustomScriptData warlockScriptData = new CustomScriptData();
+        warlockScriptData.name = "Warlock_1";
+        ScriptInfo warlockScript = new ScriptInfo();
+        Il2CppSystem.Collections.Generic.List<CharacterData> warlockList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        warlockList.Add(Warlock);
+        warlockScript.mustInclude = warlockList;
+        warlockScript.startingDemons = warlockList;
+        warlockScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
+        warlockScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
+        warlockScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
+        // 7-8 cards: 1 summon
+        CharactersCount warlock_7a = setCharacterCount(6, 0, 0, 1);
+        CharactersCount warlock_7b = setCharacterCount(5, 1, 0, 1);
+        CharactersCount warlock_8a = setCharacterCount(7, 0, 0, 1);
+        CharactersCount warlock_8b = setCharacterCount(6, 1, 0, 1);
+        // 9-10 cards: 1-2 summons
+        CharactersCount warlock_9a = setCharacterCount(8, 0, 0, 1);
+        CharactersCount warlock_9b = setCharacterCount(7, 1, 0, 1);
+        CharactersCount warlock_10a = setCharacterCount(8, 1, 0, 1);
+        CharactersCount warlock_10b = setCharacterCount(7, 2, 0, 1);
+        // 11-12 cards: 2 summons
+        CharactersCount warlock_11a = setCharacterCount(9, 1, 0, 1);
+        CharactersCount warlock_11b = setCharacterCount(8, 2, 0, 1);
+        CharactersCount warlock_12a = setCharacterCount(10, 1, 0, 1);
+        CharactersCount warlock_12b = setCharacterCount(9, 2, 0, 1);
+        // 13+ cards: 2-3 summons
+        CharactersCount warlock_13a = setCharacterCount(11, 1, 0, 1);
+        CharactersCount warlock_13b = setCharacterCount(10, 2, 0, 1);
+        CharactersCount warlock_14a = setCharacterCount(12, 1, 0, 1);
+        CharactersCount warlock_14b = setCharacterCount(11, 2, 0, 1);
+        CharactersCount warlock_15a = setCharacterCount(13, 1, 0, 1);
+        CharactersCount warlock_15b = setCharacterCount(12, 2, 0, 1);
+        Il2CppSystem.Collections.Generic.List<CharactersCount> warlockCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
+
+
+        warlockCounterList.Add(warlock_7a);
+        warlockCounterList.Add(warlock_7b);
+        warlockCounterList.Add(warlock_8a);
+        warlockCounterList.Add(warlock_8b);
+        warlockCounterList.Add(warlock_9a);
+        warlockCounterList.Add(warlock_9b);
+        warlockCounterList.Add(warlock_10a);
+        warlockCounterList.Add(warlock_10b);
+        warlockCounterList.Add(warlock_11a);
+        warlockCounterList.Add(warlock_11b);
+        warlockCounterList.Add(warlock_12a);
+        warlockCounterList.Add(warlock_12b);
+        warlockCounterList.Add(warlock_13a);
+        warlockCounterList.Add(warlock_13b);
+        warlockCounterList.Add(warlock_14a);
+        warlockCounterList.Add(warlock_14b);
+        warlockCounterList.Add(warlock_15a);
+        warlockCounterList.Add(warlock_15b);
+        warlockScript.characterCounts = warlockCounterList;
+        warlockScriptData.scriptInfo = warlockScript;
+
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
         addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
         addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
+        addDemonRole(advancedAscension, Warlock, "Baa_Difficult", "Warlock_1", warlockScriptData, 2);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
@@ -540,6 +648,8 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Trickster_v);
             AddRole(script.startingTownsfolks, Obsessor);
             AddRole(script.startingTownsfolks, Lawyer);
+            AddRole(script.startingTownsfolks, Psychic);
+            AddRole(script.startingTownsfolks, Weaver);
 
 
             AddRole(script.startingOutsiders, MadScientist);
@@ -590,7 +700,19 @@ public class MainMod : MelonMod
         }
         return newActList;
     }
-    public CharacterData[] insertAtEndOfActOrder(CharacterData data)
+    public CharacterData[] InsertAtStartOfActOrder(CharacterData data)
+    {
+        CharacterData[] actList = Characters.Instance.startGameActOrder;
+        int actSize = actList.Length;
+        CharacterData[] newActList = new CharacterData[actSize + 1];
+        for (int i = 0; i < actSize; i++)
+        {
+            newActList[i + 1] = actList[i];
+        }
+        newActList[0] = data;
+        return newActList;
+    }
+    public CharacterData[] InsertAtEndOfActOrder(CharacterData data)
     {
         CharacterData[] actList = Characters.Instance.startGameActOrder;
         int actSize = actList.Length;
@@ -792,35 +914,6 @@ public class MainMod : MelonMod
             {
                 roles.Add(name, data);
             }
-        }
-    }
-    [HarmonyPatch(typeof(Confessor), nameof(Confessor.GetInfo))]
-    private static class GetHypnotistConfessorInfo
-    {
-        private static bool Prefix(Confessor __instance, Character charRef)
-        {
-            if (charRef.bluff)
-            {
-                if (charRef.bluff.characterId != "Confessor_18741708")
-                {
-                    return true;
-                }
-            }
-            else if (charRef.dataRef.characterId != "Confessor_18741708")
-            {
-                return true;
-            }
-            ActedInfo myInfo = new ActedInfo("I am Good");
-            if (charRef.statuses.Contains(ECharacterStatus.Corrupted) || charRef.GetAlignment() == EAlignment.Evil)
-            {
-                myInfo = new ActedInfo("I am dizzy");
-            }
-            if (charRef.bluff && charRef.dataRef.characterId == "Hypnotist")
-            {
-                myInfo = new ActedInfo("I am Good");
-            }
-            __instance.onActed?.Invoke(myInfo);
-            return false;
         }
     }
 }
