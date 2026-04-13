@@ -163,7 +163,7 @@ public class MainMod : MelonMod
         Director.startingAlignment = EAlignment.Good;
         Director.type = ECharacterType.Villager;
         Director.bluffable = true;
-        Director.characterId = "Director";
+        Director.characterId = "Director_scm";
         Director.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Director.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Director.color = new Color(1f, 0.935f, 0.7302f);

@@ -34,8 +34,8 @@ public class Channeler : Minion
             characters = Characters.Instance.FilterRealAlignmentCharacters(characters, EAlignment.Evil);
             characters.Remove(charRef);
             Il2CppSystem.Collections.Generic.List<Character> allowedCharacters = new();
-            foreach (Character character in characters) { // two characters that will end up causing problems if copied
-                if (character.dataRef.characterId != "Undying_WING" && character.dataRef.characterId != "MadScientist_scm")
+            foreach (Character character in characters) { // characters that will end up causing problems if copied
+                if (character.dataRef.characterId != "Undying_WING" && character.dataRef.characterId != "MadScientist_scm" && character.dataRef.characterId != "Blackmailer_VP")
                     allowedCharacters.Add(character);
             }
             copy = allowedCharacters[UnityEngine.Random.RandomRangeInt(0, allowedCharacters.Count)].dataRef;
