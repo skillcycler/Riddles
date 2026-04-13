@@ -12,7 +12,7 @@ using static MelonLoader.MelonLogger;
 namespace RiddlerMod;
 
 [RegisterTypeInIl2Cpp]
-public class Criminal : Role
+public class Hitman : Role
 {
     /*
     public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
@@ -60,7 +60,7 @@ public class Criminal : Role
             {
                 Character myTarget = newList[UnityEngine.Random.Range(0, newList.Count)];
                 // not gonna have this guy try to kill the Undying or the Mad Scientist with the Undying ability. It causes too many bugs.
-                while (myTarget.dataRef.characterId == "Undying_WING" || myTarget.dataRef.characterId == "MadScientist") 
+                while (myTarget.dataRef.characterId == "Undying_WING" || myTarget.dataRef.characterId == "MadScientist_scm") 
                 {
                     myTarget = newList[UnityEngine.Random.Range(0, newList.Count)];
                 }
@@ -97,11 +97,11 @@ public class Criminal : Role
             return bluff;
         }
     }
-    public Criminal() : base(ClassInjector.DerivedConstructorPointer<Criminal>())
+    public Hitman() : base(ClassInjector.DerivedConstructorPointer<Hitman>())
     {
         ClassInjector.DerivedConstructorBody((Il2CppObjectBase)this);
     }
-    public Criminal(IntPtr ptr) : base(ptr) { }
+    public Hitman(IntPtr ptr) : base(ptr) { }
 }
 public static class CriminalKill
 {

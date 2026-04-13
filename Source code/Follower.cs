@@ -30,7 +30,7 @@ public class Follower : Demon
         midPriorityIDs.Add("Oracle_07039445");
         midPriorityIDs.Add("Archivist_34476114");
         midPriorityIDs.Add("Lookout_41018246");
-        midPriorityIDs.Add("Mathematician");
+        midPriorityIDs.Add("Mathematician_scm");
         midPriorityIDs.Add("Gossip_85354100");
         midPriorityIDs.Add("Hunter_93427887");
 

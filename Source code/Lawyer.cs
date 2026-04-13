@@ -114,7 +114,7 @@ public class Lawyer : Role
                 if (character.dataRef.role.GetBluffIfAble(charRef) != null)
                     character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
                 character.statuses.statuses.Remove(ECharacterStatus.Corrupted);
-                if (character.dataRef.characterId == "Trickster_m" || character.dataRef.characterId == "Trickster_o")
+                if (character.dataRef.characterId == "Trickster_m_scm" || character.dataRef.characterId == "Trickster_o_scm")
                     character.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
                 
             }

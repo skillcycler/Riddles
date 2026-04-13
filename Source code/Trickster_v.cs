@@ -66,6 +66,10 @@ public class Trickster_v : Role
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Day)
+        {
+            onActed.Invoke(GetInfo(charRef));
+        }
         if (charRef.statuses.Contains(ECharacterStatus.BrokenAbility))
             return;
         if (trigger == ETriggerPhase.Start)
@@ -95,24 +99,24 @@ public class Trickster_v : Role
                 }
                 for (int j = 0; j < allDatas.Length; j++)
                 {
-                    if (allDatas[j].characterId == "Trickster_o")
+                    if (allDatas[j].characterId == "Trickster_o_scm")
                     {
                         converts[c1].Init(allDatas[j]);
                     }
-                    if (allDatas[j].characterId == "Trickster_m")
+                    if (allDatas[j].characterId == "Trickster_m_scm")
                     {
                         converts[c2].Init(allDatas[j]);
                     }
                 }
             }
         }
+    }
+    public override void BluffAct(ETriggerPhase trigger, Character charRef)
+    {
         if (trigger == ETriggerPhase.Day)
         {
             onActed.Invoke(GetInfo(charRef));
         }
-    }
-    public override void BluffAct(ETriggerPhase trigger, Character charRef)
-    {
         if (charRef.statuses.Contains(ECharacterStatus.BrokenAbility))
             return;
         if (trigger == ETriggerPhase.Start && charRef.GetCharacterType() == ECharacterType.Villager)
@@ -143,20 +147,16 @@ public class Trickster_v : Role
                 }
                 for (int j = 0; j < allDatas.Length; j++)
                 {
-                    if (allDatas[j].characterId == "Trickster_o")
+                    if (allDatas[j].characterId == "Trickster_o_scm")
                     {
                         converts[c1].Init(allDatas[j]);
                     }
-                    if (allDatas[j].characterId == "Trickster_m")
+                    if (allDatas[j].characterId == "Trickster_m_scm")
                     {
                         converts[c2].Init(allDatas[j]);
                     }
                 }
             }
-        }
-        if (trigger == ETriggerPhase.Day)
-        {
-            onActed.Invoke(GetBluffInfo(charRef));
         }
     }
     public Trickster_v() : base(ClassInjector.DerivedConstructorPointer<Trickster_v>())

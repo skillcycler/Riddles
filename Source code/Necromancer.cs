@@ -56,7 +56,7 @@ public class Necromancer : Role
         CharacterPicker.OnCharactersPicked -= action1;
         CharacterPicker.OnStopPick -= action2;
         Character c1 = CharacterPicker.PickedCharacters[0];
-        if (c1.GetAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost")
+        if (c1.GetAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm")
         {
             return;
         }
@@ -91,7 +91,7 @@ public class Necromancer : Role
         CharacterPicker.OnStopPick -= action2;
 
         Character c1 = CharacterPicker.PickedCharacters[0];
-        if (c1.GetAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost")
+        if (c1.GetAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm")
         {
             return;
         }

@@ -13,7 +13,7 @@ using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -42,18 +42,18 @@ public class MainMod : MelonMod
 
         ClassInjector.RegisterTypeInIl2Cpp<MadScientist>();
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
-        ClassInjector.RegisterTypeInIl2Cpp<Criminal>();
+        ClassInjector.RegisterTypeInIl2Cpp<Hitman>();
         ClassInjector.RegisterTypeInIl2Cpp<Ghost>();
 
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
         ClassInjector.RegisterTypeInIl2Cpp<Hypnotist>();
-        ClassInjector.RegisterTypeInIl2Cpp<Apprentice>();
+        ClassInjector.RegisterTypeInIl2Cpp<Channeler>();
 
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
         ClassInjector.RegisterTypeInIl2Cpp<Veil>();
-        ClassInjector.RegisterTypeInIl2Cpp<Warlock>();
+        ClassInjector.RegisterTypeInIl2Cpp<Summoner>();
         ClassInjector.RegisterTypeInIl2Cpp<Infestation>();
     }
     public override void OnLateInitializeMelon()
@@ -73,7 +73,7 @@ public class MainMod : MelonMod
         Riddler.startingAlignment = EAlignment.Good;
         Riddler.type = ECharacterType.Villager;
         Riddler.bluffable = true;
-        Riddler.characterId = "Riddler";
+        Riddler.characterId = "Riddler_scm";
         Riddler.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Riddler.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Riddler.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
@@ -90,7 +90,7 @@ public class MainMod : MelonMod
         Swapper.startingAlignment = EAlignment.Good;
         Swapper.type = ECharacterType.Villager;
         Swapper.bluffable = true;
-        Swapper.characterId = "Swapper";
+        Swapper.characterId = "Swapper_scm";
         Swapper.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Swapper.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Swapper.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
@@ -111,7 +111,7 @@ public class MainMod : MelonMod
         Sleeper.startingAlignment = EAlignment.Good;
         Sleeper.type = ECharacterType.Villager;
         Sleeper.bluffable = true;
-        Sleeper.characterId = "Sleeper";
+        Sleeper.characterId = "Sleeper_scm";
         Sleeper.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Sleeper.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Sleeper.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
@@ -129,7 +129,7 @@ public class MainMod : MelonMod
         Mathematician.startingAlignment = EAlignment.Good;
         Mathematician.type = ECharacterType.Villager;
         Mathematician.bluffable = true;
-        Mathematician.characterId = "Mathematician";
+        Mathematician.characterId = "Mathematician_scm";
         Mathematician.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Mathematician.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Mathematician.color = new Color(1f, 0.935f, 0.7302f);
@@ -147,7 +147,7 @@ public class MainMod : MelonMod
         Commander.type = ECharacterType.Villager;
         Commander.abilityUsage = EAbilityUsage.Once;
         Commander.bluffable = true;
-        Commander.characterId = "Commander";
+        Commander.characterId = "Commander_scm";
         Commander.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Commander.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Commander.color = new Color(1f, 0.935f, 0.7302f);
@@ -179,7 +179,7 @@ public class MainMod : MelonMod
         Scanner.startingAlignment = EAlignment.Good;
         Scanner.type = ECharacterType.Villager;
         Scanner.bluffable = true;
-        Scanner.characterId = "Scanner";
+        Scanner.characterId = "Scanner_scm";
         Scanner.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Scanner.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Scanner.color = new Color(1f, 0.935f, 0.7302f);
@@ -195,7 +195,7 @@ public class MainMod : MelonMod
         Obsessor.startingAlignment = EAlignment.Good;
         Obsessor.type = ECharacterType.Villager;
         Obsessor.bluffable = true;
-        Obsessor.characterId = "Obsessor";
+        Obsessor.characterId = "Obsessor_scm";
         Obsessor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Obsessor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Obsessor.color = new Color(1f, 0.935f, 0.7302f);
@@ -211,7 +211,7 @@ public class MainMod : MelonMod
         Lawyer.startingAlignment = EAlignment.Good;
         Lawyer.type = ECharacterType.Villager;
         Lawyer.bluffable = true;
-        Lawyer.characterId = "Lawyer";
+        Lawyer.characterId = "Lawyer_scm";
         Lawyer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Lawyer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Lawyer.color = new Color(1f, 0.935f, 0.7302f);
@@ -227,7 +227,7 @@ public class MainMod : MelonMod
         Psychic.startingAlignment = EAlignment.Good;
         Psychic.type = ECharacterType.Villager;
         Psychic.bluffable = true;
-        Psychic.characterId = "Psychic";
+        Psychic.characterId = "Psychic_scm";
         Psychic.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Psychic.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Psychic.color = new Color(1f, 0.935f, 0.7302f);
@@ -243,7 +243,7 @@ public class MainMod : MelonMod
         Weaver.startingAlignment = EAlignment.Good;
         Weaver.type = ECharacterType.Villager;
         Weaver.bluffable = true;
-        Weaver.characterId = "Weaver";
+        Weaver.characterId = "Weaver_scm";
         Weaver.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Weaver.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Weaver.color = new Color(1f, 0.935f, 0.7302f);
@@ -260,7 +260,7 @@ public class MainMod : MelonMod
         Nurse.startingAlignment = EAlignment.Good;
         Nurse.type = ECharacterType.Villager;
         Nurse.bluffable = true;
-        Nurse.characterId = "Nurse";
+        Nurse.characterId = "Nurse_scm";
         Nurse.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Nurse.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Nurse.color = new Color(1f, 0.935f, 0.7302f);
@@ -276,7 +276,7 @@ public class MainMod : MelonMod
         Stylist.startingAlignment = EAlignment.Good;
         Stylist.type = ECharacterType.Villager;
         Stylist.bluffable = true;
-        Stylist.characterId = "Stylist";
+        Stylist.characterId = "Stylist_scm";
         Stylist.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Stylist.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Stylist.color = new Color(1f, 0.935f, 0.7302f);
@@ -292,7 +292,7 @@ public class MainMod : MelonMod
         Trickster_v.startingAlignment = EAlignment.Good;
         Trickster_v.type = ECharacterType.Villager;
         Trickster_v.bluffable = false;
-        Trickster_v.characterId = "Trickster_v";
+        Trickster_v.characterId = "Trickster_v_scm";
         Trickster_v.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Trickster_v.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Trickster_v.color = new Color(1f, 0.935f, 0.7302f);
@@ -308,7 +308,7 @@ public class MainMod : MelonMod
         Trickster_o.startingAlignment = EAlignment.Good;
         Trickster_o.type = ECharacterType.Outcast;
         Trickster_o.bluffable = false;
-        Trickster_o.characterId = "Trickster_o";
+        Trickster_o.characterId = "Trickster_o_scm";
         Trickster_o.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Trickster_o.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Trickster_o.color = new Color(1f, 0.935f, 0.7302f);
@@ -324,7 +324,7 @@ public class MainMod : MelonMod
         Trickster_m.startingAlignment = EAlignment.Good;
         Trickster_m.type = ECharacterType.Minion;
         Trickster_m.bluffable = false;
-        Trickster_m.characterId = "Trickster_m";
+        Trickster_m.characterId = "Trickster_m_scm";
         Trickster_m.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Trickster_m.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Trickster_m.color = new Color(1f, 0.935f, 0.7302f);
@@ -340,7 +340,7 @@ public class MainMod : MelonMod
         MadScientist.startingAlignment = EAlignment.Good;
         MadScientist.type = ECharacterType.Outcast;
         MadScientist.bluffable = false;
-        MadScientist.characterId = "MadScientist";
+        MadScientist.characterId = "MadScientist_scm";
         MadScientist.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
         MadScientist.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
         MadScientist.color = new Color(0.9659f, 1f, 0.4472f);
@@ -356,26 +356,26 @@ public class MainMod : MelonMod
         Necromancer.startingAlignment = EAlignment.Good;
         Necromancer.type = ECharacterType.Outcast;
         Necromancer.bluffable = true;
-        Necromancer.characterId = "Necromancer";
+        Necromancer.characterId = "Necromancer_scm";
         Necromancer.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
         Necromancer.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
         Necromancer.color = new Color(0.9659f, 1f, 0.4472f);
 
-        CharacterData Criminal = new CharacterData();
-        Criminal.role = new Criminal();
-        Criminal.name = "Hitman";
-        Criminal.description = "I Lie and Disguise.\n\nAt night: Kill a random card and lose 3 HP.";
-        Criminal.flavorText = "\"No one is safe from me, not even myself\"";
-        Criminal.hints = "I can kill any card, including Knights, Demons, and myself.\nIf there is no night cycle, I'm just a regular Evil Outcast.";
-        Criminal.ifLies = "";
-        Criminal.picking = false;
-        Criminal.startingAlignment = EAlignment.Evil;
-        Criminal.type = ECharacterType.Outcast;
-        Criminal.bluffable = false;
-        Criminal.characterId = "Criminal";
-        Criminal.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        Criminal.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        Criminal.color = new Color(0.9659f, 1f, 0.4472f);
+        CharacterData Hitman = new CharacterData();
+        Hitman.role = new Hitman();
+        Hitman.name = "Hitman";
+        Hitman.description = "I Lie and Disguise.\n\nAt night: Kill a random card and lose 3 HP.";
+        Hitman.flavorText = "\"No one is safe from me, not even myself\"";
+        Hitman.hints = "I can kill any card, including Knights, Demons, and myself.\nIf there is no night cycle, I'm just a regular Evil Outcast.";
+        Hitman.ifLies = "";
+        Hitman.picking = false;
+        Hitman.startingAlignment = EAlignment.Evil;
+        Hitman.type = ECharacterType.Outcast;
+        Hitman.bluffable = false;
+        Hitman.characterId = "Hitman_scm";
+        Hitman.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
+        Hitman.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
+        Hitman.color = new Color(0.9659f, 1f, 0.4472f);
 
         CharacterData Ghost = new CharacterData();
         Ghost.role = new Ghost();
@@ -388,7 +388,7 @@ public class MainMod : MelonMod
         Ghost.startingAlignment = EAlignment.Good;
         Ghost.type = ECharacterType.Outcast;
         Ghost.bluffable = false;
-        Ghost.characterId = "Ghost";
+        Ghost.characterId = "Ghost_scm";
         Ghost.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
         Ghost.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
         Ghost.color = new Color(0.9659f, 1f, 0.4472f);
@@ -405,7 +405,7 @@ public class MainMod : MelonMod
         Accuser.type = ECharacterType.Minion;
         Accuser.abilityUsage = EAbilityUsage.Once;
         Accuser.bluffable = false;
-        Accuser.characterId = "Accuser";
+        Accuser.characterId = "Accuser_scm";
         Accuser.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Accuser.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Accuser.color = new Color(0.8491f, 0.4555f, 0f);
@@ -422,27 +422,27 @@ public class MainMod : MelonMod
         Hypnotist.type = ECharacterType.Minion;
         Hypnotist.abilityUsage = EAbilityUsage.Once;
         Hypnotist.bluffable = false;
-        Hypnotist.characterId = "Hypnotist";
+        Hypnotist.characterId = "Hypnotist_scm";
         Hypnotist.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Hypnotist.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Hypnotist.color = new Color(0.8491f, 0.4555f, 0f);
 
-        CharacterData Apprentice = new CharacterData();
-        Apprentice.role = new Apprentice();
-        Apprentice.name = "Channeler";
-        Apprentice.description = "I copy the ability of another Evil.";
-        Apprentice.flavorText = "\"I will follow in your footsteps.\"";
-        Apprentice.hints = "";
-        Apprentice.ifLies = "";
-        Apprentice.picking = false;
-        Apprentice.startingAlignment = EAlignment.Evil;
-        Apprentice.type = ECharacterType.Minion;
-        Apprentice.abilityUsage = EAbilityUsage.Once;
-        Apprentice.bluffable = false;
-        Apprentice.characterId = "Apprentice";
-        Apprentice.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Apprentice.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
-        Apprentice.color = new Color(0.8491f, 0.4555f, 0f);
+        CharacterData Channeler = new CharacterData();
+        Channeler.role = new Channeler();
+        Channeler.name = "Channeler";
+        Channeler.description = "I copy the ability of another Evil.";
+        Channeler.flavorText = "\"I will follow in your footsteps.\"";
+        Channeler.hints = "";
+        Channeler.ifLies = "";
+        Channeler.picking = false;
+        Channeler.startingAlignment = EAlignment.Evil;
+        Channeler.type = ECharacterType.Minion;
+        Channeler.abilityUsage = EAbilityUsage.Once;
+        Channeler.bluffable = false;
+        Channeler.characterId = "Channeler_scm";
+        Channeler.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Channeler.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
+        Channeler.color = new Color(0.8491f, 0.4555f, 0f);
 
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
@@ -455,7 +455,7 @@ public class MainMod : MelonMod
         Follower.startingAlignment = EAlignment.Evil;
         Follower.type = ECharacterType.Demon;
         Follower.bluffable = false;
-        Follower.characterId = "Follower";
+        Follower.characterId = "Follower_scm";
         Follower.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Follower.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Follower.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
@@ -473,28 +473,28 @@ public class MainMod : MelonMod
         Veil.startingAlignment = EAlignment.Evil;
         Veil.type = ECharacterType.Demon;
         Veil.bluffable = false;
-        Veil.characterId = "Veil";
+        Veil.characterId = "Veil_scm";
         Veil.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Veil.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Veil.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
         Veil.color = new Color(1f, 0.3804f, 0.3804f);
 
-        CharacterData Warlock = new CharacterData();
-        Warlock.role = new Warlock();
-        Warlock.name = "Summoner";
-        Warlock.description = "Game Start: There are no Minions in play. 1-3 other cards become Demons and there are many fake Demons in the deck.\n\nI Lie and Disguise.\n\nYou start with 5 extra HP.";
-        Warlock.flavorText = "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"";
-        Warlock.hints = "The night cycle is always active if I am in play.";
-        Warlock.ifLies = "";
-        Warlock.picking = false;
-        Warlock.startingAlignment = EAlignment.Evil;
-        Warlock.type = ECharacterType.Demon;
-        Warlock.bluffable = false;
-        Warlock.characterId = "Warlock";
-        Warlock.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Warlock.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Warlock.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
-        Warlock.color = new Color(1f, 0.3804f, 0.3804f);
+        CharacterData Summoner = new CharacterData();
+        Summoner.role = new Summoner();
+        Summoner.name = "Summoner";
+        Summoner.description = "Game Start: There are no Minions in play. 1-3 other cards become Demons. The demons I summon are not added to the Deck.\n\nI Lie and Disguise.\n\nYou start with 5 extra HP.";
+        Summoner.flavorText = "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"";
+        Summoner.hints = "The night cycle is always active if I am in play.";
+        Summoner.ifLies = "";
+        Summoner.picking = false;
+        Summoner.startingAlignment = EAlignment.Evil;
+        Summoner.type = ECharacterType.Demon;
+        Summoner.bluffable = false;
+        Summoner.characterId = "Summoner_scm";
+        Summoner.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Summoner.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Summoner.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
+        Summoner.color = new Color(1f, 0.3804f, 0.3804f);
 
         CharacterData Infestation = new CharacterData();
         Infestation.role = new Infestation();
@@ -507,7 +507,7 @@ public class MainMod : MelonMod
         Infestation.startingAlignment = EAlignment.Evil;
         Infestation.type = ECharacterType.Demon;
         Infestation.bluffable = false;
-        Infestation.characterId = "Infestation";
+        Infestation.characterId = "Infestation_scm";
         Infestation.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Infestation.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Infestation.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
@@ -515,21 +515,21 @@ public class MainMod : MelonMod
 
         nightPhase.nightCharactersOrder.Add(Infestation);
         nightPhase.nightCharactersOrder.Add(Follower);
-        nightPhase.nightCharactersOrder.Add(Apprentice);
-        nightPhase.nightCharactersOrder.Add(Criminal);
+        nightPhase.nightCharactersOrder.Add(Channeler);
+        nightPhase.nightCharactersOrder.Add(Hitman);
         nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
 
 
         // Characters.Instance.startGameActOrder = InsertAfterAct("Baa", Sleeper);
+        Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
         Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", MadScientist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Channeler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Accuser);
         Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Apprentice);
-        Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Warlock);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
 
 
@@ -629,61 +629,61 @@ public class MainMod : MelonMod
         veilScript.characterCounts = veilCounterList;
         veilScriptData.scriptInfo = veilScript;
 
-        CustomScriptData warlockScriptData = new CustomScriptData();
-        warlockScriptData.name = "Warlock_1";
-        ScriptInfo warlockScript = new ScriptInfo();
-        Il2CppSystem.Collections.Generic.List<CharacterData> warlockList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
-        warlockList.Add(Warlock);
-        warlockScript.mustInclude = warlockList;
-        warlockScript.startingDemons = warlockList;
-        warlockScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
-        warlockScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
-        warlockScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
+        CustomScriptData summonerScriptData = new CustomScriptData();
+        summonerScriptData.name = "Summoner_1";
+        ScriptInfo summonerScript = new ScriptInfo();
+        Il2CppSystem.Collections.Generic.List<CharacterData> summonerList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        summonerList.Add(Summoner);
+        summonerScript.mustInclude = summonerList;
+        summonerScript.startingDemons = summonerList;
+        summonerScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
+        summonerScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
+        summonerScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
         // 7-8 cards: 1 summon
-        CharactersCount warlock_7a = setCharacterCount(6, 0, 0, 1);
-        CharactersCount warlock_7b = setCharacterCount(5, 1, 0, 1);
-        CharactersCount warlock_8a = setCharacterCount(7, 0, 0, 1);
-        CharactersCount warlock_8b = setCharacterCount(6, 1, 0, 1);
+        CharactersCount summoner_7a = setCharacterCount(6, 0, 0, 1);
+        CharactersCount summoner_7b = setCharacterCount(5, 1, 0, 1);
+        CharactersCount summoner_8a = setCharacterCount(7, 0, 0, 1);
+        CharactersCount summoner_8b = setCharacterCount(6, 1, 0, 1);
         // 9-10 cards: 1-2 summons
-        CharactersCount warlock_9a = setCharacterCount(8, 0, 0, 1);
-        CharactersCount warlock_9b = setCharacterCount(7, 1, 0, 1);
-        CharactersCount warlock_10a = setCharacterCount(8, 1, 0, 1);
-        CharactersCount warlock_10b = setCharacterCount(7, 2, 0, 1);
+        CharactersCount summoner_9a = setCharacterCount(8, 0, 0, 1);
+        CharactersCount summoner_9b = setCharacterCount(7, 1, 0, 1);
+        CharactersCount summoner_10a = setCharacterCount(8, 1, 0, 1);
+        CharactersCount summoner_10b = setCharacterCount(7, 2, 0, 1);
         // 11-12 cards: 2 summons
-        CharactersCount warlock_11a = setCharacterCount(9, 1, 0, 1);
-        CharactersCount warlock_11b = setCharacterCount(8, 2, 0, 1);
-        CharactersCount warlock_12a = setCharacterCount(10, 1, 0, 1);
-        CharactersCount warlock_12b = setCharacterCount(9, 2, 0, 1);
+        CharactersCount summoner_11a = setCharacterCount(9, 1, 0, 1);
+        CharactersCount summoner_11b = setCharacterCount(8, 2, 0, 1);
+        CharactersCount summoner_12a = setCharacterCount(10, 1, 0, 1);
+        CharactersCount summoner_12b = setCharacterCount(9, 2, 0, 1);
         // 13+ cards: 2-3 summons
-        CharactersCount warlock_13a = setCharacterCount(11, 1, 0, 1);
-        CharactersCount warlock_13b = setCharacterCount(10, 2, 0, 1);
-        CharactersCount warlock_14a = setCharacterCount(12, 1, 0, 1);
-        CharactersCount warlock_14b = setCharacterCount(11, 2, 0, 1);
-        CharactersCount warlock_15a = setCharacterCount(13, 1, 0, 1);
-        CharactersCount warlock_15b = setCharacterCount(12, 2, 0, 1);
-        Il2CppSystem.Collections.Generic.List<CharactersCount> warlockCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
+        CharactersCount summoner_13a = setCharacterCount(11, 1, 0, 1);
+        CharactersCount summoner_13b = setCharacterCount(10, 2, 0, 1);
+        CharactersCount summoner_14a = setCharacterCount(12, 1, 0, 1);
+        CharactersCount summoner_14b = setCharacterCount(11, 2, 0, 1);
+        CharactersCount summoner_15a = setCharacterCount(13, 1, 0, 1);
+        CharactersCount summoner_15b = setCharacterCount(12, 2, 0, 1);
+        Il2CppSystem.Collections.Generic.List<CharactersCount> summonerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
 
-        warlockCounterList.Add(warlock_7a);
-        warlockCounterList.Add(warlock_7b);
-        warlockCounterList.Add(warlock_8a);
-        warlockCounterList.Add(warlock_8b);
-        warlockCounterList.Add(warlock_9a);
-        warlockCounterList.Add(warlock_9b);
-        warlockCounterList.Add(warlock_10a);
-        warlockCounterList.Add(warlock_10b);
-        warlockCounterList.Add(warlock_11a);
-        warlockCounterList.Add(warlock_11b);
-        warlockCounterList.Add(warlock_12a);
-        warlockCounterList.Add(warlock_12b);
-        warlockCounterList.Add(warlock_13a);
-        warlockCounterList.Add(warlock_13b);
-        warlockCounterList.Add(warlock_14a);
-        warlockCounterList.Add(warlock_14b);
-        warlockCounterList.Add(warlock_15a);
-        warlockCounterList.Add(warlock_15b);
-        warlockScript.characterCounts = warlockCounterList;
-        warlockScriptData.scriptInfo = warlockScript;
+        summonerCounterList.Add(summoner_7a);
+        summonerCounterList.Add(summoner_7b);
+        summonerCounterList.Add(summoner_8a);
+        summonerCounterList.Add(summoner_8b);
+        summonerCounterList.Add(summoner_9a);
+        summonerCounterList.Add(summoner_9b);
+        summonerCounterList.Add(summoner_10a);
+        summonerCounterList.Add(summoner_10b);
+        summonerCounterList.Add(summoner_11a);
+        summonerCounterList.Add(summoner_11b);
+        summonerCounterList.Add(summoner_12a);
+        summonerCounterList.Add(summoner_12b);
+        summonerCounterList.Add(summoner_13a);
+        summonerCounterList.Add(summoner_13b);
+        summonerCounterList.Add(summoner_14a);
+        summonerCounterList.Add(summoner_14b);
+        summonerCounterList.Add(summoner_15a);
+        summonerCounterList.Add(summoner_15b);
+        summonerScript.characterCounts = summonerCounterList;
+        summonerScriptData.scriptInfo = summonerScript;
 
         CustomScriptData infestationScriptData = new CustomScriptData();
         infestationScriptData.name = "Infestation_1";
@@ -720,7 +720,7 @@ public class MainMod : MelonMod
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
         addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
         addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
-        addDemonRole(advancedAscension, Warlock, "Baa_Difficult", "Warlock_1", warlockScriptData, 2);
+        addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 2);
         addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
@@ -744,13 +744,13 @@ public class MainMod : MelonMod
 
             AddRole(script.startingOutsiders, MadScientist);
             AddRole(script.startingOutsiders, Necromancer);
-            AddRole(script.startingOutsiders, Criminal);
+            AddRole(script.startingOutsiders, Hitman);
             AddRole(script.startingOutsiders, Ghost);
 
 
             AddRole(script.startingMinions, Accuser);
             AddRole(script.startingMinions, Hypnotist);
-            AddRole(script.startingMinions, Apprentice);
+            AddRole(script.startingMinions, Channeler);
         }
     }
     public void AddRole(Il2CppSystem.Collections.Generic.List<CharacterData> list, CharacterData data)

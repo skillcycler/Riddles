@@ -8,7 +8,7 @@ using System.ComponentModel.Design;
 using UnityEngine;
 using HarmonyLib;
 
-public class Apprentice : Minion
+public class Channeler : Minion
 {
     public CharacterData copy = GetGenericMinion();
     public override string Description
@@ -35,7 +35,7 @@ public class Apprentice : Minion
             characters.Remove(charRef);
             Il2CppSystem.Collections.Generic.List<Character> allowedCharacters = new();
             foreach (Character character in characters) { // two characters that will end up causing problems if copied
-                if (character.dataRef.characterId != "Undying_WING" && character.dataRef.characterId != "MadScientist")
+                if (character.dataRef.characterId != "Undying_WING" && character.dataRef.characterId != "MadScientist_scm")
                     allowedCharacters.Add(character);
             }
             copy = allowedCharacters[UnityEngine.Random.RandomRangeInt(0, allowedCharacters.Count)].dataRef;
@@ -72,11 +72,11 @@ public class Apprentice : Minion
     {
         return copy.role.CheckIfCanBeKilled(charRef);
     }
-    public Apprentice() : base(ClassInjector.DerivedConstructorPointer<Apprentice>())
+    public Channeler() : base(ClassInjector.DerivedConstructorPointer<Channeler>())
     {
         ClassInjector.DerivedConstructorBody((Il2CppObjectBase)this);
     }
-    public Apprentice(System.IntPtr ptr) : base(ptr) { }
+    public Channeler(System.IntPtr ptr) : base(ptr) { }
     public static CharacterData GetGenericMinion()
     {
         AscensionsData allCharactersAscension = ProjectContext.Instance.gameData.allCharactersAscension;

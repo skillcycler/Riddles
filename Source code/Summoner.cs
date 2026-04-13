@@ -11,7 +11,7 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.TouchScreenKeyboard;
 
-public class Warlock : Demon
+public class Summoner : Demon
 {
     public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
     {
@@ -38,7 +38,7 @@ public class Warlock : Demon
             }
         }
         List<string> bannedDemons = new List<string>();
-        bannedDemons.Add("Warlock"); // don't turn something into another summoner
+        bannedDemons.Add("Summoner_scm"); // don't turn something into another summoner
         bannedDemons.Add("Pandemonium_WING"); // This just might cause problems.
         bannedDemons.Add("Tenecaligo_WING"); // Adds minions which is not good.
         bannedDemons.Add("Praesect_WING"); // Adds minions which is not good.
@@ -87,9 +87,9 @@ public class Warlock : Demon
         }
 
     }
-    public Warlock() : base(ClassInjector.DerivedConstructorPointer<Warlock>())
+    public Summoner() : base(ClassInjector.DerivedConstructorPointer<Summoner>())
     {
         ClassInjector.DerivedConstructorBody((Il2CppObjectBase)this);
     }
-    public Warlock(System.IntPtr ptr) : base(ptr) { }
+    public Summoner(System.IntPtr ptr) : base(ptr) { }
 }

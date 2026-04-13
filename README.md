@@ -17,7 +17,7 @@ A Demon Bluff mod that adds 24 brand new characters to the game!
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
 - Hitman: An evil outcast that lies and disguises and kills a random card every night, dealing 3 damage. This can be any card, including normally unkillable cards, Demons, and even itself.
-- Necromancer: Revive a dead Good card at the cost of 3 HP. If I am lying, the revived card will lie.
+- Necromancer: Revive a dead Good card at the cost of 2 HP. If I am lying, the revived card will lie.
 - Ghost: Dies when revealed, haunting (corrupting) an unrevealed Villager.
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil. (I turn the villager into a Wretch disguised as that villager.)

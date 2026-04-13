@@ -61,7 +61,7 @@ public class Trickster_o : Role
         Il2CppSystem.Collections.Generic.List<CharacterData> listV = new Il2CppSystem.Collections.Generic.List<CharacterData>();
         Il2CppSystem.Collections.Generic.List<string> whitelistCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
 
-        whitelistCharacterIDs.Add("Trickster_v");
+        whitelistCharacterIDs.Add("Trickster_v_scm");
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))

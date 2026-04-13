@@ -61,23 +61,23 @@ public class Swapper : Role
         chars.Add(CharacterPicker.PickedCharacters[1]);
         if (chars[0].bluff)
         {
-            if (chars[0].bluff.characterId == "Swapper")
+            if (chars[0].bluff.characterId == "Swapper_scm")
             {
                 return;
             }
         }
-        if (chars[0].dataRef.characterId == "Swapper")
+        if (chars[0].dataRef.characterId == "Swapper_scm")
         {
             return;
         }
         if (chars[1].bluff)
         {
-            if (chars[1].bluff.characterId == "Swapper")
+            if (chars[1].bluff.characterId == "Swapper_scm")
             {
                 return;
             }
         }
-        if (chars[1].dataRef.characterId == "Swapper")
+        if (chars[1].dataRef.characterId == "Swapper_scm")
         {
             return;
         }
@@ -168,23 +168,23 @@ public class Swapper : Role
         chars.Add(CharacterPicker.PickedCharacters[1]);
         if (chars[0].bluff)
         {
-            if (chars[0].bluff.characterId == "Swapper")
+            if (chars[0].bluff.characterId == "Swapper_scm")
             {
                 return;
             }
         }
-        if (chars[0].dataRef.characterId == "Swapper")
+        if (chars[0].dataRef.characterId == "Swapper_scm")
         {
             return;
         }
         if (chars[1].bluff)
         {
-            if (chars[1].bluff.characterId == "Swapper")
+            if (chars[1].bluff.characterId == "Swapper_scm")
             {
                 return;
             }
         }
-        if (chars[1].dataRef.characterId == "Swapper")
+        if (chars[1].dataRef.characterId == "Swapper_scm")
         {
             return;
         }
