@@ -37,6 +37,8 @@ public class Ghost : Role
         {
             charRef.state = ECharacterState.Dead;
             PlayerController.PlayerInfo.health.Damage(1);
+            if (MainMod.CachedRule != null)
+                MainMod.CachedRule.currentStep++;
             Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
             unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
             unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);

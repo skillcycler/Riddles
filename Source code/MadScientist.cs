@@ -75,6 +75,7 @@ public class MadScientist : Role
             // This Mod
             whitelistMinionCharacterIDs.Add("Accuser_scm");
             whitelistMinionCharacterIDs.Add("Channeler_scm");
+            //whitelistMinionCharacterIDs.Add("Sleeper_scm");
             whitelistOutcastCharacterIDs.Add("Ghost_scm");
             whitelistOutcastCharacterIDs.Add("Hitman_scm");
             // Wingidon

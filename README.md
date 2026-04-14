@@ -1,5 +1,5 @@
 # Riddles
-A Demon Bluff mod that adds 24 brand new characters to the game!
+A Demon Bluff mod that adds 25 brand new characters to the game!
 ## Villagers
 - Riddler: Gives you a fun fact about the game. 
 - Swapper: Swaps the disguises of two cards. Corrupts chosen villagers if lying.
@@ -23,6 +23,7 @@ A Demon Bluff mod that adds 24 brand new characters to the game!
 - Accuser: One random adjacent Villager registers as Evil. (I turn the villager into a Wretch disguised as that villager.)
 - Hypnotist: Always disguises and says something that would otherwise never be a lie.
 - Apprentice: Copies the ability of another Evil.
+- Sleeper: The night cycle is 1 tick shorter. Can you keep up with the demons killing faster?
 ## Demons
 - Follower: Kills smartly. Night is 3 ticks long.
 - Veil: 3 cards are unable to be revealed.

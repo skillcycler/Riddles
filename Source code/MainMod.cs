@@ -9,11 +9,13 @@ using Il2CppSystem.IO;
 using MelonLoader;
 using RiddlerMod;
 using UnityEngine;
+using System.Reflection;
 using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
+using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -23,7 +25,6 @@ public class MainMod : MelonMod
     {
         ClassInjector.RegisterTypeInIl2Cpp<Riddler>();
         ClassInjector.RegisterTypeInIl2Cpp<Swapper>();
-        //ClassInjector.RegisterTypeInIl2Cpp<Sleeper>();
         ClassInjector.RegisterTypeInIl2Cpp<Mathematician>();
         ClassInjector.RegisterTypeInIl2Cpp<Commander>();
         ClassInjector.RegisterTypeInIl2Cpp<Director>();
@@ -49,18 +50,20 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
         ClassInjector.RegisterTypeInIl2Cpp<Hypnotist>();
         ClassInjector.RegisterTypeInIl2Cpp<Channeler>();
+        ClassInjector.RegisterTypeInIl2Cpp<Sleeper>();
 
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
         ClassInjector.RegisterTypeInIl2Cpp<Veil>();
         ClassInjector.RegisterTypeInIl2Cpp<Summoner>();
         ClassInjector.RegisterTypeInIl2Cpp<Infestation>();
+        Instance = this;
     }
     public override void OnLateInitializeMelon()
     {
         GameObject content = GameObject.Find("Game/Gameplay/Content");
         NightPhase nightPhase = content.GetComponent<NightPhase>();
-        MelonLogger.Msg(typeof(Confessor).ToString(), typeof(Gossip).ToString(), nameof(Confessor.Act), nameof(Gossip.Act));
+        GameplayEvents.OnDeckShuffled += new Action(OnRoundStart);
 
         CharacterData Riddler = new CharacterData();
         Riddler.role = new Riddler();
@@ -95,28 +98,7 @@ public class MainMod : MelonMod
         Swapper.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Swapper.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Swapper.color = new Color(1f, 0.935f, 0.7302f);
-        /*
-         * This character has too many bugs that I don't know how to fix.
-         * - Sleeper doesn't work when it's an evil disguised as Sleeper
-         * - Sleeper doesn't refresh its info each day.
-         * - Sleeper in a Lilis village causes 2 night cycles at the same time.
-        CharacterData Sleeper = new CharacterData();
-        Sleeper.role = new Sleeper();
-        Sleeper.name = "Sleeper";
-        Sleeper.description = "Learn random information each day. The night cycle is 3 ticks long.";
-        Sleeper.flavorText = "\"Ever feel like you get enough sleep? Me neither.\"";
-        Sleeper.hints = "";
-        Sleeper.ifLies = "The night cycle is still 3 ticks but the information is false.";
-        Sleeper.picking = false;
-        Sleeper.startingAlignment = EAlignment.Good;
-        Sleeper.type = ECharacterType.Villager;
-        Sleeper.bluffable = true;
-        Sleeper.characterId = "Sleeper_scm";
-        Sleeper.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Sleeper.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Sleeper.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Sleeper.color = new Color(1f, 0.935f, 0.7302f);
-        */
+        
 
         CharacterData Mathematician = new CharacterData();
         Mathematician.role = new Mathematician();
@@ -286,7 +268,7 @@ public class MainMod : MelonMod
         Trickster_v.name = "Trickster";
         Trickster_v.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nYou don't know which is which.\nLearn a card that is the same character type as me.";
         Trickster_v.flavorText = "\"If you thought the Minion twins were bad, get ready for the three of us!\"";
-        Trickster_v.hints = "";
+        Trickster_v.hints = "If I am Corrupted or abnormally Disguised as: \"I feel sick\"";
         Trickster_v.ifLies = "";
         Trickster_v.picking = false;
         Trickster_v.startingAlignment = EAlignment.Good;
@@ -444,6 +426,22 @@ public class MainMod : MelonMod
         Channeler.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Channeler.color = new Color(0.8491f, 0.4555f, 0f);
 
+        CharacterData Sleeper = new CharacterData();
+        Sleeper.role = new Sleeper();
+        Sleeper.name = "Sleeper";
+        Sleeper.description = "The night cycle is 1 tick shorter if there is one.";
+        Sleeper.flavorText = "\"Ever feel like you get enough sleep? Well too bad. You're not getting it anymore.\"";
+        Sleeper.hints = "";
+        Sleeper.ifLies = "";
+        Sleeper.picking = false;
+        Sleeper.startingAlignment = EAlignment.Evil;
+        Sleeper.type = ECharacterType.Minion;
+        Sleeper.bluffable = false;
+        Sleeper.characterId = "Sleeper_scm";
+        Sleeper.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Sleeper.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
+        Sleeper.color = new Color(0.8491f, 0.4555f, 0f);
+
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
         Follower.name = "Follower";
@@ -518,6 +516,7 @@ public class MainMod : MelonMod
         nightPhase.nightCharactersOrder.Add(Channeler);
         nightPhase.nightCharactersOrder.Add(Hitman);
         nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
+        nightPhase.nightCharactersOrder.Add(Sleeper);
 
 
         // Characters.Instance.startGameActOrder = InsertAfterAct("Baa", Sleeper);
@@ -530,6 +529,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Accuser);
         Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
 
 
@@ -714,6 +714,7 @@ public class MainMod : MelonMod
         infestationCounterList.Add(infestation_13);
         infestationCounterList.Add(infestation_14);
         infestationCounterList.Add(infestation_15);
+
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
 
@@ -728,7 +729,6 @@ public class MainMod : MelonMod
             ScriptInfo script = scriptData.scriptInfo;
             AddRole(script.startingTownsfolks, Riddler);
             AddRole(script.startingTownsfolks, Swapper);
-            // AddRole(script.startingTownsfolks, Sleeper);
             AddRole(script.startingTownsfolks, Mathematician);
             AddRole(script.startingTownsfolks, Commander);
             AddRole(script.startingTownsfolks, Director);
@@ -751,6 +751,7 @@ public class MainMod : MelonMod
             AddRole(script.startingMinions, Accuser);
             AddRole(script.startingMinions, Hypnotist);
             AddRole(script.startingMinions, Channeler);
+            AddRole(script.startingMinions, Sleeper);
         }
     }
     public void AddRole(Il2CppSystem.Collections.Generic.List<CharacterData> list, CharacterData data)
@@ -1006,4 +1007,48 @@ public class MainMod : MelonMod
             }
         }
     }
+
+    public bool shortenNight = false;
+    public static MainMod Instance;
+    private void OnRoundStart()
+    {
+        shortenNight = false;
+
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (c.dataRef.characterId == "Sleeper_scm")
+                shortenNight = true;
+        }
+
+    }
+    public static NightModeRule CachedRule;
+
+    [HarmonyPatch(typeof(Gameplay), "OnCharacterReveal")]
+    public static class CharacterRevealPatch
+    {
+
+        [HarmonyPostfix]
+        public static void DoSleeperStuff(Character obj)
+        {
+            
+            if (obj == null) return;
+            var mod = MainMod.Instance;
+            if (mod == null) return;
+            if (mod.shortenNight)
+            {
+                CachedRule.currentStep++;
+                mod.shortenNight = false;
+            }
+
+        }
+    }
+    [HarmonyPatch(typeof(NightModeRule), "Init")]
+    static class Patch
+    {
+        static void Postfix(NightModeRule __instance)
+        {
+            MainMod.CachedRule = __instance;
+        }
+    }
+
 }

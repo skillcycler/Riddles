@@ -27,6 +27,11 @@ public class Trickster_v : Role
     }
     public override ActedInfo GetInfo(Character charRef)
     {
+        if (charRef.dataRef.characterId != "Trickster_v_scm" && charRef.dataRef.characterId != "Trickster_o_scm" && charRef.dataRef.characterId != "Trickster_m_scm")
+        {
+            if (!charRef.statuses.Contains(Accused.accused))
+                return new ActedInfo("I feel sick.");
+        }
         if (!converted)
             return new ActedInfo("This village has too few Villagers! I can't perform my tricks here!");
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
@@ -43,6 +48,15 @@ public class Trickster_v : Role
 
     public override ActedInfo GetBluffInfo(Character charRef)
     {
+        if (charRef.dataRef.characterId != "Trickster_v_scm" && charRef.dataRef.characterId != "Trickster_o_scm" && charRef.dataRef.characterId != "Trickster_m_scm")
+        {
+            if (!charRef.statuses.Contains(Accused.accused))
+                return new ActedInfo("I feel sick.");
+        }
+        if (charRef.statuses.Contains(ECharacterStatus.Corrupted))
+        {
+            return new ActedInfo("I feel sick.");
+        }
         if (charRef.GetCharacterType() == ECharacterType.Outcast || charRef.GetCharacterType() == ECharacterType.Minion)
         {
             return GetInfo(charRef);
