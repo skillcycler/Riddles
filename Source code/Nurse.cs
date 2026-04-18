@@ -39,7 +39,7 @@ public class Nurse : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(1);
+        CharacterPicker.Instance.StartPickCharacters(1, charRef);
         CharacterPicker.OnCharactersPicked += action1;
         CharacterPicker.OnStopPick += action2;
     }
@@ -47,7 +47,7 @@ public class Nurse : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(1);
+        CharacterPicker.Instance.StartPickCharacters(1, charRef);
         CharacterPicker.OnCharactersPicked += action3;
         CharacterPicker.OnStopPick += action2;
     }
@@ -74,14 +74,14 @@ public class Nurse : Role
             {
                 if (c.bluff.picking)
                 {
-                    c.uses = 1;
+                    c.pickableUses = 1;
                     c.pickable.SetActive(true);
                 }
             } else
             {
                 if (c.dataRef.picking)
                 {
-                    c.uses = 1;
+                    c.pickableUses = 1;
                     c.pickable.SetActive(true);
                 }
             }

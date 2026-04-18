@@ -39,7 +39,7 @@ public class Swapper : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(2);
+        CharacterPicker.Instance.StartPickCharacters(2, charRef);
         CharacterPicker.OnCharactersPicked += action1;
         CharacterPicker.OnStopPick += action2;
     }
@@ -47,7 +47,7 @@ public class Swapper : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(2);
+        CharacterPicker.Instance.StartPickCharacters(2, charRef);
         CharacterPicker.OnCharactersPicked += action3;
         CharacterPicker.OnStopPick += action2;
     }
@@ -128,7 +128,7 @@ public class Swapper : Role
         c1.RefreshCharacter();
         if (c1.bluff.picking)
         {
-            c1.uses = 1;
+            c1.pickableUses = 1;
             c1.pickable.SetActive(true);
         }
         c1.Act(ETriggerPhase.Day);
@@ -146,7 +146,7 @@ public class Swapper : Role
         c2.RefreshCharacter();
         if (c2.bluff.picking)
         {
-            c2.uses = 1;
+            c2.pickableUses = 1;
             c2.pickable.SetActive(true);
         }
         c2.Act(ETriggerPhase.Day);
@@ -211,7 +211,7 @@ public class Swapper : Role
         c1.RefreshCharacter();
         if (c1.bluff.picking)
         {
-            c1.uses = 1;
+            c1.pickableUses = 1;
             c1.pickable.SetActive(true);
         }
         c1.Act(ETriggerPhase.Day);
@@ -230,7 +230,7 @@ public class Swapper : Role
         c2.RefreshCharacter();
         if (c2.bluff.picking)
         {
-            c2.uses = 1;
+            c2.pickableUses = 1;
             c2.pickable.SetActive(true);
         }
         c2.Act(ETriggerPhase.Day);

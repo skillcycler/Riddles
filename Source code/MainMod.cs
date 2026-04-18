@@ -15,7 +15,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.3", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -480,7 +480,7 @@ public class MainMod : MelonMod
         CharacterData Summoner = new CharacterData();
         Summoner.role = new Summoner();
         Summoner.name = "Summoner";
-        Summoner.description = "Game Start: There are no Minions in play. 1-3 other cards become Demons. The demons I summon are not added to the Deck.\n\nI Lie and Disguise.\n\nYou start with 5 extra HP.";
+        Summoner.description = "Game Start: There are no Minions in play. 1-3 other cards become Demons. The demons I summon are not added to the Deck.\n\nI Lie and Disguise.\n\nYou might start with 5 extra HP.";
         Summoner.flavorText = "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"";
         Summoner.hints = "The night cycle is always active if I am in play.";
         Summoner.ifLies = "";
@@ -580,12 +580,12 @@ public class MainMod : MelonMod
         followerCounterList.Add(follower_11b);
         followerCounterList.Add(follower_11c);
         followerCounterList.Add(follower_11d);
-        followerCounterList.Add(follower_12a);
+        /*followerCounterList.Add(follower_12a);
         followerCounterList.Add(follower_12b);
         followerCounterList.Add(follower_12c);
         followerCounterList.Add(follower_12d);
         followerCounterList.Add(follower_13a);
-        followerCounterList.Add(follower_13b);
+        followerCounterList.Add(follower_13b);*/
         followerScript.characterCounts = followerCounterList;
         followerScriptData.scriptInfo = followerScript;
 
@@ -612,7 +612,7 @@ public class MainMod : MelonMod
         Il2CppSystem.Collections.Generic.List<CharactersCount> veilCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
 
-        veilCounterList.Add(veil_13a);
+        /*veilCounterList.Add(veil_13a);
         veilCounterList.Add(veil_13b);
         veilCounterList.Add(veil_13c);
         veilCounterList.Add(veil_13d);
@@ -625,7 +625,10 @@ public class MainMod : MelonMod
         veilCounterList.Add(veil_14b);
         veilCounterList.Add(veil_14c);
         veilCounterList.Add(veil_15a);
-        veilCounterList.Add(veil_15b);
+        veilCounterList.Add(veil_15b);*/
+        veilCounterList.Add(setCharacterCount(8, 0, 2, 1)); // temp fix until 12+ cards work again
+        veilCounterList.Add(setCharacterCount(7, 1, 2, 1)); // temp fix until 12+ cards work again
+
         veilScript.characterCounts = veilCounterList;
         veilScriptData.scriptInfo = veilScript;
 
@@ -674,14 +677,14 @@ public class MainMod : MelonMod
         summonerCounterList.Add(summoner_10b);
         summonerCounterList.Add(summoner_11a);
         summonerCounterList.Add(summoner_11b);
-        summonerCounterList.Add(summoner_12a);
+        /*summonerCounterList.Add(summoner_12a);
         summonerCounterList.Add(summoner_12b);
         summonerCounterList.Add(summoner_13a);
         summonerCounterList.Add(summoner_13b);
         summonerCounterList.Add(summoner_14a);
         summonerCounterList.Add(summoner_14b);
         summonerCounterList.Add(summoner_15a);
-        summonerCounterList.Add(summoner_15b);
+        summonerCounterList.Add(summoner_15b);*/
         summonerScript.characterCounts = summonerCounterList;
         summonerScriptData.scriptInfo = summonerScript;
 
@@ -710,10 +713,10 @@ public class MainMod : MelonMod
         infestationCounterList.Add(infestation_9);
         infestationCounterList.Add(infestation_10);
         infestationCounterList.Add(infestation_11);
-        infestationCounterList.Add(infestation_12);
+        /*infestationCounterList.Add(infestation_12);
         infestationCounterList.Add(infestation_13);
         infestationCounterList.Add(infestation_14);
-        infestationCounterList.Add(infestation_15);
+        infestationCounterList.Add(infestation_15);*/
 
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
@@ -766,6 +769,7 @@ public class MainMod : MelonMod
     public CharacterData[] InsertAfterAct(string previous, CharacterData data)
     {
         CharacterData[] actList = Characters.Instance.startGameActOrder;
+
         int actSize = actList.Length;
         CharacterData[] newActList = new CharacterData[actSize + 1];
         bool inserted = false;
@@ -777,11 +781,14 @@ public class MainMod : MelonMod
             }
             else
             {
-                newActList[i] = actList[i];
-                if (actList[i].name == previous)
+                if (actList[i] != null)
                 {
-                    newActList[i + 1] = data;
-                    inserted = true;
+                    newActList[i] = actList[i];
+                    if (actList[i].name == previous)
+                    {
+                        newActList[i + 1] = data;
+                        inserted = true;
+                    }
                 }
             }
         }
@@ -851,6 +858,7 @@ public class MainMod : MelonMod
             }
         }
     }
+    /*
     public override void OnUpdate()
     {
         if (allDatas.Length == 0)
@@ -891,19 +899,15 @@ public class MainMod : MelonMod
         {
             Statics.checkCreateCircle(chars, i);
         }
-        for (int j = 2; j < 5; j++)
-        {
-            Statics.checkCreateCircle(chars, j);
-        }
     }
     public static class Statics
     {
         public static Dictionary<string, CharacterData> roles = new Dictionary<string, CharacterData>();
         public static CharacterData[] charactersArray = Il2CppSystem.Array.Empty<CharacterData>();
-        static GameObject circChar = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/Character");
-        static GameObject circCharLeft = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/Character (1)");
-        static GameObject circCharRight = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/Character (4)");
-        static GameObject circCharDown = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/Character (3)");
+        static GameObject circChar = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/CardPlaceholder");
+        static GameObject circCharLeft = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/CardPlaceholder (1)");
+        static GameObject circCharRight = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/CardPlaceholder (4)");
+        static GameObject circCharDown = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/CardPlaceholder (3)");
         public static void checkCreateCircle(Transform parent, int size)
         {
             string name = "Circle_" + size;
@@ -922,6 +926,7 @@ public class MainMod : MelonMod
             circle.transform.SetParent(parent);
             CharactersPool circlePool = circle.AddComponent<CharactersPool>();
             circlePool.characters = new Character[size];
+            
             for (int i = 0; i < size; i++)
             {
                 GameObject card;
@@ -959,7 +964,9 @@ public class MainMod : MelonMod
                 Transform icon = card.transform.Find("Icon");
                 card.transform.Rotate(0, 0, rotation);
                 icon.Rotate(0, 0, 360 - rotation);
-                circlePool.characters[i] = card.GetComponent<Character>();
+
+
+                circlePool.characters[i] = new Character();
             }
             circle.transform.position = new UnityEngine.Vector3(0f, 1f, 85.9444f);
             circle.transform.localScale = new UnityEngine.Vector3(1f, 1f, 1f);
@@ -1007,13 +1014,12 @@ public class MainMod : MelonMod
             }
         }
     }
-
+    */
     public bool shortenNight = false;
     public static MainMod Instance;
     private void OnRoundStart()
     {
         shortenNight = false;
-
         foreach (Character c in Gameplay.CurrentCharacters)
         {
             if (c.dataRef.characterId == "Sleeper_scm")

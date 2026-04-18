@@ -70,7 +70,7 @@ public class Follower : Demon
             } else
             {
                 // deprioritize "spent" once per game abilities
-                if (character.uses == 0)
+                if (character.pickableUses == 0)
                 {
                     targetValue = 0f;
                 } else
@@ -159,7 +159,7 @@ public class Follower : Demon
             nightAttackTarget.KillByDemon(charRef);
             if (nightAttackTarget.dataRef.picking)
             {
-                nightAttackTarget.uses = 0;
+                nightAttackTarget.pickableUses = 0;
                 nightAttackTarget.pickable.SetActive(false);
             }
         }

@@ -73,7 +73,7 @@ public class Hitman : Role
                 myTarget.RevealReal();
                 if (myTarget.dataRef.picking)
                 {
-                    myTarget.uses = 0;
+                    myTarget.pickableUses = 0;
                     myTarget.pickable.SetActive(false);
                 }
             }

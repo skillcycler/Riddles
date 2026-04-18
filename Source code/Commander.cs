@@ -39,7 +39,7 @@ public class Commander : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(2);
+        CharacterPicker.Instance.StartPickCharacters(2, charRef);
         CharacterPicker.OnCharactersPicked += action1;
         CharacterPicker.OnStopPick += action2;
     }
@@ -47,7 +47,7 @@ public class Commander : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(2);
+        CharacterPicker.Instance.StartPickCharacters(2, charRef);
         CharacterPicker.OnCharactersPicked += action3;
         CharacterPicker.OnStopPick += action2;
     }

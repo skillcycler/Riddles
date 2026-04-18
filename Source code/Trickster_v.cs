@@ -48,14 +48,14 @@ public class Trickster_v : Role
 
     public override ActedInfo GetBluffInfo(Character charRef)
     {
+        if (charRef.statuses.Contains(ECharacterStatus.Corrupted))
+        {
+            return new ActedInfo("I feel sick.");
+        }
         if (charRef.dataRef.characterId != "Trickster_v_scm" && charRef.dataRef.characterId != "Trickster_o_scm" && charRef.dataRef.characterId != "Trickster_m_scm")
         {
             if (!charRef.statuses.Contains(Accused.accused))
                 return new ActedInfo("I feel sick.");
-        }
-        if (charRef.statuses.Contains(ECharacterStatus.Corrupted))
-        {
-            return new ActedInfo("I feel sick.");
         }
         if (charRef.GetCharacterType() == ECharacterType.Outcast || charRef.GetCharacterType() == ECharacterType.Minion)
         {

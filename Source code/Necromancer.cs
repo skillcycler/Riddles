@@ -39,7 +39,7 @@ public class Necromancer : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(1);
+        CharacterPicker.Instance.StartPickCharacters(1, charRef);
         CharacterPicker.OnCharactersPicked += action1;
         CharacterPicker.OnStopPick += action2;
     }
@@ -47,7 +47,7 @@ public class Necromancer : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(1);
+        CharacterPicker.Instance.StartPickCharacters(1, charRef);
         CharacterPicker.OnCharactersPicked += action3;
         CharacterPicker.OnStopPick += action2;
     }
@@ -69,12 +69,12 @@ public class Necromancer : Role
         {
             if (c1.bluff.picking)
             {
-                c1.uses = 1;
+                c1.pickableUses = 1;
                 c1.pickable.SetActive(true);
             }
         } else if (c1.dataRef.picking)
         {
-            c1.uses = 1;
+            c1.pickableUses = 1;
             c1.pickable.SetActive(true);
         }
         c1.state = ECharacterState.Alive;
@@ -104,13 +104,13 @@ public class Necromancer : Role
         {
             if (c1.bluff.picking)
             {
-                c1.uses = 1;
+                c1.pickableUses = 1;
                 c1.pickable.SetActive(true);
             }
         }
         else if (c1.dataRef.picking)
         {
-            c1.uses = 1;
+            c1.pickableUses = 1;
             c1.pickable.SetActive(true);
         }
         c1.state = ECharacterState.Alive;

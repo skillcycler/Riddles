@@ -39,7 +39,7 @@ public class Stylist : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(1);
+        CharacterPicker.Instance.StartPickCharacters(1, charRef);
         CharacterPicker.OnCharactersPicked += action1;
         CharacterPicker.OnStopPick += action2;
     }
@@ -47,7 +47,7 @@ public class Stylist : Role
     {
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
-        CharacterPicker.Instance.StartPickCharacters(1);
+        CharacterPicker.Instance.StartPickCharacters(1, charRef);
         CharacterPicker.OnCharactersPicked += action3;
         CharacterPicker.OnStopPick += action2;
     }
@@ -77,7 +77,7 @@ public class Stylist : Role
             c.RefreshCharacter();
             if (c.bluff.picking)
             {
-                c.uses = 1;
+                c.pickableUses = 1;
                 c.pickable.SetActive(true);
             }
             c.Act(ETriggerPhase.Day);
