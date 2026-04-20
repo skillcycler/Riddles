@@ -15,7 +15,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.4", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -155,7 +155,7 @@ public class MainMod : MelonMod
         Scanner.name = "Scanner";
         Scanner.description = "Learn how many Outcasts are Disguised or being used as a Disguise.";
         Scanner.flavorText = "\"I spy with my two little eyes, two Outcasts in disguise!\"";
-        Scanner.hints = "The Outcast Trickster and Accused villager both count towards this.";
+        Scanner.hints = "The Outcast Trickster counts towards this.";
         Scanner.ifLies = "";
         Scanner.picking = false;
         Scanner.startingAlignment = EAlignment.Good;
@@ -203,7 +203,7 @@ public class MainMod : MelonMod
         Psychic.name = "Psychic";
         Psychic.description = "Learn 2 characters. Exactly 1 is in play.";
         Psychic.flavorText = "\"I may be able to read your mind.\"";
-        Psychic.hints = "";
+        Psychic.hints = "I can see through misregistration.";
         Psychic.ifLies = "Neither or both are in play.";
         Psychic.picking = false;
         Psychic.startingAlignment = EAlignment.Good;
@@ -380,7 +380,7 @@ public class MainMod : MelonMod
         Accuser.name = "Accuser";
         Accuser.description = "Game Start: One adjacent Good Villager registers a random Evil Minion.\n\nI Lie and Disguise.";
         Accuser.flavorText = "\"Uno reverse card!\"";
-        Accuser.hints = "I turn the Villager into a Wretch disguised as that Villager. It was too hard to code otherwise.";
+        Accuser.hints = "";
         Accuser.ifLies = "";
         Accuser.picking = false;
         Accuser.startingAlignment = EAlignment.Evil;
@@ -736,7 +736,7 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Commander);
             AddRole(script.startingTownsfolks, Director);
             AddRole(script.startingTownsfolks, Scanner);
-            AddRole(script.startingTownsfolks, Trickster_v);
+            //AddRole(script.startingTownsfolks, Trickster_v); They're taking a break from their trickery.
             AddRole(script.startingTownsfolks, Obsessor);
             AddRole(script.startingTownsfolks, Lawyer);
             AddRole(script.startingTownsfolks, Psychic);

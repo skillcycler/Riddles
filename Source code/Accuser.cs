@@ -31,14 +31,12 @@ public class Accuser : Minion
         {
             Il2CppSystem.Collections.Generic.List<Character> neighbors = Characters.Instance.GetAdjacentCharacters(charRef);
             neighbors = Characters.Instance.FilterCharacterType(neighbors, ECharacterType.Villager);
+            neighbors = Characters.Instance.FilterAlignmentCharacters(neighbors, EAlignment.Good);
             if (neighbors.Count > 0)
             {
                 Character randomChar = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
                 randomChar.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 randomChar.statuses.AddStatus(Accused.accused, charRef);
-                randomChar.GiveBluff(randomChar.dataRef);
-                randomChar.dataRef = ProjectContext.Instance.gameData.GetCharacterDataOfId("Wretch_80988916");
-                randomChar.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
             }
         }
     }
@@ -63,6 +61,18 @@ public static class Accused
             {
                 __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#FF8000><size=18>\n<Accused></color></size>";
             }
+        }
+    }
+}
+[HarmonyPatch(typeof(Character), nameof(Character.Reveal))]
+public static class Accusing
+{
+    public static void Postfix(Character __instance)
+    {
+        if (__instance.statuses.Contains(Accused.accused))
+        {
+            Recluse wretch = new();
+            __instance.UpdateRegisterAsRole(wretch.GetRegisterAsRole(__instance));
         }
     }
 }
