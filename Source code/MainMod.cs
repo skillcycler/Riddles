@@ -15,7 +15,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.4", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.5", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -51,6 +51,8 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Hypnotist>();
         ClassInjector.RegisterTypeInIl2Cpp<Channeler>();
         ClassInjector.RegisterTypeInIl2Cpp<Sleeper>();
+        ClassInjector.RegisterTypeInIl2Cpp<Guardian>();
+        ClassInjector.RegisterTypeInIl2Cpp<Mastermind>();
 
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
@@ -442,6 +444,38 @@ public class MainMod : MelonMod
         Sleeper.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Sleeper.color = new Color(0.8491f, 0.4555f, 0f);
 
+        CharacterData Guardian = new CharacterData();
+        Guardian.role = new Guardian();
+        Guardian.name = "Guardian";
+        Guardian.description = "The Demon registers as a Good Villager.\n\nI sit next to the Demon.";
+        Guardian.flavorText = "\"You're gonna have to get through me first.\"";
+        Guardian.hints = "";
+        Guardian.ifLies = "";
+        Guardian.picking = false;
+        Guardian.startingAlignment = EAlignment.Evil;
+        Guardian.type = ECharacterType.Minion;
+        Guardian.bluffable = false;
+        Guardian.characterId = "Guardian_scm";
+        Guardian.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Guardian.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
+        Guardian.color = new Color(0.8491f, 0.4555f, 0f);
+
+        CharacterData Mastermind = new CharacterData();
+        Mastermind.role = new Mastermind();
+        Mastermind.name = "Mastermind";
+        Mastermind.description = "Game Start: Every Evil Minion becomes a Mastermind after all other Game Start effects.";
+        Mastermind.flavorText = "\"It all comes back to me.\"";
+        Mastermind.hints = "";
+        Mastermind.ifLies = "";
+        Mastermind.picking = false;
+        Mastermind.startingAlignment = EAlignment.Evil;
+        Mastermind.type = ECharacterType.Minion;
+        Mastermind.bluffable = false;
+        Mastermind.characterId = "Mastermind_scm";
+        Mastermind.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Mastermind.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
+        Mastermind.color = new Color(0.8491f, 0.4555f, 0f);
+
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
         Follower.name = "Follower";
@@ -527,10 +561,12 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Channeler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Accuser);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Guardian);
         Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind);
 
 
         CustomScriptData followerScriptData = new CustomScriptData();
@@ -708,7 +744,7 @@ public class MainMod : MelonMod
         CharactersCount infestation_15 = setCharacterCount(9, 2, 3, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> infestationCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
-
+        
         infestationCounterList.Add(infestation_8);
         infestationCounterList.Add(infestation_9);
         infestationCounterList.Add(infestation_10);
@@ -717,6 +753,8 @@ public class MainMod : MelonMod
         infestationCounterList.Add(infestation_13);
         infestationCounterList.Add(infestation_14);
         infestationCounterList.Add(infestation_15);*/
+        //infestationCounterList.Add(setCharacterCount(2, 7, 0, 1)); // use this to test outcasts
+        //infestationCounterList.Add(setCharacterCount(2, 0, 7, 1)); // use this to test minions
 
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
@@ -755,6 +793,8 @@ public class MainMod : MelonMod
             AddRole(script.startingMinions, Hypnotist);
             AddRole(script.startingMinions, Channeler);
             AddRole(script.startingMinions, Sleeper);
+            AddRole(script.startingMinions, Guardian);
+            AddRole(script.startingMinions, Mastermind);
         }
     }
     public void AddRole(Il2CppSystem.Collections.Generic.List<CharacterData> list, CharacterData data)
@@ -1044,6 +1084,10 @@ public class MainMod : MelonMod
             {
                 CachedRule.currentStep++;
                 mod.shortenNight = false;
+            }
+            if (obj.dataRef.characterId == "Ghost_scm")
+            {
+                CachedRule.currentStep++;
             }
 
         }

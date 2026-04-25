@@ -14,14 +14,14 @@ public class MadScientist : Role
     public CharacterData fakeMinion = GetGenericMinion();
     public CharacterData fakeMinion2 = GetGenericMinion();
     public CharacterData fakeOutcast = GetGenericOutcast();
-    public CharacterData fakeOutcast2 = GetGenericOutcast();
+    //public CharacterData fakeOutcast2 = GetGenericOutcast();
     public Character chargedActor = new Character();
     public override ActedInfo GetInfo(Character charRef)
     {
         if (fakeMinion.name == "Minion")
         {
-            return new ActedInfo("Something went wrong and I don't have a Minion ability");
-        }
+            return new ActedInfo("I can't remember what abilities I have.");
+        }/*
         if (fakeOutcast.name == "Doppelganger")
         {
             return new ActedInfo("Something went wrong and I don't have an Outcast ability");
@@ -29,7 +29,7 @@ public class MadScientist : Role
         if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
         {
             return new ActedInfo(string.Format("I have the {0} and {1} abilities", fakeMinion2.name, fakeOutcast2.name));
-        }
+        }*/
         return new ActedInfo(string.Format("I have the {0} and {1} abilities", fakeMinion.name, fakeOutcast.name));
     }
     public override ActedInfo GetBluffInfo(Character charRef)
@@ -70,14 +70,15 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Plague Doctor_49312486");
             whitelistOutcastCharacterIDs.Add("Wretch_80988916");
             whitelistOutcastCharacterIDs.Add("Bombardier_79093372");
-            whitelistOutcastCharacterIDs.Add("Drunk_15369527");
-            whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
+            //whitelistOutcastCharacterIDs.Add("Drunk_15369527");
+            //whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
             // This Mod
             whitelistMinionCharacterIDs.Add("Accuser_scm");
             whitelistMinionCharacterIDs.Add("Channeler_scm");
             //whitelistMinionCharacterIDs.Add("Sleeper_scm");
+            whitelistMinionCharacterIDs.Add("Guardian_scm");
             whitelistOutcastCharacterIDs.Add("Ghost_scm");
-            whitelistOutcastCharacterIDs.Add("Hitman_scm");
+            //whitelistOutcastCharacterIDs.Add("Hitman_scm");
             // Wingidon
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
@@ -86,14 +87,14 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Chatterbox_WING");
             whitelistOutcastCharacterIDs.Add("Revolutionary_WING");
             whitelistOutcastCharacterIDs.Add("Marionette_WING");
-            whitelistOutcastCharacterIDs.Add("Renegade_WING");
-            whitelistOutcastCharacterIDs.Add("Lunatic_WING");
+            //whitelistOutcastCharacterIDs.Add("Renegade_WING");
+            //whitelistOutcastCharacterIDs.Add("Lunatic_WING");
 
             // Carlz
             //whitelistMinionCharacterIDs.Add("Lycaon_VP"); This has been causing too many bugs
             whitelistMinionCharacterIDs.Add("Blackmailer_VP");
             whitelistOutcastCharacterIDs.Add("Rook_VP");
-            whitelistOutcastCharacterIDs.Add("Mayor_VP");
+            //whitelistOutcastCharacterIDs.Add("Mayor_VP");
             // Mass Hysteria
             whitelistMinionCharacterIDs.Add("Siren_MaHy");
             whitelistOutcastCharacterIDs.Add("Magician_MaHy");
@@ -129,29 +130,30 @@ public class MadScientist : Role
 
             fakeMinion = listMin[r1];
             int s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
-            int s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
+            /*int s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
             while ((s1 == s2 && listOut.Count > 1) || listOut[s2].characterId == "Hitman_scm" || listOut[s2].characterId == "Renegade_WING"
                 || listOut[s2].name == "Drunk" || listOut[s2].name == "Doppelganger" || listOut[s2].characterId == "Lunatic_WING")
             {
                 s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
-            }
+            }*/
             fakeOutcast = listOut[s1];
-            fakeOutcast2 = listOut[s2]; // Never actually adds this. It's for the rare case when it needs to lie
+            //fakeOutcast2 = listOut[s2]; // Never actually adds this. It's for the rare case when it needs to lie
             gameplay.AddScriptCharacter(ECharacterType.Minion, fakeMinion);
             gameplay.AddScriptCharacter(ECharacterType.Outcast, fakeOutcast);
 
             fakeMinion2 = listMin[r2];
+            /*
             if (UnityEngine.Random.RandomRangeInt(0, 2) == 0 || fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
             {
                 gameplay.AddScriptCharacter(ECharacterType.Minion, fakeMinion2);
-            }
+            }*/
             if (charRef.GetCharacterData().characterId == "MadScientist_scm")
             {
                 fakeMinion.role.Act(trigger, charRef);
                 fakeOutcast.role.Act(trigger, charRef);
             }
             // check if I should turn evil
-            if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
+            /*if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
             {
                 charRef.ChangeAlignment(EAlignment.Evil);
             }
@@ -175,7 +177,7 @@ public class MadScientist : Role
                 {
                     charRef.ChangeAlignment(EAlignment.Evil);
                 }
-            }
+            }*/
         }
         if (trigger == ETriggerPhase.Day)
         {
@@ -208,19 +210,19 @@ public class MadScientist : Role
         if (fakeOutcast.characterId == "Marionette_WING" || fakeOutcast.characterId == "Revolutionary_WING")
         {
             return 3;
-        }
+        }/*
         if (fakeOutcast.characterId == "Drunk_15369527")
         {
             return 2;
-        }
+        }*/
         if (fakeOutcast.characterId == "Ghost_scm")
         {
             return 1;
-        }
+        }/*
         if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
         {
             return 0;
-        }
+        }*/
         return 5;
     }
     public static CharacterData GetGenericMinion()
@@ -260,7 +262,7 @@ public class MadScientist : Role
             return ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619");
         }
         return ProjectContext.Instance.gameData.GetCharacterDataOfId("MadScientist_scm");
-    }
+    }/*
     public override CharacterData GetBluffIfAble(Character charRef)
     {
         if (fakeOutcast.characterId == "Drunk_15369527")
@@ -312,5 +314,5 @@ public class MadScientist : Role
         }
         // if not one of those don't disguise
         return null;
-    }
+    }*/
 }

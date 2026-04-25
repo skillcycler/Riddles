@@ -30,7 +30,10 @@ public class Accuser : Minion
         if (trigger == ETriggerPhase.Start)
         {
             Il2CppSystem.Collections.Generic.List<Character> neighbors = Characters.Instance.GetAdjacentCharacters(charRef);
+            // I only want actual Villagers that register as Good Villagers to be Accused.
+            // No shenanigans involving Guardian or Evils registering as Villagers
             neighbors = Characters.Instance.FilterCharacterType(neighbors, ECharacterType.Villager);
+            neighbors = Characters.Instance.FilterRealCharacterType(neighbors, ECharacterType.Villager);
             neighbors = Characters.Instance.FilterAlignmentCharacters(neighbors, EAlignment.Good);
             if (neighbors.Count > 0)
             {
