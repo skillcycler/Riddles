@@ -15,7 +15,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.5", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.6", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -449,7 +449,7 @@ public class MainMod : MelonMod
         Guardian.name = "Guardian";
         Guardian.description = "The Demon registers as a Good Villager.\n\nI sit next to the Demon.";
         Guardian.flavorText = "\"You're gonna have to get through me first.\"";
-        Guardian.hints = "";
+        Guardian.hints = "If there are multiple Demons, all of them register as Good.";
         Guardian.ifLies = "";
         Guardian.picking = false;
         Guardian.startingAlignment = EAlignment.Evil;
@@ -497,9 +497,9 @@ public class MainMod : MelonMod
         CharacterData Veil = new CharacterData();
         Veil.role = new Veil();
         Veil.name = "Veil";
-        Veil.description = "You can reveal 3 less cards. Villages are much bigger to compensate.\n\nI Lie and Disguise.";
+        Veil.description = "2-3 cards cannot be revealed. Villages are much bigger to compensate.\n\nI Lie and Disguise.";
         Veil.flavorText = "\"I cannot see anyone's role through this dense fog!\"";
-        Veil.hints = "";
+        Veil.hints = "If someone else copies my effect, only 1 card is hidden.";
         Veil.ifLies = "";
         Veil.picking = false;
         Veil.startingAlignment = EAlignment.Evil;

@@ -33,6 +33,10 @@ public class Mastermind : Minion
             evils.Remove(charRef);
             foreach (Character evil in evils)
             {
+                if (evil.dataRef.name == "Witch")
+                {
+                    PlayerController.PlayerInfo.blocks.value.Reduce(1); // You can probably guess why
+                }
                 if (evil.dataRef.characterId != "Mastermind_scm" && evil.dataRef.type == ECharacterType.Minion)
                     evil.Init(charRef.GetRegisterAs());
             }

@@ -73,13 +73,13 @@ public class Stylist : Role
                 b = Characters.Instance.GetRandomDuplicateBluff();
             }
             c.GiveBluff(b);
-            c.RevealBluff();
-            c.RefreshCharacter();
             if (c.bluff.picking)
             {
                 c.pickableUses = 1;
                 c.pickable.SetActive(true);
             }
+            c.RevealBluff();
+            c.RefreshCharacter();
             c.Act(ETriggerPhase.Day);
             string inf = string.Format("#{0}'s style has been changed!", c.id);
             onActed?.Invoke(new ActedInfo(inf, chars));

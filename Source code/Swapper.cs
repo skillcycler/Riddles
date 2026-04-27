@@ -124,13 +124,13 @@ public class Swapper : Role
         {
             c1.statuses.AddStatus(ECharacterStatus.HealthyBluff, chRef);
         }
-        c1.RevealBluff();
-        c1.RefreshCharacter();
         if (c1.bluff.picking)
         {
             c1.pickableUses = 1;
             c1.pickable.SetActive(true);
         }
+        c1.RevealBluff();
+        c1.RefreshCharacter();
         c1.Act(ETriggerPhase.Day);
         if (c1.state == ECharacterState.Dead)
         {
@@ -142,13 +142,13 @@ public class Swapper : Role
         {
             c2.statuses.AddStatus(ECharacterStatus.HealthyBluff, chRef);
         }
-        c2.RevealBluff();
-        c2.RefreshCharacter();
         if (c2.bluff.picking)
         {
             c2.pickableUses = 1;
             c2.pickable.SetActive(true);
         }
+        c2.RevealBluff();
+        c2.RefreshCharacter();
         c2.Act(ETriggerPhase.Day);
         if (c2.state == ECharacterState.Dead)
         {
@@ -207,13 +207,13 @@ public class Swapper : Role
             c1.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
         }
 
-        c1.RevealBluff();
-        c1.RefreshCharacter();
         if (c1.bluff.picking)
         {
             c1.pickableUses = 1;
             c1.pickable.SetActive(true);
         }
+        c1.RevealBluff();
+        c1.RefreshCharacter();
         c1.Act(ETriggerPhase.Day);
         if (c1.state == ECharacterState.Dead)
         {
@@ -226,13 +226,13 @@ public class Swapper : Role
             c2.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
         }
         
-        c2.RevealBluff();
-        c2.RefreshCharacter();
         if (c2.bluff.picking)
         {
             c2.pickableUses = 1;
             c2.pickable.SetActive(true);
         }
+        c2.RevealBluff();
+        c2.RefreshCharacter();
         c2.Act(ETriggerPhase.Day);
 
         if (c2.state == ECharacterState.Dead)

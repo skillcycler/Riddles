@@ -33,9 +33,11 @@ public class Guardian : Minion
             Il2CppSystem.Collections.Generic.List<Character> demons = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Demon);
             if (demons.Count > 0)
             {
-                Character randomChar = demons[UnityEngine.Random.Range(0, demons.Count)];
-                randomChar.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
-                randomChar.statuses.AddStatus(Guarding.guarded, charRef);
+                foreach (Character demon in demons)
+                {
+                    demon.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
+                    demon.statuses.AddStatus(Guarding.guarded, charRef);
+                }
             }
         }
     }

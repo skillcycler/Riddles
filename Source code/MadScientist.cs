@@ -142,6 +142,22 @@ public class MadScientist : Role
             gameplay.AddScriptCharacter(ECharacterType.Outcast, fakeOutcast);
 
             fakeMinion2 = listMin[r2];
+            // time to deal with bad combos
+            if (fakeMinion.characterId == "Undying_WING")
+            {
+                while (fakeOutcast.characterId == "Ghost_scm")
+                {
+                    fakeOutcast = listOut[s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count)];
+                }
+            }
+
+            if (fakeMinion.characterId == "Guardian_scm")
+            {
+                while (fakeOutcast.characterId == "Marionette_WING")
+                {
+                    fakeOutcast = listOut[s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count)];
+                }
+            }
             /*
             if (UnityEngine.Random.RandomRangeInt(0, 2) == 0 || fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
             {

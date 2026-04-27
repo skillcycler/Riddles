@@ -68,8 +68,6 @@ public class Nurse : Role
         if (c.statuses.Contains(ECharacterStatus.Corrupted))
         {
             c.statuses.statuses.Remove(ECharacterStatus.Corrupted);
-            c.RefreshCharacter();
-            c.Act(ETriggerPhase.Day);
             if (c.bluff)
             {
                 if (c.bluff.picking)
@@ -85,6 +83,8 @@ public class Nurse : Role
                     c.pickable.SetActive(true);
                 }
             }
+            c.RefreshCharacter();
+            c.Act(ETriggerPhase.Day);
             string inf = string.Format("I cured #{0}", c.id);
             onActed?.Invoke(new ActedInfo(inf, chars));
             return;
