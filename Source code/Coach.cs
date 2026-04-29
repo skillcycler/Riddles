@@ -56,17 +56,15 @@ public class Coach : Role
         CharacterPicker.OnCharactersPicked -= action1;
         CharacterPicker.OnStopPick -= action2;
         Character picked = CharacterPicker.PickedCharacters[0];
-        Il2CppSystem.Collections.Generic.List<Character> characters = Characters.Instance.GetAdjacentCharacters(picked);
+        Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         int matches = 0;
 
         foreach (Character character in characters)
         {
-            Il2CppSystem.Collections.Generic.List<Character> char2 = Characters.Instance.GetAdjacentCharacters(character);
-            foreach (Character character2 in char2) {
-                if (character2.GetType() == picked.GetType() && character2.id != picked.id)
-                    matches++;
-            }
-            if (character.GetType() == picked.GetType())
+            int distanceFromCharacter = character.id - picked.id;
+            if (distanceFromCharacter < -2)
+                distanceFromCharacter += Gameplay.CurrentCharacters.Count;
+            if (character.GetCharacterType() == picked.GetCharacterType() && distanceFromCharacter >= -2 && distanceFromCharacter <= 2 && distanceFromCharacter != 0)
                 matches++;
         }
         string info = ConjureInfo(picked, matches);
@@ -78,18 +76,15 @@ public class Coach : Role
         CharacterPicker.OnCharactersPicked -= action1;
         CharacterPicker.OnStopPick -= action2;
         Character picked = CharacterPicker.PickedCharacters[0];
-        Il2CppSystem.Collections.Generic.List<Character> characters = Characters.Instance.GetAdjacentCharacters(picked);
+        Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         int matches = 0;
 
         foreach (Character character in characters)
         {
-            Il2CppSystem.Collections.Generic.List<Character> char2 = Characters.Instance.GetAdjacentCharacters(character);
-            foreach (Character character2 in char2)
-            {
-                if (character2.GetType() == picked.GetType() && character2.id != picked.id)
-                    matches++;
-            }
-            if (character.GetType() == picked.GetType())
+            int distanceFromCharacter = character.id - picked.id;
+            if (distanceFromCharacter < -2)
+                distanceFromCharacter += Gameplay.CurrentCharacters.Count;
+            if (character.GetCharacterType() == picked.GetCharacterType() && distanceFromCharacter >= -2 && distanceFromCharacter <= 2 && distanceFromCharacter != 0)
                 matches++;
         }
         int lie = UnityEngine.Random.RandomRangeInt(0, 5);
@@ -103,6 +98,8 @@ public class Coach : Role
 
     public string ConjureInfo(Character character, int matches)
     {
+        if (matches == 1)
+            return string.Format("1 character near #{1} are the same Type as #{1}", matches);
         return string.Format("{0} characters near #{1} are the same Type as #{1}", matches, character.id);
     }
     private void StopPick()

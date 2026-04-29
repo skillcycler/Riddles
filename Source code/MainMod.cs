@@ -1,5 +1,7 @@
 global using Il2Cpp;
 using System;
+using System.Data.SqlTypes;
+using System.Reflection;
 using HarmonyLib;
 using Il2CppDissolveExample;
 using Il2CppInterop.Runtime;
@@ -9,7 +11,6 @@ using Il2CppSystem.IO;
 using MelonLoader;
 using RiddlerMod;
 using UnityEngine;
-using System.Reflection;
 using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
@@ -312,11 +313,12 @@ public class MainMod : MelonMod
         CharacterData Comedian = new CharacterData();
         Comedian.role = new Comedian();
         Comedian.name = "Comedian";
-        Comedian.description = "Pick 3 cards: Learn if any are Disguised.";
+        Comedian.description = "Pick 3 cards: Learn 2 that are both disguised or both not disguised.";
         Comedian.flavorText = "\"You will be blown away by his performance when he teams up with the Jester!\"";
         Comedian.hints = "";
         Comedian.ifLies = "";
         Comedian.picking = true;
+        Comedian.abilityUsage = EAbilityUsage.ResetAfterNight;
         Comedian.startingAlignment = EAlignment.Good;
         Comedian.type = ECharacterType.Villager;
         Comedian.bluffable = true;
@@ -476,7 +478,7 @@ public class MainMod : MelonMod
         Ghost.name = "Ghost";
         Ghost.description = "On Reveal: Die, dealing 1 damage to you. One unrevealed Good character is Corrupted.";
         Ghost.flavorText = "\"I would say 'Boo!' but that's not scary anymore.\"";
-        Ghost.hints = "I cannot be revived.\nRevealing me does not progress the night cycle.";
+        Ghost.hints = "I cannot be revived.";
         Ghost.ifLies = "";
         Ghost.picking = false;
         Ghost.startingAlignment = EAlignment.Good;
@@ -885,8 +887,8 @@ public class MainMod : MelonMod
         infestationCounterList.Add(infestation_13);
         infestationCounterList.Add(infestation_14);
         infestationCounterList.Add(infestation_15);*/
-        //infestationCounterList.Add(setCharacterCount(2, 7, 0, 1)); // use this to test outcasts
-        //infestationCounterList.Add(setCharacterCount(2, 0, 7, 1)); // use this to test minions
+        //infestationCounterList.Add(setCharacterCount(2, 6, 0, 1)); // use this to test outcasts
+        //infestationCounterList.Add(setCharacterCount(2, 0, 6, 1)); // use this to test minions
 
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
@@ -1210,7 +1212,6 @@ public class MainMod : MelonMod
         [HarmonyPostfix]
         public static void DoSleeperStuff(Character obj)
         {
-            
             if (obj == null) return;
             var mod = MainMod.Instance;
             if (mod == null) return;
@@ -1218,6 +1219,11 @@ public class MainMod : MelonMod
             {
                 CachedRule.currentStep++;
                 mod.shortenNight = false;
+            }
+
+            if (obj.dataRef.characterId == "Ghost_scm" || obj.statuses.Contains(SpecialMadScientistTags.hasGhostAbility))
+            {
+                CachedRule.currentStep++;
             }
 
         }

@@ -61,6 +61,7 @@ public class MadScientist : Role
             Il2CppSystem.Collections.Generic.List<CharacterData> listMin = new Il2CppSystem.Collections.Generic.List<CharacterData>();
             Il2CppSystem.Collections.Generic.List<string> whitelistMinionCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
             Il2CppSystem.Collections.Generic.List<string> whitelistOutcastCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
+            
             // vanilla
             whitelistMinionCharacterIDs.Add("Mezepheles_09511163");
             whitelistMinionCharacterIDs.Add("Poisoner_64796285");
@@ -80,6 +81,7 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Ghost_scm");
             //whitelistOutcastCharacterIDs.Add("Hitman_scm");
             // Wingidon
+
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
             whitelistMinionCharacterIDs.Add("Swarm_Good_WING");
@@ -165,8 +167,35 @@ public class MadScientist : Role
             }*/
             if (charRef.GetCharacterData().characterId == "MadScientist_scm")
             {
-                fakeMinion.role.Act(trigger, charRef);
-                fakeOutcast.role.Act(trigger, charRef);
+                if (fakeOutcast.characterId == "Ghost_scm")
+                {
+                    charRef.statuses.AddStatus(SpecialMadScientistTags.hasGhostAbility, charRef);
+                }
+                if (fakeMinion.characterId == "Guardian_scm")
+                {
+                    MoveDemonNextToMe(charRef);
+                    Il2CppSystem.Collections.Generic.List<Character> demons = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Demon);
+                    if (demons.Count > 0)
+                    {
+                        foreach (Character demon in demons)
+                        {
+                            demon.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
+                            demon.statuses.AddStatus(Guarding.guarded, charRef);
+                        }
+                    }
+                }
+                else
+                {
+                    fakeMinion.role.Act(trigger, charRef);
+                }
+                if (fakeOutcast.characterId == "Marionette_WING")
+                {
+                    MoveDemonNextToMe(charRef);
+                }
+                else
+                {
+                    fakeOutcast.role.Act(trigger, charRef);
+                }
             }
             // check if I should turn evil
             /*if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
@@ -201,34 +230,8 @@ public class MadScientist : Role
         }
         if (charRef.GetCharacterData().characterId == "MadScientist_scm" && trigger != ETriggerPhase.Start)
         {
-            if (fakeMinion.characterId == "Guardian_scm")
-            {
-                MoveDemonNextToMe(charRef);
-                if (trigger == ETriggerPhase.Start)
-                {
-                    Il2CppSystem.Collections.Generic.List<Character> demons = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Demon);
-                    if (demons.Count > 0)
-                    {
-                        foreach (Character demon in demons)
-                        {
-                            demon.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
-                            demon.statuses.AddStatus(Guarding.guarded, charRef);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                fakeMinion.role.Act(trigger, charRef);
-            }
-            if (fakeOutcast.characterId == "Marionette_WING")
-            {
-                MoveDemonNextToMe(charRef);
-            }
-            else
-            {
-                fakeOutcast.role.Act(trigger, charRef);
-            }
+            fakeMinion.role.Act(trigger, charRef);
+            fakeOutcast.role.Act(trigger, charRef);
         }
     }
     public override bool CheckIfCanBeKilled(Character charRef)
@@ -370,4 +373,8 @@ public class MadScientist : Role
         pickedSwapCharacter.Init(pickedDemon.dataRef);
         pickedDemon.Init(pickedData);
     }
+}
+public static class SpecialMadScientistTags
+{
+    public static ECharacterStatus hasGhostAbility = (ECharacterStatus)1201;
 }
