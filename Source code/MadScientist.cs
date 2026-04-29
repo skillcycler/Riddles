@@ -201,8 +201,34 @@ public class MadScientist : Role
         }
         if (charRef.GetCharacterData().characterId == "MadScientist_scm" && trigger != ETriggerPhase.Start)
         {
-            fakeMinion.role.Act(trigger, charRef);
-            fakeOutcast.role.Act(trigger, charRef);
+            if (fakeMinion.characterId == "Guardian_scm")
+            {
+                MoveDemonNextToMe(charRef);
+                if (trigger == ETriggerPhase.Start)
+                {
+                    Il2CppSystem.Collections.Generic.List<Character> demons = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Demon);
+                    if (demons.Count > 0)
+                    {
+                        foreach (Character demon in demons)
+                        {
+                            demon.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
+                            demon.statuses.AddStatus(Guarding.guarded, charRef);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                fakeMinion.role.Act(trigger, charRef);
+            }
+            if (fakeOutcast.characterId == "Marionette_WING")
+            {
+                MoveDemonNextToMe(charRef);
+            }
+            else
+            {
+                fakeOutcast.role.Act(trigger, charRef);
+            }
         }
     }
     public override bool CheckIfCanBeKilled(Character charRef)
@@ -331,4 +357,17 @@ public class MadScientist : Role
         // if not one of those don't disguise
         return null;
     }*/
+    private void MoveDemonNextToMe(Character charRef)
+    {
+        Il2CppSystem.Collections.Generic.List<Character> checkDemons = new Il2CppSystem.Collections.Generic.List<Character>();
+        checkDemons = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Demon);
+
+        Character pickedDemon = checkDemons[UnityEngine.Random.Range(0, checkDemons.Count)];
+
+        Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentAliveCharacters(charRef);
+        Character pickedSwapCharacter = adjacentCharacters[UnityEngine.Random.Range(0, adjacentCharacters.Count)];
+        CharacterData pickedData = pickedSwapCharacter.dataRef;
+        pickedSwapCharacter.Init(pickedDemon.dataRef);
+        pickedDemon.Init(pickedData);
+    }
 }

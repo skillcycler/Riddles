@@ -16,7 +16,6 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class Trickster_v : Role
 {
-    public bool converted = false;
     public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();
     public override string Description
     {
@@ -27,18 +26,32 @@ public class Trickster_v : Role
     }
     public override ActedInfo GetInfo(Character charRef)
     {
-        if (charRef.dataRef.characterId != "Trickster_v_scm" && charRef.dataRef.characterId != "Trickster_o_scm" && charRef.dataRef.characterId != "Trickster_m_scm")
+        if (charRef.dataRef.characterId != "Trickster_v_scm")
         {
-            if (!charRef.statuses.Contains(Accused.accused))
-                return new ActedInfo("I feel sick.");
+            return new ActedInfo("Something is Digsuising as a Villager Trickster! This should never happen!");
+        }
+        // safeguard against getting moved
+        bool converted = false;
+        foreach (Character ch in Gameplay.CurrentCharacters)
+        {
+            if (ch.dataRef.characterId == "Trickster_m_scm" || ch.dataRef.characterId == "Trickster_o_scm")
+                converted = true;
         }
         if (!converted)
             return new ActedInfo("This village has too few Villagers! I can't perform my tricks here!");
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        characters = Characters.Instance.FilterCharacterType(characters, charRef.GetCharacterType());
-        if (characters.Count > 1)
-            characters.Remove(charRef);
-        Character chosen = characters[UnityEngine.Random.RandomRangeInt(0, characters.Count)];
+        characters = Characters.Instance.FilterCharacterType(characters, ECharacterType.Villager);
+        Il2CppSystem.Collections.Generic.List<Character> characters2 = new();
+        foreach (Character ch in characters)
+        {
+            if (ch.dataRef.characterId != "Trickster_o_scm" && ch.dataRef.characterId != "Trickster_m_scm")
+            {
+                characters2.Add(ch);
+            }
+        }
+        if (characters2.Count > 1)
+            characters2.Remove(charRef);
+        Character chosen = characters2[UnityEngine.Random.RandomRangeInt(0, characters2.Count)];
         string info = string.Format("#{0} is my Type", chosen.id);
         Il2CppSystem.Collections.Generic.List<Character> hint = new();
         hint.Add(chosen);
@@ -48,34 +61,7 @@ public class Trickster_v : Role
 
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        if (charRef.statuses.Contains(ECharacterStatus.Corrupted))
-        {
-            return new ActedInfo("I feel sick.");
-        }
-        if (charRef.dataRef.characterId != "Trickster_v_scm" && charRef.dataRef.characterId != "Trickster_o_scm" && charRef.dataRef.characterId != "Trickster_m_scm")
-        {
-            if (!charRef.statuses.Contains(Accused.accused))
-                return new ActedInfo("I feel sick.");
-        }
-        if (charRef.GetCharacterType() == ECharacterType.Outcast || charRef.GetCharacterType() == ECharacterType.Minion)
-        {
-            return GetInfo(charRef);
-        }
-        Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        Il2CppSystem.Collections.Generic.List<Character> wrongType = new Il2CppSystem.Collections.Generic.List<Character>();
-        foreach (Character character in characters)
-        {
-            if (character.GetCharacterType() != charRef.GetCharacterType())
-            {
-                wrongType.Add(character);
-            }
-        }
-        Character chosen = wrongType[UnityEngine.Random.RandomRangeInt(0, characters.Count)];
-        string info = string.Format("#{0} is my Type", chosen.id);
-        Il2CppSystem.Collections.Generic.List<Character> hint = new();
-        hint.Add(chosen);
-        ActedInfo actedInfo = new ActedInfo(info, hint);
-        return actedInfo;
+        return new ActedInfo("I feel sick.");
     }
 
     public override void Act(ETriggerPhase trigger, Character charRef)
@@ -104,7 +90,6 @@ public class Trickster_v : Role
             converts = Characters.Instance.FilterRealCharacterType(converts, ECharacterType.Villager);
             converts.Remove(charRef);
             if (converts.Count > 1) {
-                converted = true;
                 int c1 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
                 int c2 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
                 while (c1 == c2)
@@ -152,7 +137,6 @@ public class Trickster_v : Role
             converts.Remove(charRef);
             if (converts.Count > 1)
             {
-                converted = true;
                 int c1 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
                 int c2 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
                 while (c1 == c2)

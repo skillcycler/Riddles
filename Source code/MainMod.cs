@@ -15,7 +15,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.9.6", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.0", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -38,6 +38,8 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Weaver>();
         ClassInjector.RegisterTypeInIl2Cpp<Nurse>();
         ClassInjector.RegisterTypeInIl2Cpp<Stylist>();
+        ClassInjector.RegisterTypeInIl2Cpp<Coach>();
+        ClassInjector.RegisterTypeInIl2Cpp<Comedian>();
 
         // Outcasts
 
@@ -83,6 +85,8 @@ public class MainMod : MelonMod
         Riddler.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Riddler.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Riddler.color = new Color(1f, 0.935f, 0.7302f);
+        Riddler.additionalFlavorTexts = new Il2CppStringArray(1);
+        Riddler.additionalFlavorTexts[0] = Riddler.flavorText;
 
         CharacterData Swapper = new CharacterData();
         Swapper.role = new Swapper();
@@ -100,7 +104,9 @@ public class MainMod : MelonMod
         Swapper.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Swapper.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Swapper.color = new Color(1f, 0.935f, 0.7302f);
-        
+        Swapper.additionalFlavorTexts = new Il2CppStringArray(1);
+        Swapper.additionalFlavorTexts[0] = Swapper.flavorText;
+
 
         CharacterData Mathematician = new CharacterData();
         Mathematician.role = new Mathematician();
@@ -117,6 +123,8 @@ public class MainMod : MelonMod
         Mathematician.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Mathematician.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Mathematician.color = new Color(1f, 0.935f, 0.7302f);
+        Mathematician.additionalFlavorTexts = new Il2CppStringArray(1);
+        Mathematician.additionalFlavorTexts[0] = Mathematician.flavorText;
 
 
         CharacterData Commander = new CharacterData();
@@ -135,6 +143,8 @@ public class MainMod : MelonMod
         Commander.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Commander.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Commander.color = new Color(1f, 0.935f, 0.7302f);
+        Commander.additionalFlavorTexts = new Il2CppStringArray(1);
+        Commander.additionalFlavorTexts[0] = Commander.flavorText;
 
         CharacterData Director = new CharacterData();
         Director.role = new Director();
@@ -151,6 +161,8 @@ public class MainMod : MelonMod
         Director.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Director.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Director.color = new Color(1f, 0.935f, 0.7302f);
+        Director.additionalFlavorTexts = new Il2CppStringArray(1);
+        Director.additionalFlavorTexts[0] = Director.flavorText;
 
         CharacterData Scanner = new CharacterData();
         Scanner.role = new Scanner();
@@ -167,6 +179,8 @@ public class MainMod : MelonMod
         Scanner.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Scanner.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Scanner.color = new Color(1f, 0.935f, 0.7302f);
+        Scanner.additionalFlavorTexts = new Il2CppStringArray(1);
+        Scanner.additionalFlavorTexts[0] = Scanner.flavorText;
 
         CharacterData Obsessor = new CharacterData();
         Obsessor.role = new Obsessor();
@@ -183,6 +197,8 @@ public class MainMod : MelonMod
         Obsessor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Obsessor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Obsessor.color = new Color(1f, 0.935f, 0.7302f);
+        Obsessor.additionalFlavorTexts = new Il2CppStringArray(1);
+        Obsessor.additionalFlavorTexts[0] = Obsessor.flavorText;
 
         CharacterData Lawyer = new CharacterData();
         Lawyer.role = new Lawyer();
@@ -190,7 +206,7 @@ public class MainMod : MelonMod
         Lawyer.description = "My neighbors tell the truth. Learn a truthful character.";
         Lawyer.flavorText = "\"Do you swear to tell the truth, the whole truth, and nothing but the truth?\"";
         Lawyer.hints = "";
-        Lawyer.ifLies = "My neighbors will lie.";
+        Lawyer.ifLies = "";
         Lawyer.picking = false;
         Lawyer.startingAlignment = EAlignment.Good;
         Lawyer.type = ECharacterType.Villager;
@@ -199,6 +215,8 @@ public class MainMod : MelonMod
         Lawyer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Lawyer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Lawyer.color = new Color(1f, 0.935f, 0.7302f);
+        Lawyer.additionalFlavorTexts = new Il2CppStringArray(1);
+        Lawyer.additionalFlavorTexts[0] = Lawyer.flavorText;
 
         CharacterData Psychic = new CharacterData();
         Psychic.role = new Psychic();
@@ -215,6 +233,8 @@ public class MainMod : MelonMod
         Psychic.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Psychic.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Psychic.color = new Color(1f, 0.935f, 0.7302f);
+        Psychic.additionalFlavorTexts = new Il2CppStringArray(1);
+        Psychic.additionalFlavorTexts[0] = Psychic.flavorText;
 
         CharacterData Weaver = new CharacterData();
         Weaver.role = new Weaver();
@@ -231,6 +251,8 @@ public class MainMod : MelonMod
         Weaver.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Weaver.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Weaver.color = new Color(1f, 0.935f, 0.7302f);
+        Weaver.additionalFlavorTexts = new Il2CppStringArray(1);
+        Weaver.additionalFlavorTexts[0] = Weaver.flavorText;
 
         CharacterData Nurse = new CharacterData();
         Nurse.role = new Nurse();
@@ -248,6 +270,8 @@ public class MainMod : MelonMod
         Nurse.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Nurse.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Nurse.color = new Color(1f, 0.935f, 0.7302f);
+        Nurse.additionalFlavorTexts = new Il2CppStringArray(1);
+        Nurse.additionalFlavorTexts[0] = Nurse.flavorText;
 
         CharacterData Stylist = new CharacterData();
         Stylist.role = new Stylist();
@@ -264,13 +288,51 @@ public class MainMod : MelonMod
         Stylist.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Stylist.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Stylist.color = new Color(1f, 0.935f, 0.7302f);
+        Stylist.additionalFlavorTexts = new Il2CppStringArray(1);
+        Stylist.additionalFlavorTexts[0] = Stylist.flavorText;
+
+        CharacterData Coach = new CharacterData();
+        Coach.role = new Coach();
+        Coach.name = "Coach";
+        Coach.description = "Pick 1 card: Learn how many characters near them [Range 2] are the same Type as them.";
+        Coach.flavorText = "\"Demon Bluff is now a team building game.\"";
+        Coach.hints = "";
+        Coach.ifLies = "";
+        Coach.picking = true;
+        Coach.startingAlignment = EAlignment.Good;
+        Coach.type = ECharacterType.Villager;
+        Coach.bluffable = true;
+        Coach.characterId = "Coach_scm";
+        Coach.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Coach.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Coach.color = new Color(1f, 0.935f, 0.7302f);
+        Coach.additionalFlavorTexts = new Il2CppStringArray(1);
+        Coach.additionalFlavorTexts[0] = Coach.flavorText;
+
+        CharacterData Comedian = new CharacterData();
+        Comedian.role = new Comedian();
+        Comedian.name = "Comedian";
+        Comedian.description = "Pick 3 cards: Learn if any are Disguised.";
+        Comedian.flavorText = "\"You will be blown away by his performance when he teams up with the Jester!\"";
+        Comedian.hints = "";
+        Comedian.ifLies = "";
+        Comedian.picking = true;
+        Comedian.startingAlignment = EAlignment.Good;
+        Comedian.type = ECharacterType.Villager;
+        Comedian.bluffable = true;
+        Comedian.characterId = "Comedian_scm";
+        Comedian.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Comedian.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Comedian.color = new Color(1f, 0.935f, 0.7302f);
+        Comedian.additionalFlavorTexts = new Il2CppStringArray(1);
+        Comedian.additionalFlavorTexts[0] = Comedian.flavorText;
 
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
         Trickster_v.name = "Trickster";
         Trickster_v.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nYou don't know which is which.\nLearn a card that is the same character type as me.";
         Trickster_v.flavorText = "\"If you thought the Minion twins were bad, get ready for the three of us!\"";
-        Trickster_v.hints = "If I am Corrupted or abnormally Disguised as: \"I feel sick\"";
+        Trickster_v.hints = "If I am Corrupted: \"I feel sick\"\nI cannot be Disguised as.";
         Trickster_v.ifLies = "";
         Trickster_v.picking = false;
         Trickster_v.startingAlignment = EAlignment.Good;
@@ -280,38 +342,80 @@ public class MainMod : MelonMod
         Trickster_v.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Trickster_v.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Trickster_v.color = new Color(1f, 0.935f, 0.7302f);
+        Trickster_v.additionalFlavorTexts = new Il2CppStringArray(1);
+        Trickster_v.additionalFlavorTexts[0] = Trickster_v.flavorText;
 
         CharacterData Trickster_o = new CharacterData();
         Trickster_o.role = new Trickster_o();
         Trickster_o.name = "Trickster";
-        Trickster_o.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nYou don't know which is which.\nLearn a card that is the same character type as me.";
-        Trickster_o.flavorText = "";
-        Trickster_o.hints = "";
+        Trickster_o.description = Trickster_v.description;
+        Trickster_o.flavorText = Trickster_v.flavorText;
+        Trickster_o.hints = Trickster_v.hints;
         Trickster_o.ifLies = "";
         Trickster_o.picking = false;
         Trickster_o.startingAlignment = EAlignment.Good;
-        Trickster_o.type = ECharacterType.Outcast;
+        Trickster_o.type = ECharacterType.Villager;
         Trickster_o.bluffable = false;
         Trickster_o.characterId = "Trickster_o_scm";
         Trickster_o.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Trickster_o.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Trickster_o.color = new Color(1f, 0.935f, 0.7302f);
+        Trickster_o.additionalFlavorTexts = new Il2CppStringArray(1);
+        Trickster_o.additionalFlavorTexts[0] = Trickster_o.flavorText;
+
+        CharacterData Trickster_o2 = new CharacterData();
+        Trickster_o2.role = new Trickster_o_register();
+        Trickster_o2.name = "Trickster Outcast Register";
+        Trickster_o2.description = "";
+        Trickster_o2.flavorText = "";
+        Trickster_o2.hints = "";
+        Trickster_o2.ifLies = "";
+        Trickster_o2.picking = false;
+        Trickster_o2.startingAlignment = EAlignment.Good;
+        Trickster_o2.type = ECharacterType.Outcast;
+        Trickster_o2.bluffable = false;
+        Trickster_o2.characterId = "Trickster_o_register_scm";
+        Trickster_o2.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Trickster_o2.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Trickster_o2.color = new Color(1f, 0.935f, 0.7302f);
+        Trickster_o2.additionalFlavorTexts = new Il2CppStringArray(1);
+        Trickster_o2.additionalFlavorTexts[0] = Trickster_o2.flavorText;
 
         CharacterData Trickster_m = new CharacterData();
         Trickster_m.role = new Trickster_m();
         Trickster_m.name = "Trickster";
-        Trickster_m.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nYou don't know which is which.\nLearn a card that is the same character type as me.";
-        Trickster_m.flavorText = "";
-        Trickster_m.hints = "";
+        Trickster_m.description = Trickster_v.description;
+        Trickster_m.flavorText = Trickster_v.flavorText;
+        Trickster_m.hints = Trickster_v.hints;
         Trickster_m.ifLies = "";
         Trickster_m.picking = false;
         Trickster_m.startingAlignment = EAlignment.Good;
-        Trickster_m.type = ECharacterType.Minion;
+        Trickster_m.type = ECharacterType.Villager;
         Trickster_m.bluffable = false;
         Trickster_m.characterId = "Trickster_m_scm";
         Trickster_m.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Trickster_m.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Trickster_m.color = new Color(1f, 0.935f, 0.7302f);
+        Trickster_m.additionalFlavorTexts = new Il2CppStringArray(1);
+        Trickster_m.additionalFlavorTexts[0] = Trickster_m.flavorText;
+
+        CharacterData Trickster_m2 = new CharacterData();
+        Trickster_m2.role = new Trickster_m_register();
+        Trickster_m2.name = "Trickster Minion Register";
+        Trickster_m2.description ="";
+        Trickster_m2.flavorText = "";
+        Trickster_m2.hints = "";
+        Trickster_m2.ifLies = "";
+        Trickster_m2.picking = false;
+        Trickster_m2.startingAlignment = EAlignment.Good;
+        Trickster_m2.type = ECharacterType.Minion;
+        Trickster_m2.bluffable = false;
+        Trickster_m2.characterId = "Trickster_m_scm";
+        Trickster_m2.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Trickster_m2.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Trickster_m2.color = new Color(1f, 0.935f, 0.7302f);
+        Trickster_m2.additionalFlavorTexts = new Il2CppStringArray(1);
+        Trickster_m2.additionalFlavorTexts[0] = Trickster_m2.flavorText;
 
         CharacterData MadScientist = new CharacterData();
         MadScientist.role = new MadScientist();
@@ -328,6 +432,8 @@ public class MainMod : MelonMod
         MadScientist.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
         MadScientist.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
         MadScientist.color = new Color(0.9659f, 1f, 0.4472f);
+        MadScientist.additionalFlavorTexts = new Il2CppStringArray(1);
+        MadScientist.additionalFlavorTexts[0] = MadScientist.flavorText;
 
         CharacterData Necromancer = new CharacterData();
         Necromancer.role = new Necromancer();
@@ -344,6 +450,8 @@ public class MainMod : MelonMod
         Necromancer.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
         Necromancer.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
         Necromancer.color = new Color(0.9659f, 1f, 0.4472f);
+        Necromancer.additionalFlavorTexts = new Il2CppStringArray(1);
+        Necromancer.additionalFlavorTexts[0] = Necromancer.flavorText;
 
         CharacterData Hitman = new CharacterData();
         Hitman.role = new Hitman();
@@ -360,13 +468,15 @@ public class MainMod : MelonMod
         Hitman.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
         Hitman.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
         Hitman.color = new Color(0.9659f, 1f, 0.4472f);
+        Hitman.additionalFlavorTexts = new Il2CppStringArray(1);
+        Hitman.additionalFlavorTexts[0] = Hitman.flavorText;
 
         CharacterData Ghost = new CharacterData();
         Ghost.role = new Ghost();
         Ghost.name = "Ghost";
         Ghost.description = "On Reveal: Die, dealing 1 damage to you. One unrevealed Good character is Corrupted.";
         Ghost.flavorText = "\"I would say 'Boo!' but that's not scary anymore.\"";
-        Ghost.hints = "I cannot be revived.";
+        Ghost.hints = "I cannot be revived.\nRevealing me does not progress the night cycle.";
         Ghost.ifLies = "";
         Ghost.picking = false;
         Ghost.startingAlignment = EAlignment.Good;
@@ -376,6 +486,8 @@ public class MainMod : MelonMod
         Ghost.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
         Ghost.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
         Ghost.color = new Color(0.9659f, 1f, 0.4472f);
+        Ghost.additionalFlavorTexts = new Il2CppStringArray(1);
+        Ghost.additionalFlavorTexts[0] = Ghost.flavorText;
 
         CharacterData Accuser = new CharacterData();
         Accuser.role = new Accuser();
@@ -393,6 +505,8 @@ public class MainMod : MelonMod
         Accuser.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Accuser.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Accuser.color = new Color(0.8491f, 0.4555f, 0f);
+        Accuser.additionalFlavorTexts = new Il2CppStringArray(1);
+        Accuser.additionalFlavorTexts[0] = Accuser.flavorText;
 
         CharacterData Hypnotist = new CharacterData();
         Hypnotist.role = new Hypnotist();
@@ -410,6 +524,8 @@ public class MainMod : MelonMod
         Hypnotist.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Hypnotist.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Hypnotist.color = new Color(0.8491f, 0.4555f, 0f);
+        Hypnotist.additionalFlavorTexts = new Il2CppStringArray(1);
+        Hypnotist.additionalFlavorTexts[0] = Hypnotist.flavorText;
 
         CharacterData Channeler = new CharacterData();
         Channeler.role = new Channeler();
@@ -427,6 +543,8 @@ public class MainMod : MelonMod
         Channeler.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Channeler.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Channeler.color = new Color(0.8491f, 0.4555f, 0f);
+        Channeler.additionalFlavorTexts = new Il2CppStringArray(1);
+        Channeler.additionalFlavorTexts[0] = Channeler.flavorText;
 
         CharacterData Sleeper = new CharacterData();
         Sleeper.role = new Sleeper();
@@ -443,6 +561,8 @@ public class MainMod : MelonMod
         Sleeper.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Sleeper.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Sleeper.color = new Color(0.8491f, 0.4555f, 0f);
+        Sleeper.additionalFlavorTexts = new Il2CppStringArray(1);
+        Sleeper.additionalFlavorTexts[0] = Sleeper.flavorText;
 
         CharacterData Guardian = new CharacterData();
         Guardian.role = new Guardian();
@@ -459,6 +579,8 @@ public class MainMod : MelonMod
         Guardian.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Guardian.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Guardian.color = new Color(0.8491f, 0.4555f, 0f);
+        Guardian.additionalFlavorTexts = new Il2CppStringArray(1);
+        Guardian.additionalFlavorTexts[0] = Guardian.flavorText;
 
         CharacterData Mastermind = new CharacterData();
         Mastermind.role = new Mastermind();
@@ -475,6 +597,8 @@ public class MainMod : MelonMod
         Mastermind.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Mastermind.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
         Mastermind.color = new Color(0.8491f, 0.4555f, 0f);
+        Mastermind.additionalFlavorTexts = new Il2CppStringArray(1);
+        Mastermind.additionalFlavorTexts[0] = Mastermind.flavorText;
 
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
@@ -492,6 +616,8 @@ public class MainMod : MelonMod
         Follower.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Follower.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
         Follower.color = new Color(1f, 0.3804f, 0.3804f);
+        Follower.additionalFlavorTexts = new Il2CppStringArray(1);
+        Follower.additionalFlavorTexts[0] = Follower.flavorText;
 
 
         CharacterData Veil = new CharacterData();
@@ -510,6 +636,8 @@ public class MainMod : MelonMod
         Veil.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Veil.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
         Veil.color = new Color(1f, 0.3804f, 0.3804f);
+        Veil.additionalFlavorTexts = new Il2CppStringArray(1);
+        Veil.additionalFlavorTexts[0] = Veil.flavorText;
 
         CharacterData Summoner = new CharacterData();
         Summoner.role = new Summoner();
@@ -527,6 +655,8 @@ public class MainMod : MelonMod
         Summoner.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Summoner.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
         Summoner.color = new Color(1f, 0.3804f, 0.3804f);
+        Summoner.additionalFlavorTexts = new Il2CppStringArray(1);
+        Summoner.additionalFlavorTexts[0] = Summoner.flavorText;
 
         CharacterData Infestation = new CharacterData();
         Infestation.role = new Infestation();
@@ -544,6 +674,8 @@ public class MainMod : MelonMod
         Infestation.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
         Infestation.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
         Infestation.color = new Color(1f, 0.3804f, 0.3804f);
+        Infestation.additionalFlavorTexts = new Il2CppStringArray(1);
+        Infestation.additionalFlavorTexts[0] = Infestation.flavorText;
 
         nightPhase.nightCharactersOrder.Add(Infestation);
         nightPhase.nightCharactersOrder.Add(Follower);
@@ -560,9 +692,9 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Channeler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Trickster_v);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Accuser);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Guardian);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Hypnotist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
@@ -774,13 +906,15 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Commander);
             AddRole(script.startingTownsfolks, Director);
             AddRole(script.startingTownsfolks, Scanner);
-            //AddRole(script.startingTownsfolks, Trickster_v); They're taking a break from their trickery.
+            AddRole(script.startingTownsfolks, Trickster_v);
             AddRole(script.startingTownsfolks, Obsessor);
             AddRole(script.startingTownsfolks, Lawyer);
             AddRole(script.startingTownsfolks, Psychic);
             AddRole(script.startingTownsfolks, Weaver);
             AddRole(script.startingTownsfolks, Nurse);
             AddRole(script.startingTownsfolks, Stylist);
+            AddRole(script.startingTownsfolks, Coach);
+            AddRole(script.startingTownsfolks, Comedian);
 
 
             AddRole(script.startingOutsiders, MadScientist);
@@ -1084,10 +1218,6 @@ public class MainMod : MelonMod
             {
                 CachedRule.currentStep++;
                 mod.shortenNight = false;
-            }
-            if (obj.dataRef.characterId == "Ghost_scm")
-            {
-                CachedRule.currentStep++;
             }
 
         }

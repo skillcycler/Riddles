@@ -69,9 +69,10 @@ public class Riddler : Role
         infos.Add("A truthful Bishop can reference herself.");
         infos.Add("A Knitter will say there are 3 pairs of evils if 4 evils are in a row.");
         infos.Add("The Bombardier's loss condition does not directly interact with your HP.");
+        infos.Add("The Baa prefers to hide the Doppelganger and Drunk.");
 
         // easter eggs
-        infos.Add("A lying Dreamer or Oracle can mention a Marionette if there are no Minions in play.");
+        infos.Add("A lying Oracle can mention a Marionette if there are no Minions in play.");
         infos.Add("It is possible for the decklist to contain 5 outcasts in Standard mode.");
         infos.Add("13 special character skins were introduced in 2025.");
         infos.Add("The top and bottom cards count towards both sides for the Architect.");
@@ -105,7 +106,7 @@ public class Riddler : Role
         infos.Add("A truthful Hunter can claim to be 5 cards away from his closest Evil.");
         infos.Add("A Puppet disguised as a Confessor will say they are Good.");
         infos.Add("A Puppet disguised as Alchemist or Baker will have their ability work.");
-        infos.Add("The Slayer, Druid, and Plague Doctor can be used every night.");
+        infos.Add("The Slayer and Plague Doctor can be used every night.");
         infos.Add("The Witness can see which card the Witch cursed.");
         infos.Add("A Judge targeting a dizzy Confessor will say she is Lying.");
         infos.Add("A lying Druid targeting an Outcast can say there is a different Outcast.");

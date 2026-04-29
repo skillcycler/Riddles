@@ -17,28 +17,30 @@ public class Veil : Demon
         if (charRef.dataRef.characterId != "Veil_scm")
         {
             PlayerController.PlayerInfo.blocks.value.Add(1);
-            return;
         }
-        if (Gameplay.CurrentCharacters.Count > 10)
+        else if (Gameplay.CurrentCharacters.Count > 10)
+        {
+            PlayerController.PlayerInfo.blocks.value.Add(3);
+        }
+        else
         {
             PlayerController.PlayerInfo.blocks.value.Add(2);
-            return;
         }
-        PlayerController.PlayerInfo.blocks.value.Add(3);
     }
     public override void ActOnDied(Character charRef)
     {
         if (charRef.dataRef.characterId != "Veil_scm")
         {
             PlayerController.PlayerInfo.blocks.value.Reduce(1);
-            return;
         }
-        if (Gameplay.CurrentCharacters.Count > 10)
+        else if (Gameplay.CurrentCharacters.Count > 10)
+        {
+            PlayerController.PlayerInfo.blocks.value.Reduce(3);
+        }
+        else
         {
             PlayerController.PlayerInfo.blocks.value.Reduce(2);
-            return;
         }
-        PlayerController.PlayerInfo.blocks.value.Reduce(3);
     }
     public Veil() : base(ClassInjector.DerivedConstructorPointer<Veil>())
     {

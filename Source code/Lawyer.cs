@@ -111,11 +111,10 @@ public class Lawyer : Role
             Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
             foreach (Character character in adjacentCharacters)
             {
-                if (character.dataRef.role.GetBluffIfAble(charRef) != null)
-                    character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+                character.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
                 character.statuses.statuses.Remove(ECharacterStatus.Corrupted);
-                if (character.dataRef.characterId == "Trickster_m_scm" || character.dataRef.characterId == "Trickster_o_scm")
-                    character.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
+                /*if (character.dataRef.characterId == "Trickster_m_scm" || character.dataRef.characterId == "Trickster_o_scm")
+                    character.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);*/
                 
             }
         }    
@@ -126,6 +125,7 @@ public class Lawyer : Role
     }
     public override void BluffAct(ETriggerPhase trigger, Character charRef)
     {
+        /*
         if (trigger == ETriggerPhase.Start)
         {
             Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
@@ -135,6 +135,7 @@ public class Lawyer : Role
                 character.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
             }
         }
+        */
         if (trigger == ETriggerPhase.Day)
         {
             onActed.Invoke(GetBluffInfo(charRef));

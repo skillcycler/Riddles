@@ -25,10 +25,25 @@ public class Trickster_m : Role
     }
     public override ActedInfo GetInfo(Character charRef)
     {
-        Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        characters = Characters.Instance.FilterCharacterType(characters, charRef.GetCharacterType());
+        if (charRef.dataRef.characterId != "Trickster_m_scm")
+        {
+            return new ActedInfo("Something is Digsuising as a Minion Trickster! This should never happen!");
+        }
+        Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
+        Il2CppSystem.Collections.Generic.List<Character> characters = new();
+        foreach (Character c in chars)
+        {
+            if (c.GetRegisterAs().type == ECharacterType.Minion)
+            {
+                characters.Add(c);
+            }
+        }
         if (characters.Count > 1)
             characters.Remove(charRef);
+        if (characters.Count == 0)
+        {
+            return new ActedInfo(string.Format("#{0} is my Type", charRef.id));
+        }
         Character chosen = characters[UnityEngine.Random.RandomRangeInt(0, characters.Count)];
         string info = string.Format("#{0} is my Type", chosen.id);
         ActedInfo actedInfo = new ActedInfo(info);
@@ -37,17 +52,7 @@ public class Trickster_m : Role
 
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        Il2CppSystem.Collections.Generic.List<Character> wrongType = new Il2CppSystem.Collections.Generic.List<Character>();
-        foreach (Character character in characters)
-        {
-            if (character.GetCharacterType() != charRef.GetCharacterType())
-            {
-                wrongType.Add(character);
-            }
-        }
-        Character chosen = wrongType[UnityEngine.Random.RandomRangeInt(0, characters.Count)];
-        string info = string.Format("#{0} is my Type", chosen.id);
+        string info = "I feel sick.";
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
@@ -66,24 +71,10 @@ public class Trickster_m : Role
             onActed.Invoke(GetBluffInfo(charRef));
         }
     }
-    public override CharacterData GetBluffIfAble(Character charRef)
+    public override CharacterData GetRegisterAsRole(Character charRef)
     {
-        Gameplay gameplay = Gameplay.Instance;
-        Characters instance = Characters.Instance;
-        Il2CppSystem.Collections.Generic.List<CharacterData> chars = gameplay.GetAscensionAllStartingCharacters();
-        Il2CppSystem.Collections.Generic.List<CharacterData> villagers = instance.FilterRealCharacterType(chars, ECharacterType.Villager);
-
-        Il2CppSystem.Collections.Generic.List<CharacterData> listV = new Il2CppSystem.Collections.Generic.List<CharacterData>();
-        Il2CppSystem.Collections.Generic.List<string> whitelistCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
-
-        whitelistCharacterIDs.Add("Trickster_v_scm");
-        for (int i = 0; i < villagers.Count; i++)
-        {
-            if (whitelistCharacterIDs.Contains(villagers[i].characterId))
-                listV.Add(villagers[i]);
-        }
-        CharacterData bluff = listV[0];
-        return bluff;
+        Trickster_m_register register = new Trickster_m_register();
+        return register.GetRegisterAsRole(charRef);
     }
     public Trickster_m() : base(ClassInjector.DerivedConstructorPointer<Trickster_m>())
     {
@@ -91,6 +82,26 @@ public class Trickster_m : Role
     }
 
     public Trickster_m(System.IntPtr ptr) : base(ptr)
+    {
+
+    }
+}
+[RegisterTypeInIl2Cpp]
+public class Trickster_m_register : Role
+{
+    public override string Description
+    {
+        get
+        {
+            return "";
+        }
+    }
+    public Trickster_m_register() : base(ClassInjector.DerivedConstructorPointer<Trickster_m_register>())
+    {
+        ClassInjector.DerivedConstructorBody((Il2CppObjectBase)this);
+    }
+
+    public Trickster_m_register(System.IntPtr ptr) : base(ptr)
     {
 
     }
