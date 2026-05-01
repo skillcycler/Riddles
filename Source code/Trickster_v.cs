@@ -26,6 +26,10 @@ public class Trickster_v : Role
     }
     public override ActedInfo GetInfo(Character charRef)
     {
+        if (charRef.statuses.Contains(ECharacterStatus.Corrupted))
+        {
+            return new ActedInfo("I feel sick.");
+        }
         if (charRef.dataRef.characterId != "Trickster_v_scm")
         {
             return new ActedInfo("Something is Digsuising as a Villager Trickster! This should never happen!");

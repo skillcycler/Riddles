@@ -74,6 +74,7 @@ public class Nurse : Role
                 {
                     c.pickableUses = 1;
                     c.pickable.SetActive(true);
+                    c.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
                 }
             } else
             {

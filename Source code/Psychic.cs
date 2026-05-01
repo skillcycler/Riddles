@@ -86,7 +86,7 @@ public class Psychic : Role
         {
             int randomInPlay1 = UnityEngine.Random.RandomRangeInt(0, inPlayChars.Count);
             int randomInPlay2 = UnityEngine.Random.RandomRangeInt(0, inPlayChars.Count);
-            while (randomInPlay1 == randomInPlay2)
+            while (inPlayChars[randomInPlay1].name == inPlayChars[randomInPlay2].name)
             {
                 randomInPlay2 = UnityEngine.Random.RandomRangeInt(0, inPlayChars.Count);
             }
@@ -100,7 +100,7 @@ public class Psychic : Role
         }
         int randomOutOfPlay1 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
         int randomOutOfPlay2 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
-        while (randomOutOfPlay1 == randomOutOfPlay2)
+        while (outOfPlay[randomOutOfPlay1].name == outOfPlay[randomOutOfPlay2].name)
         {
             randomOutOfPlay2 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
         }

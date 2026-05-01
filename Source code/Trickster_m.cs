@@ -25,6 +25,10 @@ public class Trickster_m : Role
     }
     public override ActedInfo GetInfo(Character charRef)
     {
+        if (charRef.statuses.Contains(ECharacterStatus.Corrupted))
+        {
+            return new ActedInfo("I feel sick.");
+        }
         if (charRef.dataRef.characterId != "Trickster_m_scm")
         {
             return new ActedInfo("Something is Digsuising as a Minion Trickster! This should never happen!");
@@ -46,7 +50,9 @@ public class Trickster_m : Role
         }
         Character chosen = characters[UnityEngine.Random.RandomRangeInt(0, characters.Count)];
         string info = string.Format("#{0} is my Type", chosen.id);
-        ActedInfo actedInfo = new ActedInfo(info);
+        Il2CppSystem.Collections.Generic.List<Character> hint = new();
+        hint.Add(chosen);
+        ActedInfo actedInfo = new ActedInfo(info, hint);
         return actedInfo;
     }
 
