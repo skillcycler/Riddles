@@ -73,7 +73,7 @@ public class Coach : Role
     private void CharacterPickedLiar()
     {
 
-        CharacterPicker.OnCharactersPicked -= action1;
+        CharacterPicker.OnCharactersPicked -= action3;
         CharacterPicker.OnStopPick -= action2;
         Character picked = CharacterPicker.PickedCharacters[0];
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
@@ -99,7 +99,7 @@ public class Coach : Role
     public string ConjureInfo(Character character, int matches)
     {
         if (matches == 1)
-            return string.Format("1 character near #{1} are the same Type as #{1}", matches);
+            return string.Format("1 character near #{0} is the same Type as #{0}", matches);
         return string.Format("{0} characters near #{1} are the same Type as #{1}", matches, character.id);
     }
     private void StopPick()

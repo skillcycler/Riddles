@@ -67,7 +67,7 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Poisoner_64796285");
             whitelistMinionCharacterIDs.Add("Witch_25286521");
             whitelistMinionCharacterIDs.Add("Shaman_26945607");
-            whitelistMinionCharacterIDs.Add("Baron_04539999");
+           // whitelistMinionCharacterIDs.Add("Baron_04539999"); oops this is bugged as well
             whitelistOutcastCharacterIDs.Add("Plague Doctor_49312486");
             whitelistOutcastCharacterIDs.Add("Wretch_80988916");
             whitelistOutcastCharacterIDs.Add("Bombardier_79093372");
@@ -75,10 +75,11 @@ public class MadScientist : Role
             //whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
             // This Mod
             whitelistMinionCharacterIDs.Add("Accuser_scm");
-            whitelistMinionCharacterIDs.Add("Channeler_scm");
-            //whitelistMinionCharacterIDs.Add("Sleeper_scm");
+            //whitelistMinionCharacterIDs.Add("Channeler_scm");
+            whitelistMinionCharacterIDs.Add("Sleeper_scm");
             whitelistMinionCharacterIDs.Add("Guardian_scm");
             whitelistOutcastCharacterIDs.Add("Ghost_scm");
+            whitelistOutcastCharacterIDs.Add("Muddler_scm");
             //whitelistOutcastCharacterIDs.Add("Hitman_scm");
             // Wingidon
 
@@ -170,6 +171,10 @@ public class MadScientist : Role
                 if (fakeOutcast.characterId == "Ghost_scm")
                 {
                     charRef.statuses.AddStatus(SpecialMadScientistTags.hasGhostAbility, charRef);
+                }
+                if (fakeOutcast.characterId == "Sleeper_scm")
+                {
+                    charRef.statuses.AddStatus(SpecialMadScientistTags.hasSleeperAbility, charRef);
                 }
                 if (fakeMinion.characterId == "Guardian_scm")
                 {
@@ -377,4 +382,5 @@ public class MadScientist : Role
 public static class SpecialMadScientistTags
 {
     public static ECharacterStatus hasGhostAbility = (ECharacterStatus)1201;
+    public static ECharacterStatus hasSleeperAbility = (ECharacterStatus)1202;
 }

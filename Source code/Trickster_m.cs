@@ -31,7 +31,7 @@ public class Trickster_m : Role
         }
         if (charRef.dataRef.characterId != "Trickster_m_scm")
         {
-            return new ActedInfo("Something is Digsuising as a Minion Trickster! This should never happen!");
+            return new ActedInfo("You found an easter egg.");
         }
         Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
         Il2CppSystem.Collections.Generic.List<Character> characters = new();
@@ -79,8 +79,7 @@ public class Trickster_m : Role
     }
     public override CharacterData GetRegisterAsRole(Character charRef)
     {
-        Trickster_m_register register = new Trickster_m_register();
-        return register.GetRegisterAsRole(charRef);
+        return ProjectContext.Instance.gameData.GetCharacterDataOfId("Trickster_m_register_scm");
     }
     public Trickster_m() : base(ClassInjector.DerivedConstructorPointer<Trickster_m>())
     {

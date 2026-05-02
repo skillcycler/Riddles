@@ -1,12 +1,13 @@
-﻿using Il2Cpp;
+﻿using System;
+using System.ComponentModel.Design;
+using HarmonyLib;
+using Il2Cpp;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppSystem;
 using MelonLoader;
-using System;
-using System.ComponentModel.Design;
 using UnityEngine;
-using HarmonyLib;
+using static MelonLoader.MelonLogger;
 
 public class Accuser : Minion
 {
@@ -40,6 +41,8 @@ public class Accuser : Minion
                 Character randomChar = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
                 randomChar.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 randomChar.statuses.AddStatus(Accused.accused, charRef);
+                Recluse wretch = new();
+                randomChar.UpdateRegisterAsRole(wretch.GetRegisterAsRole(randomChar));
             }
         }
     }
@@ -67,7 +70,7 @@ public static class Accused
         }
     }
 }
-[HarmonyPatch(typeof(Character), nameof(Character.Reveal))]
+[HarmonyPatch(typeof(Character), nameof(Character.UpdateRegisterAsRole))]
 public static class Accusing
 {
     public static void Postfix(Character __instance)
@@ -75,7 +78,7 @@ public static class Accusing
         if (__instance.statuses.Contains(Accused.accused))
         {
             Recluse wretch = new();
-            __instance.UpdateRegisterAsRole(wretch.GetRegisterAsRole(__instance));
+            __instance.registerAs = wretch.GetRegisterAsRole(__instance);
         }
     }
 }

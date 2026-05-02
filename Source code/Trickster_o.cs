@@ -29,6 +29,10 @@ public class Trickster_o : Role
         {
             return new ActedInfo("I feel sick.");
         }
+        if (charRef.dataRef.characterId != "Trickster_o_scm")
+        {
+            return new ActedInfo("You found an easter egg.");
+        }
         Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
         Il2CppSystem.Collections.Generic.List<Character> characters = new();
         foreach (Character c in chars)
@@ -75,8 +79,7 @@ public class Trickster_o : Role
     }
     public override CharacterData GetRegisterAsRole(Character charRef)
     {
-        Trickster_o_register register = new Trickster_o_register();
-        return register.GetRegisterAsRole(charRef);
+        return ProjectContext.Instance.gameData.GetCharacterDataOfId("Trickster_o_register_scm");
     }
     public Trickster_o() : base(ClassInjector.DerivedConstructorPointer<Trickster_o>())
     {

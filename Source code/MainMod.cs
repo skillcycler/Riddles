@@ -16,7 +16,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.3", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -48,6 +48,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
         ClassInjector.RegisterTypeInIl2Cpp<Hitman>();
         ClassInjector.RegisterTypeInIl2Cpp<Ghost>();
+        ClassInjector.RegisterTypeInIl2Cpp<Muddler>();
 
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
@@ -318,7 +319,6 @@ public class MainMod : MelonMod
         Comedian.hints = "";
         Comedian.ifLies = "";
         Comedian.picking = true;
-        Comedian.abilityUsage = EAbilityUsage.ResetAfterNight;
         Comedian.startingAlignment = EAlignment.Good;
         Comedian.type = ECharacterType.Villager;
         Comedian.bluffable = true;
@@ -412,7 +412,7 @@ public class MainMod : MelonMod
         Trickster_m2.startingAlignment = EAlignment.Good;
         Trickster_m2.type = ECharacterType.Minion;
         Trickster_m2.bluffable = false;
-        Trickster_m2.characterId = "Trickster_m_scm";
+        Trickster_m2.characterId = "Trickster_m_register_scm";
         Trickster_m2.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Trickster_m2.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Trickster_m2.color = new Color(1f, 0.935f, 0.7302f);
@@ -425,7 +425,7 @@ public class MainMod : MelonMod
         MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
         MadScientist.flavorText = "\"Lil bro is ANGRY at the village\"";
         MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.";
-        MadScientist.ifLies = "I will only Lie if I am somehow guaranteed to be Evil.\nIf I have the Doppelganger, Drunk, or Lunatic (from Wingidon's mod) abilities I will disguise accordingly.";
+        MadScientist.ifLies = "";
         MadScientist.picking = false;
         MadScientist.startingAlignment = EAlignment.Good;
         MadScientist.type = ECharacterType.Outcast;
@@ -490,6 +490,25 @@ public class MainMod : MelonMod
         Ghost.color = new Color(0.9659f, 1f, 0.4472f);
         Ghost.additionalFlavorTexts = new Il2CppStringArray(1);
         Ghost.additionalFlavorTexts[0] = Ghost.flavorText;
+
+
+        CharacterData Muddler = new CharacterData();
+        Muddler.role = new Muddler();
+        Muddler.name = "Muddler";
+        Muddler.description = "Status effects (like Corrupted) are not displayed.";
+        Muddler.flavorText = "\"I don't know, was it?\"";
+        Muddler.hints = "";
+        Muddler.ifLies = "";
+        Muddler.picking = false;
+        Muddler.startingAlignment = EAlignment.Good;
+        Muddler.type = ECharacterType.Outcast;
+        Muddler.bluffable = false;
+        Muddler.characterId = "Muddler_scm";
+        Muddler.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
+        Muddler.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
+        Muddler.color = new Color(0.9659f, 1f, 0.4472f);
+        Muddler.additionalFlavorTexts = new Il2CppStringArray(1);
+        Muddler.additionalFlavorTexts[0] = Muddler.flavorText;
 
         CharacterData Accuser = new CharacterData();
         Accuser.role = new Accuser();
@@ -689,18 +708,19 @@ public class MainMod : MelonMod
 
         // Characters.Instance.startGameActOrder = InsertAfterAct("Baa", Sleeper);
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", MadScientist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Channeler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Guardian);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", Hypnotist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Muddler);
 
 
         CustomScriptData followerScriptData = new CustomScriptData();
@@ -923,6 +943,7 @@ public class MainMod : MelonMod
             AddRole(script.startingOutsiders, Necromancer);
             AddRole(script.startingOutsiders, Hitman);
             AddRole(script.startingOutsiders, Ghost);
+            AddRole(script.startingOutsiders, Muddler);
 
 
             AddRole(script.startingMinions, Accuser);
@@ -1198,7 +1219,7 @@ public class MainMod : MelonMod
         shortenNight = false;
         foreach (Character c in Gameplay.CurrentCharacters)
         {
-            if (c.dataRef.characterId == "Sleeper_scm")
+            if (c.dataRef.characterId == "Sleeper_scm" || c.statuses.Contains(SpecialMadScientistTags.hasSleeperAbility))
                 shortenNight = true;
         }
 

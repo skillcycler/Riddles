@@ -44,7 +44,12 @@ public class Trickster_v : Role
         if (!converted)
             return new ActedInfo("This village has too few Villagers! I can't perform my tricks here!");
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        characters = Characters.Instance.FilterCharacterType(characters, ECharacterType.Villager);
+        if (charRef.statuses.Contains(Accused.accused))
+        {
+            characters = Characters.Instance.FilterCharacterType(characters, ECharacterType.Minion);
+        }
+        else 
+            characters = Characters.Instance.FilterCharacterType(characters, ECharacterType.Villager);
         Il2CppSystem.Collections.Generic.List<Character> characters2 = new();
         foreach (Character ch in characters)
         {
