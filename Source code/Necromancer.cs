@@ -56,7 +56,7 @@ public class Necromancer : Role
         CharacterPicker.OnCharactersPicked -= action1;
         CharacterPicker.OnStopPick -= action2;
         Character c1 = CharacterPicker.PickedCharacters[0];
-        if (c1.GetAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm")
+        if (c1.GetAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm" || c1.alignment == EAlignment.Evil)
         {
             return;
         }
@@ -78,7 +78,7 @@ public class Necromancer : Role
             c1.pickable.SetActive(true);
         }
         c1.state = ECharacterState.Alive;
-        c1.InitWithNoReset(c1.GetRegisterAs());
+        c1.InitWithNoReset(c1.dataRef);
         c1.Act(ETriggerPhase.Day);
         PlayerController.PlayerInfo.health.Damage(2);
         string info = ConjureInfo(c1);
@@ -91,7 +91,7 @@ public class Necromancer : Role
         CharacterPicker.OnStopPick -= action2;
 
         Character c1 = CharacterPicker.PickedCharacters[0];
-        if (c1.GetAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm")
+        if (c1.GetAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm" || c1.alignment == EAlignment.Evil)
         {
             return;
         }
@@ -116,7 +116,7 @@ public class Necromancer : Role
         c1.state = ECharacterState.Alive;
         c1.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
         c1.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
-        c1.InitWithNoReset(c1.GetRegisterAs());
+        c1.InitWithNoReset(c1.dataRef);
         c1.Act(ETriggerPhase.Day);
         PlayerController.PlayerInfo.health.Damage(2);
         string info = ConjureInfo(c1);

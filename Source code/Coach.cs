@@ -61,9 +61,9 @@ public class Coach : Role
 
         foreach (Character character in characters)
         {
-            int distanceFromCharacter = character.id - picked.id;
-            if (distanceFromCharacter < -2)
-                distanceFromCharacter += Gameplay.CurrentCharacters.Count;
+            int distanceFromCharacter = Il2CppSystem.Math.Abs(character.id - picked.id);
+            if (distanceFromCharacter >= Gameplay.CurrentCharacters.Count/2)
+                distanceFromCharacter -= Gameplay.CurrentCharacters.Count;
             if (character.GetCharacterType() == picked.GetCharacterType() && distanceFromCharacter >= -2 && distanceFromCharacter <= 2 && distanceFromCharacter != 0)
                 matches++;
         }
@@ -81,9 +81,9 @@ public class Coach : Role
 
         foreach (Character character in characters)
         {
-            int distanceFromCharacter = character.id - picked.id;
-            if (distanceFromCharacter < -2)
-                distanceFromCharacter += Gameplay.CurrentCharacters.Count;
+            int distanceFromCharacter = Il2CppSystem.Math.Abs(character.id - picked.id);
+            if (distanceFromCharacter >= Gameplay.CurrentCharacters.Count / 2)
+                distanceFromCharacter -= Gameplay.CurrentCharacters.Count;
             if (character.GetCharacterType() == picked.GetCharacterType() && distanceFromCharacter >= -2 && distanceFromCharacter <= 2 && distanceFromCharacter != 0)
                 matches++;
         }
@@ -99,7 +99,7 @@ public class Coach : Role
     public string ConjureInfo(Character character, int matches)
     {
         if (matches == 1)
-            return string.Format("1 character near #{0} is the same Type as #{0}", matches);
+            return string.Format("{0} character near #{1} is the same Type as #{1}", matches, character.id);
         return string.Format("{0} characters near #{1} are the same Type as #{1}", matches, character.id);
     }
     private void StopPick()

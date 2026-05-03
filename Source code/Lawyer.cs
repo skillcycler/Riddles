@@ -38,18 +38,7 @@ public class Lawyer : Role
                     isAdjacent = true;
                 }
             }
-            bool lying = false;
-            if (character.bluff)
-                lying = true;
-            if (character.statuses.Contains(ECharacterStatus.Corrupted))
-                lying = true;
-            if (character.statuses.Contains(ECharacterStatus.HealthyBluff))
-                lying = false;
-            if (character.dataRef.role is Confessor)
-                lying = false;
-            if (character.bluff)
-                if (character.bluff.role is Confessor)
-                    lying = false;
+            bool lying = CharacterHelper.CheckLyingAppearance(character);
             if (!lying && !isAdjacent)
             {
                 truthfulCharacters.Add(character);
@@ -79,18 +68,7 @@ public class Lawyer : Role
                     isAdjacent = true;
                 }
             }
-            bool lying = false;
-            if (character.bluff)
-                lying = true;
-            if (character.statuses.Contains(ECharacterStatus.Corrupted))
-                lying = true;
-            if (character.statuses.Contains(ECharacterStatus.HealthyBluff))
-                lying = false;
-            if (character.dataRef.role is Confessor)
-                lying = false;
-            if (character.bluff)
-                if (character.bluff.role is Confessor)
-                    lying = false;
+            bool lying = CharacterHelper.CheckLyingAppearance(character);
             if (lying && !isAdjacent)
             {
                 untruthfulCharacters.Add(character);

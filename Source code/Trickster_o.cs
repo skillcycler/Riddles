@@ -65,6 +65,10 @@ public class Trickster_o : Role
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Start)
+        {
+            charRef.UpdateRegisterAsRole(ProjectContext.Instance.gameData.GetCharacterDataOfId("Trickster_o_register_scm"));
+        }
         if (trigger == ETriggerPhase.Day)
         {
             onActed.Invoke(GetInfo(charRef));

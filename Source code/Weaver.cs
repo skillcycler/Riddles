@@ -79,7 +79,7 @@ public class Weaver : Role
         }
         if (max < 2)
             max = 2;
-        int randomPairCount = Calculator.RemoveNumberAndGetRandomNumberFromList(pairCount, 0, max-1);
+        int randomPairCount = Calculator.RemoveNumberAndGetRandomNumberFromList(pairCount, 0, max);
 
         string info = MakeInfo(randomPairCount);
         ActedInfo newInfo = new ActedInfo(info);

@@ -16,7 +16,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.4", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -365,23 +365,23 @@ public class MainMod : MelonMod
         Trickster_o.additionalFlavorTexts = new Il2CppStringArray(1);
         Trickster_o.additionalFlavorTexts[0] = Trickster_o.flavorText;
 
-        CharacterData Trickster_o2 = new CharacterData();
-        Trickster_o2.role = new Trickster_o_register();
-        Trickster_o2.name = "Trickster Outcast Register";
-        Trickster_o2.description = "";
-        Trickster_o2.flavorText = "";
-        Trickster_o2.hints = "";
-        Trickster_o2.ifLies = "";
-        Trickster_o2.picking = false;
-        Trickster_o2.startingAlignment = EAlignment.Good;
-        Trickster_o2.type = ECharacterType.Outcast;
-        Trickster_o2.bluffable = false;
-        Trickster_o2.characterId = "Trickster_o_register_scm";
-        Trickster_o2.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Trickster_o2.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Trickster_o2.color = new Color(1f, 0.935f, 0.7302f);
-        Trickster_o2.additionalFlavorTexts = new Il2CppStringArray(1);
-        Trickster_o2.additionalFlavorTexts[0] = Trickster_o2.flavorText;
+        CharacterData Trickster_o_register = new CharacterData();
+        Trickster_o_register.role = new Trickster_o_register();
+        Trickster_o_register.name = "Trickster Outcast Register";
+        Trickster_o_register.description = "";
+        Trickster_o_register.flavorText = "";
+        Trickster_o_register.hints = "";
+        Trickster_o_register.ifLies = "";
+        Trickster_o_register.picking = false;
+        Trickster_o_register.startingAlignment = EAlignment.Good;
+        Trickster_o_register.type = ECharacterType.Outcast;
+        Trickster_o_register.bluffable = false;
+        Trickster_o_register.characterId = "Trickster_o_register_scm";
+        Trickster_o_register.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Trickster_o_register.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Trickster_o_register.color = new Color(1f, 0.935f, 0.7302f);
+        Trickster_o_register.additionalFlavorTexts = new Il2CppStringArray(1);
+        Trickster_o_register.additionalFlavorTexts[0] = Trickster_o_register.flavorText;
 
         CharacterData Trickster_m = new CharacterData();
         Trickster_m.role = new Trickster_m();
@@ -401,23 +401,23 @@ public class MainMod : MelonMod
         Trickster_m.additionalFlavorTexts = new Il2CppStringArray(1);
         Trickster_m.additionalFlavorTexts[0] = Trickster_m.flavorText;
 
-        CharacterData Trickster_m2 = new CharacterData();
-        Trickster_m2.role = new Trickster_m_register();
-        Trickster_m2.name = "Trickster Minion Register";
-        Trickster_m2.description ="";
-        Trickster_m2.flavorText = "";
-        Trickster_m2.hints = "";
-        Trickster_m2.ifLies = "";
-        Trickster_m2.picking = false;
-        Trickster_m2.startingAlignment = EAlignment.Good;
-        Trickster_m2.type = ECharacterType.Minion;
-        Trickster_m2.bluffable = false;
-        Trickster_m2.characterId = "Trickster_m_register_scm";
-        Trickster_m2.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Trickster_m2.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Trickster_m2.color = new Color(1f, 0.935f, 0.7302f);
-        Trickster_m2.additionalFlavorTexts = new Il2CppStringArray(1);
-        Trickster_m2.additionalFlavorTexts[0] = Trickster_m2.flavorText;
+        CharacterData Trickster_m_register = new CharacterData();
+        Trickster_m_register.role = new Trickster_m_register();
+        Trickster_m_register.name = "Trickster Minion Register";
+        Trickster_m_register.description = "";
+        Trickster_m_register.flavorText = "";
+        Trickster_m_register.hints = "";
+        Trickster_m_register.ifLies = "";
+        Trickster_m_register.picking = false;
+        Trickster_m_register.startingAlignment = EAlignment.Good;
+        Trickster_m_register.type = ECharacterType.Minion;
+        Trickster_m_register.bluffable = false;
+        Trickster_m_register.characterId = "Trickster_m_register_scm";
+        Trickster_m_register.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Trickster_m_register.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Trickster_m_register.color = new Color(1f, 0.935f, 0.7302f);
+        Trickster_m_register.additionalFlavorTexts = new Il2CppStringArray(1);
+        Trickster_m_register.additionalFlavorTexts[0] = Trickster_m_register.flavorText;
 
         CharacterData MadScientist = new CharacterData();
         MadScientist.role = new MadScientist();
@@ -713,6 +713,8 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Channeler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Trickster_v);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_v", Trickster_o);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_o", Trickster_m);
         Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
         Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Hypnotist);

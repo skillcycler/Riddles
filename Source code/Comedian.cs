@@ -60,17 +60,17 @@ public class Comedian : Role
         bool disguised2 = false;
         bool disguised3 = false;
         int total = 0;
-        if (CharacterPicker.PickedCharacters[0].bluff)
+        if (CharacterHelper.CheckIfDisguisedAppearance(CharacterPicker.PickedCharacters[0]))
         {
             disguised1 = true;
             total++;
         }
-        if (CharacterPicker.PickedCharacters[1].bluff)
+        if (CharacterHelper.CheckIfDisguisedAppearance(CharacterPicker.PickedCharacters[1]))
         {
             disguised2 = true;
             total++;
         }
-        if (CharacterPicker.PickedCharacters[2].bluff)
+        if (CharacterHelper.CheckIfDisguisedAppearance(CharacterPicker.PickedCharacters[2]))
         {
             disguised3 = true;
             total++;
@@ -173,11 +173,11 @@ public class Comedian : Role
         int second = CharacterPicker.PickedCharacters[choice2].id;
         bool bothDisguised = true;
 
-        if (CharacterPicker.PickedCharacters[choice1].bluff && CharacterPicker.PickedCharacters[choice2].bluff)
+        if (CharacterHelper.CheckIfDisguisedAppearance(CharacterPicker.PickedCharacters[choice1]) && CharacterHelper.CheckIfDisguisedAppearance(CharacterPicker.PickedCharacters[choice2]))
         {
             bothDisguised = false;
         }
-        else if ((CharacterPicker.PickedCharacters[choice1].bluff && !CharacterPicker.PickedCharacters[choice2].bluff) || (!CharacterPicker.PickedCharacters[choice1].bluff && CharacterPicker.PickedCharacters[choice2].bluff))
+        else if ((CharacterHelper.CheckIfDisguisedAppearance(CharacterPicker.PickedCharacters[choice1]) && !CharacterHelper.CheckIfDisguisedAppearance(CharacterPicker.PickedCharacters[choice2])) || (!CharacterHelper.CheckIfDisguisedAppearance(CharacterPicker.PickedCharacters[choice1]) && CharacterHelper.CheckIfDisguisedAppearance(CharacterPicker.PickedCharacters[choice2])))
         {
             if (UnityEngine.Random.RandomRangeInt(0, 2) == 1)
                 bothDisguised = false;
