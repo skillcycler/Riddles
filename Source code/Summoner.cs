@@ -54,8 +54,29 @@ public class Summoner : Demon
             }
         }
         Il2CppSystem.Collections.Generic.List<Character> summons = new Il2CppSystem.Collections.Generic.List<Character>();
+
+        //anything that adds minions isn't allowed so it will just turn into a random demon
+        List<string> bannedOther = new List<string>();
+        bannedOther.Add("Mutant_WING"); // This card might add a minion.
+
+        foreach (Character c in Gameplay.CurrentCharacters) {
+            if (bannedOther.Contains(c.dataRef.characterId))
+            {
+            } else
+            {
+                summons.Add(c);
+            }
+        }
         foreach (Character c in Gameplay.CurrentCharacters)
-            summons.Add(c);
+        {
+            if (bannedOther.Contains(c.dataRef.characterId))
+            {
+                int chosen = UnityEngine.Random.RandomRangeInt(0, possibleDemons.Count);
+                CharacterData selectedDemon = possibleDemons[chosen];
+                possibleDemons.Remove(selectedDemon);
+                c.Init(selectedDemon);
+            }
+        }
         summons.Remove(charRef);
         int extraDemons = 1;
         if (Gameplay.CurrentCharacters.Count >= 9)

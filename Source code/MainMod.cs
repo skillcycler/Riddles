@@ -16,7 +16,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.4", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.5", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -663,7 +663,7 @@ public class MainMod : MelonMod
         CharacterData Summoner = new CharacterData();
         Summoner.role = new Summoner();
         Summoner.name = "Summoner";
-        Summoner.description = "Game Start: There are no Minions in play. 1-3 other cards become Demons. The demons I summon are not added to the Deck.\n\nI Lie and Disguise.\n\nYou might start with 5 extra HP.";
+        Summoner.description = "Game Start: There are no Minions in play. One or more other cards become Demons. The demons I summon are not added to the Deck.\n\nI Lie and Disguise.\n\nYou might start with 5 extra HP.";
         Summoner.flavorText = "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"";
         Summoner.hints = "The night cycle is always active if I am in play.";
         Summoner.ifLies = "";
@@ -1238,13 +1238,13 @@ public class MainMod : MelonMod
             if (obj == null) return;
             var mod = MainMod.Instance;
             if (mod == null) return;
-            if (mod.shortenNight)
+            if (mod.shortenNight && CachedRule != null)
             {
                 CachedRule.currentStep++;
                 mod.shortenNight = false;
             }
 
-            if (obj.dataRef.characterId == "Ghost_scm" || obj.statuses.Contains(SpecialMadScientistTags.hasGhostAbility))
+            if ((obj.dataRef.characterId == "Ghost_scm" || obj.statuses.Contains(SpecialMadScientistTags.hasGhostAbility)) && CachedRule != null)
             {
                 CachedRule.currentStep++;
             }
