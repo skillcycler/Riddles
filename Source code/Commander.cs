@@ -76,7 +76,7 @@ public class Commander : Role
             onActed?.Invoke(new ActedInfo(info, chars));
         } else
         {
-            string info = "There is no valid truthful info to give.";
+            string info = string.Format("Everyone is the same type as #{0} or #{1}, characters[0].id, characters[1].id");
             onActed?.Invoke(new ActedInfo(info, chars));
         }
     }

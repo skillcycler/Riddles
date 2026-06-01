@@ -14,16 +14,24 @@ A Demon Bluff mod that adds 25 brand new characters to the game!
 - Weaver: Learn how many pairs of Villagers there are.
 - Stylist: Pick a Disguised character and change their disguise.
 - Nurse: Pick a card. If they are corrupted, uncorrupt them and refresh their ability.
+- Coach: Pick a card. Learn how many cards [Range 2] are the same Type as them.
+- Comedian: Pick 3 cards. Learn 2 that are both Disguised or both Not Disguised.
+
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
 - Hitman: An evil outcast that lies and disguises and kills a random card every night, dealing 3 damage. This can be any card, including normally unkillable cards, Demons, and even itself.
 - Necromancer: Revive a dead Good card at the cost of 2 HP. If I am lying, the revived card will lie.
 - Ghost: Dies when revealed, haunting (corrupting) an unrevealed Villager.
+- Muddler: Status effects such as Corrupted are not shown when cards are executed.
+
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil. (I turn the villager into a Wretch disguised as that villager.)
 - Hypnotist: Always disguises and says something that would otherwise never be a lie.
 - Apprentice: Copies the ability of another Evil.
 - Sleeper: The night cycle is 1 tick shorter. Can you keep up with the demons killing faster?
+- Mastermind: All minions become Masterminds after doing their Game Start actions.
+- Guardian: The Demon registers as what they're bluffing. I sit next to the Demon.
+
 ## Demons
 - Follower: Kills smartly. Night is 3 ticks long.
 - Veil: 3 cards are unable to be revealed.

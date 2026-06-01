@@ -34,13 +34,13 @@ public class Sleeper : Minion
         if (trigger == ETriggerPhase.Start) {
             var mod = MainMod.Instance;
             if (mod == null) return;
-            mod.shortenNight = true;
+            mod.shortenNight += 1;
         }
         if (trigger == ETriggerPhase.Night)
         {
             var mod = MainMod.Instance;
             if (mod == null) return;
-            mod.shortenNight = true;
+            mod.shortenNight += 1;
         }
     }
 

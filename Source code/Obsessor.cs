@@ -35,7 +35,7 @@ public class Obsessor : Role
         }
         foreach (Character character in characters) {
             // gonna make it not useless in Specularus villages
-            if (!isSpecularusVillage || character.GetAlignment() == EAlignment.Evil)
+            if (!isSpecularusVillage || character.GetRegisterAlignment() == EAlignment.Evil)
                 actualCharacters.Add(character);
         }
         Character chosenCharacter = actualCharacters[UnityEngine.Random.RandomRangeInt(0, actualCharacters.Count)];
@@ -43,7 +43,7 @@ public class Obsessor : Role
         Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(chosenCharacter);
         foreach (Character character in adjacentCharacters)
         {
-            if (character.GetAlignment() == EAlignment.Evil)
+            if (character.GetRegisterAlignment() == EAlignment.Evil)
             {
                 evils++;
             }
@@ -68,7 +68,7 @@ public class Obsessor : Role
         Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(chosenCharacter);
         foreach (Character character in adjacentCharacters)
         {
-            if (character.GetAlignment() == EAlignment.Evil)
+            if (character.GetRegisterAlignment() == EAlignment.Evil)
             {
                 evils++;
             }

@@ -29,7 +29,7 @@ public class Mathematician : Role
         System.Collections.Generic.List<int> evils = new System.Collections.Generic.List<int>();
         foreach (Character character in characters)
         {
-            if (character.GetAlignment() == EAlignment.Evil)
+            if (character.GetRegisterAlignment() == EAlignment.Evil)
             {
                 evils.Add(character.id);
             }
@@ -62,7 +62,7 @@ public class Mathematician : Role
         System.Collections.Generic.List<int> evils = new System.Collections.Generic.List<int>();
         foreach (Character character in characters)
         {
-            if (character.GetAlignment() == EAlignment.Evil)
+            if (character.GetRegisterAlignment() == EAlignment.Evil)
             {
                 evils.Add(character.id);
             }

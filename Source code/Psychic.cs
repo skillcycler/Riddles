@@ -48,10 +48,10 @@ public class Psychic : Role
         }
         int randomInPlay = UnityEngine.Random.RandomRangeInt(0, inPlayChars.Count);
         int randomOutOfPlay = UnityEngine.Random.RandomRange(0, outOfPlay.Count);
-        string info = string.Format("Either the {0} or the {1} is in play", inPlayChars[randomInPlay].name, outOfPlay[randomOutOfPlay].name);
+        string info = string.Format("Exactly one of the {0} or the {1} is in play", inPlayChars[randomInPlay].name, outOfPlay[randomOutOfPlay].name);
         if (Calculator.RollDice(2) == 1)
         {
-            info = string.Format("Either the {1} or the {0} is in play", inPlayChars[randomInPlay].name, outOfPlay[randomOutOfPlay].name);
+            info = string.Format("Exactly one of the {1} or the {0} is in play", inPlayChars[randomInPlay].name, outOfPlay[randomOutOfPlay].name);
         }
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
@@ -90,10 +90,10 @@ public class Psychic : Role
             {
                 randomInPlay2 = UnityEngine.Random.RandomRangeInt(0, inPlayChars.Count);
             }
-            string inf = string.Format("Either the {0} or the {1} is in play", inPlayChars[randomInPlay1].name, inPlayChars[randomInPlay2].name);
+            string inf = string.Format("Exactly one of the {0} or the {1} is in play", inPlayChars[randomInPlay1].name, inPlayChars[randomInPlay2].name);
             if (Calculator.RollDice(2) == 1)
             {
-                inf = string.Format("Either the {1} or the {0} is in play", inPlayChars[randomInPlay1].name, inPlayChars[randomInPlay2].name);
+                inf = string.Format("Exactly one of the {1} or the {0} is in play", inPlayChars[randomInPlay1].name, inPlayChars[randomInPlay2].name);
             }
             ActedInfo actedInf = new ActedInfo(inf);
             return actedInf;

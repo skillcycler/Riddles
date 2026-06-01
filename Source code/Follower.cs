@@ -6,6 +6,7 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppSystem;
 using MelonLoader;
+using RiddlerMod;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -14,7 +15,7 @@ public class Follower : Demon
     public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
     {
         Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
-        sr.Add(new NightModeRule(3));
+        sr.Add(new NightModeRule(4));
         return sr;
     }
     public int CheckRolePriority(Character character)
@@ -88,6 +89,22 @@ public class Follower : Demon
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (charRef.state == ECharacterState.Dead)
+        {
+            return;
+        }
+        if (trigger == ETriggerPhase.Start)
+        {
+            var mod = MainMod.Instance;
+            if (mod == null) return;
+            mod.shortenNight += 1;
+        }
+        if (trigger == ETriggerPhase.Night)
+        {
+            var mod = MainMod.Instance;
+            if (mod == null) return;
+            mod.shortenNight += 1;
+        }
         if (trigger == ETriggerPhase.Start)
         {
             if (Gameplay.CurrentCharacters.Count >= 11)

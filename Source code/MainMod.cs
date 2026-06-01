@@ -16,7 +16,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.5", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.6", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -74,6 +74,7 @@ public class MainMod : MelonMod
         CharacterData Riddler = new CharacterData();
         Riddler.role = new Riddler();
         Riddler.name = "Riddler";
+        Riddler.characterName = "Riddler";
         Riddler.description = "Learn a true fact about the game.";
         Riddler.flavorText = "\"One day I'll cause a paradox.\"";
         Riddler.hints = "";
@@ -93,6 +94,7 @@ public class MainMod : MelonMod
         CharacterData Swapper = new CharacterData();
         Swapper.role = new Swapper();
         Swapper.name = "Swapper";
+        Swapper.characterName = "Swapper";
         Swapper.description = "Pick 2 cards: They disguise as each other's apparent role. Refresh both of their statements or abilities.";
         Swapper.flavorText = "\"Didn't like the role you got? I'm here to save the day!\"";
         Swapper.hints = "A Swapper cannot swap itself or another Swapper.";
@@ -113,6 +115,7 @@ public class MainMod : MelonMod
         CharacterData Mathematician = new CharacterData();
         Mathematician.role = new Mathematician();
         Mathematician.name = "Mathematician";
+        Mathematician.characterName = "Mathematician";
         Mathematician.description = "Learn a number equal to the sum of the card numbers of 2 Evils.";
         Mathematician.flavorText = "\"21\"";
         Mathematician.hints = "";
@@ -132,6 +135,7 @@ public class MainMod : MelonMod
         CharacterData Commander = new CharacterData();
         Commander.role = new Commander();
         Commander.name = "Commander";
+        Commander.characterName = "Commander";
         Commander.description = "Pick 2 cards: Learn a card of a different character type from both.";
         Commander.flavorText = "\"Leads the Villagers by day, hunts the Minions at night.\"";
         Commander.hints = "";
@@ -151,6 +155,7 @@ public class MainMod : MelonMod
         CharacterData Director = new CharacterData();
         Director.role = new Director();
         Director.name = "Director";
+        Director.characterName = "Director";
         Director.description = "Learn a consecutive group of cards that contain 2 Evils.";
         Director.flavorText = "\"There are no lights. There is no camera. But there's certainly a lot of action.\"";
         Director.hints = "I always go clockwise from the first number to the second number. Both endpoints are included.";
@@ -169,6 +174,7 @@ public class MainMod : MelonMod
         CharacterData Scanner = new CharacterData();
         Scanner.role = new Scanner();
         Scanner.name = "Scanner";
+        Scanner.characterName = "Scanner";
         Scanner.description = "Learn how many Outcasts are Disguised or being used as a Disguise.";
         Scanner.flavorText = "\"I spy with my two little eyes, two Outcasts in disguise!\"";
         Scanner.hints = "The Outcast Trickster counts towards this.";
@@ -187,6 +193,7 @@ public class MainMod : MelonMod
         CharacterData Obsessor = new CharacterData();
         Obsessor.role = new Obsessor();
         Obsessor.name = "Obsessor";
+        Obsessor.characterName = "Obsessor";
         Obsessor.description = "Learn how many Evils are next to a certain role.";
         Obsessor.flavorText = "\"Once snuck into the Lover's house at night. You'll never guess what happened next\"";
         Obsessor.hints = "";
@@ -205,6 +212,7 @@ public class MainMod : MelonMod
         CharacterData Lawyer = new CharacterData();
         Lawyer.role = new Lawyer();
         Lawyer.name = "Lawyer";
+        Lawyer.characterName = "Lawyer";
         Lawyer.description = "My neighbors tell the truth. Learn a truthful character.";
         Lawyer.flavorText = "\"Do you swear to tell the truth, the whole truth, and nothing but the truth?\"";
         Lawyer.hints = "";
@@ -223,6 +231,7 @@ public class MainMod : MelonMod
         CharacterData Psychic = new CharacterData();
         Psychic.role = new Psychic();
         Psychic.name = "Psychic";
+        Psychic.characterName = "Psychic";
         Psychic.description = "Learn 2 characters. Exactly 1 is in play.";
         Psychic.flavorText = "\"I may be able to read your mind.\"";
         Psychic.hints = "I can see through misregistration.";
@@ -241,6 +250,7 @@ public class MainMod : MelonMod
         CharacterData Weaver = new CharacterData();
         Weaver.role = new Weaver();
         Weaver.name = "Weaver";
+        Weaver.characterName = "Weaver";
         Weaver.description = "Learn how many pairs of Villagers there are.";
         Weaver.flavorText = "\"The Knitter's younger sister. Still recovering from that incident with the Evil Villagers.\"";
         Weaver.hints = "";
@@ -259,6 +269,7 @@ public class MainMod : MelonMod
         CharacterData Nurse = new CharacterData();
         Nurse.role = new Nurse();
         Nurse.name = "Nurse";
+        Nurse.characterName = "Nurse";
         Nurse.description = "Pick 1 alive card: If Corrupted, cure and refresh their ability.";
         Nurse.flavorText = "\"I can cure the Drunk, I promise!\"";
         Nurse.hints = "My ability refreshes every night.";
@@ -278,6 +289,7 @@ public class MainMod : MelonMod
         CharacterData Stylist = new CharacterData();
         Stylist.role = new Stylist();
         Stylist.name = "Stylist";
+        Stylist.characterName = "Stylist";
         Stylist.description = "Pick an alive Disguised character. Change their Disguise.";
         Stylist.flavorText = "\"Taking clients from the Swapper since 2025\"";
         Stylist.hints = "";
@@ -296,6 +308,7 @@ public class MainMod : MelonMod
         CharacterData Coach = new CharacterData();
         Coach.role = new Coach();
         Coach.name = "Coach";
+        Coach.characterName = "Coach";
         Coach.description = "Pick 1 card: Learn how many characters near them [Range 2] are the same Type as them.";
         Coach.flavorText = "\"Demon Bluff is now a team building game.\"";
         Coach.hints = "";
@@ -314,6 +327,7 @@ public class MainMod : MelonMod
         CharacterData Comedian = new CharacterData();
         Comedian.role = new Comedian();
         Comedian.name = "Comedian";
+        Comedian.characterName = "Comedian";
         Comedian.description = "Pick 3 cards: Learn 2 that are both disguised or both not disguised.";
         Comedian.flavorText = "\"You will be blown away by his performance when he teams up with the Jester!\"";
         Comedian.hints = "";
@@ -332,6 +346,7 @@ public class MainMod : MelonMod
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
         Trickster_v.name = "Trickster";
+        Trickster_v.characterName = "Trickster";
         Trickster_v.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nYou don't know which is which.\nLearn a card that is the same character type as me.";
         Trickster_v.flavorText = "\"If you thought the Minion twins were bad, get ready for the three of us!\"";
         Trickster_v.hints = "If I am Corrupted: \"I feel sick\"\nI cannot be Disguised as.";
@@ -350,6 +365,7 @@ public class MainMod : MelonMod
         CharacterData Trickster_o = new CharacterData();
         Trickster_o.role = new Trickster_o();
         Trickster_o.name = "Trickster";
+        Trickster_o.characterName = "Trickster";
         Trickster_o.description = Trickster_v.description;
         Trickster_o.flavorText = Trickster_v.flavorText;
         Trickster_o.hints = Trickster_v.hints;
@@ -368,6 +384,7 @@ public class MainMod : MelonMod
         CharacterData Trickster_o_register = new CharacterData();
         Trickster_o_register.role = new Trickster_o_register();
         Trickster_o_register.name = "Trickster Outcast Register";
+        Trickster_o_register.characterName = "Trickster Outcast Register";
         Trickster_o_register.description = "";
         Trickster_o_register.flavorText = "";
         Trickster_o_register.hints = "";
@@ -386,6 +403,7 @@ public class MainMod : MelonMod
         CharacterData Trickster_m = new CharacterData();
         Trickster_m.role = new Trickster_m();
         Trickster_m.name = "Trickster";
+        Trickster_m.characterName = "Trickster";
         Trickster_m.description = Trickster_v.description;
         Trickster_m.flavorText = Trickster_v.flavorText;
         Trickster_m.hints = Trickster_v.hints;
@@ -404,6 +422,7 @@ public class MainMod : MelonMod
         CharacterData Trickster_m_register = new CharacterData();
         Trickster_m_register.role = new Trickster_m_register();
         Trickster_m_register.name = "Trickster Minion Register";
+        Trickster_m_register.characterName = "Trickster Minion Register";
         Trickster_m_register.description = "";
         Trickster_m_register.flavorText = "";
         Trickster_m_register.hints = "";
@@ -422,6 +441,7 @@ public class MainMod : MelonMod
         CharacterData MadScientist = new CharacterData();
         MadScientist.role = new MadScientist();
         MadScientist.name = "Mad Scientist";
+        MadScientist.characterName = "Mad Scientist";
         MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
         MadScientist.flavorText = "\"Lil bro is ANGRY at the village\"";
         MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.";
@@ -440,6 +460,7 @@ public class MainMod : MelonMod
         CharacterData Necromancer = new CharacterData();
         Necromancer.role = new Necromancer();
         Necromancer.name = "Necromancer";
+        Necromancer.characterName = "Necromancer";
         Necromancer.description = "Pick 1 dead card: Revive it and lose 2 Health. I cannot revive Evils.";
         Necromancer.flavorText = "\"Second chances are real. Just like Empaths and Mayors.\"";
         Necromancer.hints = "";
@@ -458,6 +479,7 @@ public class MainMod : MelonMod
         CharacterData Hitman = new CharacterData();
         Hitman.role = new Hitman();
         Hitman.name = "Hitman";
+        Hitman.characterName = "Hitman";
         Hitman.description = "I Lie and Disguise.\n\nAt night: Kill a random card and lose 3 HP.";
         Hitman.flavorText = "\"No one is safe from me, not even myself\"";
         Hitman.hints = "I can kill any card, including Knights, Demons, and myself.\nIf there is no night cycle, I'm just a regular Evil Outcast.";
@@ -476,6 +498,7 @@ public class MainMod : MelonMod
         CharacterData Ghost = new CharacterData();
         Ghost.role = new Ghost();
         Ghost.name = "Ghost";
+        Ghost.characterName = "Ghost";
         Ghost.description = "On Reveal: Die, dealing 1 damage to you. One unrevealed Good character is Corrupted.";
         Ghost.flavorText = "\"I would say 'Boo!' but that's not scary anymore.\"";
         Ghost.hints = "I cannot be revived.";
@@ -495,6 +518,7 @@ public class MainMod : MelonMod
         CharacterData Muddler = new CharacterData();
         Muddler.role = new Muddler();
         Muddler.name = "Muddler";
+        Muddler.characterName = "Muddler";
         Muddler.description = "Status effects (like Corrupted) are not displayed.";
         Muddler.flavorText = "\"I don't know, was it?\"";
         Muddler.hints = "";
@@ -513,6 +537,7 @@ public class MainMod : MelonMod
         CharacterData Accuser = new CharacterData();
         Accuser.role = new Accuser();
         Accuser.name = "Accuser";
+        Accuser.characterName = "Accuser";
         Accuser.description = "Game Start: One adjacent Good Villager registers a random Evil Minion.\n\nI Lie and Disguise.";
         Accuser.flavorText = "\"Uno reverse card!\"";
         Accuser.hints = "";
@@ -532,6 +557,7 @@ public class MainMod : MelonMod
         CharacterData Hypnotist = new CharacterData();
         Hypnotist.role = new Hypnotist();
         Hypnotist.name = "Hypnotist";
+        Hypnotist.characterName = "Hypnotist";
         Hypnotist.description = "I Disguise as and say something that would normally never be a Lie.";
         Hypnotist.flavorText = "\"You are getting sleepy...\"";
         Hypnotist.hints = "I may tell the truth, but that doesn't mean I have their ability.";
@@ -551,6 +577,7 @@ public class MainMod : MelonMod
         CharacterData Channeler = new CharacterData();
         Channeler.role = new Channeler();
         Channeler.name = "Channeler";
+        Channeler.characterName = "Channeler";
         Channeler.description = "I copy the ability of another Evil.";
         Channeler.flavorText = "\"I will follow in your footsteps.\"";
         Channeler.hints = "";
@@ -570,6 +597,7 @@ public class MainMod : MelonMod
         CharacterData Sleeper = new CharacterData();
         Sleeper.role = new Sleeper();
         Sleeper.name = "Sleeper";
+        Sleeper.characterName = "Sleeper";
         Sleeper.description = "The night cycle is 1 tick shorter if there is one.";
         Sleeper.flavorText = "\"Ever feel like you get enough sleep? Well too bad. You're not getting it anymore.\"";
         Sleeper.hints = "";
@@ -588,6 +616,7 @@ public class MainMod : MelonMod
         CharacterData Guardian = new CharacterData();
         Guardian.role = new Guardian();
         Guardian.name = "Guardian";
+        Guardian.characterName = "Guardian";
         Guardian.description = "The Demon registers as a Good Villager.\n\nI sit next to the Demon.";
         Guardian.flavorText = "\"You're gonna have to get through me first.\"";
         Guardian.hints = "If there are multiple Demons, all of them register as Good.";
@@ -606,6 +635,7 @@ public class MainMod : MelonMod
         CharacterData Mastermind = new CharacterData();
         Mastermind.role = new Mastermind();
         Mastermind.name = "Mastermind";
+        Mastermind.characterName = "Mastermind";
         Mastermind.description = "Game Start: Every Evil Minion becomes a Mastermind after all other Game Start effects.";
         Mastermind.flavorText = "\"It all comes back to me.\"";
         Mastermind.hints = "";
@@ -624,6 +654,7 @@ public class MainMod : MelonMod
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
         Follower.name = "Follower";
+        Follower.characterName = "Follower";
         Follower.description = "You have slightly more HP in larger villages.\nNight falls every 3 ticks.\n<b>At Night:</b>\nKill 1 card, prioritizing more valuable targets.\nDeal 2 damage to you.\n\nI Lie and Disguise.";
         Follower.flavorText = "\"I'm playing chess and you're playing checkers.\"";
         Follower.hints = "Valuable targets are those with unused active abilities and strong information roles.";
@@ -644,6 +675,7 @@ public class MainMod : MelonMod
         CharacterData Veil = new CharacterData();
         Veil.role = new Veil();
         Veil.name = "Veil";
+        Veil.characterName = "Veil";
         Veil.description = "2-3 cards cannot be revealed. Villages are much bigger to compensate.\n\nI Lie and Disguise.";
         Veil.flavorText = "\"I cannot see anyone's role through this dense fog!\"";
         Veil.hints = "If someone else copies my effect, only 1 card is hidden.";
@@ -663,6 +695,7 @@ public class MainMod : MelonMod
         CharacterData Summoner = new CharacterData();
         Summoner.role = new Summoner();
         Summoner.name = "Summoner";
+        Summoner.characterName = "Summoner";
         Summoner.description = "Game Start: There are no Minions in play. One or more other cards become Demons. The demons I summon are not added to the Deck.\n\nI Lie and Disguise.\n\nYou might start with 5 extra HP.";
         Summoner.flavorText = "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"";
         Summoner.hints = "The night cycle is always active if I am in play.";
@@ -682,6 +715,7 @@ public class MainMod : MelonMod
         CharacterData Infestation = new CharacterData();
         Infestation.role = new Infestation();
         Infestation.name = "Infestation";
+        Infestation.characterName = "Infestation";
         Infestation.description = "Game Start: 1 random character is Corrupted.\n\nAt Night: Kill all Good Corrupted characters, dealing 1 damage each. Good Characters adjacent to alive Corrupted characters are Corrupted.\n\nI Lie and Disguise.";
         Infestation.flavorText = "\"The one zombie apocalypse you'll stand no chance in\"";
         Infestation.hints = "Certain characters that remove Corruptions will stop my ability from working.";
@@ -1214,15 +1248,15 @@ public class MainMod : MelonMod
         }
     }
     */
-    public bool shortenNight = false;
+    public int shortenNight = 0;
     public static MainMod Instance;
     private void OnRoundStart()
     {
-        shortenNight = false;
+        shortenNight = 0;
         foreach (Character c in Gameplay.CurrentCharacters)
         {
             if (c.dataRef.characterId == "Sleeper_scm" || c.statuses.Contains(SpecialMadScientistTags.hasSleeperAbility))
-                shortenNight = true;
+                shortenNight++;
         }
 
     }
@@ -1238,10 +1272,10 @@ public class MainMod : MelonMod
             if (obj == null) return;
             var mod = MainMod.Instance;
             if (mod == null) return;
-            if (mod.shortenNight && CachedRule != null)
+            if (mod.shortenNight > 0 && CachedRule != null)
             {
-                CachedRule.currentStep++;
-                mod.shortenNight = false;
+                CachedRule.currentStep+= mod.shortenNight;
+                mod.shortenNight = 0;
             }
 
             if ((obj.dataRef.characterId == "Ghost_scm" || obj.statuses.Contains(SpecialMadScientistTags.hasGhostAbility)) && CachedRule != null)
@@ -1259,5 +1293,4 @@ public class MainMod : MelonMod
             MainMod.CachedRule = __instance;
         }
     }
-
 }
