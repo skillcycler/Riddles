@@ -32,7 +32,7 @@ public class Trickster_v : Role
         }
         if (charRef.dataRef.characterId != "Trickster_v_scm")
         {
-            return new ActedInfo("Something is Digsuising as a Villager Trickster! This should never happen!");
+            return new ActedInfo(string.Format("I am actually a {1}", charRef.id, charRef.dataRef.name));
         }
         // safeguard against getting moved
         bool converted = false;

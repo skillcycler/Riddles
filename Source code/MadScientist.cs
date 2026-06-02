@@ -201,6 +201,7 @@ public class MadScientist : Role
                 {
                     fakeOutcast.role.Act(trigger, charRef);
                 }
+                MelonLogger.Msg(string.Format("Mad Scientist is copying the {0} and {1} abilities", fakeOutcast.name, fakeMinion.name));
             }
             // check if I should turn evil
             /*if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")

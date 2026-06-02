@@ -36,15 +36,19 @@ public class Channeler : Minion
             Il2CppSystem.Collections.Generic.List<Character> allowedCharacters = new();
             List<string> blacklistIDs = new();
             blacklistIDs.Add("Undying_WING");
+            blacklistIDs.Add("Agmeres_WING");
             blacklistIDs.Add("MadScientist_scm");
-            blacklistIDs.Add("Sleeper_scm");
+            blacklistIDs.Add("Hitman_scm");
             blacklistIDs.Add("Blackmailer_VP");
             foreach (Character character in characters) {
                 if (!blacklistIDs.Contains(character.dataRef.characterId))
                     allowedCharacters.Add(character);
             }
-            copy = allowedCharacters[UnityEngine.Random.RandomRangeInt(0, allowedCharacters.Count)].dataRef;
-            copy.role.Act(trigger, charRef);
+            if (allowedCharacters.Count > 0)
+            {
+                copy = allowedCharacters[UnityEngine.Random.RandomRangeInt(0, allowedCharacters.Count)].dataRef;
+                copy.role.Act(trigger, charRef);
+            }
         }
         if (trigger != ETriggerPhase.Start)
         {

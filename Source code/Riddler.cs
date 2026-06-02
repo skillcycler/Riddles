@@ -29,8 +29,8 @@ public class Riddler : Role
         infos.Add("A Gemcrafter or Medium referencing herself must be Evil.");
         infos.Add("A bard claiming to be 5 cards away from a Corrupted character is always truthful.");
         infos.Add("A Druid that claims to have seen a Wretch is lying.");
-        infos.Add("Poisoner acts before Puppeteer in the Game Start order.");
         infos.Add("Lilis cannot kill herself in the night.");
+        infos.Add("Puppeteer acts before Poisoner in the Game Start order.");
         infos.Add("The Bishop will only name 2 cards if Wretch is the only Outcast.");
         infos.Add("A card cannot be both Evil and Corrupted.");
         infos.Add("It is possible for there to be 3 Original Bakers.");
@@ -70,6 +70,7 @@ public class Riddler : Role
         infos.Add("A Knitter will say there are 3 pairs of evils if 4 evils are in a row.");
         infos.Add("The Bombardier's loss condition does not directly interact with your HP.");
         infos.Add("The Baa prefers to hide the Doppelganger and Drunk.");
+        infos.Add("A Chancellor can create a Drunk that is not Corrupted.");
 
         // easter eggs
         infos.Add("A lying Oracle can mention a Marionette if there are no Minions in play.");
@@ -90,7 +91,7 @@ public class Riddler : Role
         infos.Add("A bard claiming to be 5 cards away from a Corrupted character is always lying.");
         infos.Add("A bard claiming to be 4 cards away from a Corrupted character is always lying.");
         infos.Add("A Druid that claims to have seen a Wretch is telling the truth.");
-        infos.Add("Puppeteer acts before Poisoner in the Game Start order.");
+        infos.Add("Poisoner acts before Puppeteer in the Game Start order.");
         infos.Add("Lilis can kill herself in the night.");
         infos.Add("A truthful Bishop will name 3 cards if Wretch is the only Outcast.");
         infos.Add("A card can be both Evil and Corrupted.");

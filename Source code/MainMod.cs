@@ -16,7 +16,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.10.6", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.11.0", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -41,6 +41,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Stylist>();
         ClassInjector.RegisterTypeInIl2Cpp<Coach>();
         ClassInjector.RegisterTypeInIl2Cpp<Comedian>();
+        ClassInjector.RegisterTypeInIl2Cpp<Innkeeper>();
 
         // Outcasts
 
@@ -49,6 +50,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Hitman>();
         ClassInjector.RegisterTypeInIl2Cpp<Ghost>();
         ClassInjector.RegisterTypeInIl2Cpp<Muddler>();
+        ClassInjector.RegisterTypeInIl2Cpp<Confectioner>();
 
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
@@ -333,6 +335,7 @@ public class MainMod : MelonMod
         Comedian.hints = "";
         Comedian.ifLies = "";
         Comedian.picking = true;
+        Nurse.abilityUsage = EAbilityUsage.ResetAfterNight;
         Comedian.startingAlignment = EAlignment.Good;
         Comedian.type = ECharacterType.Villager;
         Comedian.bluffable = true;
@@ -342,6 +345,25 @@ public class MainMod : MelonMod
         Comedian.color = new Color(1f, 0.935f, 0.7302f);
         Comedian.additionalFlavorTexts = new Il2CppStringArray(1);
         Comedian.additionalFlavorTexts[0] = Comedian.flavorText;
+
+        CharacterData Innkeeper = new CharacterData();
+        Innkeeper.role = new Innkeeper();
+        Innkeeper.name = "Innkeeper";
+        Innkeeper.characterName = "Innkeeper";
+        Innkeeper.description = "On activate: Heal 1 HP. Refreshes at night.";
+        Innkeeper.flavorText = "\"Need a place to stay? I got you!\"";
+        Innkeeper.hints = "";
+        Innkeeper.ifLies = "Lose 3 HP.";
+        Innkeeper.picking = true;
+        Innkeeper.startingAlignment = EAlignment.Good;
+        Innkeeper.type = ECharacterType.Villager;
+        Innkeeper.bluffable = true;
+        Innkeeper.characterId = "Innkeeper_scm";
+        Innkeeper.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Innkeeper.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Innkeeper.color = new Color(1f, 0.935f, 0.7302f);
+        Innkeeper.additionalFlavorTexts = new Il2CppStringArray(1);
+        Innkeeper.additionalFlavorTexts[0] = Innkeeper.flavorText;
 
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
@@ -480,7 +502,7 @@ public class MainMod : MelonMod
         Hitman.role = new Hitman();
         Hitman.name = "Hitman";
         Hitman.characterName = "Hitman";
-        Hitman.description = "I Lie and Disguise.\n\nAt night: Kill a random card and lose 3 HP.";
+        Hitman.description = "I Lie and Disguise.\n\nOn odd numbered nights: Kill a random card.\nOn even numbered nights: lose 3 HP.";
         Hitman.flavorText = "\"No one is safe from me, not even myself\"";
         Hitman.hints = "I can kill any card, including Knights, Demons, and myself.\nIf there is no night cycle, I'm just a regular Evil Outcast.";
         Hitman.ifLies = "";
@@ -533,6 +555,26 @@ public class MainMod : MelonMod
         Muddler.color = new Color(0.9659f, 1f, 0.4472f);
         Muddler.additionalFlavorTexts = new Il2CppStringArray(1);
         Muddler.additionalFlavorTexts[0] = Muddler.flavorText;
+
+
+        CharacterData Confectioner = new CharacterData();
+        Confectioner.role = new Confectioner();
+        Confectioner.name = "Confectioner";
+        Confectioner.characterName = "Confectioner";
+        Confectioner.description = "Game Start: One random Villager is baked.\n\nI disguise as the Original Baker.";
+        Confectioner.flavorText = "\"Bakers are my favorite character.\"";
+        Confectioner.hints = "";
+        Confectioner.ifLies = "";
+        Confectioner.picking = false;
+        Confectioner.startingAlignment = EAlignment.Good;
+        Confectioner.type = ECharacterType.Outcast;
+        Confectioner.bluffable = false;
+        Confectioner.characterId = "Confectioner_scm";
+        Confectioner.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
+        Confectioner.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
+        Confectioner.color = new Color(0.9659f, 1f, 0.4472f);
+        Confectioner.additionalFlavorTexts = new Il2CppStringArray(1);
+        Confectioner.additionalFlavorTexts[0] = Confectioner.flavorText;
 
         CharacterData Accuser = new CharacterData();
         Accuser.role = new Accuser();
@@ -746,7 +788,8 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Channeler);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Trickster_v);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Confectioner);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_v", Trickster_o);
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_o", Trickster_m);
         Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
@@ -973,6 +1016,7 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Stylist);
             AddRole(script.startingTownsfolks, Coach);
             AddRole(script.startingTownsfolks, Comedian);
+            AddRole(script.startingTownsfolks, Innkeeper);
 
 
             AddRole(script.startingOutsiders, MadScientist);
@@ -980,6 +1024,7 @@ public class MainMod : MelonMod
             AddRole(script.startingOutsiders, Hitman);
             AddRole(script.startingOutsiders, Ghost);
             AddRole(script.startingOutsiders, Muddler);
+            AddRole(script.startingOutsiders, Confectioner);
 
 
             AddRole(script.startingMinions, Accuser);

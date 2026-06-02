@@ -32,6 +32,7 @@ public class Hitman : Role
         return sr;
     }
     */
+    public bool killedLastNight = false;
     public override string Description
     {
         get
@@ -52,30 +53,37 @@ public class Hitman : Role
         if (trigger == ETriggerPhase.Night)
         {
             if (charRef.state == ECharacterState.Dead) return;
-            Il2CppSystem.Collections.Generic.List<Character> newList = Gameplay.CurrentCharacters;
-            newList = Characters.Instance.FilterAliveCharacters(newList);
-            Health health = PlayerController.PlayerInfo.health;
-            health.Damage(3);
-            if (!(newList.Count == 0))
+            if (!killedLastNight)
             {
-                Character myTarget = newList[UnityEngine.Random.Range(0, newList.Count)];
-                // not gonna have this guy try to kill the Undying or the Mad Scientist with the Undying ability. It causes too many bugs.
-                while (myTarget.dataRef.characterId == "Undying_WING" || myTarget.dataRef.characterId == "MadScientist_scm") 
+                Il2CppSystem.Collections.Generic.List<Character> newList = Gameplay.CurrentCharacters;
+                newList = Characters.Instance.FilterAliveCharacters(newList);
+                if (!(newList.Count == 0))
                 {
-                    myTarget = newList[UnityEngine.Random.Range(0, newList.Count)];
+                    Character myTarget = newList[UnityEngine.Random.Range(0, newList.Count)];
+                    // not gonna have this guy try to kill the Undying or the Mad Scientist with the Undying ability. It causes too many bugs.
+                    while (myTarget.dataRef.characterId == "Undying_WING" || myTarget.dataRef.characterId == "MadScientist_scm")
+                    {
+                        myTarget = newList[UnityEngine.Random.Range(0, newList.Count)];
+                    }
+                    myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
+                    myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
+                    myTarget.statuses.statuses.Remove(ECharacterStatus.UnkillableByDemon);
+                    myTarget.KillByDemon(charRef);
+                    myTarget.Reveal();
+                    myTarget.onReveal.Invoke();
+                    myTarget.RevealReal();
+                    if (myTarget.dataRef.picking)
+                    {
+                        myTarget.pickableUses = 0;
+                        myTarget.pickable.SetActive(false);
+                    }
                 }
-                myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
-                myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
-                myTarget.statuses.statuses.Remove(ECharacterStatus.UnkillableByDemon);
-                myTarget.KillByDemon(charRef);
-                myTarget.Reveal();
-                myTarget.onReveal.Invoke();
-                myTarget.RevealReal();
-                if (myTarget.dataRef.picking)
-                {
-                    myTarget.pickableUses = 0;
-                    myTarget.pickable.SetActive(false);
-                }
+                killedLastNight = true;
+            } else
+            {
+                Health health = PlayerController.PlayerInfo.health;
+                health.Damage(3);
+                killedLastNight = false;
             }
         }
     }

@@ -104,10 +104,10 @@ public class Psychic : Role
         {
             randomOutOfPlay2 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
         }
-        string info = string.Format("Either the {0} or the {1} is in play", outOfPlay[randomOutOfPlay1].name, outOfPlay[randomOutOfPlay2].name);
+        string info = string.Format("Exactly one of the {0} or the {1} is in play", outOfPlay[randomOutOfPlay1].name, outOfPlay[randomOutOfPlay2].name);
         if (Calculator.RollDice(2) == 1)
         {
-            info = string.Format("Either the {1} or the {0} is in play", outOfPlay[randomOutOfPlay1].name, outOfPlay[randomOutOfPlay2].name);
+            info = string.Format("Exactly one of the {1} or the {0} is in play", outOfPlay[randomOutOfPlay1].name, outOfPlay[randomOutOfPlay2].name);
         }
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;

@@ -16,6 +16,7 @@ A Demon Bluff mod that adds 25 brand new characters to the game!
 - Nurse: Pick a card. If they are corrupted, uncorrupt them and refresh their ability.
 - Coach: Pick a card. Learn how many cards [Range 2] are the same Type as them.
 - Comedian: Pick 3 cards. Learn 2 that are both Disguised or both Not Disguised.
+- Innkeeper: Heal 1 HP. If lying, take 3 damage. Refreshes at night.
 
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
@@ -23,6 +24,7 @@ A Demon Bluff mod that adds 25 brand new characters to the game!
 - Necromancer: Revive a dead Good card at the cost of 2 HP. If I am lying, the revived card will lie.
 - Ghost: Dies when revealed, haunting (corrupting) an unrevealed Villager.
 - Muddler: Status effects such as Corrupted are not shown when cards are executed.
+- Confectioner: I disguise as a Baker. On game start: Bake 1 random villager.
 
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil. (I turn the villager into a Wretch disguised as that villager.)
