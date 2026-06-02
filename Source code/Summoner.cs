@@ -45,6 +45,7 @@ public class Summoner : Demon
         bannedDemons.Add("Hypnotist_ER"); // Adds minions which is not good.
         bannedDemons.Add("Hydra_VP"); // Corrupted hydra telling the truth sucks
         bannedDemons.Add("Mutant_84675843"); // Why is this one even in the list of demons
+        bannedDemons.Add("Delusion_10561407"); // No unreleased WIP demons allowed
         for (int j = 0; j < allDatas.Length; j++)
         {
             CharacterData d = allDatas[j];
@@ -58,6 +59,7 @@ public class Summoner : Demon
         //anything that adds minions isn't allowed so it will just turn into a random demon
         List<string> bannedOther = new List<string>();
         bannedOther.Add("Mutant_WING"); // This card might add a minion.
+        bannedOther.Add("Lycanthrope_16077432"); // This card might add a minion.
 
         foreach (Character c in Gameplay.CurrentCharacters) {
             if (bannedOther.Contains(c.dataRef.characterId))

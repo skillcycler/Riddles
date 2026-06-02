@@ -720,7 +720,7 @@ public class MainMod : MelonMod
         Veil.characterName = "Veil";
         Veil.description = "2-3 cards cannot be revealed. Villages are much bigger to compensate.\n\nI Lie and Disguise.";
         Veil.flavorText = "\"I cannot see anyone's role through this dense fog!\"";
-        Veil.hints = "If someone else copies my effect, only 1 card is hidden.";
+        Veil.hints = "If someone else copies my effect, they only hide 1 additional card.";
         Veil.ifLies = "";
         Veil.picking = false;
         Veil.startingAlignment = EAlignment.Evil;
@@ -740,7 +740,7 @@ public class MainMod : MelonMod
         Summoner.characterName = "Summoner";
         Summoner.description = "Game Start: There are no Minions in play. One or more other cards become Demons. The demons I summon are not added to the Deck.\n\nI Lie and Disguise.\n\nYou might start with 5 extra HP.";
         Summoner.flavorText = "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"";
-        Summoner.hints = "The night cycle is always active if I am in play.";
+        Summoner.hints = "The night cycle is always active if I am in play.\n\nIf an outcast that causes minions to be in play is in play, it gets turned into another Demon instead.";
         Summoner.ifLies = "";
         Summoner.picking = false;
         Summoner.startingAlignment = EAlignment.Evil;
