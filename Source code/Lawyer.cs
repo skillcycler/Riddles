@@ -39,7 +39,8 @@ public class Lawyer : Role
                 }
             }
             bool lying = CharacterHelper.CheckLyingAppearance(character);
-            if (!lying && !isAdjacent)
+            bool isEvil = (character.GetRegisterAlignment() == EAlignment.Evil);
+            if ((!lying && !isAdjacent) || (isAdjacent && isEvil))
             {
                 truthfulCharacters.Add(character);
             }
@@ -69,7 +70,8 @@ public class Lawyer : Role
                 }
             }
             bool lying = CharacterHelper.CheckLyingAppearance(character);
-            if (lying && !isAdjacent)
+            bool isEvil = (character.GetRegisterAlignment() == EAlignment.Evil);
+            if ((lying && !isAdjacent) || (lying && isAdjacent && !isEvil))
             {
                 untruthfulCharacters.Add(character);
             }

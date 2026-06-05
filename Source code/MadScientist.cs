@@ -69,7 +69,7 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Shaman_26945607");
            // whitelistMinionCharacterIDs.Add("Baron_04539999"); oops this is bugged as well
             whitelistOutcastCharacterIDs.Add("Plague Doctor_49312486");
-            whitelistOutcastCharacterIDs.Add("Wretch_80988916");
+            //whitelistOutcastCharacterIDs.Add("Wretch_80988916"); seems like this one's bugged too
             whitelistOutcastCharacterIDs.Add("Bombardier_79093372");
             //whitelistOutcastCharacterIDs.Add("Drunk_15369527");
             //whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
@@ -81,6 +81,7 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Ghost_scm");
             whitelistOutcastCharacterIDs.Add("Muddler_scm");
             //whitelistOutcastCharacterIDs.Add("Hitman_scm");
+            whitelistOutcastCharacterIDs.Add("Confectioner_scm");
             // Wingidon
 
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
@@ -303,11 +304,19 @@ public class MadScientist : Role
     public MadScientist(IntPtr ptr) : base(ptr) { }
     public override CharacterData GetRegisterAsRole(Character charRef)
     {
-        if (fakeOutcast.name == "Wretch")
+        /*if (fakeOutcast.name == "Wretch")
         {
-            Recluse wretch = new Recluse();
-            return wretch.GetRegisterAsRole(charRef);
-        }
+            Il2CppSystem.Collections.Generic.List<CharacterData> allChars = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+            foreach (CharacterData charData in Gameplay.Instance.GetScriptCharacters()) {
+                allChars.Add(charData);
+            }
+            allChars = Characters.Instance.FilterCharacterType(allChars, ECharacterType.Minion);
+            if (allChars.Count == 0)
+                allChars.Add(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
+            CharacterData randomMinion = allChars[UnityEngine.Random.Range(0, allChars.Count)];
+
+            return randomMinion;
+        }*/
         if (fakeOutcast.characterId == "Marionette_WING")
         {
             return ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619");

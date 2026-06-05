@@ -48,6 +48,12 @@ public class Hypnotist : Spy
         whitelistCharacterIDs.Add("Confessor_18741708");
         whitelistCharacterIDs.Add("Baker_22847064");
         whitelistCharacterIDs.Add("Alchemist_94446803");
+        if (Gameplay.CurrentCharacters.Count >= 8)
+        {
+            whitelistCharacterIDs.Add("Athlete_95133291");
+        }
+        whitelistCharacterIDs.Add("Lookout_41018246");
+        whitelistCharacterIDs.Add("Witness_25155076");
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))

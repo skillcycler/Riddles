@@ -41,8 +41,16 @@ public class Accuser : Minion
                 Character randomChar = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
                 randomChar.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 randomChar.statuses.AddStatus(Accused.accused, charRef);
-                Recluse wretch = new();
-                randomChar.UpdateRegisterAsRole(wretch.GetRegisterAsRole(randomChar));
+                Il2CppSystem.Collections.Generic.List<CharacterData> allChars = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+                foreach (CharacterData charData in Gameplay.Instance.GetScriptCharacters())
+                {
+                    allChars.Add(charData);
+                }
+                allChars = Characters.Instance.FilterCharacterType(allChars, ECharacterType.Minion);
+                if (allChars.Count == 0)
+                    allChars.Add(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
+                CharacterData randomMinion = allChars[UnityEngine.Random.Range(0, allChars.Count)];
+                randomChar.UpdateRegisterAsRole(randomMinion);
             }
         }
     }
@@ -70,15 +78,23 @@ public static class Accused
         }
     }
 }
-[HarmonyPatch(typeof(Character), nameof(Character.UpdateRegisterAsRole))]
+[HarmonyPatch(typeof(Character), nameof(Character.Reveal))]
 public static class Accusing
 {
     public static void Postfix(Character __instance)
     {
         if (__instance.statuses.Contains(Accused.accused))
         {
-            Recluse wretch = new();
-            __instance.registerAs = wretch.GetRegisterAsRole(__instance);
+            Il2CppSystem.Collections.Generic.List<CharacterData> allChars = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+            foreach (CharacterData charData in Gameplay.Instance.GetScriptCharacters())
+            {
+                allChars.Add(charData);
+            }
+            allChars = Characters.Instance.FilterCharacterType(allChars, ECharacterType.Minion);
+            if (allChars.Count == 0)
+                allChars.Add(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
+            CharacterData randomMinion = allChars[UnityEngine.Random.Range(0, allChars.Count)];
+            __instance.UpdateRegisterAsRole(randomMinion);
         }
     }
 }

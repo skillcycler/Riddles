@@ -16,7 +16,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.11.0", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.12.0", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -42,6 +42,8 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Coach>();
         ClassInjector.RegisterTypeInIl2Cpp<Comedian>();
         ClassInjector.RegisterTypeInIl2Cpp<Innkeeper>();
+        ClassInjector.RegisterTypeInIl2Cpp<Recruiter>();
+        ClassInjector.RegisterTypeInIl2Cpp<Engineer>();
 
         // Outcasts
 
@@ -217,7 +219,7 @@ public class MainMod : MelonMod
         Lawyer.characterName = "Lawyer";
         Lawyer.description = "My neighbors tell the truth. Learn a truthful character.";
         Lawyer.flavorText = "\"Do you swear to tell the truth, the whole truth, and nothing but the truth?\"";
-        Lawyer.hints = "";
+        Lawyer.hints = "If I am not Lying:\nI will only point to my neighbors if they are evil.";
         Lawyer.ifLies = "";
         Lawyer.picking = false;
         Lawyer.startingAlignment = EAlignment.Good;
@@ -335,7 +337,6 @@ public class MainMod : MelonMod
         Comedian.hints = "";
         Comedian.ifLies = "";
         Comedian.picking = true;
-        Nurse.abilityUsage = EAbilityUsage.ResetAfterNight;
         Comedian.startingAlignment = EAlignment.Good;
         Comedian.type = ECharacterType.Villager;
         Comedian.bluffable = true;
@@ -355,6 +356,7 @@ public class MainMod : MelonMod
         Innkeeper.hints = "";
         Innkeeper.ifLies = "Lose 3 HP.";
         Innkeeper.picking = true;
+        Innkeeper.abilityUsage = EAbilityUsage.ResetAfterNight;
         Innkeeper.startingAlignment = EAlignment.Good;
         Innkeeper.type = ECharacterType.Villager;
         Innkeeper.bluffable = true;
@@ -364,6 +366,44 @@ public class MainMod : MelonMod
         Innkeeper.color = new Color(1f, 0.935f, 0.7302f);
         Innkeeper.additionalFlavorTexts = new Il2CppStringArray(1);
         Innkeeper.additionalFlavorTexts[0] = Innkeeper.flavorText;
+
+        CharacterData Recruiter = new CharacterData();
+        Recruiter.role = new Recruiter();
+        Recruiter.name = "Recruiter";
+        Recruiter.characterName = "Recruiter";
+        Recruiter.description = "Game Start: 1 random Outcast is turned into a Villager.";
+        Recruiter.flavorText = "\"Hello and Welcome to the greatest village of all time!\"";
+        Recruiter.hints = "";
+        Recruiter.ifLies = "";
+        Recruiter.picking = false;
+        Recruiter.startingAlignment = EAlignment.Good;
+        Recruiter.type = ECharacterType.Villager;
+        Recruiter.bluffable = true;
+        Recruiter.characterId = "Recruiter_scm";
+        Recruiter.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Recruiter.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Recruiter.color = new Color(1f, 0.935f, 0.7302f);
+        Recruiter.additionalFlavorTexts = new Il2CppStringArray(1);
+        Recruiter.additionalFlavorTexts[0] = Recruiter.flavorText;
+
+        CharacterData Engineer = new CharacterData();
+        Engineer.role = new Engineer();
+        Engineer.name = "Engineer";
+        Engineer.characterName = "Engineer";
+        Engineer.description = "Learn whether the top or bottom half of the circle has more Evils.";
+        Engineer.flavorText = "\"The long lost brother of the Architect.\"";
+        Engineer.hints = "The top half is considered as all cards within [Range (Cards/4)] of the highest numbered card.";
+        Engineer.ifLies = "";
+        Engineer.picking = false;
+        Engineer.startingAlignment = EAlignment.Good;
+        Engineer.type = ECharacterType.Villager;
+        Engineer.bluffable = true;
+        Engineer.characterId = "Engineer_scm";
+        Engineer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Engineer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Engineer.color = new Color(1f, 0.935f, 0.7302f);
+        Engineer.additionalFlavorTexts = new Il2CppStringArray(1);
+        Engineer.additionalFlavorTexts[0] = Engineer.flavorText;
 
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
@@ -466,7 +506,7 @@ public class MainMod : MelonMod
         MadScientist.characterName = "Mad Scientist";
         MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
         MadScientist.flavorText = "\"Lil bro is ANGRY at the village\"";
-        MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.";
+        MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.\n\nI will not Disguise if part of my Outcast's ability is to Disguise.";
         MadScientist.ifLies = "";
         MadScientist.picking = false;
         MadScientist.startingAlignment = EAlignment.Good;
@@ -602,7 +642,7 @@ public class MainMod : MelonMod
         Hypnotist.characterName = "Hypnotist";
         Hypnotist.description = "I Disguise as and say something that would normally never be a Lie.";
         Hypnotist.flavorText = "\"You are getting sleepy...\"";
-        Hypnotist.hints = "I may tell the truth, but that doesn't mean I have their ability.";
+        Hypnotist.hints = "I may tell the truth, but that doesn't mean I have their ability.\n\nI always register as Truthful.";
         Hypnotist.ifLies = "";
         Hypnotist.picking = false;
         Hypnotist.startingAlignment = EAlignment.Evil;
@@ -785,6 +825,7 @@ public class MainMod : MelonMod
         // Characters.Instance.startGameActOrder = InsertAfterAct("Baa", Sleeper);
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
         Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Recruiter);
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Channeler);
@@ -1017,6 +1058,8 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Coach);
             AddRole(script.startingTownsfolks, Comedian);
             AddRole(script.startingTownsfolks, Innkeeper);
+            AddRole(script.startingTownsfolks, Recruiter);
+            AddRole(script.startingTownsfolks, Engineer);
 
 
             AddRole(script.startingOutsiders, MadScientist);
@@ -1336,6 +1379,58 @@ public class MainMod : MelonMod
         static void Postfix(NightModeRule __instance)
         {
             MainMod.CachedRule = __instance;
+        }
+    }
+
+    // Hypnotist stuff
+    [HarmonyPatch(typeof(Acrobat2), nameof(Acrobat2.GetInfo))]
+    private static class HypnotistBard
+    {
+        private static void Postfix(Acrobat2 __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            string info = __instance.ConjourInfo(UnityEngine.Random.RandomRangeInt(4, (int)(Gameplay.CurrentCharacters.Count / 2)+1), charRef);
+
+            __result = new ActedInfo(info);
+        }
+    }
+    [HarmonyPatch(typeof(Alchemist), nameof(Alchemist.GetInfo))]
+    private static class HypnotistAlchemist
+    {
+        private static void Postfix(Alchemist __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            string info = __instance.ConjourInfo(3, charRef);
+
+            __result = new ActedInfo(info);
+        }
+    }
+    [HarmonyPatch(typeof(Witness), nameof(Witness.GetInfo))]
+    private static class HypnotistWitness
+    {
+        private static void Postfix(Witness __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            string info = __instance.ConjourInfo(null, charRef);
+
+            __result = new ActedInfo(info);
+        }
+    }
+    [HarmonyPatch(typeof(Lookout), nameof(Lookout.GetInfo))]
+    private static class HypnotistMedium
+    {
+        private static void Postfix(Lookout __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            Il2CppSystem.Collections.Generic.List<string> disguisingOutcasts = new Il2CppSystem.Collections.Generic.List<string>();
+
+            disguisingOutcasts.Add("Drunk");
+            disguisingOutcasts.Add("Doppelganger");
+            disguisingOutcasts.Add("Lycanthrope");
+            string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
+            string info = string.Format("#{0} is actually a {1}", UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1), fakeDisguisingOutcastName);
+
+            __result = new ActedInfo(info);
         }
     }
 }

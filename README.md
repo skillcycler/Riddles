@@ -1,5 +1,5 @@
 # Riddles
-A Demon Bluff mod that adds 25 brand new characters to the game!
+A Demon Bluff mod that adds over 30 brand new characters to the game!
 ## Villagers
 - Riddler: Gives you a fun fact about the game. 
 - Swapper: Swaps the disguises of two cards. Corrupts chosen villagers if lying.
@@ -17,6 +17,8 @@ A Demon Bluff mod that adds 25 brand new characters to the game!
 - Coach: Pick a card. Learn how many cards [Range 2] are the same Type as them.
 - Comedian: Pick 3 cards. Learn 2 that are both Disguised or both Not Disguised.
 - Innkeeper: Heal 1 HP. If lying, take 3 damage. Refreshes at night.
+- Recruiter: There is one less outcast in play.
+- Engineer: Learn whether the top or bottom half is more evil.
 
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
