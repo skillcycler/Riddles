@@ -1368,7 +1368,7 @@ public class MainMod : MelonMod
         addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
         addDemonRole(advancedAscension, Escapist, "Baa_Difficult", "Escapist_1", escapistScriptData, 2);
         addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 2);
-        addDemonRole(advancedAscension, Mystifier, "Baa_Difficult", "Mystifier_1", MystifierScriptData, 2000);
+        addDemonRole(advancedAscension, Mystifier, "Baa_Difficult", "Mystifier_1", MystifierScriptData, 2);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {

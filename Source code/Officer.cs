@@ -29,7 +29,7 @@ public class Officer : Role
         int evils = 0;
         foreach (Character character in characters)
         {
-            if (character.alignment == EAlignment.Evil)
+            if (character.GetRegisterAlignment() == EAlignment.Evil)
             {
                 evils++;
             }
@@ -49,7 +49,7 @@ public class Officer : Role
         int evils = 0;
         foreach (Character character in characters)
         {
-            if (character.alignment == EAlignment.Evil)
+            if (character.GetRegisterAlignment() == EAlignment.Evil)
             {
                 evils++;
             }
