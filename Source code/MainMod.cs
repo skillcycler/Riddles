@@ -16,7 +16,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.12.0", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.13.0", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -44,6 +44,12 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Innkeeper>();
         ClassInjector.RegisterTypeInIl2Cpp<Recruiter>();
         ClassInjector.RegisterTypeInIl2Cpp<Engineer>();
+        ClassInjector.RegisterTypeInIl2Cpp<Governor>();
+        ClassInjector.RegisterTypeInIl2Cpp<Officer>();
+        ClassInjector.RegisterTypeInIl2Cpp<Cowboy>();
+        ClassInjector.RegisterTypeInIl2Cpp<Surveyor>();
+        ClassInjector.RegisterTypeInIl2Cpp<Tracker>();
+        ClassInjector.RegisterTypeInIl2Cpp<Pioneer>();
 
         // Outcasts
 
@@ -67,6 +73,8 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Veil>();
         ClassInjector.RegisterTypeInIl2Cpp<Summoner>();
         ClassInjector.RegisterTypeInIl2Cpp<Infestation>();
+        ClassInjector.RegisterTypeInIl2Cpp<Escapist>();
+        ClassInjector.RegisterTypeInIl2Cpp<Kingmaker>();
         Instance = this;
     }
     public override void OnLateInitializeMelon()
@@ -404,6 +412,120 @@ public class MainMod : MelonMod
         Engineer.color = new Color(1f, 0.935f, 0.7302f);
         Engineer.additionalFlavorTexts = new Il2CppStringArray(1);
         Engineer.additionalFlavorTexts[0] = Engineer.flavorText;
+
+        CharacterData Governor = new CharacterData();
+        Governor.role = new Governor();
+        Governor.name = "Governor";
+        Governor.description = "Learn how many Villagers are actually in the village.";
+        Governor.flavorText = "\"I know everyone around here.\"";
+        Governor.hints = "";
+        Governor.ifLies = "The number will be off by 1.";
+        Governor.picking = false;
+        Governor.startingAlignment = EAlignment.Good;
+        Governor.type = ECharacterType.Villager;
+        Governor.bluffable = true;
+        Governor.characterId = "Governor_ehm";
+        Governor.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Governor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Governor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Governor.color = new Color(1f, 0.935f, 0.7302f);
+        Governor.additionalFlavorTexts = new Il2CppStringArray(1);
+        Governor.additionalFlavorTexts[0] = Governor.flavorText;
+
+        CharacterData Officer = new CharacterData();
+        Officer.role = new Officer();
+        Officer.name = "Officer";
+        Officer.description = "Learn how many characters register as Evil.";
+        Officer.flavorText = "\"Worried about not knowing if that Undying is safe to stab? Fear not, I'm here to save the day.\"";
+        Officer.hints = "";
+        Officer.ifLies = "The number will be off by 1.";
+        Officer.picking = false;
+        Officer.startingAlignment = EAlignment.Good;
+        Officer.type = ECharacterType.Villager;
+        Officer.bluffable = true;
+        Officer.characterId = "Officer_ehm";
+        Officer.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Officer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Officer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Officer.color = new Color(1f, 0.935f, 0.7302f);
+        Officer.additionalFlavorTexts = new Il2CppStringArray(1);
+        Officer.additionalFlavorTexts[0] = Officer.flavorText;
+
+        CharacterData Cowboy = new CharacterData();
+        Cowboy.role = new Cowboy();
+        Cowboy.name = "Cowboy";
+        Cowboy.description = "Learn an Evil that isn't a Minion or Demon, or that there are none.";
+        Cowboy.flavorText = "\"Never approach a bull from the front, a horse from the rear or a fool from any direction.\"";
+        Cowboy.hints = "";
+        Cowboy.ifLies = "";
+        Cowboy.picking = false;
+        Cowboy.startingAlignment = EAlignment.Good;
+        Cowboy.type = ECharacterType.Villager;
+        Cowboy.bluffable = true;
+        Cowboy.characterId = "Cowboy_ehm";
+        Cowboy.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Cowboy.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Cowboy.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Cowboy.color = new Color(1f, 0.935f, 0.7302f);
+        Cowboy.additionalFlavorTexts = new Il2CppStringArray(1);
+        Cowboy.additionalFlavorTexts[0] = Cowboy.flavorText;
+
+        CharacterData Surveyor = new CharacterData();
+        Surveyor.role = new Surveyor();
+        Surveyor.name = "Surveyor";
+        Surveyor.description = "Learn how many Outcasts and Minions there actually are";
+        Surveyor.flavorText = "This land belongs to the Outcasts. Wretch, you're not welcome here.";
+        Surveyor.hints = "";
+        Surveyor.ifLies = "";
+        Surveyor.picking = false;
+        Surveyor.startingAlignment = EAlignment.Good;
+        Surveyor.type = ECharacterType.Villager;
+        Surveyor.bluffable = true;
+        Surveyor.characterId = "Surveyor_ehm";
+        Surveyor.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Surveyor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Surveyor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Surveyor.color = new Color(1f, 0.935f, 0.7302f);
+        Surveyor.additionalFlavorTexts = new Il2CppStringArray(1);
+        Surveyor.additionalFlavorTexts[0] = Surveyor.flavorText;
+
+        CharacterData Tracker = new CharacterData();
+        Tracker.role = new Tracker();
+        Tracker.name = "Tracker";
+        Tracker.description = "Learn who is a fake Outcast";
+        Tracker.flavorText = "\"You're not hiding that easily!\"";
+        Tracker.hints = "";
+        Tracker.ifLies = "";
+        Tracker.picking = false;
+        Tracker.startingAlignment = EAlignment.Good;
+        Tracker.type = ECharacterType.Villager;
+        Tracker.bluffable = true;
+        Tracker.characterId = "Tracker_ehm";
+        Tracker.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Tracker.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Tracker.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Tracker.color = new Color(1f, 0.935f, 0.7302f);
+        Tracker.additionalFlavorTexts = new Il2CppStringArray(1);
+        Tracker.additionalFlavorTexts[0] = Tracker.flavorText;
+
+        CharacterData Pioneer = new CharacterData();
+        Pioneer.role = new Pioneer();
+        Pioneer.name = "Pioneer";
+        Pioneer.description = "Learn how many cards a particular Evil is from my closest Evil.";
+        Pioneer.flavorText = "\"Why does everyone keep mistaking me for the Scout?\"";
+        Pioneer.hints = "";
+        Pioneer.ifLies = "";
+        Pioneer.picking = false;
+        Pioneer.startingAlignment = EAlignment.Good;
+        Pioneer.type = ECharacterType.Villager;
+        Pioneer.bluffable = true;
+        Pioneer.characterId = "Pioneer_ehm";
+        Pioneer.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Pioneer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+        Pioneer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+        Pioneer.color = new Color(1f, 0.935f, 0.7302f);
+        Pioneer.additionalFlavorTexts = new Il2CppStringArray(1);
+        Pioneer.additionalFlavorTexts[0] = Pioneer.flavorText;
 
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
@@ -814,6 +936,46 @@ public class MainMod : MelonMod
         Infestation.additionalFlavorTexts = new Il2CppStringArray(1);
         Infestation.additionalFlavorTexts[0] = Infestation.flavorText;
 
+        CharacterData Escapist = new CharacterData();
+        Escapist.role = new Escapist();
+        Escapist.name = "Escapist";
+        Escapist.characterName = "Escapist";
+        Escapist.description = "Game Start: There is an extra Outcast. One non-Bombardier Outcast is Evil and Corrupted.\n\nI Lie and Disguise as an Outcast.";
+        Escapist.flavorText = "\"Catch me if you can!\"";
+        Escapist.hints = "";
+        Escapist.ifLies = "";
+        Escapist.picking = false;
+        Escapist.startingAlignment = EAlignment.Evil;
+        Escapist.type = ECharacterType.Demon;
+        Escapist.bluffable = false;
+        Escapist.characterId = "Escapist_scm";
+        Escapist.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Escapist.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Escapist.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
+        Escapist.color = new Color(1f, 0.3804f, 0.3804f);
+        Escapist.additionalFlavorTexts = new Il2CppStringArray(1);
+        Escapist.additionalFlavorTexts[0] = Escapist.flavorText;
+
+        CharacterData Kingmaker = new CharacterData();
+        Kingmaker.role = new Kingmaker();
+        Kingmaker.name = "Kingmaker";
+        Kingmaker.characterName = "Kingmaker";
+        Kingmaker.description = "Game Start: Both my neighbors become Minions.\n\nI Lie and Disguise.";
+        Kingmaker.flavorText = "\"'Puppet Master' is more like it.\"";
+        Kingmaker.hints = "There may be fewer Outcasts in play than expected.";
+        Kingmaker.ifLies = "";
+        Kingmaker.picking = false;
+        Kingmaker.startingAlignment = EAlignment.Evil;
+        Kingmaker.type = ECharacterType.Demon;
+        Kingmaker.bluffable = false;
+        Kingmaker.characterId = "Kingmaker_scm";
+        Kingmaker.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Kingmaker.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Kingmaker.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
+        Kingmaker.color = new Color(1f, 0.3804f, 0.3804f);
+        Kingmaker.additionalFlavorTexts = new Il2CppStringArray(1);
+        Kingmaker.additionalFlavorTexts[0] = Kingmaker.flavorText;
+
         nightPhase.nightCharactersOrder.Add(Infestation);
         nightPhase.nightCharactersOrder.Add(Follower);
         nightPhase.nightCharactersOrder.Add(Channeler);
@@ -824,16 +986,18 @@ public class MainMod : MelonMod
 
         // Characters.Instance.startGameActOrder = InsertAfterAct("Baa", Sleeper);
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Recruiter);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Escapist", Recruiter);
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Channeler);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Infestation", Channeler);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Confectioner);
         Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_v", Trickster_o);
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_o", Trickster_m);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
         Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
@@ -1033,11 +1197,90 @@ public class MainMod : MelonMod
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
 
+        CustomScriptData escapistScriptData = new CustomScriptData();
+        escapistScriptData.name = "Escapist_1";
+        ScriptInfo escapistScript = new ScriptInfo();
+        Il2CppSystem.Collections.Generic.List<CharacterData> escapistList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        escapistList.Add(Escapist);
+        escapistScript.mustInclude = escapistList;
+        escapistScript.startingDemons = escapistList;
+        escapistScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
+        escapistScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
+        escapistScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
+        CharactersCount escapist_8a = setCharacterCount(5, 2, 0, 1);
+        CharactersCount escapist_8b = setCharacterCount(4, 2, 1, 1);
+        CharactersCount escapist_8c = setCharacterCount(5, 1, 1, 1);
+        CharactersCount escapist_9a = setCharacterCount(5, 2, 1, 1);
+        CharactersCount escapist_9b = setCharacterCount(5, 1, 2, 1);
+        CharactersCount escapist_10a = setCharacterCount(6, 1, 2, 1);
+        CharactersCount escapist_10b = setCharacterCount(6, 2, 1, 1);
+        CharactersCount escapist_10c = setCharacterCount(6, 3, 0, 1);
+        CharactersCount escapist_11a = setCharacterCount(7, 1, 2, 1);
+        CharactersCount escapist_11b = setCharacterCount(7, 2, 1, 1);
+        Il2CppSystem.Collections.Generic.List<CharactersCount> escapistCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
+
+
+        escapistCounterList.Add(escapist_8a);
+        escapistCounterList.Add(escapist_8b);
+        escapistCounterList.Add(escapist_8c);
+        escapistCounterList.Add(escapist_9a);
+        escapistCounterList.Add(escapist_9b);
+        escapistCounterList.Add(escapist_10a);
+        escapistCounterList.Add(escapist_10b);
+        escapistCounterList.Add(escapist_10c);
+        escapistCounterList.Add(escapist_11a);
+        escapistCounterList.Add(escapist_11b);
+
+        escapistScript.characterCounts = escapistCounterList;
+        escapistScriptData.scriptInfo = escapistScript;
+
+        CustomScriptData kingmakerScriptData = new CustomScriptData();
+        kingmakerScriptData.name = "Kingmaker_1";
+        ScriptInfo kingmakerScript = new ScriptInfo();
+        Il2CppSystem.Collections.Generic.List<CharacterData> kingmakerList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        kingmakerList.Add(Kingmaker);
+        kingmakerScript.mustInclude = kingmakerList;
+        kingmakerScript.startingDemons = kingmakerList;
+        kingmakerScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
+        kingmakerScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
+        kingmakerScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
+        CharactersCount kingmaker_7a = setCharacterCount(4, 1, 1, 1);
+        CharactersCount kingmaker_7b = setCharacterCount(5, 1, 0, 1);
+        CharactersCount kingmaker_8a = setCharacterCount(5, 1, 1, 1);
+        CharactersCount kingmaker_8b = setCharacterCount(4, 2, 1, 1);
+        CharactersCount kingmaker_9a = setCharacterCount(5, 2, 1, 1);
+        CharactersCount kingmaker_9b = setCharacterCount(5, 1, 2, 1);
+        CharactersCount kingmaker_9c = setCharacterCount(6, 1, 1, 1);
+        CharactersCount kingmaker_10a = setCharacterCount(6, 1, 2, 1);
+        CharactersCount kingmaker_10b = setCharacterCount(6, 2, 1, 1);
+        CharactersCount kingmaker_10c = setCharacterCount(7, 2, 0, 1);
+        CharactersCount kingmaker_10d = setCharacterCount(7, 1, 1, 1);
+        CharactersCount kingmaker_10e = setCharacterCount(7, 0, 2, 1);
+        Il2CppSystem.Collections.Generic.List<CharactersCount> kingmakerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
+
+
+        kingmakerCounterList.Add(kingmaker_7a);
+        kingmakerCounterList.Add(kingmaker_7b);
+        kingmakerCounterList.Add(kingmaker_8a);
+        kingmakerCounterList.Add(kingmaker_8b);
+        kingmakerCounterList.Add(kingmaker_9a);
+        kingmakerCounterList.Add(kingmaker_9b);
+        kingmakerCounterList.Add(kingmaker_10a);
+        kingmakerCounterList.Add(kingmaker_10b);
+        kingmakerCounterList.Add(kingmaker_10c);
+        kingmakerCounterList.Add(kingmaker_10d);
+        kingmakerCounterList.Add(kingmaker_10e);
+
+        kingmakerScript.characterCounts = kingmakerCounterList;
+        kingmakerScriptData.scriptInfo = kingmakerScript;
+
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
         addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
         addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
         addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 2);
         addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
+        addDemonRole(advancedAscension, Escapist, "Baa_Difficult", "Escapist_1", escapistScriptData, 2);
+        addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 2);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
@@ -1060,6 +1303,12 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Innkeeper);
             AddRole(script.startingTownsfolks, Recruiter);
             AddRole(script.startingTownsfolks, Engineer);
+            AddRole(script.startingTownsfolks, Governor);
+            AddRole(script.startingTownsfolks, Officer);
+            AddRole(script.startingTownsfolks, Cowboy);
+            AddRole(script.startingTownsfolks, Surveyor);
+            AddRole(script.startingTownsfolks, Tracker);
+            AddRole(script.startingTownsfolks, Pioneer);
 
 
             AddRole(script.startingOutsiders, MadScientist);
@@ -1429,6 +1678,40 @@ public class MainMod : MelonMod
             disguisingOutcasts.Add("Lycanthrope");
             string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
             string info = string.Format("#{0} is actually a {1}", UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1), fakeDisguisingOutcastName);
+
+            __result = new ActedInfo(info);
+        }
+    }
+    [HarmonyPatch(typeof(Knitter), nameof(Knitter.GetInfo))]
+    private static class HypnotistKnitter
+    {
+        private static void Postfix(Knitter __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            Il2CppSystem.Collections.Generic.List<Character> chs = Gameplay.CurrentCharacters;
+            int evils = 0;
+            foreach (Character c in chs)
+            {
+                if (c.GetRegisterAlignment() == EAlignment.Evil)
+                    evils++;
+            }
+            string info = __instance.ConjourInfo(3, charRef);
+
+            __result = new ActedInfo(info);
+        }
+    }
+    [HarmonyPatch(typeof(Scout), nameof(Scout.GetInfo))]
+    private static class HypnotistScout
+    {
+        private static void Postfix(Scout __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            Il2CppSystem.Collections.Generic.List<Character> allEvils = Gameplay.CurrentCharacters;
+            allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
+
+            Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+
+            string info = __instance.ConjourInfo(pickedEvil.dataRef, 4, charRef);
 
             __result = new ActedInfo(info);
         }

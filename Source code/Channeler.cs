@@ -36,12 +36,12 @@ public class Channeler : Minion
             Il2CppSystem.Collections.Generic.List<Character> allowedCharacters = new();
             List<string> blacklistIDs = new();
             blacklistIDs.Add("Undying_WING");
-            blacklistIDs.Add("Agmeres_WING");
+            blacklistIDs.Add("Legion_WING");
             blacklistIDs.Add("MadScientist_scm");
             blacklistIDs.Add("Hitman_scm");
             blacklistIDs.Add("Blackmailer_VP");
             foreach (Character character in characters) {
-                if (!blacklistIDs.Contains(character.dataRef.characterId))
+                if (!blacklistIDs.Contains(character.dataRef.characterId) && character.GetCharacterType() != ECharacterType.Villager && character.GetCharacterType() != ECharacterType.Outcast)
                     allowedCharacters.Add(character);
             }
             if (allowedCharacters.Count > 0)

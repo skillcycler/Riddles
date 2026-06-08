@@ -78,7 +78,7 @@ public class Engineer : Role
             }
         }
 
-        string info = makeInfo(topEvils, bottomEvils, false);
+        string info = makeInfo(topEvils, bottomEvils, true);
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }

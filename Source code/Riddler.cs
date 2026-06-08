@@ -71,6 +71,7 @@ public class Riddler : Role
         infos.Add("The Bombardier's loss condition does not directly interact with your HP.");
         infos.Add("The Baa prefers to hide the Doppelganger and Drunk.");
         infos.Add("A Chancellor can create a Drunk that is not Corrupted.");
+        infos.Add("Chancellor will always sit next to the outcast he adds.");
 
         // easter eggs
         infos.Add("A lying Oracle can mention a Marionette if there are no Minions in play.");
@@ -135,6 +136,7 @@ public class Riddler : Role
         infos.Add("A Knitter will say there are 2 pairs of evils if 4 evils are in a row.");
         infos.Add("2 truthful Lovers next to each other can both claim to be adjacent to 2 Evils.");
         infos.Add("The Minion and Twin Minion might register as each other's characters.");
+        infos.Add("Chancellor can sit next to an outcast he didn't create.");
 
         string info = infos[UnityEngine.Random.RandomRangeInt(0, infos.Count)];
         ActedInfo actedInfo = new ActedInfo(info);

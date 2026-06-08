@@ -46,6 +46,7 @@ public class Summoner : Demon
         bannedDemons.Add("Hydra_VP"); // Corrupted hydra telling the truth sucks
         bannedDemons.Add("Mutant_84675843"); // Why is this one even in the list of demons
         bannedDemons.Add("Delusion_10561407"); // No unreleased WIP demons allowed
+        bannedDemons.Add("Kingmaker_scm"); // Adds minions.
         for (int j = 0; j < allDatas.Length; j++)
         {
             CharacterData d = allDatas[j];

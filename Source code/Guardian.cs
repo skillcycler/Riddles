@@ -49,7 +49,14 @@ public class Guardian : Minion
         Character pickedDemon = checkDemons[UnityEngine.Random.Range(0, checkDemons.Count)];
 
         Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentAliveCharacters(pickedDemon);
-        Character pickedSwapCharacter = adjacentCharacters[UnityEngine.Random.Range(0, adjacentCharacters.Count)];
+        Il2CppSystem.Collections.Generic.List<Character> filteredCharacters = new();
+        foreach (Character c in adjacentCharacters) { 
+            if (c.dataRef.characterId != "MadScientist_scm")
+            {
+                filteredCharacters.Add(c);
+            }
+        }
+        Character pickedSwapCharacter = filteredCharacters[UnityEngine.Random.Range(0, filteredCharacters.Count)];
         CharacterData pickedData = pickedSwapCharacter.dataRef;
         pickedSwapCharacter.Init(charRef.dataRef);
         charRef.Init(pickedData);

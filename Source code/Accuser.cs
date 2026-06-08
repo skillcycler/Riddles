@@ -53,6 +53,26 @@ public class Accuser : Minion
                 randomChar.UpdateRegisterAsRole(randomMinion);
             }
         }
+        //just to make sure accused things register as evil
+        if (trigger == ETriggerPhase.AfterRoundStart)
+        {
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.statuses.Contains(Accused.accused))
+                {
+                    Il2CppSystem.Collections.Generic.List<CharacterData> allChars = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+                    foreach (CharacterData charData in Gameplay.Instance.GetScriptCharacters())
+                    {
+                        allChars.Add(charData);
+                    }
+                    allChars = Characters.Instance.FilterCharacterType(allChars, ECharacterType.Minion);
+                    if (allChars.Count == 0)
+                        allChars.Add(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
+                    CharacterData randomMinion = allChars[UnityEngine.Random.Range(0, allChars.Count)];
+                    c.UpdateRegisterAsRole(randomMinion);
+                }
+            }
+        }
     }
     
     public Accuser() : base(ClassInjector.DerivedConstructorPointer<Accuser>())

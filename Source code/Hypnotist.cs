@@ -51,9 +51,21 @@ public class Hypnotist : Spy
         if (Gameplay.CurrentCharacters.Count >= 8)
         {
             whitelistCharacterIDs.Add("Athlete_95133291");
+            whitelistCharacterIDs.Add("Scout_88081716");
         }
         whitelistCharacterIDs.Add("Lookout_41018246");
         whitelistCharacterIDs.Add("Witness_25155076");
+        Il2CppSystem.Collections.Generic.List<Character> chs = Gameplay.CurrentCharacters;
+        int evils = 0;
+        foreach (Character c in chs)
+        {
+            if (c.GetRegisterAlignment() == EAlignment.Evil)
+                evils++;
+        }
+        if (evils >= 4)
+        {
+            whitelistCharacterIDs.Add("Knitter_32352172");
+        }
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))
