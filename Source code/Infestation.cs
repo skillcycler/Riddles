@@ -61,7 +61,7 @@ public class Infestation : Demon
             }
             foreach (Character c in Gameplay.CurrentCharacters)
             {
-                if (oldCorruptions.Contains(c.id) && c.state != ECharacterState.Dead) {
+                if (oldCorruptions.Contains(c.id) && c.state != ECharacterState.Dead && !c.statuses.Contains(ECharacterStatus.KilledByEvil)) {
                     c.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
                     c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                     c.KillByDemon(charRef);

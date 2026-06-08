@@ -5,6 +5,7 @@ using Il2CppInterop.Runtime.InteropTypes;
 using MelonLoader;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
+using static UnityEngine.GraphicsBuffer;
 
 namespace RiddlerMod;
 
@@ -16,6 +17,7 @@ public class MadScientist : Role
     public CharacterData fakeOutcast = GetGenericOutcast();
     //public CharacterData fakeOutcast2 = GetGenericOutcast();
     public Character chargedActor = new Character();
+    public int targetForGhost = 0;
     public override ActedInfo GetInfo(Character charRef)
     {
         if (fakeMinion.name == "Minion")
@@ -30,7 +32,16 @@ public class MadScientist : Role
         {
             return new ActedInfo(string.Format("I have the {0} and {1} abilities", fakeMinion2.name, fakeOutcast2.name));
         }*/
-        return new ActedInfo(string.Format("I have the {0} and {1} abilities", fakeMinion.name, fakeOutcast.name));
+        string info = string.Format("I have the {0} and {1} abilities", fakeMinion.name, fakeOutcast.name);
+        if (fakeOutcast.name == "Ghost")
+        {
+            if (targetForGhost == 0)
+            {
+                info += "\n\nI couldn't haunt anyone";
+            }
+            info += string.Format("I haunted #{0}", targetForGhost);
+        }
+        return new ActedInfo(info);
     }
     public override ActedInfo GetBluffInfo(Character charRef)
     {
@@ -169,15 +180,11 @@ public class MadScientist : Role
             }*/
             if (charRef.GetCharacterData().characterId == "MadScientist_scm")
             {
-                if (fakeOutcast.characterId == "Ghost_scm")
-                {
-                    charRef.statuses.AddStatus(SpecialMadScientistTags.hasGhostAbility, charRef);
-                }
-                if (fakeOutcast.characterId == "Sleeper_scm")
+                if (fakeMinion.characterId == "Sleeper_scm")
                 {
                     charRef.statuses.AddStatus(SpecialMadScientistTags.hasSleeperAbility, charRef);
                 }
-                if (fakeMinion.characterId == "Guardian_scm")
+                else if (fakeMinion.characterId == "Guardian_scm")
                 {
                     MoveDemonNextToMe(charRef);
                     Il2CppSystem.Collections.Generic.List<Character> demons = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Demon);
@@ -194,7 +201,30 @@ public class MadScientist : Role
                 {
                     fakeMinion.role.Act(trigger, charRef);
                 }
-                if (fakeOutcast.characterId == "Marionette_WING")
+                if (fakeOutcast.characterId == "Ghost_scm" && trigger == ETriggerPhase.Day)
+                {
+                    charRef.statuses.AddStatus(SpecialMadScientistTags.hasGhostAbility, charRef);
+                    charRef.state = ECharacterState.Dead;
+                    PlayerController.PlayerInfo.health.Damage(1);
+                    ActOnDied(charRef);
+                    Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
+                    unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
+                    unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
+                    charRef.RevealAllReal();
+                    charRef.RefreshCharacter();
+                    if (unrevealedCharacters.Count == 0)
+                    {
+                        targetForGhost = 0;
+                    }
+                    else
+                    {
+                        Character targetChar = unrevealedCharacters[UnityEngine.Random.RandomRangeInt(0, unrevealedCharacters.Count)];
+                        targetChar.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                        targetChar.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+                        targetForGhost = targetChar.id;
+                    }
+                }
+                else if (fakeOutcast.characterId == "Marionette_WING")
                 {
                     MoveDemonNextToMe(charRef);
                 }

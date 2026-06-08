@@ -60,7 +60,8 @@ public class Escapist : Demon
             {
                 Character pickedOutsider2 = filter[UnityEngine.Random.Range(0, filter.Count - 1)];
                 pickedOutsider2.ChangeAlignment(EAlignment.Evil);
-                pickedOutsider2.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                if (pickedOutsider2.dataRef.name != "Doppelganger") // some weird bug where corrupted doppelganger doesn't disguise
+                    pickedOutsider2.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
                 pickedOutsider2.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 pickedOutsider2.statuses.AddStatus(Escaped.evilTurned, charRef);
             }

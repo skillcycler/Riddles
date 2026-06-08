@@ -24,7 +24,7 @@ public class Riddler : Role
     public override ActedInfo GetInfo(Character charRef)
     {
         List<string> infos = new List<string>();
-        infos.Add("It is impossible for an Alchemist to claim to have cured 4 Corruptions.");
+        infos.Add("It is possible for an Alchemist to claim there were 4 Corruptions around him.");
         //infos.Add("The Wretch must register as the same minion to different characters.");  This statement has conflicting info whether it is true or not
         infos.Add("A Gemcrafter or Medium referencing herself must be Evil.");
         infos.Add("A bard claiming to be 5 cards away from a Corrupted character is always truthful.");
@@ -72,6 +72,7 @@ public class Riddler : Role
         infos.Add("The Baa prefers to hide the Doppelganger and Drunk.");
         infos.Add("A Chancellor can create a Drunk that is not Corrupted.");
         infos.Add("Chancellor will always sit next to the outcast he adds.");
+        infos.Add("If a Lycanthrope turns into a Werewolf, information may become outdated.");
 
         // easter eggs
         infos.Add("A lying Oracle can mention a Marionette if there are no Minions in play.");
@@ -86,7 +87,7 @@ public class Riddler : Role
     public override ActedInfo GetBluffInfo(Character charRef)
     {
         List<string> infos = new List<string>();
-        infos.Add("It is possible for an Alchemist to claim to have cured 4 Corruptions.");
+        infos.Add("It is impossible for an Alchemist to claim there were 4 Corruptions around him.");
         //infos.Add("The Wretch can register as different minions to different characters."); This statement has conflicting info whether it is true or not
         infos.Add("A Gemcrafter or Medium referencing herself can be Good.");
         infos.Add("A bard claiming to be 5 cards away from a Corrupted character is always lying.");

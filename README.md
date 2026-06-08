@@ -35,12 +35,13 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 - Confectioner: I disguise as a Baker. On game start: Bake 1 random villager.
 
 ## Minions
-- Accuser: One random adjacent Villager registers as Evil. (I turn the villager into a Wretch disguised as that villager.)
+- Accuser: One random adjacent Villager registers as Evil.
 - Hypnotist: Always disguises and says something that would otherwise never be a lie.
 - Apprentice: Copies the ability of another Evil.
 - Sleeper: The night cycle is 1 tick shorter. Can you keep up with the demons killing faster?
 - Mastermind: All minions become Masterminds after doing their Game Start actions.
 - Guardian: The Demon registers as what they're bluffing. I sit next to the Demon.
+- Baffler: One adjacent Villager is Confused. Confused characters have a 50% chance to Lie.
 
 ## Demons
 - Follower: Kills smartly. Night is 3 ticks long.
@@ -49,3 +50,4 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 - Infestation: One random character is Corrupted. The corruption spreads at night.
 - Escapist: There is an extra Evil Outcast in play.
 - Kingmaker: Both of my neighbors are Minions.
+- Mystifier: One random Villager is Confused each night and at the start. Confused characters have a 50% chance to Lie.

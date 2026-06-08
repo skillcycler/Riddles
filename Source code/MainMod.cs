@@ -16,7 +16,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.13.0", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.13.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -67,6 +67,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Sleeper>();
         ClassInjector.RegisterTypeInIl2Cpp<Guardian>();
         ClassInjector.RegisterTypeInIl2Cpp<Mastermind>();
+        ClassInjector.RegisterTypeInIl2Cpp<Baffler>();
 
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
@@ -75,6 +76,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Infestation>();
         ClassInjector.RegisterTypeInIl2Cpp<Escapist>();
         ClassInjector.RegisterTypeInIl2Cpp<Kingmaker>();
+        ClassInjector.RegisterTypeInIl2Cpp<Mystifier>();
         Instance = this;
     }
     public override void OnLateInitializeMelon()
@@ -89,7 +91,7 @@ public class MainMod : MelonMod
         Riddler.characterName = "Riddler";
         Riddler.description = "Learn a true fact about the game.";
         Riddler.flavorText = "\"One day I'll cause a paradox.\"";
-        Riddler.hints = "";
+        Riddler.hints = "Statements are accurate as of June 8th, 2026, or version 0.730 of the game. If you are playing in a later version, statements may not be accurate.";
         Riddler.ifLies = "Learn a false fact about the game.";
         Riddler.picking = false;
         Riddler.startingAlignment = EAlignment.Good;
@@ -513,7 +515,7 @@ public class MainMod : MelonMod
         Pioneer.name = "Pioneer";
         Pioneer.description = "Learn how many cards a particular Evil is from my closest Evil.";
         Pioneer.flavorText = "\"Why does everyone keep mistaking me for the Scout?\"";
-        Pioneer.hints = "";
+        Pioneer.hints = "If my closest 2 Evils are equidistant, which one I refer to is arbitrary.";
         Pioneer.ifLies = "";
         Pioneer.picking = false;
         Pioneer.startingAlignment = EAlignment.Good;
@@ -855,6 +857,25 @@ public class MainMod : MelonMod
         Mastermind.additionalFlavorTexts = new Il2CppStringArray(1);
         Mastermind.additionalFlavorTexts[0] = Mastermind.flavorText;
 
+        CharacterData Baffler = new CharacterData();
+        Baffler.role = new Baffler();
+        Baffler.name = "Baffler";
+        Baffler.characterName = "Baffler";
+        Baffler.description = "Game Start: One adjacent Villager is Confused.\nConfused characters have a 50% chance of Lying.";
+        Baffler.flavorText = "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"";
+        Baffler.hints = "";
+        Baffler.ifLies = "";
+        Baffler.picking = false;
+        Baffler.startingAlignment = EAlignment.Evil;
+        Baffler.type = ECharacterType.Minion;
+        Baffler.bluffable = false;
+        Baffler.characterId = "Baffler_scm";
+        Baffler.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Baffler.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
+        Baffler.color = new Color(0.8491f, 0.4555f, 0f);
+        Baffler.additionalFlavorTexts = new Il2CppStringArray(1);
+        Baffler.additionalFlavorTexts[0] = Baffler.flavorText;
+
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
         Follower.name = "Follower";
@@ -960,7 +981,7 @@ public class MainMod : MelonMod
         Kingmaker.role = new Kingmaker();
         Kingmaker.name = "Kingmaker";
         Kingmaker.characterName = "Kingmaker";
-        Kingmaker.description = "Game Start: Both my neighbors become Minions.\n\nI Lie and Disguise.";
+        Kingmaker.description = "Game Start: Both my neighbors become Minions.\n\nYou don't know how many Evils there are.\n\nI Lie and Disguise.";
         Kingmaker.flavorText = "\"'Puppet Master' is more like it.\"";
         Kingmaker.hints = "There may be fewer Outcasts in play than expected.";
         Kingmaker.ifLies = "";
@@ -976,6 +997,28 @@ public class MainMod : MelonMod
         Kingmaker.additionalFlavorTexts = new Il2CppStringArray(1);
         Kingmaker.additionalFlavorTexts[0] = Kingmaker.flavorText;
 
+        CharacterData Mystifier = new CharacterData();
+        Mystifier.role = new Mystifier();
+        Mystifier.name = "Mystifier";
+        Mystifier.characterName = "Mystifier";
+        Mystifier.description = "Game Start: One random Villager is Confused.\nConfused characters have a 50% chance of Lying.\n\nAt night: One random Villager is Confused.\n\nI Lie and Disguise.";
+        Mystifier.flavorText = "\"Puzzled, confounded, or astonished yet?\"";
+        Mystifier.hints = "";
+        Mystifier.ifLies = "";
+        Mystifier.picking = false;
+        Mystifier.startingAlignment = EAlignment.Evil;
+        Mystifier.type = ECharacterType.Demon;
+        Mystifier.bluffable = false;
+        Mystifier.characterId = "Mystifier_scm";
+        Mystifier.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+        Mystifier.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+        Mystifier.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
+        Mystifier.color = new Color(1f, 0.3804f, 0.3804f);
+        Mystifier.additionalFlavorTexts = new Il2CppStringArray(1);
+        Mystifier.additionalFlavorTexts[0] = Mystifier.flavorText;
+
+        nightPhase.nightCharactersOrder.Add(Baffler);
+        nightPhase.nightCharactersOrder.Add(Mystifier);
         nightPhase.nightCharactersOrder.Add(Infestation);
         nightPhase.nightCharactersOrder.Add(Follower);
         nightPhase.nightCharactersOrder.Add(Channeler);
@@ -983,8 +1026,6 @@ public class MainMod : MelonMod
         nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
         nightPhase.nightCharactersOrder.Add(Sleeper);
 
-
-        // Characters.Instance.startGameActOrder = InsertAfterAct("Baa", Sleeper);
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
         Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
         Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
@@ -999,6 +1040,8 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_o", Trickster_m);
         Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
         Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Poisoner", Baffler);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Baffler", Mystifier);
         Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Hypnotist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
@@ -1102,6 +1145,10 @@ public class MainMod : MelonMod
         veilCounterList.Add(veil_15b);*/
         veilCounterList.Add(setCharacterCount(8, 0, 2, 1)); // temp fix until 12+ cards work again
         veilCounterList.Add(setCharacterCount(7, 1, 2, 1)); // temp fix until 12+ cards work again
+        veilCounterList.Add(setCharacterCount(7, 0, 2, 1)); // maybe some smaller villages as well, at 10 or less cards only 2 are hidden
+        veilCounterList.Add(setCharacterCount(7, 1, 1, 1));
+        veilCounterList.Add(setCharacterCount(6, 1, 1, 1));
+        veilCounterList.Add(setCharacterCount(6, 0, 2, 1));
 
         veilScript.characterCounts = veilCounterList;
         veilScriptData.scriptInfo = veilScript;
@@ -1245,7 +1292,7 @@ public class MainMod : MelonMod
         kingmakerScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
         kingmakerScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
         CharactersCount kingmaker_7a = setCharacterCount(4, 1, 1, 1);
-        CharactersCount kingmaker_7b = setCharacterCount(5, 1, 0, 1);
+        CharactersCount kingmaker_7b = setCharacterCount(4, 0, 2, 1);
         CharactersCount kingmaker_8a = setCharacterCount(5, 1, 1, 1);
         CharactersCount kingmaker_8b = setCharacterCount(4, 2, 1, 1);
         CharactersCount kingmaker_9a = setCharacterCount(5, 2, 1, 1);
@@ -1253,7 +1300,7 @@ public class MainMod : MelonMod
         CharactersCount kingmaker_9c = setCharacterCount(6, 1, 1, 1);
         CharactersCount kingmaker_10a = setCharacterCount(6, 1, 2, 1);
         CharactersCount kingmaker_10b = setCharacterCount(6, 2, 1, 1);
-        CharactersCount kingmaker_10c = setCharacterCount(7, 2, 0, 1);
+        CharactersCount kingmaker_10c = setCharacterCount(5, 2, 2, 1);
         CharactersCount kingmaker_10d = setCharacterCount(7, 1, 1, 1);
         CharactersCount kingmaker_10e = setCharacterCount(7, 0, 2, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> kingmakerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
@@ -1274,6 +1321,46 @@ public class MainMod : MelonMod
         kingmakerScript.characterCounts = kingmakerCounterList;
         kingmakerScriptData.scriptInfo = kingmakerScript;
 
+        CustomScriptData MystifierScriptData = new CustomScriptData();
+        MystifierScriptData.name = "Mystifier_1";
+        ScriptInfo MystifierScript = new ScriptInfo();
+        Il2CppSystem.Collections.Generic.List<CharacterData> MystifierList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        MystifierList.Add(Mystifier);
+        MystifierScript.mustInclude = MystifierList;
+        MystifierScript.startingDemons = MystifierList;
+        MystifierScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
+        MystifierScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
+        MystifierScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
+        CharactersCount Mystifier_8a = setCharacterCount(5, 1, 1, 1);
+        CharactersCount Mystifier_8b = setCharacterCount(4, 1, 2, 1);
+        CharactersCount Mystifier_9a = setCharacterCount(6, 0, 2, 1);
+        CharactersCount Mystifier_9b = setCharacterCount(5, 1, 2, 1);
+        CharactersCount Mystifier_9c = setCharacterCount(6, 1, 1, 1);
+        CharactersCount Mystifier_10a = setCharacterCount(6, 1, 2, 1);
+        CharactersCount Mystifier_10b = setCharacterCount(6, 2, 1, 1);
+        CharactersCount Mystifier_10c = setCharacterCount(7, 0, 2, 1);
+        CharactersCount Mystifier_11a = setCharacterCount(7, 0, 3, 1);
+        CharactersCount Mystifier_11b = setCharacterCount(7, 1, 2, 1);
+        CharactersCount Mystifier_11c = setCharacterCount(6, 1, 3, 1);
+        CharactersCount Mystifier_11d = setCharacterCount(8, 0, 2, 1);
+        Il2CppSystem.Collections.Generic.List<CharactersCount> MystifierCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
+
+
+        MystifierCounterList.Add(Mystifier_8a);
+        MystifierCounterList.Add(Mystifier_8b);
+        MystifierCounterList.Add(Mystifier_9a);
+        MystifierCounterList.Add(Mystifier_9b);
+        MystifierCounterList.Add(Mystifier_10a);
+        MystifierCounterList.Add(Mystifier_10b);
+        MystifierCounterList.Add(Mystifier_10c);
+        MystifierCounterList.Add(Mystifier_11a);
+        MystifierCounterList.Add(Mystifier_11b);
+        MystifierCounterList.Add(Mystifier_11c);
+        MystifierCounterList.Add(Mystifier_11d);
+
+        MystifierScript.characterCounts = MystifierCounterList;
+        MystifierScriptData.scriptInfo = MystifierScript;
+
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
         addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
         addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
@@ -1281,6 +1368,7 @@ public class MainMod : MelonMod
         addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
         addDemonRole(advancedAscension, Escapist, "Baa_Difficult", "Escapist_1", escapistScriptData, 2);
         addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 2);
+        addDemonRole(advancedAscension, Mystifier, "Baa_Difficult", "Mystifier_1", MystifierScriptData, 2000);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
@@ -1325,6 +1413,7 @@ public class MainMod : MelonMod
             AddRole(script.startingMinions, Sleeper);
             AddRole(script.startingMinions, Guardian);
             AddRole(script.startingMinions, Mastermind);
+            AddRole(script.startingMinions, Baffler);
         }
     }
     public void AddRole(Il2CppSystem.Collections.Generic.List<CharacterData> list, CharacterData data)
@@ -1630,7 +1719,50 @@ public class MainMod : MelonMod
             MainMod.CachedRule = __instance;
         }
     }
+    // Kingmaker hides evil counter
+    [HarmonyPatch(typeof(ObjectivesUI), nameof(ObjectivesUI.UpdateObjectives))]
+    public static class ChangeCounter
+    {
+        public static void Postfix(ObjectivesUI __instance)
+        {
+            bool Kingmaker = false;
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.dataRef.characterId == "Kingmaker_scm")
+                {
+                    Kingmaker = true;
+                }
+            }
+            if (!Kingmaker) return;
+            int minions = Gameplay.CurrentScript.minion;
+            int demons = Gameplay.CurrentScript.demon;
+            var deadCharacters = Gameplay.DeadCharacters;
+            int EvilsKilled = 0;
 
+            foreach (var deadCharacter in deadCharacters)
+            {
+                if (deadCharacter.alignment == EAlignment.Evil)
+                {
+                    EvilsKilled++;
+                }
+            }
+            __instance.evilsKilled.text = string.Format("<color=grey>Evils killed:</color> <color=red>{0}", EvilsKilled);
+
+
+            string minionCountText = "Minions";
+            if (minions == 1)
+            {
+                minionCountText = "Minion";
+            }
+            string demonCountText = "Demons";
+            if (demons == 1)
+            {
+                demonCountText = "Demon";
+            }
+            __instance.objective.text = string.Format("Find and Execute all Evil Characters<br><color=grey><size=18>(<color=orange>{0}+ {2}</color> and <color=red>{1}+ {3} </color>)", minions, demons, minionCountText, demonCountText);
+
+        }
+    }
     // Hypnotist stuff
     [HarmonyPatch(typeof(Acrobat2), nameof(Acrobat2.GetInfo))]
     private static class HypnotistBard

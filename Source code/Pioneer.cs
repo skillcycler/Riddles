@@ -57,8 +57,13 @@ public class Pioneer : Role
             return new ActedInfo("There are no Evils");
         }
         int distance = GetDistanceBetween(closestid, chosen.id, Gameplay.CurrentCharacters.Count);
+
         string info = string.Format("{0} is {1} card{2} away from my closest Evil", chosen.dataRef.name, distance, distance==1?"":"s");
 
+        if (distance == 0)
+        {
+            info = string.Format("{0} is my closest Evil", chosen.dataRef.name);
+        }
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
@@ -96,7 +101,7 @@ public class Pioneer : Role
         }
         int distance = GetDistanceBetween(closestid, chosen.id, Gameplay.CurrentCharacters.Count);
         int fakeDistance = Calculator.RemoveNumberAndGetRandomNumberFromList(distance, 1, (int)(Gameplay.CurrentCharacters.Count/2)+1);
-        string info = string.Format("{0} is {1} card{2} away from my closest Evil", chosen.dataRef.name, distance, distance == 1 ? "" : "s");
+        string info = string.Format("{0} is {1} card{2} away from my closest Evil", chosen.dataRef.name, fakeDistance, fakeDistance == 1 ? "" : "s");
 
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;

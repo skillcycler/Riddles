@@ -76,6 +76,10 @@ public class Channeler : Minion
     public override void ActOnDied(Character charRef)
     {
         copy.role.ActOnDied(charRef);
+        if (copy.characterId == "Veil_scm")
+        {
+            PlayerController.PlayerInfo.blocks.value.Reduce(1);//since apparently it doesn't work
+        }
     }
     public override bool CheckIfCanBeKilled(Character charRef)
     {
