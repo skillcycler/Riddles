@@ -7,6 +7,7 @@ using Il2CppDissolveExample;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppRewired.UI.ControlMapper;
 using Il2CppSystem.IO;
 using MelonLoader;
 using RiddlerMod;
@@ -16,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.13.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.14", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -30,9 +31,9 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Commander>();
         ClassInjector.RegisterTypeInIl2Cpp<Director>();
         ClassInjector.RegisterTypeInIl2Cpp<Scanner>();
-        ClassInjector.RegisterTypeInIl2Cpp<Trickster_o>();
+        /*ClassInjector.RegisterTypeInIl2Cpp<Trickster_o>();
         ClassInjector.RegisterTypeInIl2Cpp<Trickster_v>();
-        ClassInjector.RegisterTypeInIl2Cpp<Trickster_m>();
+        ClassInjector.RegisterTypeInIl2Cpp<Trickster_m>();*/
         ClassInjector.RegisterTypeInIl2Cpp<Obsessor>();
         ClassInjector.RegisterTypeInIl2Cpp<Lawyer>();
         ClassInjector.RegisterTypeInIl2Cpp<Psychic>();
@@ -52,14 +53,14 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Pioneer>();
 
         // Outcasts
-
+        
         ClassInjector.RegisterTypeInIl2Cpp<MadScientist>();
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
         ClassInjector.RegisterTypeInIl2Cpp<Hitman>();
         ClassInjector.RegisterTypeInIl2Cpp<Ghost>();
         ClassInjector.RegisterTypeInIl2Cpp<Muddler>();
         ClassInjector.RegisterTypeInIl2Cpp<Confectioner>();
-
+        
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
         ClassInjector.RegisterTypeInIl2Cpp<Hypnotist>();
@@ -68,7 +69,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Guardian>();
         ClassInjector.RegisterTypeInIl2Cpp<Mastermind>();
         ClassInjector.RegisterTypeInIl2Cpp<Baffler>();
-
+        
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
         ClassInjector.RegisterTypeInIl2Cpp<Veil>();
@@ -79,73 +80,75 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Mystifier>();
         Instance = this;
     }
+    public CharacterData makeNewCharacter(string name, EAlignment startingAlignment, ECharacterType type, bool bluffable, bool usuallyDisguised, string flavorText = "", bool picking = false)
+    {
+        CharacterData character = new CharacterData();
+        character.name = name;
+        character.characterName = name;
+        character.picking = picking;
+        character.startingAlignment = startingAlignment;
+        character.flavorText = flavorText;
+        character.type = type;
+        character.bluffable = bluffable;
+        character.additionalFlavorTexts = new Il2CppStringArray(1);
+        character.additionalFlavorTexts[0] = character.flavorText;
+        character.characterId = name + "_scm";
+        switch (type)
+        {
+            case ECharacterType.Villager:
+                character.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+                character.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
+                character.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
+                character.color = new Color(1f, 0.935f, 0.7302f);
+                break;
+            case ECharacterType.Outcast:
+                character.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
+                character.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
+                character.color = new Color(0.9659f, 1f, 0.4472f);
+                break;
+            case ECharacterType.Minion:
+                character.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+                character.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
+                character.color = new Color(0.8491f, 0.4555f, 0f);
+                break;
+            case ECharacterType.Demon:
+                character.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
+                character.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+                character.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
+                character.color = new Color(1f, 0.3804f, 0.3804f);
+                break;
+        }
+        character.bundledCharacters = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        character.additionalPossibleCharacters = new AddedCharacterTypes();
+        character.usuallyDisguised = usuallyDisguised;
+        return character;
+    }
     public override void OnLateInitializeMelon()
     {
         GameObject content = GameObject.Find("Game/Gameplay/Content");
         NightPhase nightPhase = content.GetComponent<NightPhase>();
-        GameplayEvents.OnDeckShuffled += new Action(OnRoundStart);
+        //GameplayEvents.OnDeckShuffled += new Action(OnRoundStart);
 
-        CharacterData Riddler = new CharacterData();
+        CharacterData Riddler = makeNewCharacter("Riddler", EAlignment.Good, ECharacterType.Villager, true, false, "\"One day I'll cause a paradox.\"");
         Riddler.role = new Riddler();
-        Riddler.name = "Riddler";
-        Riddler.characterName = "Riddler";
         Riddler.description = "Learn a true fact about the game.";
-        Riddler.flavorText = "\"One day I'll cause a paradox.\"";
         Riddler.hints = "Statements are accurate as of June 8th, 2026, or version 0.730 of the game. If you are playing in a later version, statements may not be accurate.";
         Riddler.ifLies = "Learn a false fact about the game.";
-        Riddler.picking = false;
-        Riddler.startingAlignment = EAlignment.Good;
-        Riddler.type = ECharacterType.Villager;
-        Riddler.bluffable = true;
-        Riddler.characterId = "Riddler_scm";
-        Riddler.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Riddler.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Riddler.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Riddler.color = new Color(1f, 0.935f, 0.7302f);
-        Riddler.additionalFlavorTexts = new Il2CppStringArray(1);
-        Riddler.additionalFlavorTexts[0] = Riddler.flavorText;
 
-        CharacterData Swapper = new CharacterData();
+        CharacterData Swapper = makeNewCharacter("Swapper", EAlignment.Good, ECharacterType.Villager, true, false, "\"Didn't like the role you got? I'm here to save the day!\"", true);
         Swapper.role = new Swapper();
-        Swapper.name = "Swapper";
-        Swapper.characterName = "Swapper";
         Swapper.description = "Pick 2 cards: They disguise as each other's apparent role. Refresh both of their statements or abilities.";
-        Swapper.flavorText = "\"Didn't like the role you got? I'm here to save the day!\"";
         Swapper.hints = "A Swapper cannot swap itself or another Swapper.";
         Swapper.ifLies = "Both targets are Corrupted if they are Villagers.";
-        Swapper.picking = true;
-        Swapper.startingAlignment = EAlignment.Good;
-        Swapper.type = ECharacterType.Villager;
-        Swapper.bluffable = true;
-        Swapper.characterId = "Swapper_scm";
-        Swapper.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Swapper.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Swapper.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Swapper.color = new Color(1f, 0.935f, 0.7302f);
-        Swapper.additionalFlavorTexts = new Il2CppStringArray(1);
-        Swapper.additionalFlavorTexts[0] = Swapper.flavorText;
 
 
-        CharacterData Mathematician = new CharacterData();
+        CharacterData Mathematician = makeNewCharacter("Swapper", EAlignment.Good, ECharacterType.Villager, true, false, "\"21\"");
         Mathematician.role = new Mathematician();
         Mathematician.name = "Mathematician";
         Mathematician.characterName = "Mathematician";
         Mathematician.description = "Learn a number equal to the sum of the card numbers of 2 Evils.";
-        Mathematician.flavorText = "\"21\"";
-        Mathematician.hints = "";
-        Mathematician.ifLies = "";
-        Mathematician.picking = false;
-        Mathematician.startingAlignment = EAlignment.Good;
-        Mathematician.type = ECharacterType.Villager;
-        Mathematician.bluffable = true;
-        Mathematician.characterId = "Mathematician_scm";
-        Mathematician.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Mathematician.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Mathematician.color = new Color(1f, 0.935f, 0.7302f);
-        Mathematician.additionalFlavorTexts = new Il2CppStringArray(1);
-        Mathematician.additionalFlavorTexts[0] = Mathematician.flavorText;
 
-
+        //rewriting all of this is gonna take a really long time. will finish in a future update, but definitely will do it before adding another character
         CharacterData Commander = new CharacterData();
         Commander.role = new Commander();
         Commander.name = "Commander";
@@ -418,6 +421,7 @@ public class MainMod : MelonMod
         CharacterData Governor = new CharacterData();
         Governor.role = new Governor();
         Governor.name = "Governor";
+        Governor.characterName = "Governor";
         Governor.description = "Learn how many Villagers are actually in the village.";
         Governor.flavorText = "\"I know everyone around here.\"";
         Governor.hints = "";
@@ -426,7 +430,7 @@ public class MainMod : MelonMod
         Governor.startingAlignment = EAlignment.Good;
         Governor.type = ECharacterType.Villager;
         Governor.bluffable = true;
-        Governor.characterId = "Governor_ehm";
+        Governor.characterId = "Governor_scm";
         Governor.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Governor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Governor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
@@ -437,6 +441,7 @@ public class MainMod : MelonMod
         CharacterData Officer = new CharacterData();
         Officer.role = new Officer();
         Officer.name = "Officer";
+        Officer.characterName = "Officer";
         Officer.description = "Learn how many characters register as Evil.";
         Officer.flavorText = "\"Worried about not knowing if that Undying is safe to stab? Fear not, I'm here to save the day.\"";
         Officer.hints = "";
@@ -445,7 +450,7 @@ public class MainMod : MelonMod
         Officer.startingAlignment = EAlignment.Good;
         Officer.type = ECharacterType.Villager;
         Officer.bluffable = true;
-        Officer.characterId = "Officer_ehm";
+        Officer.characterId = "Officer_scm";
         Officer.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Officer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Officer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
@@ -456,7 +461,8 @@ public class MainMod : MelonMod
         CharacterData Cowboy = new CharacterData();
         Cowboy.role = new Cowboy();
         Cowboy.name = "Cowboy";
-        Cowboy.description = "Learn an Evil that isn't a Minion or Demon, or that there are none.";
+        Cowboy.characterName = "Cowboy";
+        Cowboy.description = "Learn an Evil or Evil-registering Villager or Outcast.";
         Cowboy.flavorText = "\"Never approach a bull from the front, a horse from the rear or a fool from any direction.\"";
         Cowboy.hints = "";
         Cowboy.ifLies = "";
@@ -464,7 +470,7 @@ public class MainMod : MelonMod
         Cowboy.startingAlignment = EAlignment.Good;
         Cowboy.type = ECharacterType.Villager;
         Cowboy.bluffable = true;
-        Cowboy.characterId = "Cowboy_ehm";
+        Cowboy.characterId = "Cowboy_scm";
         Cowboy.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Cowboy.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Cowboy.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
@@ -475,6 +481,7 @@ public class MainMod : MelonMod
         CharacterData Surveyor = new CharacterData();
         Surveyor.role = new Surveyor();
         Surveyor.name = "Surveyor";
+        Surveyor.characterName = "Surveyor";
         Surveyor.description = "Learn how many Outcasts and Minions there actually are";
         Surveyor.flavorText = "This land belongs to the Outcasts. Wretch, you're not welcome here.";
         Surveyor.hints = "";
@@ -483,7 +490,7 @@ public class MainMod : MelonMod
         Surveyor.startingAlignment = EAlignment.Good;
         Surveyor.type = ECharacterType.Villager;
         Surveyor.bluffable = true;
-        Surveyor.characterId = "Surveyor_ehm";
+        Surveyor.characterId = "Surveyor_scm";
         Surveyor.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Surveyor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Surveyor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
@@ -494,6 +501,7 @@ public class MainMod : MelonMod
         CharacterData Tracker = new CharacterData();
         Tracker.role = new Tracker();
         Tracker.name = "Tracker";
+        Tracker.characterName = "Tracker";
         Tracker.description = "Learn who is a fake Outcast";
         Tracker.flavorText = "\"You're not hiding that easily!\"";
         Tracker.hints = "";
@@ -502,7 +510,7 @@ public class MainMod : MelonMod
         Tracker.startingAlignment = EAlignment.Good;
         Tracker.type = ECharacterType.Villager;
         Tracker.bluffable = true;
-        Tracker.characterId = "Tracker_ehm";
+        Tracker.characterId = "Tracker_scm";
         Tracker.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Tracker.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Tracker.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
@@ -521,14 +529,14 @@ public class MainMod : MelonMod
         Pioneer.startingAlignment = EAlignment.Good;
         Pioneer.type = ECharacterType.Villager;
         Pioneer.bluffable = true;
-        Pioneer.characterId = "Pioneer_ehm";
+        Pioneer.characterId = "Pioneer_scm";
         Pioneer.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
         Pioneer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
         Pioneer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
         Pioneer.color = new Color(1f, 0.935f, 0.7302f);
         Pioneer.additionalFlavorTexts = new Il2CppStringArray(1);
         Pioneer.additionalFlavorTexts[0] = Pioneer.flavorText;
-
+        /*
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
         Trickster_v.name = "Trickster";
@@ -623,7 +631,7 @@ public class MainMod : MelonMod
         Trickster_m_register.color = new Color(1f, 0.935f, 0.7302f);
         Trickster_m_register.additionalFlavorTexts = new Il2CppStringArray(1);
         Trickster_m_register.additionalFlavorTexts[0] = Trickster_m_register.flavorText;
-
+        */
         CharacterData MadScientist = new CharacterData();
         MadScientist.role = new MadScientist();
         MadScientist.name = "Mad Scientist";
@@ -680,7 +688,7 @@ public class MainMod : MelonMod
         Hitman.color = new Color(0.9659f, 1f, 0.4472f);
         Hitman.additionalFlavorTexts = new Il2CppStringArray(1);
         Hitman.additionalFlavorTexts[0] = Hitman.flavorText;
-
+        
         CharacterData Ghost = new CharacterData();
         Ghost.role = new Ghost();
         Ghost.name = "Ghost";
@@ -799,7 +807,7 @@ public class MainMod : MelonMod
         Channeler.color = new Color(0.8491f, 0.4555f, 0f);
         Channeler.additionalFlavorTexts = new Il2CppStringArray(1);
         Channeler.additionalFlavorTexts[0] = Channeler.flavorText;
-
+        
         CharacterData Sleeper = new CharacterData();
         Sleeper.role = new Sleeper();
         Sleeper.name = "Sleeper";
@@ -875,7 +883,7 @@ public class MainMod : MelonMod
         Baffler.color = new Color(0.8491f, 0.4555f, 0f);
         Baffler.additionalFlavorTexts = new Il2CppStringArray(1);
         Baffler.additionalFlavorTexts[0] = Baffler.flavorText;
-
+        
         CharacterData Follower = new CharacterData();
         Follower.role = new Follower();
         Follower.name = "Follower";
@@ -896,7 +904,7 @@ public class MainMod : MelonMod
         Follower.additionalFlavorTexts = new Il2CppStringArray(1);
         Follower.additionalFlavorTexts[0] = Follower.flavorText;
 
-
+        
         CharacterData Veil = new CharacterData();
         Veil.role = new Veil();
         Veil.name = "Veil";
@@ -916,7 +924,7 @@ public class MainMod : MelonMod
         Veil.color = new Color(1f, 0.3804f, 0.3804f);
         Veil.additionalFlavorTexts = new Il2CppStringArray(1);
         Veil.additionalFlavorTexts[0] = Veil.flavorText;
-
+        
         CharacterData Summoner = new CharacterData();
         Summoner.role = new Summoner();
         Summoner.name = "Summoner";
@@ -936,7 +944,7 @@ public class MainMod : MelonMod
         Summoner.color = new Color(1f, 0.3804f, 0.3804f);
         Summoner.additionalFlavorTexts = new Il2CppStringArray(1);
         Summoner.additionalFlavorTexts[0] = Summoner.flavorText;
-
+        
         CharacterData Infestation = new CharacterData();
         Infestation.role = new Infestation();
         Infestation.name = "Infestation";
@@ -1016,40 +1024,7 @@ public class MainMod : MelonMod
         Mystifier.color = new Color(1f, 0.3804f, 0.3804f);
         Mystifier.additionalFlavorTexts = new Il2CppStringArray(1);
         Mystifier.additionalFlavorTexts[0] = Mystifier.flavorText;
-
-        nightPhase.nightCharactersOrder.Add(Baffler);
-        nightPhase.nightCharactersOrder.Add(Mystifier);
-        nightPhase.nightCharactersOrder.Add(Infestation);
-        nightPhase.nightCharactersOrder.Add(Follower);
-        nightPhase.nightCharactersOrder.Add(Channeler);
-        nightPhase.nightCharactersOrder.Add(Hitman);
-        nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
-        nightPhase.nightCharactersOrder.Add(Sleeper);
-
-        Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Escapist", Recruiter);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Infestation", Channeler);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Confectioner);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Trickster_v);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_v", Trickster_o);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_o", Trickster_m);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Poisoner", Baffler);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Baffler", Mystifier);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Alchemist", Hypnotist);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Hypnotist", Follower);
-        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
-        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
-        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind);
-        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Muddler);
-
-
+        
         CustomScriptData followerScriptData = new CustomScriptData();
         followerScriptData.name = "Follower_1";
         ScriptInfo followerScript = new ScriptInfo();
@@ -1105,7 +1080,7 @@ public class MainMod : MelonMod
         followerCounterList.Add(follower_13b);*/
         followerScript.characterCounts = followerCounterList;
         followerScriptData.scriptInfo = followerScript;
-
+        
         CustomScriptData veilScriptData = new CustomScriptData();
         veilScriptData.name = "Veil_1";
         ScriptInfo veilScript = new ScriptInfo();
@@ -1152,7 +1127,7 @@ public class MainMod : MelonMod
 
         veilScript.characterCounts = veilCounterList;
         veilScriptData.scriptInfo = veilScript;
-
+        
         CustomScriptData summonerScriptData = new CustomScriptData();
         summonerScriptData.name = "Summoner_1";
         ScriptInfo summonerScript = new ScriptInfo();
@@ -1208,7 +1183,7 @@ public class MainMod : MelonMod
         summonerCounterList.Add(summoner_15b);*/
         summonerScript.characterCounts = summonerCounterList;
         summonerScriptData.scriptInfo = summonerScript;
-
+        
         CustomScriptData infestationScriptData = new CustomScriptData();
         infestationScriptData.name = "Infestation_1";
         ScriptInfo infestationScript = new ScriptInfo();
@@ -1238,9 +1213,7 @@ public class MainMod : MelonMod
         infestationCounterList.Add(infestation_13);
         infestationCounterList.Add(infestation_14);
         infestationCounterList.Add(infestation_15);*/
-        //infestationCounterList.Add(setCharacterCount(2, 6, 0, 1)); // use this to test outcasts
-        //infestationCounterList.Add(setCharacterCount(2, 0, 6, 1)); // use this to test minions
-
+        
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
 
@@ -1361,6 +1334,40 @@ public class MainMod : MelonMod
         MystifierScript.characterCounts = MystifierCounterList;
         MystifierScriptData.scriptInfo = MystifierScript;
 
+        // ------------ NIGHT PHASE ------------
+        nightPhase.nightCharactersOrder.Add(Baffler);
+        nightPhase.nightCharactersOrder.Add(Mystifier);
+        nightPhase.nightCharactersOrder.Add(Infestation);
+        nightPhase.nightCharactersOrder.Add(Follower);
+        nightPhase.nightCharactersOrder.Add(Channeler);
+        nightPhase.nightCharactersOrder.Add(Hitman);
+        nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
+        nightPhase.nightCharactersOrder.Add(Sleeper);
+
+        // ------------ GAME START ------------
+        Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Escapist", Recruiter);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Infestation", Channeler);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Confectioner);
+        /*Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Trickster_v);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_v", Trickster_o);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_o", Trickster_m);*/ // These guys have SOMEHOW broke again
+        Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Poisoner", Baffler);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Baffler", Mystifier);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Follower);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Muddler);
+
+
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
         addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
         addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
@@ -1379,7 +1386,7 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Commander);
             AddRole(script.startingTownsfolks, Director);
             AddRole(script.startingTownsfolks, Scanner);
-            AddRole(script.startingTownsfolks, Trickster_v);
+            //AddRole(script.startingTownsfolks, Trickster_v);
             AddRole(script.startingTownsfolks, Obsessor);
             AddRole(script.startingTownsfolks, Lawyer);
             AddRole(script.startingTownsfolks, Psychic);
@@ -1398,14 +1405,14 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Tracker);
             AddRole(script.startingTownsfolks, Pioneer);
 
-
+            
             AddRole(script.startingOutsiders, MadScientist);
             AddRole(script.startingOutsiders, Necromancer);
             AddRole(script.startingOutsiders, Hitman);
             AddRole(script.startingOutsiders, Ghost);
             AddRole(script.startingOutsiders, Muddler);
             AddRole(script.startingOutsiders, Confectioner);
-
+            
 
             AddRole(script.startingMinions, Accuser);
             AddRole(script.startingMinions, Hypnotist);
@@ -1674,6 +1681,7 @@ public class MainMod : MelonMod
         }
     }
     */
+    
     public int shortenNight = 0;
     public static MainMod Instance;
     private void OnRoundStart()
@@ -1720,6 +1728,7 @@ public class MainMod : MelonMod
         }
     }
     // Kingmaker hides evil counter
+    
     [HarmonyPatch(typeof(ObjectivesUI), nameof(ObjectivesUI.UpdateObjectives))]
     public static class ChangeCounter
     {

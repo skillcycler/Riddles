@@ -7,7 +7,7 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 - Commander: Pick 2 cards. Tells you a character with a different character type than those 2 cards.
 - Director: Tells you a range of cards that contain 2 evils.
 - Scanner: Tells you how many Outcasts are either disguised or being used as a disguise.
-- Trickster Triplets: One Villager, one Outcast, one Good Minion. You don't know which is which but they tell you someone of their character type.
+- Trickster Triplets: One Villager, one Outcast, one Good Minion. You don't know which is which but they tell you someone of their character type. [Currently unavailable]
 - Obsessor: Learn how many Evils are adjacent to a certain character.
 - Lawyer: Forces both neighbors to tell the truth. Tells you one truthful character.
 - Psychic: Learn that 1 of 2 characters is in play.
@@ -37,7 +37,7 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil.
 - Hypnotist: Always disguises and says something that would otherwise never be a lie.
-- Apprentice: Copies the ability of another Evil.
+- Channeler: Copies the ability of another Evil.
 - Sleeper: The night cycle is 1 tick shorter. Can you keep up with the demons killing faster?
 - Mastermind: All minions become Masterminds after doing their Game Start actions.
 - Guardian: The Demon registers as what they're bluffing. I sit next to the Demon.

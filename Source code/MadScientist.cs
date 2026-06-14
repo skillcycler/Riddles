@@ -78,17 +78,21 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Poisoner_64796285");
             whitelistMinionCharacterIDs.Add("Witch_25286521");
             whitelistMinionCharacterIDs.Add("Shaman_26945607");
-           // whitelistMinionCharacterIDs.Add("Baron_04539999"); oops this is bugged as well
+            //whitelistMinionCharacterIDs.Add("Baron_04539999"); oops this is bugged as well
             whitelistOutcastCharacterIDs.Add("Plague Doctor_49312486");
-            //whitelistOutcastCharacterIDs.Add("Wretch_80988916"); seems like this one's bugged too
+            whitelistOutcastCharacterIDs.Add("Wretch_80988916");
             whitelistOutcastCharacterIDs.Add("Bombardier_79093372");
-            //whitelistOutcastCharacterIDs.Add("Drunk_15369527");
+            //whitelistOutcastCharacterIDs.Add("Rambler_57930131"); Does not work at all.
             //whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
             // This Mod
             whitelistMinionCharacterIDs.Add("Accuser_scm");
             //whitelistMinionCharacterIDs.Add("Channeler_scm");
             whitelistMinionCharacterIDs.Add("Sleeper_scm");
             whitelistMinionCharacterIDs.Add("Guardian_scm");
+            whitelistMinionCharacterIDs.Add("Baffler_scm");
+            whitelistMinionCharacterIDs.Add("Mastermind_scm");
+
+
             whitelistOutcastCharacterIDs.Add("Ghost_scm");
             whitelistOutcastCharacterIDs.Add("Muddler_scm");
             //whitelistOutcastCharacterIDs.Add("Hitman_scm");
@@ -260,6 +264,27 @@ public class MadScientist : Role
                     charRef.ChangeAlignment(EAlignment.Evil);
                 }
             }*/
+        }
+        if (trigger == ETriggerPhase.AfterRoundStart)
+        {
+            if (fakeOutcast.characterName == "Wretch")
+            {
+                Il2CppSystem.Collections.Generic.List<CharacterData> allChars = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+                foreach (CharacterData charData in Gameplay.Instance.GetScriptCharacters())
+                {
+                    allChars.Add(charData);
+                }
+                allChars = Characters.Instance.FilterCharacterType(allChars, ECharacterType.Minion);
+                if (allChars.Count == 0)
+                    allChars.Add(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
+                CharacterData randomMinion = allChars[UnityEngine.Random.Range(0, allChars.Count)];
+
+                charRef.UpdateRegisterAsRole(randomMinion);
+            }
+            if (fakeOutcast.characterName == "Marionette")
+            {
+                charRef.UpdateRegisterAsRole(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
+            }
         }
         if (trigger == ETriggerPhase.Day)
         {

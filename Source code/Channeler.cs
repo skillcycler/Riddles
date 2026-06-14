@@ -37,9 +37,17 @@ public class Channeler : Minion
             List<string> blacklistIDs = new();
             blacklistIDs.Add("Undying_WING");
             blacklistIDs.Add("Legion_WING");
-            blacklistIDs.Add("MadScientist_scm");
-            blacklistIDs.Add("Hitman_scm");
             blacklistIDs.Add("Blackmailer_VP");
+            //the below characters do nothing when copied, so don't copy them if possible
+            blacklistIDs.Add("Puppet_15989619");
+            blacklistIDs.Add("Turncoat_WING");
+            blacklistIDs.Add("Minion_71804875");
+            blacklistIDs.Add("Twin Minion_15695218");
+            blacklistIDs.Add("Acolyte_WING");
+            blacklistIDs.Add("Fanatic_WING");
+            blacklistIDs.Add("Zealot_WING");
+            blacklistIDs.Add("Swarm_Evil_WING");
+            blacklistIDs.Add("Imp_58992273");
             foreach (Character character in characters) {
                 if (!blacklistIDs.Contains(character.dataRef.characterId) && character.GetCharacterType() != ECharacterType.Villager && character.GetCharacterType() != ECharacterType.Outcast)
                     allowedCharacters.Add(character);
