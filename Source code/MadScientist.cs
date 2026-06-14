@@ -39,7 +39,7 @@ public class MadScientist : Role
             {
                 info += "\n\nI couldn't haunt anyone";
             }
-            info += string.Format("I haunted #{0}", targetForGhost);
+            else { info += string.Format("I haunted #{0}", targetForGhost); }
         }
         return new ActedInfo(info);
     }
@@ -184,6 +184,10 @@ public class MadScientist : Role
             }*/
             if (charRef.GetCharacterData().characterId == "MadScientist_scm")
             {
+                if (fakeMinion.characterId == "Undying_WING")
+                {
+                    charRef.statuses.AddStatus(SpecialMadScientistTags.hasUndyingAbility, charRef);
+                }
                 if (fakeMinion.characterId == "Sleeper_scm")
                 {
                     charRef.statuses.AddStatus(SpecialMadScientistTags.hasSleeperAbility, charRef);
@@ -448,4 +452,5 @@ public static class SpecialMadScientistTags
 {
     public static ECharacterStatus hasGhostAbility = (ECharacterStatus)1201;
     public static ECharacterStatus hasSleeperAbility = (ECharacterStatus)1202;
+    public static ECharacterStatus hasUndyingAbility = (ECharacterStatus)1203;
 }

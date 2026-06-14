@@ -21,15 +21,19 @@ public class Kingmaker : Demon
             notInPlayMinions = Characters.Instance.FilterNotInPlayCharactersUnique(notInPlayMinions);
             notInPlayMinions = Characters.Instance.FilterRealCharacterType(notInPlayMinions, ECharacterType.Minion);
             foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
-            {
+            { // always have 2 extra minions in the deck list
+                CharacterData picked = notInPlayMinions[UnityEngine.Random.Range(0, notInPlayMinions.Count - 1)];
+                Gameplay.Instance.AddScriptCharacter(ECharacterType.Minion, picked);
                 if (c.dataRef.type != ECharacterType.Minion)
                 {
-                    CharacterData picked = notInPlayMinions[UnityEngine.Random.Range(0, notInPlayMinions.Count - 1)];
-                    Gameplay.Instance.AddScriptCharacter(ECharacterType.Minion, picked);
                     c.Init(picked);
-                    notInPlayMinions.Remove(picked);
                 }
+                notInPlayMinions.Remove(picked);
             }
+        }
+        if (trigger == ETriggerPhase.AfterRoundStart)
+        {
+            charRef.statuses.statuses.Add(ECharacterStatus.HealthyBluff);
         }
     }
     public Kingmaker() : base(ClassInjector.DerivedConstructorPointer<Kingmaker>())

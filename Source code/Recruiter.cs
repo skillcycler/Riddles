@@ -55,11 +55,14 @@ public class Recruiter : Role
                     outcasts.Add(character);
                 }
             }
-            Character chosen = outcasts[UnityEngine.Random.RandomRangeInt(0, outcasts.Count)];
-            removedOutcast = chosen.id;
-            CharacterData newVillager = Characters.Instance.GetRandomUniqueVillagerBluff();
-            Gameplay.Instance.AddScriptCharacterIfAble(ECharacterType.Villager, newVillager);
-            chosen.Init(newVillager);
+            if (outcasts.Count > 0)
+            {
+                Character chosen = outcasts[UnityEngine.Random.RandomRangeInt(0, outcasts.Count)];
+                removedOutcast = chosen.id;
+                CharacterData newVillager = Characters.Instance.GetRandomUniqueVillagerBluff();
+                Gameplay.Instance.AddScriptCharacterIfAble(ECharacterType.Villager, newVillager);
+                chosen.Init(newVillager);
+            }
         }
         if (trigger == ETriggerPhase.Day)
         {

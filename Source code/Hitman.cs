@@ -13,25 +13,7 @@ namespace RiddlerMod;
 
 [RegisterTypeInIl2Cpp]
 public class Hitman : Role
-{
-    /*
-    public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
-    {
-        Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        foreach (Character character in characters)
-        {
-            // make sure no other night cycles exist
-            if (character.name == "Lilis" || character.name == "Follower" || character.name == "Agmeres" || character.name == "Viciyon" || character.name == "Caedoccidere" || character.name == "Sanguitaurus")
-            {
-                return new Il2CppSystem.Collections.Generic.List<SpecialRule>();
-            }
-        }
-        
-        Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
-        sr.Add(new NightModeRule(4));
-        return sr;
-    }
-    */
+{    
     public bool killedLastNight = false;
     public override string Description
     {
@@ -57,14 +39,17 @@ public class Hitman : Role
             {
                 Il2CppSystem.Collections.Generic.List<Character> newList = Gameplay.CurrentCharacters;
                 newList = Characters.Instance.FilterAliveCharacters(newList);
+                Il2CppSystem.Collections.Generic.List<Character> validTargets = new();
+                // not gonna have this guy try to kill the Undying or the Mad Scientist with the Undying ability. It causes too many bugs.
+                foreach (Character target in newList) { 
+                    if (target.dataRef.characterId != "Undying_WING" && !target.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
+                    {
+                        validTargets.Add(target);
+                    }
+                }
                 if (!(newList.Count == 0))
                 {
-                    Character myTarget = newList[UnityEngine.Random.Range(0, newList.Count)];
-                    // not gonna have this guy try to kill the Undying or the Mad Scientist with the Undying ability. It causes too many bugs.
-                    while (myTarget.dataRef.characterId == "Undying_WING" || myTarget.dataRef.characterId == "MadScientist_scm")
-                    {
-                        myTarget = newList[UnityEngine.Random.Range(0, newList.Count)];
-                    }
+                    Character myTarget = validTargets[UnityEngine.Random.Range(0, validTargets.Count)];
                     myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
                     myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
                     myTarget.statuses.statuses.Remove(ECharacterStatus.UnkillableByDemon);

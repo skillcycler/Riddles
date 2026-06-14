@@ -9,13 +9,15 @@ using Il2CppSystem;
 using Il2CppSystem.Reflection;
 using MelonLoader;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace RiddlerMod;
 
 [RegisterTypeInIl2Cpp]
 public class Necromancer : Role
 {
-    Character chRef;
+    bool hasUsedOnce = false;
+    
     private Il2CppSystem.Action action1;
     private Il2CppSystem.Action action2;
     private Il2CppSystem.Action action3;
@@ -38,7 +40,6 @@ public class Necromancer : Role
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (trigger != ETriggerPhase.Day) return;
-        chRef = charRef;
         CharacterPicker.Instance.StartPickCharacters(1, charRef);
         CharacterPicker.OnCharactersPicked += action1;
         CharacterPicker.OnStopPick += action2;
@@ -46,7 +47,6 @@ public class Necromancer : Role
     public override void BluffAct(ETriggerPhase trigger, Character charRef)
     {
         if (trigger != ETriggerPhase.Day) return;
-        chRef = charRef;
         CharacterPicker.Instance.StartPickCharacters(1, charRef);
         CharacterPicker.OnCharactersPicked += action3;
         CharacterPicker.OnStopPick += action2;
@@ -56,33 +56,50 @@ public class Necromancer : Role
         CharacterPicker.OnCharactersPicked -= action1;
         CharacterPicker.OnStopPick -= action2;
         Character c1 = CharacterPicker.PickedCharacters[0];
-        if (c1.GetRegisterAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm" || c1.alignment == EAlignment.Evil)
+        if (!hasUsedOnce) // kill the selected character dealing 2 damage
         {
-            return;
+            if (c1.state == ECharacterState.Dead || c1.id == charRef.id)
+            {
+                return;
+            }
+            charRef.pickableUses++;
+            hasUsedOnce = true;
+            PlayerController.PlayerInfo.health.Damage(2);
+            c1.KillByDemon(charRef);
+            c1.Reveal();
+            c1.onReveal.Invoke();
+            c1.RevealReal();
         }
+        else // revive
+        {
+            if (c1.GetRegisterAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm" || c1.alignment == EAlignment.Evil)
+            {
+                return;
+            }
 
-        if (c1.state != ECharacterState.Dead)
-        {
-            return;
-        }
-        if (c1.bluff)
-        {
-            if (c1.bluff.picking)
+            if (c1.state != ECharacterState.Dead)
+            {
+                return;
+            }
+            if (c1.bluff)
+            {
+                if (c1.bluff.picking)
+                {
+                    c1.pickableUses = 1;
+                    c1.pickable.SetActive(true);
+                }
+            }
+            else if (c1.dataRef.picking)
             {
                 c1.pickableUses = 1;
                 c1.pickable.SetActive(true);
             }
-        } else if (c1.dataRef.picking)
-        {
-            c1.pickableUses = 1;
-            c1.pickable.SetActive(true);
+            c1.state = ECharacterState.Alive;
+            c1.InitWithNoReset(c1.dataRef);
+            c1.Act(ETriggerPhase.Day);
+            string info = ConjureInfo(c1);
+            onActed?.Invoke(new ActedInfo(info));
         }
-        c1.state = ECharacterState.Alive;
-        c1.InitWithNoReset(c1.dataRef);
-        c1.Act(ETriggerPhase.Day);
-        PlayerController.PlayerInfo.health.Damage(2);
-        string info = ConjureInfo(c1);
-        onActed?.Invoke(new ActedInfo(info));
     }
     private void CharacterPickedLiar()
     {
@@ -91,36 +108,52 @@ public class Necromancer : Role
         CharacterPicker.OnStopPick -= action2;
 
         Character c1 = CharacterPicker.PickedCharacters[0];
-        if (c1.GetRegisterAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm" || c1.alignment == EAlignment.Evil)
+        if (!hasUsedOnce) // kill the selected character dealing 2 damage
         {
-            return;
+            if (c1.state == ECharacterState.Dead || c1.id == charRef.id)
+            {
+                return;
+            }
+            charRef.pickableUses++;
+            hasUsedOnce = true;
+            PlayerController.PlayerInfo.health.Damage(2);
+            c1.KillByDemon(charRef);
+            c1.Reveal();
+            c1.onReveal.Invoke();
+            c1.RevealReal();
         }
+        else // revive
+        {
+            if (c1.GetRegisterAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm" || c1.alignment == EAlignment.Evil)
+            {
+                return;
+            }
 
-        if (c1.state != ECharacterState.Dead)
-        {
-            return;
-        }
-        if (c1.bluff)
-        {
-            if (c1.bluff.picking)
+            if (c1.state != ECharacterState.Dead)
+            {
+                return;
+            }
+            if (c1.bluff)
+            {
+                if (c1.bluff.picking)
+                {
+                    c1.pickableUses = 1;
+                    c1.pickable.SetActive(true);
+                }
+            }
+            else if (c1.dataRef.picking)
             {
                 c1.pickableUses = 1;
                 c1.pickable.SetActive(true);
             }
+            c1.state = ECharacterState.Alive;
+            c1.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+            c1.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+            c1.InitWithNoReset(c1.dataRef);
+            c1.Act(ETriggerPhase.Day);
+            string info = ConjureInfo(c1);
+            onActed?.Invoke(new ActedInfo(info));
         }
-        else if (c1.dataRef.picking)
-        {
-            c1.pickableUses = 1;
-            c1.pickable.SetActive(true);
-        }
-        c1.state = ECharacterState.Alive;
-        c1.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-        c1.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
-        c1.InitWithNoReset(c1.dataRef);
-        c1.Act(ETriggerPhase.Day);
-        PlayerController.PlayerInfo.health.Damage(2);
-        string info = ConjureInfo(c1);
-        onActed?.Invoke(new ActedInfo(info));
     }
 
     public string ConjureInfo(Character character)

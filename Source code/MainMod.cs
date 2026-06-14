@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "0.14", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.0", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -51,11 +51,11 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Surveyor>();
         ClassInjector.RegisterTypeInIl2Cpp<Tracker>();
         ClassInjector.RegisterTypeInIl2Cpp<Pioneer>();
+        ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
 
         // Outcasts
-        
+
         ClassInjector.RegisterTypeInIl2Cpp<MadScientist>();
-        ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
         ClassInjector.RegisterTypeInIl2Cpp<Hitman>();
         ClassInjector.RegisterTypeInIl2Cpp<Ghost>();
         ClassInjector.RegisterTypeInIl2Cpp<Muddler>();
@@ -80,7 +80,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Mystifier>();
         Instance = this;
     }
-    public CharacterData makeNewCharacter(string name, EAlignment startingAlignment, ECharacterType type, bool bluffable, bool usuallyDisguised, string flavorText = "", bool picking = false)
+    public CharacterData makeNewCharacter(string name, EAlignment startingAlignment, ECharacterType type, bool bluffable, bool usuallyDisguised, string flavorText, bool picking = false)
     {
         CharacterData character = new CharacterData();
         character.name = name;
@@ -91,7 +91,7 @@ public class MainMod : MelonMod
         character.type = type;
         character.bluffable = bluffable;
         character.additionalFlavorTexts = new Il2CppStringArray(1);
-        character.additionalFlavorTexts[0] = character.flavorText;
+        character.additionalFlavorTexts[0] = flavorText;
         character.characterId = name + "_scm";
         switch (type)
         {
@@ -121,13 +121,35 @@ public class MainMod : MelonMod
         character.bundledCharacters = new Il2CppSystem.Collections.Generic.List<CharacterData>();
         character.additionalPossibleCharacters = new AddedCharacterTypes();
         character.usuallyDisguised = usuallyDisguised;
+        character.hints = "";
+        character.ifLies = "";
         return character;
+    }
+    public AddedCharacterTypes MakeAddedCharacters(int v, int o, int m, int d)
+    {
+        AddedCharacterTypes a = new AddedCharacterTypes();
+        CharacterCount cv = new CharacterCount();
+        cv.count = v;
+        cv.type = ECharacterType.Villager;
+        CharacterCount co = new CharacterCount();
+        co.count = o;
+        co.type = ECharacterType.Outcast;
+        CharacterCount cm = new CharacterCount();
+        cm.count = m;
+        cm.type = ECharacterType.Minion;
+        CharacterCount cd = new CharacterCount();
+        cd.count = d;
+        cd.type = ECharacterType.Demon;
+        a.count.Add(cv);
+        a.count.Add(co);
+        a.count.Add(cm);
+        a.count.Add(cd);
+        return a;
     }
     public override void OnLateInitializeMelon()
     {
         GameObject content = GameObject.Find("Game/Gameplay/Content");
         NightPhase nightPhase = content.GetComponent<NightPhase>();
-        //GameplayEvents.OnDeckShuffled += new Action(OnRoundStart);
 
         CharacterData Riddler = makeNewCharacter("Riddler", EAlignment.Good, ECharacterType.Villager, true, false, "\"One day I'll cause a paradox.\"");
         Riddler.role = new Riddler();
@@ -142,400 +164,112 @@ public class MainMod : MelonMod
         Swapper.ifLies = "Both targets are Corrupted if they are Villagers.";
 
 
-        CharacterData Mathematician = makeNewCharacter("Swapper", EAlignment.Good, ECharacterType.Villager, true, false, "\"21\"");
+        CharacterData Mathematician = makeNewCharacter("Mathematician", EAlignment.Good, ECharacterType.Villager, true, false, "\"21\"");
         Mathematician.role = new Mathematician();
-        Mathematician.name = "Mathematician";
-        Mathematician.characterName = "Mathematician";
         Mathematician.description = "Learn a number equal to the sum of the card numbers of 2 Evils.";
 
-        //rewriting all of this is gonna take a really long time. will finish in a future update, but definitely will do it before adding another character
-        CharacterData Commander = new CharacterData();
+        CharacterData Commander = makeNewCharacter("Commander", EAlignment.Good, ECharacterType.Villager, true, false, "\"Leads the Villagers by day, hunts the Minions at night.\"", true);
         Commander.role = new Commander();
-        Commander.name = "Commander";
-        Commander.characterName = "Commander";
         Commander.description = "Pick 2 cards: Learn a card of a different character type from both.";
-        Commander.flavorText = "\"Leads the Villagers by day, hunts the Minions at night.\"";
-        Commander.hints = "";
-        Commander.ifLies = "";
-        Commander.picking = true;
-        Commander.startingAlignment = EAlignment.Good;
-        Commander.type = ECharacterType.Villager;
-        Commander.abilityUsage = EAbilityUsage.Once;
-        Commander.bluffable = true;
-        Commander.characterId = "Commander_scm";
-        Commander.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Commander.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Commander.color = new Color(1f, 0.935f, 0.7302f);
-        Commander.additionalFlavorTexts = new Il2CppStringArray(1);
-        Commander.additionalFlavorTexts[0] = Commander.flavorText;
 
-        CharacterData Director = new CharacterData();
+        CharacterData Director = makeNewCharacter("Director", EAlignment.Good, ECharacterType.Villager, true, false, "\"There are no lights. There is no camera. But there's certainly a lot of action.\"");
         Director.role = new Director();
-        Director.name = "Director";
-        Director.characterName = "Director";
         Director.description = "Learn a consecutive group of cards that contain 2 Evils.";
-        Director.flavorText = "\"There are no lights. There is no camera. But there's certainly a lot of action.\"";
         Director.hints = "I always go clockwise from the first number to the second number. Both endpoints are included.";
-        Director.ifLies = "";
-        Director.picking = false;
-        Director.startingAlignment = EAlignment.Good;
-        Director.type = ECharacterType.Villager;
-        Director.bluffable = true;
-        Director.characterId = "Director_scm";
-        Director.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Director.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Director.color = new Color(1f, 0.935f, 0.7302f);
-        Director.additionalFlavorTexts = new Il2CppStringArray(1);
-        Director.additionalFlavorTexts[0] = Director.flavorText;
 
-        CharacterData Scanner = new CharacterData();
+        CharacterData Scanner = makeNewCharacter("Scanner", EAlignment.Good, ECharacterType.Villager, true, false, "\"I spy with my two little eyes, two Outcasts in disguise!\"");
         Scanner.role = new Scanner();
-        Scanner.name = "Scanner";
-        Scanner.characterName = "Scanner";
         Scanner.description = "Learn how many Outcasts are Disguised or being used as a Disguise.";
-        Scanner.flavorText = "\"I spy with my two little eyes, two Outcasts in disguise!\"";
-        Scanner.hints = "The Outcast Trickster counts towards this.";
-        Scanner.ifLies = "";
-        Scanner.picking = false;
-        Scanner.startingAlignment = EAlignment.Good;
-        Scanner.type = ECharacterType.Villager;
-        Scanner.bluffable = true;
-        Scanner.characterId = "Scanner_scm";
-        Scanner.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Scanner.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Scanner.color = new Color(1f, 0.935f, 0.7302f);
-        Scanner.additionalFlavorTexts = new Il2CppStringArray(1);
-        Scanner.additionalFlavorTexts[0] = Scanner.flavorText;
 
-        CharacterData Obsessor = new CharacterData();
+        CharacterData Obsessor = makeNewCharacter("Obsessor", EAlignment.Good, ECharacterType.Villager, true, false, "\"Once snuck into the Lover's house at night. You'll never guess what happened next\"");
         Obsessor.role = new Obsessor();
-        Obsessor.name = "Obsessor";
-        Obsessor.characterName = "Obsessor";
         Obsessor.description = "Learn how many Evils are next to a certain role.";
-        Obsessor.flavorText = "\"Once snuck into the Lover's house at night. You'll never guess what happened next\"";
-        Obsessor.hints = "";
-        Obsessor.ifLies = "";
-        Obsessor.picking = false;
-        Obsessor.startingAlignment = EAlignment.Good;
-        Obsessor.type = ECharacterType.Villager;
-        Obsessor.bluffable = true;
-        Obsessor.characterId = "Obsessor_scm";
-        Obsessor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Obsessor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Obsessor.color = new Color(1f, 0.935f, 0.7302f);
-        Obsessor.additionalFlavorTexts = new Il2CppStringArray(1);
-        Obsessor.additionalFlavorTexts[0] = Obsessor.flavorText;
 
-        CharacterData Lawyer = new CharacterData();
+        CharacterData Lawyer = makeNewCharacter("Lawyer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Do you swear to tell the truth, the whole truth, and nothing but the truth?\"");
         Lawyer.role = new Lawyer();
-        Lawyer.name = "Lawyer";
-        Lawyer.characterName = "Lawyer";
         Lawyer.description = "My neighbors tell the truth. Learn a truthful character.";
-        Lawyer.flavorText = "\"Do you swear to tell the truth, the whole truth, and nothing but the truth?\"";
         Lawyer.hints = "If I am not Lying:\nI will only point to my neighbors if they are evil.";
-        Lawyer.ifLies = "";
-        Lawyer.picking = false;
-        Lawyer.startingAlignment = EAlignment.Good;
-        Lawyer.type = ECharacterType.Villager;
-        Lawyer.bluffable = true;
-        Lawyer.characterId = "Lawyer_scm";
-        Lawyer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Lawyer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Lawyer.color = new Color(1f, 0.935f, 0.7302f);
-        Lawyer.additionalFlavorTexts = new Il2CppStringArray(1);
-        Lawyer.additionalFlavorTexts[0] = Lawyer.flavorText;
 
-        CharacterData Psychic = new CharacterData();
+        CharacterData Psychic = makeNewCharacter("Psychic", EAlignment.Good, ECharacterType.Villager, true, false, "\"I may be able to read your mind.\"");
         Psychic.role = new Psychic();
-        Psychic.name = "Psychic";
-        Psychic.characterName = "Psychic";
         Psychic.description = "Learn 2 characters. Exactly 1 is in play.";
-        Psychic.flavorText = "\"I may be able to read your mind.\"";
         Psychic.hints = "I can see through misregistration.";
         Psychic.ifLies = "Neither or both are in play.";
-        Psychic.picking = false;
-        Psychic.startingAlignment = EAlignment.Good;
-        Psychic.type = ECharacterType.Villager;
-        Psychic.bluffable = true;
-        Psychic.characterId = "Psychic_scm";
-        Psychic.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Psychic.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Psychic.color = new Color(1f, 0.935f, 0.7302f);
-        Psychic.additionalFlavorTexts = new Il2CppStringArray(1);
-        Psychic.additionalFlavorTexts[0] = Psychic.flavorText;
 
-        CharacterData Weaver = new CharacterData();
+        CharacterData Weaver = makeNewCharacter("Weaver", EAlignment.Good, ECharacterType.Villager, true, false, "\"The Knitter's younger sister. Still recovering from that incident with the Evil Villagers.\"");
         Weaver.role = new Weaver();
-        Weaver.name = "Weaver";
-        Weaver.characterName = "Weaver";
         Weaver.description = "Learn how many pairs of Villagers there are.";
-        Weaver.flavorText = "\"The Knitter's younger sister. Still recovering from that incident with the Evil Villagers.\"";
-        Weaver.hints = "";
-        Weaver.ifLies = "";
-        Weaver.picking = false;
-        Weaver.startingAlignment = EAlignment.Good;
-        Weaver.type = ECharacterType.Villager;
-        Weaver.bluffable = true;
-        Weaver.characterId = "Weaver_scm";
-        Weaver.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Weaver.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Weaver.color = new Color(1f, 0.935f, 0.7302f);
-        Weaver.additionalFlavorTexts = new Il2CppStringArray(1);
-        Weaver.additionalFlavorTexts[0] = Weaver.flavorText;
 
-        CharacterData Nurse = new CharacterData();
+        CharacterData Nurse = makeNewCharacter("Nurse", EAlignment.Good, ECharacterType.Villager, true, false, "\"I can cure the Drunk, I promise!\"", true);
         Nurse.role = new Nurse();
-        Nurse.name = "Nurse";
-        Nurse.characterName = "Nurse";
-        Nurse.description = "Pick 1 alive card: If Corrupted, cure and refresh their ability.";
-        Nurse.flavorText = "\"I can cure the Drunk, I promise!\"";
+        Nurse.description = "Pick 1 alive card: If Corrupted, cure and refresh their ability.\n\nIf I am not Lying and there are no Corrupted characters, I will say so.";
         Nurse.hints = "My ability refreshes every night.";
         Nurse.ifLies = "\"I couldn't cure #x\"";
-        Nurse.picking = true;
         Nurse.abilityUsage = EAbilityUsage.ResetAfterNight;
-        Nurse.startingAlignment = EAlignment.Good;
-        Nurse.type = ECharacterType.Villager;
-        Nurse.bluffable = true;
-        Nurse.characterId = "Nurse_scm";
-        Nurse.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Nurse.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Nurse.color = new Color(1f, 0.935f, 0.7302f);
-        Nurse.additionalFlavorTexts = new Il2CppStringArray(1);
-        Nurse.additionalFlavorTexts[0] = Nurse.flavorText;
 
-        CharacterData Stylist = new CharacterData();
+        CharacterData Stylist = makeNewCharacter("Stylist", EAlignment.Good, ECharacterType.Villager, true, false, "\"Taking clients from the Swapper since 2025\"", true);
         Stylist.role = new Stylist();
-        Stylist.name = "Stylist";
-        Stylist.characterName = "Stylist";
         Stylist.description = "Pick an alive Disguised character. Change their Disguise.";
-        Stylist.flavorText = "\"Taking clients from the Swapper since 2025\"";
-        Stylist.hints = "";
         Stylist.ifLies = "\"I couldn't change #x's Disguise\"";
-        Stylist.picking = true;
-        Stylist.startingAlignment = EAlignment.Good;
-        Stylist.type = ECharacterType.Villager;
-        Stylist.bluffable = true;
-        Stylist.characterId = "Stylist_scm";
-        Stylist.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Stylist.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Stylist.color = new Color(1f, 0.935f, 0.7302f);
-        Stylist.additionalFlavorTexts = new Il2CppStringArray(1);
-        Stylist.additionalFlavorTexts[0] = Stylist.flavorText;
 
-        CharacterData Coach = new CharacterData();
+        CharacterData Coach = makeNewCharacter("Coach", EAlignment.Good, ECharacterType.Villager, true, false, "\"Demon Bluff is a team building game.\"", true);
         Coach.role = new Coach();
-        Coach.name = "Coach";
-        Coach.characterName = "Coach";
         Coach.description = "Pick 1 card: Learn how many characters near them [Range 2] are the same Type as them.";
-        Coach.flavorText = "\"Demon Bluff is now a team building game.\"";
-        Coach.hints = "";
-        Coach.ifLies = "";
-        Coach.picking = true;
-        Coach.startingAlignment = EAlignment.Good;
-        Coach.type = ECharacterType.Villager;
-        Coach.bluffable = true;
-        Coach.characterId = "Coach_scm";
-        Coach.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Coach.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Coach.color = new Color(1f, 0.935f, 0.7302f);
-        Coach.additionalFlavorTexts = new Il2CppStringArray(1);
-        Coach.additionalFlavorTexts[0] = Coach.flavorText;
+        Coach.abilityUsage = EAbilityUsage.ResetAfterNight;
 
-        CharacterData Comedian = new CharacterData();
+        CharacterData Comedian = makeNewCharacter("Comedian", EAlignment.Good, ECharacterType.Villager, true, false, "\"You will be blown away by his performance when he teams up with the Jester!\"", true);
         Comedian.role = new Comedian();
-        Comedian.name = "Comedian";
-        Comedian.characterName = "Comedian";
         Comedian.description = "Pick 3 cards: Learn 2 that are both disguised or both not disguised.";
-        Comedian.flavorText = "\"You will be blown away by his performance when he teams up with the Jester!\"";
-        Comedian.hints = "";
-        Comedian.ifLies = "";
-        Comedian.picking = true;
-        Comedian.startingAlignment = EAlignment.Good;
-        Comedian.type = ECharacterType.Villager;
-        Comedian.bluffable = true;
-        Comedian.characterId = "Comedian_scm";
-        Comedian.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Comedian.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Comedian.color = new Color(1f, 0.935f, 0.7302f);
-        Comedian.additionalFlavorTexts = new Il2CppStringArray(1);
-        Comedian.additionalFlavorTexts[0] = Comedian.flavorText;
 
-        CharacterData Innkeeper = new CharacterData();
+        CharacterData Innkeeper = makeNewCharacter("Innkeeper", EAlignment.Good, ECharacterType.Villager, true, false, "\"Need a place to stay? I got you!\"", true);
         Innkeeper.role = new Innkeeper();
-        Innkeeper.name = "Innkeeper";
-        Innkeeper.characterName = "Innkeeper";
         Innkeeper.description = "On activate: Heal 1 HP. Refreshes at night.";
-        Innkeeper.flavorText = "\"Need a place to stay? I got you!\"";
-        Innkeeper.hints = "";
         Innkeeper.ifLies = "Lose 3 HP.";
-        Innkeeper.picking = true;
         Innkeeper.abilityUsage = EAbilityUsage.ResetAfterNight;
-        Innkeeper.startingAlignment = EAlignment.Good;
-        Innkeeper.type = ECharacterType.Villager;
-        Innkeeper.bluffable = true;
-        Innkeeper.characterId = "Innkeeper_scm";
-        Innkeeper.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Innkeeper.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Innkeeper.color = new Color(1f, 0.935f, 0.7302f);
-        Innkeeper.additionalFlavorTexts = new Il2CppStringArray(1);
-        Innkeeper.additionalFlavorTexts[0] = Innkeeper.flavorText;
 
-        CharacterData Recruiter = new CharacterData();
+        CharacterData Recruiter = makeNewCharacter("Recuiter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Hello and Welcome to the greatest village of all time!\"");
         Recruiter.role = new Recruiter();
-        Recruiter.name = "Recruiter";
-        Recruiter.characterName = "Recruiter";
         Recruiter.description = "Game Start: 1 random Outcast is turned into a Villager.";
-        Recruiter.flavorText = "\"Hello and Welcome to the greatest village of all time!\"";
-        Recruiter.hints = "";
-        Recruiter.ifLies = "";
-        Recruiter.picking = false;
-        Recruiter.startingAlignment = EAlignment.Good;
-        Recruiter.type = ECharacterType.Villager;
-        Recruiter.bluffable = true;
-        Recruiter.characterId = "Recruiter_scm";
-        Recruiter.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Recruiter.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Recruiter.color = new Color(1f, 0.935f, 0.7302f);
-        Recruiter.additionalFlavorTexts = new Il2CppStringArray(1);
-        Recruiter.additionalFlavorTexts[0] = Recruiter.flavorText;
+        Recruiter.additionalPossibleCharacters = MakeAddedCharacters(0, -1, 0, 0);
 
-        CharacterData Engineer = new CharacterData();
+        CharacterData Engineer = makeNewCharacter("Engineer", EAlignment.Good, ECharacterType.Villager, true, false, "\"The long lost brother of the Architect.\"");
         Engineer.role = new Engineer();
-        Engineer.name = "Engineer";
-        Engineer.characterName = "Engineer";
         Engineer.description = "Learn whether the top or bottom half of the circle has more Evils.";
-        Engineer.flavorText = "\"The long lost brother of the Architect.\"";
-        Engineer.hints = "The top half is considered as all cards within [Range (Cards/4)] of the highest numbered card.";
-        Engineer.ifLies = "";
-        Engineer.picking = false;
-        Engineer.startingAlignment = EAlignment.Good;
-        Engineer.type = ECharacterType.Villager;
-        Engineer.bluffable = true;
-        Engineer.characterId = "Engineer_scm";
-        Engineer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Engineer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Engineer.color = new Color(1f, 0.935f, 0.7302f);
-        Engineer.additionalFlavorTexts = new Il2CppStringArray(1);
-        Engineer.additionalFlavorTexts[0] = Engineer.flavorText;
+        Engineer.hints = "The top half is considered as all cards within [Range (Cards/4)] of the highest numbered card.\n\nThe bottom half is all cards outside that range, except in the case where the number of cards is a multiple of 4, in which the leftmost and rightmost cards are also counted.";
 
-        CharacterData Governor = new CharacterData();
+        CharacterData Governor = makeNewCharacter("Governor", EAlignment.Good, ECharacterType.Villager, true, false, "\"I know everyone around here.\"");
         Governor.role = new Governor();
-        Governor.name = "Governor";
-        Governor.characterName = "Governor";
         Governor.description = "Learn how many Villagers are actually in the village.";
-        Governor.flavorText = "\"I know everyone around here.\"";
-        Governor.hints = "";
         Governor.ifLies = "The number will be off by 1.";
-        Governor.picking = false;
-        Governor.startingAlignment = EAlignment.Good;
-        Governor.type = ECharacterType.Villager;
-        Governor.bluffable = true;
-        Governor.characterId = "Governor_scm";
-        Governor.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Governor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Governor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Governor.color = new Color(1f, 0.935f, 0.7302f);
-        Governor.additionalFlavorTexts = new Il2CppStringArray(1);
-        Governor.additionalFlavorTexts[0] = Governor.flavorText;
 
-        CharacterData Officer = new CharacterData();
+        CharacterData Officer = makeNewCharacter("Officer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Worried about not knowing if that Undying is safe to stab? Fear not, I'm here to save the day.\"");
         Officer.role = new Officer();
-        Officer.name = "Officer";
-        Officer.characterName = "Officer";
         Officer.description = "Learn how many characters register as Evil.";
-        Officer.flavorText = "\"Worried about not knowing if that Undying is safe to stab? Fear not, I'm here to save the day.\"";
-        Officer.hints = "";
         Officer.ifLies = "The number will be off by 1.";
-        Officer.picking = false;
-        Officer.startingAlignment = EAlignment.Good;
-        Officer.type = ECharacterType.Villager;
-        Officer.bluffable = true;
-        Officer.characterId = "Officer_scm";
-        Officer.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Officer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Officer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Officer.color = new Color(1f, 0.935f, 0.7302f);
-        Officer.additionalFlavorTexts = new Il2CppStringArray(1);
-        Officer.additionalFlavorTexts[0] = Officer.flavorText;
 
-        CharacterData Cowboy = new CharacterData();
+        CharacterData Cowboy = makeNewCharacter("Cowboy", EAlignment.Good, ECharacterType.Villager, true, false, "\"Never approach a bull from the front, a horse from the rear or a fool from any direction.\"");
         Cowboy.role = new Cowboy();
-        Cowboy.name = "Cowboy";
-        Cowboy.characterName = "Cowboy";
         Cowboy.description = "Learn an Evil or Evil-registering Villager or Outcast.";
-        Cowboy.flavorText = "\"Never approach a bull from the front, a horse from the rear or a fool from any direction.\"";
-        Cowboy.hints = "";
-        Cowboy.ifLies = "";
-        Cowboy.picking = false;
-        Cowboy.startingAlignment = EAlignment.Good;
-        Cowboy.type = ECharacterType.Villager;
-        Cowboy.bluffable = true;
-        Cowboy.characterId = "Cowboy_scm";
-        Cowboy.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Cowboy.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Cowboy.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Cowboy.color = new Color(1f, 0.935f, 0.7302f);
-        Cowboy.additionalFlavorTexts = new Il2CppStringArray(1);
-        Cowboy.additionalFlavorTexts[0] = Cowboy.flavorText;
+        Cowboy.hints = "For example, I see the Wretch as an Evil-registering Outcast.";
 
-        CharacterData Surveyor = new CharacterData();
+        CharacterData Surveyor = makeNewCharacter("Surveyor", EAlignment.Good, ECharacterType.Villager, true, false, "This land belongs to the Outcasts, not the Minions. Wretch, you're not welcome here.");
         Surveyor.role = new Surveyor();
-        Surveyor.name = "Surveyor";
-        Surveyor.characterName = "Surveyor";
         Surveyor.description = "Learn how many Outcasts and Minions there actually are";
-        Surveyor.flavorText = "This land belongs to the Outcasts. Wretch, you're not welcome here.";
-        Surveyor.hints = "";
-        Surveyor.ifLies = "";
-        Surveyor.picking = false;
-        Surveyor.startingAlignment = EAlignment.Good;
-        Surveyor.type = ECharacterType.Villager;
-        Surveyor.bluffable = true;
-        Surveyor.characterId = "Surveyor_scm";
-        Surveyor.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Surveyor.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Surveyor.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Surveyor.color = new Color(1f, 0.935f, 0.7302f);
-        Surveyor.additionalFlavorTexts = new Il2CppStringArray(1);
-        Surveyor.additionalFlavorTexts[0] = Surveyor.flavorText;
 
-        CharacterData Tracker = new CharacterData();
+        CharacterData Tracker = makeNewCharacter("Tracker", EAlignment.Good, ECharacterType.Villager, true, false, "\"You're not hiding from me that easily!\"");
         Tracker.role = new Tracker();
-        Tracker.name = "Tracker";
-        Tracker.characterName = "Tracker";
-        Tracker.description = "Learn who is a fake Outcast";
-        Tracker.flavorText = "\"You're not hiding that easily!\"";
-        Tracker.hints = "";
-        Tracker.ifLies = "";
-        Tracker.picking = false;
-        Tracker.startingAlignment = EAlignment.Good;
-        Tracker.type = ECharacterType.Villager;
-        Tracker.bluffable = true;
-        Tracker.characterId = "Tracker_scm";
-        Tracker.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Tracker.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Tracker.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Tracker.color = new Color(1f, 0.935f, 0.7302f);
-        Tracker.additionalFlavorTexts = new Il2CppStringArray(1);
-        Tracker.additionalFlavorTexts[0] = Tracker.flavorText;
+        Tracker.description = "Learn who is Disguised as an Outcast.";
 
-        CharacterData Pioneer = new CharacterData();
+        CharacterData Pioneer = makeNewCharacter("Pioneer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Why does everyone keep mistaking me for the Scout?\"");
         Pioneer.role = new Pioneer();
-        Pioneer.name = "Pioneer";
         Pioneer.description = "Learn how many cards a particular Evil is from my closest Evil.";
-        Pioneer.flavorText = "\"Why does everyone keep mistaking me for the Scout?\"";
         Pioneer.hints = "If my closest 2 Evils are equidistant, which one I refer to is arbitrary.";
-        Pioneer.ifLies = "";
-        Pioneer.picking = false;
-        Pioneer.startingAlignment = EAlignment.Good;
-        Pioneer.type = ECharacterType.Villager;
-        Pioneer.bluffable = true;
-        Pioneer.characterId = "Pioneer_scm";
-        Pioneer.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Pioneer.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Pioneer.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Pioneer.color = new Color(1f, 0.935f, 0.7302f);
-        Pioneer.additionalFlavorTexts = new Il2CppStringArray(1);
-        Pioneer.additionalFlavorTexts[0] = Pioneer.flavorText;
+
+        CharacterData Necromancer = makeNewCharacter("Necromancer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Second chances are real. Just like Empaths and Mayors.\"", true);
+        Necromancer.role = new Necromancer();
+        Necromancer.description = "On first use:\nPick 1 alive card (not myself) and kill it, taking 2 damage.\n\nOn second use: Pick 1 dead card: Revive it. I cannot revive Evils or the Ghost.";
+        Necromancer.ifLies = "The revived card will lie with its new info.";
+
         /*
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
@@ -632,398 +366,99 @@ public class MainMod : MelonMod
         Trickster_m_register.additionalFlavorTexts = new Il2CppStringArray(1);
         Trickster_m_register.additionalFlavorTexts[0] = Trickster_m_register.flavorText;
         */
-        CharacterData MadScientist = new CharacterData();
+        
+        CharacterData MadScientist = makeNewCharacter("MadScientist", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Lil bro is ANGRY at the village\"");
         MadScientist.role = new MadScientist();
         MadScientist.name = "Mad Scientist";
         MadScientist.characterName = "Mad Scientist";
         MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
-        MadScientist.flavorText = "\"Lil bro is ANGRY at the village\"";
         MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.\n\nI will not Disguise if part of my Outcast's ability is to Disguise.";
-        MadScientist.ifLies = "";
-        MadScientist.picking = false;
-        MadScientist.startingAlignment = EAlignment.Good;
-        MadScientist.type = ECharacterType.Outcast;
-        MadScientist.bluffable = false;
-        MadScientist.characterId = "MadScientist_scm";
-        MadScientist.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        MadScientist.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        MadScientist.color = new Color(0.9659f, 1f, 0.4472f);
-        MadScientist.additionalFlavorTexts = new Il2CppStringArray(1);
-        MadScientist.additionalFlavorTexts[0] = MadScientist.flavorText;
-
-        CharacterData Necromancer = new CharacterData();
-        Necromancer.role = new Necromancer();
-        Necromancer.name = "Necromancer";
-        Necromancer.characterName = "Necromancer";
-        Necromancer.description = "Pick 1 dead card: Revive it and lose 2 Health. I cannot revive Evils.";
-        Necromancer.flavorText = "\"Second chances are real. Just like Empaths and Mayors.\"";
-        Necromancer.hints = "";
-        Necromancer.ifLies = "The card will lie with its new info no matter what.";
-        Necromancer.picking = true;
-        Necromancer.startingAlignment = EAlignment.Good;
-        Necromancer.type = ECharacterType.Outcast;
-        Necromancer.bluffable = true;
-        Necromancer.characterId = "Necromancer_scm";
-        Necromancer.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        Necromancer.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        Necromancer.color = new Color(0.9659f, 1f, 0.4472f);
-        Necromancer.additionalFlavorTexts = new Il2CppStringArray(1);
-        Necromancer.additionalFlavorTexts[0] = Necromancer.flavorText;
-
-        CharacterData Hitman = new CharacterData();
+        
+        CharacterData Hitman = makeNewCharacter("Hitman", EAlignment.Evil, ECharacterType.Outcast, false, true, "\"No one is safe from me, not even myself\"");
         Hitman.role = new Hitman();
         Hitman.name = "Hitman";
         Hitman.characterName = "Hitman";
         Hitman.description = "I Lie and Disguise.\n\nOn odd numbered nights: Kill a random card.\nOn even numbered nights: lose 3 HP.";
-        Hitman.flavorText = "\"No one is safe from me, not even myself\"";
         Hitman.hints = "I can kill any card, including Knights, Demons, and myself.\nIf there is no night cycle, I'm just a regular Evil Outcast.";
-        Hitman.ifLies = "";
-        Hitman.picking = false;
-        Hitman.startingAlignment = EAlignment.Evil;
-        Hitman.type = ECharacterType.Outcast;
-        Hitman.bluffable = false;
-        Hitman.characterId = "Hitman_scm";
-        Hitman.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        Hitman.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        Hitman.color = new Color(0.9659f, 1f, 0.4472f);
-        Hitman.additionalFlavorTexts = new Il2CppStringArray(1);
-        Hitman.additionalFlavorTexts[0] = Hitman.flavorText;
         
-        CharacterData Ghost = new CharacterData();
+        CharacterData Ghost = makeNewCharacter("Ghost", EAlignment.Good, ECharacterType.Outcast, false, false, "\"I would say 'Boo!' but that's not scary anymore.\"");
         Ghost.role = new Ghost();
-        Ghost.name = "Ghost";
-        Ghost.characterName = "Ghost";
-        Ghost.description = "On Reveal: Die, dealing 1 damage to you. One unrevealed Good character is Corrupted.";
-        Ghost.flavorText = "\"I would say 'Boo!' but that's not scary anymore.\"";
-        Ghost.hints = "I cannot be revived.";
-        Ghost.ifLies = "";
-        Ghost.picking = false;
-        Ghost.startingAlignment = EAlignment.Good;
-        Ghost.type = ECharacterType.Outcast;
-        Ghost.bluffable = false;
-        Ghost.characterId = "Ghost_scm";
-        Ghost.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        Ghost.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        Ghost.color = new Color(0.9659f, 1f, 0.4472f);
-        Ghost.additionalFlavorTexts = new Il2CppStringArray(1);
-        Ghost.additionalFlavorTexts[0] = Ghost.flavorText;
+        Ghost.description = "On Reveal: Die, dealing 1 damage to you. One unrevealed Good character is Corrupted. The night counter does not tick.";
+        Ghost.hints = "I cannot be revived by the Necromancer.";
 
-
-        CharacterData Muddler = new CharacterData();
+        CharacterData Muddler = makeNewCharacter("Muddler", EAlignment.Good, ECharacterType.Outcast, true, false, "\"I don't know, was it?\"");
         Muddler.role = new Muddler();
-        Muddler.name = "Muddler";
-        Muddler.characterName = "Muddler";
         Muddler.description = "Status effects (like Corrupted) are not displayed.";
-        Muddler.flavorText = "\"I don't know, was it?\"";
-        Muddler.hints = "";
-        Muddler.ifLies = "";
-        Muddler.picking = false;
-        Muddler.startingAlignment = EAlignment.Good;
-        Muddler.type = ECharacterType.Outcast;
-        Muddler.bluffable = false;
-        Muddler.characterId = "Muddler_scm";
-        Muddler.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        Muddler.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        Muddler.color = new Color(0.9659f, 1f, 0.4472f);
-        Muddler.additionalFlavorTexts = new Il2CppStringArray(1);
-        Muddler.additionalFlavorTexts[0] = Muddler.flavorText;
-
-
-        CharacterData Confectioner = new CharacterData();
+        
+        CharacterData Confectioner = makeNewCharacter("Confectioner", EAlignment.Good, ECharacterType.Outcast, false, true, "\"She got jealous of the Baker. So she took revenge.\"");
         Confectioner.role = new Confectioner();
-        Confectioner.name = "Confectioner";
-        Confectioner.characterName = "Confectioner";
-        Confectioner.description = "Game Start: One random Villager is baked.\n\nI disguise as the Original Baker.";
-        Confectioner.flavorText = "\"Bakers are my favorite character.\"";
-        Confectioner.hints = "";
-        Confectioner.ifLies = "";
-        Confectioner.picking = false;
-        Confectioner.startingAlignment = EAlignment.Good;
-        Confectioner.type = ECharacterType.Outcast;
-        Confectioner.bluffable = false;
-        Confectioner.characterId = "Confectioner_scm";
-        Confectioner.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
-        Confectioner.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
-        Confectioner.color = new Color(0.9659f, 1f, 0.4472f);
-        Confectioner.additionalFlavorTexts = new Il2CppStringArray(1);
-        Confectioner.additionalFlavorTexts[0] = Confectioner.flavorText;
+        Confectioner.description = "Game Start: One random Villager is turned into a Corrupted Baker.\n\nI disguise as the Original Baker.";
 
-        CharacterData Accuser = new CharacterData();
+        CharacterData Accuser = makeNewCharacter("Accuser", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Uno reverse card!\"");
         Accuser.role = new Accuser();
-        Accuser.name = "Accuser";
-        Accuser.characterName = "Accuser";
         Accuser.description = "Game Start: One adjacent Good Villager registers a random Evil Minion.\n\nI Lie and Disguise.";
-        Accuser.flavorText = "\"Uno reverse card!\"";
-        Accuser.hints = "";
-        Accuser.ifLies = "";
-        Accuser.picking = false;
-        Accuser.startingAlignment = EAlignment.Evil;
-        Accuser.type = ECharacterType.Minion;
-        Accuser.abilityUsage = EAbilityUsage.Once;
-        Accuser.bluffable = false;
-        Accuser.characterId = "Accuser_scm";
-        Accuser.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Accuser.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
-        Accuser.color = new Color(0.8491f, 0.4555f, 0f);
-        Accuser.additionalFlavorTexts = new Il2CppStringArray(1);
-        Accuser.additionalFlavorTexts[0] = Accuser.flavorText;
 
-        CharacterData Hypnotist = new CharacterData();
+        CharacterData Hypnotist = makeNewCharacter("Hypnotist", EAlignment.Evil, ECharacterType.Minion, false, true, "\"You are getting sleepy...\"");
         Hypnotist.role = new Hypnotist();
-        Hypnotist.name = "Hypnotist";
-        Hypnotist.characterName = "Hypnotist";
-        Hypnotist.description = "I Disguise as and say something that would normally never be a Lie.";
-        Hypnotist.flavorText = "\"You are getting sleepy...\"";
         Hypnotist.hints = "I may tell the truth, but that doesn't mean I have their ability.\n\nI always register as Truthful.";
-        Hypnotist.ifLies = "";
-        Hypnotist.picking = false;
-        Hypnotist.startingAlignment = EAlignment.Evil;
-        Hypnotist.type = ECharacterType.Minion;
-        Hypnotist.abilityUsage = EAbilityUsage.Once;
-        Hypnotist.bluffable = false;
-        Hypnotist.characterId = "Hypnotist_scm";
-        Hypnotist.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Hypnotist.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
-        Hypnotist.color = new Color(0.8491f, 0.4555f, 0f);
-        Hypnotist.additionalFlavorTexts = new Il2CppStringArray(1);
-        Hypnotist.additionalFlavorTexts[0] = Hypnotist.flavorText;
 
-        CharacterData Channeler = new CharacterData();
+        CharacterData Channeler = makeNewCharacter("Channeler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"I will follow in your footsteps.\"");
         Channeler.role = new Channeler();
-        Channeler.name = "Channeler";
-        Channeler.characterName = "Channeler";
-        Channeler.description = "I copy the ability of another Evil.";
-        Channeler.flavorText = "\"I will follow in your footsteps.\"";
-        Channeler.hints = "";
-        Channeler.ifLies = "";
-        Channeler.picking = false;
-        Channeler.startingAlignment = EAlignment.Evil;
-        Channeler.type = ECharacterType.Minion;
-        Channeler.abilityUsage = EAbilityUsage.Once;
-        Channeler.bluffable = false;
-        Channeler.characterId = "Channeler_scm";
-        Channeler.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Channeler.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
-        Channeler.color = new Color(0.8491f, 0.4555f, 0f);
-        Channeler.additionalFlavorTexts = new Il2CppStringArray(1);
-        Channeler.additionalFlavorTexts[0] = Channeler.flavorText;
+        Channeler.description = "I copy the ability of another Minion or Demon.";
         
-        CharacterData Sleeper = new CharacterData();
+        CharacterData Sleeper = makeNewCharacter("Sleeper", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Ever feel like you get enough sleep? Not anymore!\"");
         Sleeper.role = new Sleeper();
-        Sleeper.name = "Sleeper";
-        Sleeper.characterName = "Sleeper";
         Sleeper.description = "The night cycle is 1 tick shorter if there is one.";
-        Sleeper.flavorText = "\"Ever feel like you get enough sleep? Well too bad. You're not getting it anymore.\"";
-        Sleeper.hints = "";
-        Sleeper.ifLies = "";
-        Sleeper.picking = false;
-        Sleeper.startingAlignment = EAlignment.Evil;
-        Sleeper.type = ECharacterType.Minion;
-        Sleeper.bluffable = false;
-        Sleeper.characterId = "Sleeper_scm";
-        Sleeper.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Sleeper.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
-        Sleeper.color = new Color(0.8491f, 0.4555f, 0f);
-        Sleeper.additionalFlavorTexts = new Il2CppStringArray(1);
-        Sleeper.additionalFlavorTexts[0] = Sleeper.flavorText;
 
-        CharacterData Guardian = new CharacterData();
+        CharacterData Guardian = makeNewCharacter("Guardian", EAlignment.Evil, ECharacterType.Minion, false, true, "\"You're gonna have to get through me first.\"");
         Guardian.role = new Guardian();
-        Guardian.name = "Guardian";
-        Guardian.characterName = "Guardian";
-        Guardian.description = "The Demon registers as a Good Villager.\n\nI sit next to the Demon.";
-        Guardian.flavorText = "\"You're gonna have to get through me first.\"";
+        Guardian.description = "The Demon registers as a Good Villager.\n\nI sit next to a Demon.";
         Guardian.hints = "If there are multiple Demons, all of them register as Good.";
-        Guardian.ifLies = "";
-        Guardian.picking = false;
-        Guardian.startingAlignment = EAlignment.Evil;
-        Guardian.type = ECharacterType.Minion;
-        Guardian.bluffable = false;
-        Guardian.characterId = "Guardian_scm";
-        Guardian.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Guardian.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
-        Guardian.color = new Color(0.8491f, 0.4555f, 0f);
-        Guardian.additionalFlavorTexts = new Il2CppStringArray(1);
-        Guardian.additionalFlavorTexts[0] = Guardian.flavorText;
 
-        CharacterData Mastermind = new CharacterData();
+        CharacterData Mastermind = makeNewCharacter("Mastermind", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It all comes back to me.\"");
         Mastermind.role = new Mastermind();
-        Mastermind.name = "Mastermind";
-        Mastermind.characterName = "Mastermind";
         Mastermind.description = "Game Start: Every Evil Minion becomes a Mastermind after all other Game Start effects.";
-        Mastermind.flavorText = "\"It all comes back to me.\"";
-        Mastermind.hints = "";
-        Mastermind.ifLies = "";
-        Mastermind.picking = false;
-        Mastermind.startingAlignment = EAlignment.Evil;
-        Mastermind.type = ECharacterType.Minion;
-        Mastermind.bluffable = false;
-        Mastermind.characterId = "Mastermind_scm";
-        Mastermind.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Mastermind.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
-        Mastermind.color = new Color(0.8491f, 0.4555f, 0f);
-        Mastermind.additionalFlavorTexts = new Il2CppStringArray(1);
-        Mastermind.additionalFlavorTexts[0] = Mastermind.flavorText;
 
-        CharacterData Baffler = new CharacterData();
+        CharacterData Baffler = makeNewCharacter("Baffler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"");
         Baffler.role = new Baffler();
-        Baffler.name = "Baffler";
-        Baffler.characterName = "Baffler";
         Baffler.description = "Game Start: One adjacent Villager is Confused.\nConfused characters have a 50% chance of Lying.";
-        Baffler.flavorText = "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"";
-        Baffler.hints = "";
-        Baffler.ifLies = "";
-        Baffler.picking = false;
-        Baffler.startingAlignment = EAlignment.Evil;
-        Baffler.type = ECharacterType.Minion;
-        Baffler.bluffable = false;
-        Baffler.characterId = "Baffler_scm";
-        Baffler.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Baffler.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
-        Baffler.color = new Color(0.8491f, 0.4555f, 0f);
-        Baffler.additionalFlavorTexts = new Il2CppStringArray(1);
-        Baffler.additionalFlavorTexts[0] = Baffler.flavorText;
         
-        CharacterData Follower = new CharacterData();
+        CharacterData Follower = makeNewCharacter("Follower", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I'm playing chess and you're playing checkers.\"");
         Follower.role = new Follower();
-        Follower.name = "Follower";
-        Follower.characterName = "Follower";
         Follower.description = "You have slightly more HP in larger villages.\nNight falls every 3 ticks.\n<b>At Night:</b>\nKill 1 card, prioritizing more valuable targets.\nDeal 2 damage to you.\n\nI Lie and Disguise.";
-        Follower.flavorText = "\"I'm playing chess and you're playing checkers.\"";
         Follower.hints = "Valuable targets are those with unused active abilities and strong information roles.";
-        Follower.ifLies = "";
-        Follower.picking = false;
-        Follower.startingAlignment = EAlignment.Evil;
-        Follower.type = ECharacterType.Demon;
-        Follower.bluffable = false;
-        Follower.characterId = "Follower_scm";
-        Follower.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Follower.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Follower.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
-        Follower.color = new Color(1f, 0.3804f, 0.3804f);
-        Follower.additionalFlavorTexts = new Il2CppStringArray(1);
-        Follower.additionalFlavorTexts[0] = Follower.flavorText;
 
-        
-        CharacterData Veil = new CharacterData();
+        CharacterData Veil = makeNewCharacter("Veil", EAlignment.Evil, ECharacterType.Demon, false, true, "\"You cannot see anyone's role through this dense fog!\"");
         Veil.role = new Veil();
-        Veil.name = "Veil";
-        Veil.characterName = "Veil";
         Veil.description = "2-3 cards cannot be revealed. Villages are much bigger to compensate.\n\nI Lie and Disguise.";
-        Veil.flavorText = "\"I cannot see anyone's role through this dense fog!\"";
         Veil.hints = "If someone else copies my effect, they only hide 1 additional card.";
-        Veil.ifLies = "";
-        Veil.picking = false;
-        Veil.startingAlignment = EAlignment.Evil;
-        Veil.type = ECharacterType.Demon;
-        Veil.bluffable = false;
-        Veil.characterId = "Veil_scm";
-        Veil.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Veil.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Veil.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
-        Veil.color = new Color(1f, 0.3804f, 0.3804f);
-        Veil.additionalFlavorTexts = new Il2CppStringArray(1);
-        Veil.additionalFlavorTexts[0] = Veil.flavorText;
         
-        CharacterData Summoner = new CharacterData();
+        CharacterData Summoner = makeNewCharacter("Summoner", EAlignment.Evil, ECharacterType.Demon, false, true, "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"");
         Summoner.role = new Summoner();
-        Summoner.name = "Summoner";
-        Summoner.characterName = "Summoner";
         Summoner.description = "Game Start: There are no Minions in play. One or more other cards become Demons. The demons I summon are not added to the Deck.\n\nI Lie and Disguise.\n\nYou might start with 5 extra HP.";
-        Summoner.flavorText = "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"";
         Summoner.hints = "The night cycle is always active if I am in play.\n\nIf an outcast that causes minions to be in play is in play, it gets turned into another Demon instead.";
-        Summoner.ifLies = "";
-        Summoner.picking = false;
-        Summoner.startingAlignment = EAlignment.Evil;
-        Summoner.type = ECharacterType.Demon;
-        Summoner.bluffable = false;
-        Summoner.characterId = "Summoner_scm";
-        Summoner.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Summoner.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Summoner.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
-        Summoner.color = new Color(1f, 0.3804f, 0.3804f);
-        Summoner.additionalFlavorTexts = new Il2CppStringArray(1);
-        Summoner.additionalFlavorTexts[0] = Summoner.flavorText;
-        
-        CharacterData Infestation = new CharacterData();
+        Summoner.additionalPossibleCharacters = MakeAddedCharacters(0, 0, 0, 3);
+
+        CharacterData Infestation = makeNewCharacter("Infestation", EAlignment.Evil, ECharacterType.Demon, false, true, "\"The one zombie apocalypse you'll stand no chance in\"");
         Infestation.role = new Infestation();
-        Infestation.name = "Infestation";
-        Infestation.characterName = "Infestation";
         Infestation.description = "Game Start: 1 random character is Corrupted.\n\nAt Night: Kill all Good Corrupted characters, dealing 1 damage each. Good Characters adjacent to alive Corrupted characters are Corrupted.\n\nI Lie and Disguise.";
-        Infestation.flavorText = "\"The one zombie apocalypse you'll stand no chance in\"";
         Infestation.hints = "Certain characters that remove Corruptions will stop my ability from working.";
-        Infestation.ifLies = "";
-        Infestation.picking = false;
-        Infestation.startingAlignment = EAlignment.Evil;
-        Infestation.type = ECharacterType.Demon;
-        Infestation.bluffable = false;
-        Infestation.characterId = "Infestation_scm";
-        Infestation.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Infestation.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Infestation.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
-        Infestation.color = new Color(1f, 0.3804f, 0.3804f);
-        Infestation.additionalFlavorTexts = new Il2CppStringArray(1);
-        Infestation.additionalFlavorTexts[0] = Infestation.flavorText;
 
-        CharacterData Escapist = new CharacterData();
+        CharacterData Escapist = makeNewCharacter("Escapist", EAlignment.Evil, ECharacterType.Demon, false, true, "\"Catch me if you can!\"");
         Escapist.role = new Escapist();
-        Escapist.name = "Escapist";
-        Escapist.characterName = "Escapist";
         Escapist.description = "Game Start: There is an extra Outcast. One non-Bombardier Outcast is Evil and Corrupted.\n\nI Lie and Disguise as an Outcast.";
-        Escapist.flavorText = "\"Catch me if you can!\"";
-        Escapist.hints = "";
-        Escapist.ifLies = "";
-        Escapist.picking = false;
-        Escapist.startingAlignment = EAlignment.Evil;
-        Escapist.type = ECharacterType.Demon;
-        Escapist.bluffable = false;
-        Escapist.characterId = "Escapist_scm";
-        Escapist.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Escapist.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Escapist.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
-        Escapist.color = new Color(1f, 0.3804f, 0.3804f);
-        Escapist.additionalFlavorTexts = new Il2CppStringArray(1);
-        Escapist.additionalFlavorTexts[0] = Escapist.flavorText;
+        Escapist.additionalPossibleCharacters = MakeAddedCharacters(0, 1, 0, 0);
 
-        CharacterData Kingmaker = new CharacterData();
+        CharacterData Kingmaker = makeNewCharacter("Kingmaker", EAlignment.Evil, ECharacterType.Demon, false, true, "\"'Puppet Master' is more like it.\"");
         Kingmaker.role = new Kingmaker();
-        Kingmaker.name = "Kingmaker";
-        Kingmaker.characterName = "Kingmaker";
-        Kingmaker.description = "Game Start: Both my neighbors become Minions.\n\nYou don't know how many Evils there are.\n\nI Lie and Disguise.";
-        Kingmaker.flavorText = "\"'Puppet Master' is more like it.\"";
+        Kingmaker.description = "Game Start: Both my neighbors become Minions.\n\nYou don't know how many Evils there are.\n\nI tell the truth and Disguise.";
         Kingmaker.hints = "There may be fewer Outcasts in play than expected.";
-        Kingmaker.ifLies = "";
-        Kingmaker.picking = false;
-        Kingmaker.startingAlignment = EAlignment.Evil;
-        Kingmaker.type = ECharacterType.Demon;
-        Kingmaker.bluffable = false;
-        Kingmaker.characterId = "Kingmaker_scm";
-        Kingmaker.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Kingmaker.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Kingmaker.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
-        Kingmaker.color = new Color(1f, 0.3804f, 0.3804f);
-        Kingmaker.additionalFlavorTexts = new Il2CppStringArray(1);
-        Kingmaker.additionalFlavorTexts[0] = Kingmaker.flavorText;
+        Kingmaker.additionalPossibleCharacters = MakeAddedCharacters(0, 0, 2, 0);
 
-        CharacterData Mystifier = new CharacterData();
+        CharacterData Mystifier = makeNewCharacter("Mystifier", EAlignment.Evil, ECharacterType.Demon, false, true, "\"Puzzled, confounded, or astonished yet?\"");
         Mystifier.role = new Mystifier();
-        Mystifier.name = "Mystifier";
-        Mystifier.characterName = "Mystifier";
         Mystifier.description = "Game Start: One random Villager is Confused.\nConfused characters have a 50% chance of Lying.\n\nAt night: One random Villager is Confused.\n\nI Lie and Disguise.";
-        Mystifier.flavorText = "\"Puzzled, confounded, or astonished yet?\"";
-        Mystifier.hints = "";
-        Mystifier.ifLies = "";
-        Mystifier.picking = false;
-        Mystifier.startingAlignment = EAlignment.Evil;
-        Mystifier.type = ECharacterType.Demon;
-        Mystifier.bluffable = false;
-        Mystifier.characterId = "Mystifier_scm";
-        Mystifier.artBgColor = new Color(0.111f, 0.0833f, 0.1415f);
-        Mystifier.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
-        Mystifier.cardBorderColor = new Color(0.8196f, 0.0f, 0.0275f);
-        Mystifier.color = new Color(1f, 0.3804f, 0.3804f);
-        Mystifier.additionalFlavorTexts = new Il2CppStringArray(1);
-        Mystifier.additionalFlavorTexts[0] = Mystifier.flavorText;
+        Mystifier.hints = "Confused characters that are currently Lying also register as Corrupted.";
         
         CustomScriptData followerScriptData = new CustomScriptData();
         followerScriptData.name = "Follower_1";
@@ -1341,7 +776,7 @@ public class MainMod : MelonMod
         nightPhase.nightCharactersOrder.Add(Follower);
         nightPhase.nightCharactersOrder.Add(Channeler);
         nightPhase.nightCharactersOrder.Add(Hitman);
-        nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
+        //nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
         nightPhase.nightCharactersOrder.Add(Sleeper);
 
         // ------------ GAME START ------------
@@ -1404,10 +839,10 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Surveyor);
             AddRole(script.startingTownsfolks, Tracker);
             AddRole(script.startingTownsfolks, Pioneer);
+            AddRole(script.startingTownsfolks, Necromancer);
 
-            
+
             AddRole(script.startingOutsiders, MadScientist);
-            AddRole(script.startingOutsiders, Necromancer);
             AddRole(script.startingOutsiders, Hitman);
             AddRole(script.startingOutsiders, Ghost);
             AddRole(script.startingOutsiders, Muddler);
@@ -1684,23 +1119,13 @@ public class MainMod : MelonMod
     
     public int shortenNight = 0;
     public static MainMod Instance;
-    private void OnRoundStart()
-    {
-        shortenNight = 0;
-        foreach (Character c in Gameplay.CurrentCharacters)
-        {
-            if (c.dataRef.characterId == "Sleeper_scm" || c.statuses.Contains(SpecialMadScientistTags.hasSleeperAbility))
-                shortenNight++;
-        }
-
-    }
     public static NightModeRule CachedRule;
 
     [HarmonyPatch(typeof(Gameplay), "OnCharacterReveal")]
     public static class CharacterRevealPatch
     {
 
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         public static void DoSleeperStuff(Character obj)
         {
             if (obj == null) return;
@@ -1708,15 +1133,9 @@ public class MainMod : MelonMod
             if (mod == null) return;
             if (mod.shortenNight > 0 && CachedRule != null)
             {
-                CachedRule.currentStep+= mod.shortenNight;
+                CachedRule.currentStep += mod.shortenNight;
                 mod.shortenNight = 0;
             }
-
-            if ((obj.dataRef.characterId == "Ghost_scm" || obj.statuses.Contains(SpecialMadScientistTags.hasGhostAbility)) && CachedRule != null)
-            {
-                CachedRule.currentStep++;
-            }
-
         }
     }
     [HarmonyPatch(typeof(NightModeRule), "Init")]
@@ -1852,7 +1271,7 @@ public class MainMod : MelonMod
 
             Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
 
-            string info = __instance.ConjourInfo(pickedEvil.dataRef, 4, charRef);
+            string info = __instance.ConjourInfo(pickedEvil.dataRef, 3, charRef);
 
             __result = new ActedInfo(info);
         }

@@ -90,7 +90,15 @@ public class Nurse : Role
             onActed?.Invoke(new ActedInfo(inf, chars));
             return;
         }
-        string info = string.Format("I couldn't cure #{0}", CharacterPicker.PickedCharacters[0].id);
+        string additional = "\nThere are no Corrupted Characters";
+        foreach (Character cha in Gameplay.CurrentCharacters)
+        {
+            if (cha.statuses.Contains(ECharacterStatus.Corrupted))
+            {
+                additional = "";
+            }
+        }
+        string info = string.Format("I couldn't cure #{0}{1}", CharacterPicker.PickedCharacters[0].id, additional);
         onActed?.Invoke(new ActedInfo(info, chars));
     }
     private void CharacterPickedLiar()

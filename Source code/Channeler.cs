@@ -38,6 +38,7 @@ public class Channeler : Minion
             blacklistIDs.Add("Undying_WING");
             blacklistIDs.Add("Legion_WING");
             blacklistIDs.Add("Blackmailer_VP");
+            blacklistIDs.Add("Summoner_scm"); // just in case
             //the below characters do nothing when copied, so don't copy them if possible
             blacklistIDs.Add("Puppet_15989619");
             blacklistIDs.Add("Turncoat_WING");

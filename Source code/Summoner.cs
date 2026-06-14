@@ -47,10 +47,12 @@ public class Summoner : Demon
         bannedDemons.Add("Mutant_84675843"); // Why is this one even in the list of demons
         bannedDemons.Add("Delusion_10561407"); // No unreleased WIP demons allowed
         bannedDemons.Add("Kingmaker_scm"); // Adds minions.
+        List<string> bannedDemonsByName = new List<string>();
+        bannedDemonsByName.Add("relic_copyvillager");
         for (int j = 0; j < allDatas.Length; j++)
         {
             CharacterData d = allDatas[j];
-            if (d.type == ECharacterType.Demon && !bannedDemons.Contains(d.characterId))
+            if (d.type == ECharacterType.Demon && !bannedDemons.Contains(d.characterId) && !bannedDemonsByName.Contains(d.characterName.ToLower()) && !bannedDemonsByName.Contains(d.name.ToLower()))
             {
                 possibleDemons.Add(d);
             }

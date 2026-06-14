@@ -39,7 +39,13 @@ public class Mystifier : Demon
             Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
             characters = Characters.Instance.FilterRealCharacterType(characters, ECharacterType.Villager);
             characters = Characters.Instance.FilterCharacterMissingStatus(characters, Confused.confused);
-
+            characters = Characters.Instance.FilterCharacterMissingStatus(characters, ECharacterStatus.Corrupted); // Prefer to Confuse characters that are not corrupted
+            if (characters.Count == 0)
+            {
+                characters = Gameplay.CurrentCharacters;
+                characters = Characters.Instance.FilterRealCharacterType(characters, ECharacterType.Villager);
+                characters = Characters.Instance.FilterCharacterMissingStatus(characters, Confused.confused);
+            }
             if (characters.Count > 0)
             {
                 Character randomChar = characters[UnityEngine.Random.Range(0, characters.Count)];

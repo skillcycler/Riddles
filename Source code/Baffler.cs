@@ -31,9 +31,15 @@ public class Baffler : Minion
         if (trigger == ETriggerPhase.Start)
         {
             Il2CppSystem.Collections.Generic.List<Character> neighbors = Characters.Instance.GetAdjacentCharacters(charRef);
-            neighbors = Characters.Instance.FilterCharacterMissingStatus(neighbors, Confused.confused);
             neighbors = Characters.Instance.FilterRealCharacterType(neighbors, ECharacterType.Villager);
-
+            neighbors = Characters.Instance.FilterCharacterMissingStatus(neighbors, Confused.confused);
+            neighbors = Characters.Instance.FilterCharacterMissingStatus(neighbors, ECharacterStatus.Corrupted); // Prefer to Confuse characters that are not corrupted
+            if (neighbors.Count == 0)
+            {
+                neighbors = Characters.Instance.GetAdjacentCharacters(charRef);
+                neighbors = Characters.Instance.FilterRealCharacterType(neighbors, ECharacterType.Villager);
+                neighbors = Characters.Instance.FilterCharacterMissingStatus(neighbors, Confused.confused);
+            }
             if (neighbors.Count > 0)
             {
                 Character randomChar = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];

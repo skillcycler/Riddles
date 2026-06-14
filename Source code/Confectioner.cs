@@ -33,8 +33,22 @@ public class Confectioner : Role
     {
         if (trigger == ETriggerPhase.Start)
         {
-            Baker b = new();
-            b.CreateNewBaker(charRef);
+            Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
+            Il2CppSystem.Collections.Generic.List<Character> goodVillagers = new Il2CppSystem.Collections.Generic.List<Character>();
+            foreach (Character c in characters)
+            {
+                if (c.alignment == EAlignment.Good && c.GetRegisterAlignment() == EAlignment.Good && c.GetCharacterType() == ECharacterType.Villager)
+                {
+                    goodVillagers.Add(c);
+                }
+            }
+            CharacterData bakerData = ProjectContext.Instance.gameData.GetCharacterDataOfId("Baker_22847064");
+            if (goodVillagers.Count > 0)
+            {
+                Character ch = goodVillagers[UnityEngine.Random.RandomRangeInt(0, goodVillagers.Count)];
+                ch.Init(bakerData);
+                ch.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+            }
         }
     }
     public override CharacterData GetBluffIfAble(Character charRef)

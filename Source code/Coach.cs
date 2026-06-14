@@ -87,11 +87,7 @@ public class Coach : Role
             if (character.GetCharacterType() == picked.GetCharacterType() && distanceFromCharacter >= -2 && distanceFromCharacter <= 2 && distanceFromCharacter != 0)
                 matches++;
         }
-        int lie = UnityEngine.Random.RandomRangeInt(0, 5);
-        while (lie == matches)
-        {
-            lie = UnityEngine.Random.RandomRangeInt(0, 5);
-        }
+        int lie = Calculator.RemoveNumberAndGetRandomNumberFromList(matches, 0, 5);
         string info = ConjureInfo(picked, lie);
         onActed?.Invoke(new ActedInfo(info, CharacterPicker.PickedCharacters));
     }

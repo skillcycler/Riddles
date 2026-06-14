@@ -93,17 +93,14 @@ public class Follower : Demon
         {
             return;
         }
-        if (trigger == ETriggerPhase.Start)
+        if (trigger == ETriggerPhase.Start || trigger == ETriggerPhase.Night)
         {
-            var mod = MainMod.Instance;
-            if (mod == null) return;
-            mod.shortenNight += 1;
-        }
-        if (trigger == ETriggerPhase.Night)
-        {
-            var mod = MainMod.Instance;
-            if (mod == null) return;
-            mod.shortenNight += 1;
+            if (charRef.dataRef.characterId == "Follower_scm")
+            {
+                var mod = MainMod.Instance;
+                if (mod == null) return;
+                mod.shortenNight += 1;
+            }
         }
         if (trigger == ETriggerPhase.Start)
         {

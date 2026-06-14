@@ -85,29 +85,25 @@ public class Psychic : Role
         if (bothTrue)
         {
             int randomInPlay1 = UnityEngine.Random.RandomRangeInt(0, inPlayChars.Count);
+            CharacterData ip1 = inPlayChars[randomInPlay1];
+            inPlayChars.Remove(ip1);
             int randomInPlay2 = UnityEngine.Random.RandomRangeInt(0, inPlayChars.Count);
-            while (inPlayChars[randomInPlay1].name == inPlayChars[randomInPlay2].name)
-            {
-                randomInPlay2 = UnityEngine.Random.RandomRangeInt(0, inPlayChars.Count);
-            }
-            string inf = string.Format("Exactly one of the {0} or the {1} is in play", inPlayChars[randomInPlay1].name, inPlayChars[randomInPlay2].name);
+            string inf = string.Format("Exactly one of the {0} or the {1} is in play", ip1.name, inPlayChars[randomInPlay2].name);
             if (Calculator.RollDice(2) == 1)
             {
-                inf = string.Format("Exactly one of the {1} or the {0} is in play", inPlayChars[randomInPlay1].name, inPlayChars[randomInPlay2].name);
+                inf = string.Format("Exactly one of the {1} or the {0} is in play", ip1.name, inPlayChars[randomInPlay2].name);
             }
             ActedInfo actedInf = new ActedInfo(inf);
             return actedInf;
         }
         int randomOutOfPlay1 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
+        CharacterData oop1 = outOfPlay[randomOutOfPlay1];
+        outOfPlay.Remove(oop1);
         int randomOutOfPlay2 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
-        while (outOfPlay[randomOutOfPlay1].name == outOfPlay[randomOutOfPlay2].name)
-        {
-            randomOutOfPlay2 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
-        }
-        string info = string.Format("Exactly one of the {0} or the {1} is in play", outOfPlay[randomOutOfPlay1].name, outOfPlay[randomOutOfPlay2].name);
+        string info = string.Format("Exactly one of the {0} or the {1} is in play", oop1.name, outOfPlay[randomOutOfPlay2].name);
         if (Calculator.RollDice(2) == 1)
         {
-            info = string.Format("Exactly one of the {1} or the {0} is in play", outOfPlay[randomOutOfPlay1].name, outOfPlay[randomOutOfPlay2].name);
+            info = string.Format("Exactly one of the {1} or the {0} is in play", oop1.name, outOfPlay[randomOutOfPlay2].name);
         }
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
