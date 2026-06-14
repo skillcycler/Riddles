@@ -25,14 +25,14 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 - Surveyor: Learn how many Minions and Outcasts there are.
 - Tracker: Learn someone disguised as an Outcast.
 - Pioneer: Learn how many cards away a particular Evil is from my closest Evil.
+- Necromancer: 1st use: Kill any card for the cost of 2 HP. 2nd use: Revive a dead Good card. If I am lying, the revived card will lie.
 
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
 - Hitman: An evil outcast that lies and disguises and kills a random card every night, dealing 3 damage. This can be any card, including normally unkillable cards, Demons, and even itself.
-- Necromancer: Revive a dead Good card at the cost of 2 HP. If I am lying, the revived card will lie.
 - Ghost: Dies when revealed, haunting (corrupting) an unrevealed Villager.
 - Muddler: Status effects such as Corrupted are not shown when cards are executed.
-- Confectioner: I disguise as a Baker. On game start: Bake 1 random villager.
+- Confectioner: I disguise as a Baker. On game start: One random villager becomes a Corrupted Baker.
 
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil.
@@ -49,5 +49,5 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 - Summoner: There are no minions, but there are many Demons.
 - Infestation: One random character is Corrupted. The corruption spreads at night.
 - Escapist: There is an extra Evil Outcast in play.
-- Kingmaker: Both of my neighbors are Minions.
+- Kingmaker: Both of my neighbors are Minions. I tell the truth and hide the max Evil counter.
 - Mystifier: One random Villager is Confused each night and at the start. Confused characters have a 50% chance to Lie.

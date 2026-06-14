@@ -37,7 +37,7 @@ public class Recruiter : Role
 
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        string info = string.Format("I turned #{0} into a villager", UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1));
+        string info = string.Format("I turned #{0} into a villager", Calculator.RemoveNumberAndGetRandomNumberFromList(charRef.id, 1, Gameplay.CurrentCharacters.Count + 1));
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
