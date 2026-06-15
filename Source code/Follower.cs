@@ -10,6 +10,9 @@ using RiddlerMod;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Follower : Demon
 {
     public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
@@ -20,37 +23,54 @@ public class Follower : Demon
     }
     public int CheckRolePriority(Character character)
     {
+        // General priority: High priority 8x-> Refresh at night 6x-> Mid priority 4x-> One time use unspent 3x-> Other priority 2x-> Normal priority -> Reduced priority (like corrupted) -> Deprioritized -> Never attack
         Il2CppSystem.Collections.Generic.List<string> highPriorityIDs = new Il2CppSystem.Collections.Generic.List<string>();
         Il2CppSystem.Collections.Generic.List<string> midPriorityIDs = new Il2CppSystem.Collections.Generic.List<string>();
+        Il2CppSystem.Collections.Generic.List<string> otherPriorityIDs = new Il2CppSystem.Collections.Generic.List<string>();
         Il2CppSystem.Collections.Generic.List<string> neverAttackIDs = new Il2CppSystem.Collections.Generic.List<string>();
 
         highPriorityIDs.Add("Bishop_58855542");
         highPriorityIDs.Add("Empress_13782227");
+        highPriorityIDs.Add("Arithmetician_WING");
 
         midPriorityIDs.Add("Lover_91302708");
         midPriorityIDs.Add("Oracle_07039445");
         midPriorityIDs.Add("Archivist_34476114");
         midPriorityIDs.Add("Lookout_41018246");
-        midPriorityIDs.Add("Mathematician_scm");
         midPriorityIDs.Add("Gossip_85354100");
         midPriorityIDs.Add("Hunter_93427887");
+        midPriorityIDs.Add("Mathematician_scm");
+        midPriorityIDs.Add("Lawyer_scm");
+        midPriorityIDs.Add("Clairvoyant_WING");
+        midPriorityIDs.Add("Prince_WING");
+
+        //good to kill for other reasons than to remove info
+        otherPriorityIDs.Add("MadScientist_scm");
+        otherPriorityIDs.Add("Swarm_Good_WING");
 
         neverAttackIDs.Add("Knight_47970624");
+        neverAttackIDs.Add("Ghost_scm");
 
 
         float targetValue = 1f;
         // corrupted characters are 50% less likely to be attacked
         float statusMult = 1f;
         if (character.statuses.Contains(ECharacterStatus.Corrupted)) statusMult *= 0.5f;
+        // don't kill characters that someone already killed tonight
+        if (character.statuses.Contains(AvoidingDoubleKills.killed) || character.statuses.Contains(ECharacterStatus.KilledByEvil)) statusMult = 0f;
         // don't attack dead characters
         if (character.state == ECharacterState.Dead) statusMult = 0f;
 
-        //for unrevealed characters: 6x as likely to attack certain characters
-        if (highPriorityIDs.Contains(character.dataRef.characterId) && !character.revealed) targetValue = 6f;
+        //for unrevealed characters: 8x as likely to attack certain characters
+        if (highPriorityIDs.Contains(character.dataRef.characterId) && !character.revealed) targetValue = 8f;
 
-        //for unrevealed characters: 3x as likely to attack certain characters
+        //for unrevealed characters: 4x as likely to attack certain characters
 
-        if (midPriorityIDs.Contains(character.dataRef.characterId) && !character.revealed) targetValue = 3f;
+        if (midPriorityIDs.Contains(character.dataRef.characterId) && !character.revealed) targetValue = 4f;
+
+        //for unrevealed characters: 2x as likely to attack certain characters
+
+        if (otherPriorityIDs.Contains(character.dataRef.characterId) && !character.revealed) targetValue = 2f;
 
         // don't attack outcasts unless it's a picking outcast
         // also don't attack minions or demons
@@ -63,7 +83,7 @@ public class Follower : Demon
 
         // 6x as likely to attack refreshing characters / 3x as likely for unused one time abilities (revealed or not)
         // This re-enables attacking revealed characters with unused abilities
-        if (character.dataRef.picking && character.dataRef.characterId != "Dreamer_32014895")
+        if (character.dataRef.picking)
         {
             if (character.dataRef.abilityUsage == EAbilityUsage.ResetAfterNight)
             {
@@ -87,6 +107,10 @@ public class Follower : Demon
         //MelonLogger.Msg(string.Format("Checking character #{0}: Role is {1}, value is {2}, state: {3}", character.id, character.dataRef.name, Mathf.RoundToInt(targetValue * statusMult), character.state));
         return (Mathf.RoundToInt(targetValue * statusMult));
     }
+    public bool shouldIEvenTry(Character ch)
+    {
+        return (ch.state != ECharacterState.Dead && !ch.statuses.Contains(ECharacterStatus.UnkillableByDemon) && !ch.statuses.Contains(ECharacterStatus.KilledByEvil) && !ch.statuses.Contains(AvoidingDoubleKills.killed));
+    }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (charRef.state == ECharacterState.Dead)
@@ -95,11 +119,23 @@ public class Follower : Demon
         }
         if (trigger == ETriggerPhase.Start || trigger == ETriggerPhase.Night)
         {
-            if (charRef.dataRef.characterId == "Follower_scm")
+            // check to make sure it's the main demon, and not a summoned demon
+            bool main = true;
+            foreach (Character c in Gameplay.CurrentCharacters)
             {
-                var mod = MainMod.Instance;
-                if (mod == null) return;
-                mod.shortenNight += 1;
+                if (c.dataRef.characterId == "Summoner_scm")
+                {
+                    main = false;
+                }
+            }
+            if (main)
+            {
+                if (charRef.dataRef.characterId == "Follower_scm")
+                {
+                    var mod = MainMod.Instance;
+                    if (mod == null) return;
+                    mod.shortenNight += 1;
+                }
             }
         }
         if (trigger == ETriggerPhase.Start)
@@ -131,7 +167,7 @@ public class Follower : Demon
             {
                 foreach (Character character in Gameplay.CurrentCharacters)
                 {
-                    if (character.alignment != EAlignment.Evil && character.state == ECharacterState.Hidden && !character.statuses.Contains(ECharacterStatus.UnkillableByDemon))
+                    if (character.alignment != EAlignment.Evil && character.state == ECharacterState.Hidden && shouldIEvenTry(character))
                     {
                         targetChars.Add(character);
                     }
@@ -142,19 +178,19 @@ public class Follower : Demon
             {
                 foreach (Character character in Gameplay.CurrentCharacters)
                 {
-                    if (character.GetCharacterType() == ECharacterType.Villager && character.state != ECharacterState.Dead && character.alignment == EAlignment.Good && !character.statuses.Contains(ECharacterStatus.UnkillableByDemon))
+                    if (character.GetCharacterType() == ECharacterType.Villager && shouldIEvenTry(character) && character.alignment == EAlignment.Good)
                     {
                         targetChars.Add(character);
                     }
                 }
             }
 
-            // If all options are still exhausted, kill revealed outcasts and good minions
+            // If all options are still exhausted, kill any good character
             if (targetChars.Count == 0)
             {
                 foreach (Character character in Gameplay.CurrentCharacters)
                 {
-                    if ((character.GetCharacterType() == ECharacterType.Outcast || character.GetCharacterType() == ECharacterType.Minion) && character.state != ECharacterState.Dead && character.alignment == EAlignment.Good && !character.statuses.Contains(ECharacterStatus.UnkillableByDemon))
+                    if (shouldIEvenTry(character) && character.alignment == EAlignment.Good)
                     {
                         targetChars.Add(character);
                     }
@@ -170,6 +206,7 @@ public class Follower : Demon
             PlayerController.PlayerInfo.health.Damage(2);
             nightAttackTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
             nightAttackTarget.statuses.AddStatus(FollowerKill.followerKill, charRef);
+            nightAttackTarget.statuses.AddStatus(AvoidingDoubleKills.killed, charRef);
             nightAttackTarget.KillByDemon(charRef);
             if (nightAttackTarget.dataRef.picking)
             {

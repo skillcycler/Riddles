@@ -9,6 +9,9 @@ using MelonLoader;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Veil : Demon
 {
     public override void Act(ETriggerPhase trigger, Character charRef)

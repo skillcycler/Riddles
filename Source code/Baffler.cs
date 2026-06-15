@@ -9,6 +9,9 @@ using MelonLoader;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Baffler : Minion
 {
     public override string Description
@@ -34,11 +37,13 @@ public class Baffler : Minion
             neighbors = Characters.Instance.FilterRealCharacterType(neighbors, ECharacterType.Villager);
             neighbors = Characters.Instance.FilterCharacterMissingStatus(neighbors, Confused.confused);
             neighbors = Characters.Instance.FilterCharacterMissingStatus(neighbors, ECharacterStatus.Corrupted); // Prefer to Confuse characters that are not corrupted
+            neighbors = Characters.Instance.FilterCharactersWithoutResistance(neighbors, ECharacterStatus.Corrupted);
             if (neighbors.Count == 0)
             {
                 neighbors = Characters.Instance.GetAdjacentCharacters(charRef);
                 neighbors = Characters.Instance.FilterRealCharacterType(neighbors, ECharacterType.Villager);
                 neighbors = Characters.Instance.FilterCharacterMissingStatus(neighbors, Confused.confused);
+                neighbors = Characters.Instance.FilterCharactersWithoutResistance(neighbors, ECharacterStatus.Corrupted);
             }
             if (neighbors.Count > 0)
             {

@@ -8,6 +8,9 @@ using System.ComponentModel.Design;
 using UnityEngine;
 using HarmonyLib;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Channeler : Minion
 {
     public CharacterData copy = GetGenericMinion();
@@ -109,4 +112,8 @@ public class Channeler : Minion
         }
         return allCharactersAscension.startingMinions[0];
     }
+}
+public static class AvoidingDoubleKills
+{
+    public static ECharacterStatus killed = (ECharacterStatus)882;
 }

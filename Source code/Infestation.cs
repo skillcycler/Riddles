@@ -9,6 +9,9 @@ using MelonLoader;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Infestation : Demon
 {
     public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
@@ -61,14 +64,19 @@ public class Infestation : Demon
             }
             foreach (Character c in Gameplay.CurrentCharacters)
             {
-                if (oldCorruptions.Contains(c.id) && c.state != ECharacterState.Dead && !c.statuses.Contains(ECharacterStatus.KilledByEvil)) {
-                    c.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
-                    c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
-                    c.KillByDemon(charRef);
-                    PlayerController.PlayerInfo.health.Damage(1);
+                if (!c.statuses.Contains(AvoidingDoubleKills.killed) && !c.statuses.Contains(ECharacterStatus.KilledByEvil))
+                {
+                    if (oldCorruptions.Contains(c.id) && c.state != ECharacterState.Dead && !c.statuses.Contains(ECharacterStatus.KilledByEvil))
+                    {
+                        c.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
+                        c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
+                        c.statuses.AddStatus(AvoidingDoubleKills.killed, charRef);
+                        c.KillByDemon(charRef);
+                        PlayerController.PlayerInfo.health.Damage(1);
+                    }
+                    else if (newCorruptions.Contains(c.id))
+                        c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
                 }
-                else if (newCorruptions.Contains(c.id))
-                    c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
             }
         }
     }

@@ -15,9 +15,7 @@ namespace RiddlerMod;
 
 [RegisterTypeInIl2Cpp]
 public class Necromancer : Role
-{
-    bool hasUsedOnce = false;
-    
+{    
     private Il2CppSystem.Action action1;
     private Il2CppSystem.Action action2;
     private Il2CppSystem.Action action3;
@@ -40,14 +38,14 @@ public class Necromancer : Role
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (trigger != ETriggerPhase.Day) return;
-        CharacterPicker.Instance.StartPickCharacters(1, charRef);
+        CharacterPicker.Instance.StartPickCharacters(2, charRef);
         CharacterPicker.OnCharactersPicked += action1;
         CharacterPicker.OnStopPick += action2;
     }
     public override void BluffAct(ETriggerPhase trigger, Character charRef)
     {
         if (trigger != ETriggerPhase.Day) return;
-        CharacterPicker.Instance.StartPickCharacters(1, charRef);
+        CharacterPicker.Instance.StartPickCharacters(2, charRef);
         CharacterPicker.OnCharactersPicked += action3;
         CharacterPicker.OnStopPick += action2;
     }
@@ -56,109 +54,95 @@ public class Necromancer : Role
         CharacterPicker.OnCharactersPicked -= action1;
         CharacterPicker.OnStopPick -= action2;
         Character c1 = CharacterPicker.PickedCharacters[0];
-        if (!hasUsedOnce) // kill the selected character dealing 2 damage
+        Character c2 = CharacterPicker.PickedCharacters[1];
+        if (c1.state == ECharacterState.Dead && c2.state == ECharacterState.Dead) return;
+        if (c1.state != ECharacterState.Dead && c2.state != ECharacterState.Dead) return;
+        Character dead = c1;
+        if (c1.state != ECharacterState.Dead) dead = c2;
+        Character alive = c2;
+        if (c1.state != ECharacterState.Dead) alive = c1;
+        if (dead.GetRegisterAlignment() == EAlignment.Evil || dead.dataRef.characterId == "Ghost_scm" || dead.alignment == EAlignment.Evil)
         {
-            if (c1.state == ECharacterState.Dead || c1.id == charRef.id)
-            {
-                return;
-            }
-            charRef.pickableUses++;
-            hasUsedOnce = true;
-            PlayerController.PlayerInfo.health.Damage(2);
-            c1.KillByDemon(charRef);
-            c1.Reveal();
-            c1.onReveal.Invoke();
-            c1.RevealReal();
+            return;
         }
-        else // revive
-        {
-            if (c1.GetRegisterAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm" || c1.alignment == EAlignment.Evil)
-            {
-                return;
-            }
 
-            if (c1.state != ECharacterState.Dead)
+        PlayerController.PlayerInfo.health.Damage(2);
+        alive.KillByDemon(charRef);
+        alive.Reveal();
+        alive.onReveal.Invoke();
+        alive.RevealReal();
+        
+
+        if (dead.bluff)
+        {
+            if (dead.bluff.picking)
             {
-                return;
+                dead.pickableUses = 1;
+                dead.pickable.SetActive(true);
             }
-            if (c1.bluff)
-            {
-                if (c1.bluff.picking)
-                {
-                    c1.pickableUses = 1;
-                    c1.pickable.SetActive(true);
-                }
-            }
-            else if (c1.dataRef.picking)
-            {
-                c1.pickableUses = 1;
-                c1.pickable.SetActive(true);
-            }
-            c1.state = ECharacterState.Alive;
-            c1.InitWithNoReset(c1.dataRef);
-            c1.Act(ETriggerPhase.Day);
-            string info = ConjureInfo(c1);
-            onActed?.Invoke(new ActedInfo(info));
         }
+        else if (dead.dataRef.picking)
+        {
+            dead.pickableUses = 1;
+            dead.pickable.SetActive(true);
+        }
+        dead.state = ECharacterState.Alive;
+        dead.InitWithNoReset(dead.dataRef);
+        dead.Act(ETriggerPhase.Day);
+        string info = ConjureInfo(alive, dead);
+        onActed?.Invoke(new ActedInfo(info));
+        
     }
     private void CharacterPickedLiar()
     {
 
         CharacterPicker.OnCharactersPicked -= action3;
         CharacterPicker.OnStopPick -= action2;
-
         Character c1 = CharacterPicker.PickedCharacters[0];
-        if (!hasUsedOnce) // kill the selected character dealing 2 damage
+        Character c2 = CharacterPicker.PickedCharacters[1];
+        if (c1.state == ECharacterState.Dead && c2.state == ECharacterState.Dead) return;
+        if (c1.state != ECharacterState.Dead && c2.state != ECharacterState.Dead) return;
+        Character dead = c1;
+        if (c1.state != ECharacterState.Dead) dead = c2;
+        Character alive = c2;
+        if (c1.state != ECharacterState.Dead) alive = c1;
+        if (dead.GetRegisterAlignment() == EAlignment.Evil || dead.dataRef.characterId == "Ghost_scm" || dead.alignment == EAlignment.Evil)
         {
-            if (c1.state == ECharacterState.Dead || c1.id == charRef.id)
-            {
-                return;
-            }
-            charRef.pickableUses++;
-            hasUsedOnce = true;
-            PlayerController.PlayerInfo.health.Damage(2);
-            c1.KillByDemon(charRef);
-            c1.Reveal();
-            c1.onReveal.Invoke();
-            c1.RevealReal();
+            return;
         }
-        else // revive
-        {
-            if (c1.GetRegisterAlignment() == EAlignment.Evil || c1.dataRef.characterId == "Ghost_scm" || c1.alignment == EAlignment.Evil)
-            {
-                return;
-            }
 
-            if (c1.state != ECharacterState.Dead)
+        PlayerController.PlayerInfo.health.Damage(2);
+        alive.KillByDemon(charRef);
+        alive.Reveal();
+        alive.onReveal.Invoke();
+        alive.RevealReal();
+
+
+        if (dead.bluff)
+        {
+            if (dead.bluff.picking)
             {
-                return;
+                dead.pickableUses = 1;
+                dead.pickable.SetActive(true);
             }
-            if (c1.bluff)
-            {
-                if (c1.bluff.picking)
-                {
-                    c1.pickableUses = 1;
-                    c1.pickable.SetActive(true);
-                }
-            }
-            else if (c1.dataRef.picking)
-            {
-                c1.pickableUses = 1;
-                c1.pickable.SetActive(true);
-            }
-            c1.state = ECharacterState.Alive;
-            c1.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-            c1.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
-            c1.InitWithNoReset(c1.dataRef);
-            c1.Act(ETriggerPhase.Day);
-            string info = ConjureInfo(c1);
-            onActed?.Invoke(new ActedInfo(info));
         }
+        else if (dead.dataRef.picking)
+        {
+            dead.pickableUses = 1;
+            dead.pickable.SetActive(true);
+        }
+        dead.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+        dead.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+        dead.state = ECharacterState.Alive;
+        dead.InitWithNoReset(dead.dataRef);
+        dead.Act(ETriggerPhase.Day);
+        string info = ConjureInfo(alive, dead);
+        onActed?.Invoke(new ActedInfo(info));
     }
 
-    public string ConjureInfo(Character character)
+    public string ConjureInfo(Character alive, Character dead)
     {
-        return string.Format("I revived #{0}", character.id);
+        return string.Format("I killed #{0} and revived #{1}", alive.id, dead.id);
     }
     private void StopPick()
     {

@@ -13,6 +13,9 @@ using RiddlerMod;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Hypnotist : Spy
 {
     public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();

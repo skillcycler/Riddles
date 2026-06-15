@@ -11,6 +11,9 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.TouchScreenKeyboard;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Escapist : Demon
 {
     public override void Act(ETriggerPhase trigger, Character charRef)
@@ -62,6 +65,8 @@ public class Escapist : Demon
                 pickedOutsider2.ChangeAlignment(EAlignment.Evil);
                 if (pickedOutsider2.dataRef.name != "Doppelganger") // some weird bug where corrupted doppelganger doesn't disguise
                     pickedOutsider2.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                else
+                    pickedOutsider2.statuses.RemoveStatusIfAble(ECharacterStatus.HealthyBluff);
                 pickedOutsider2.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 pickedOutsider2.statuses.AddStatus(Escaped.evilTurned, charRef);
             }

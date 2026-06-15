@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.0", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -69,7 +69,8 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Guardian>();
         ClassInjector.RegisterTypeInIl2Cpp<Mastermind>();
         ClassInjector.RegisterTypeInIl2Cpp<Baffler>();
-        
+        ClassInjector.RegisterTypeInIl2Cpp<Wizard>();
+
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
         ClassInjector.RegisterTypeInIl2Cpp<Veil>();
@@ -202,8 +203,8 @@ public class MainMod : MelonMod
 
         CharacterData Nurse = makeNewCharacter("Nurse", EAlignment.Good, ECharacterType.Villager, true, false, "\"I can cure the Drunk, I promise!\"", true);
         Nurse.role = new Nurse();
-        Nurse.description = "Pick 1 alive card: If Corrupted, cure and refresh their ability.\n\nIf I am not Lying and there are no Corrupted characters, I will say so.";
-        Nurse.hints = "My ability refreshes every night.";
+        Nurse.description = "Pick 1 alive card: If it has negative status effects, cure them and refresh their ability.\n\nIf I am not Lying and there are no Corrupted characters, I will say so.";
+        Nurse.hints = "My ability refreshes every night.\n\nThe statuses I can cure include, but are not limited to: Corrupted, Confused, Accused.";
         Nurse.ifLies = "\"I couldn't cure #x\"";
         Nurse.abilityUsage = EAbilityUsage.ResetAfterNight;
 
@@ -227,10 +228,11 @@ public class MainMod : MelonMod
         Innkeeper.ifLies = "Lose 3 HP.";
         Innkeeper.abilityUsage = EAbilityUsage.ResetAfterNight;
 
-        CharacterData Recruiter = makeNewCharacter("Recuiter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Hello and Welcome to the greatest village of all time!\"");
+        CharacterData Recruiter = makeNewCharacter("Recruiter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Hello and Welcome to the greatest village of all time!\"");
         Recruiter.role = new Recruiter();
         Recruiter.description = "Game Start: 1 random Outcast is turned into a Villager.";
         Recruiter.additionalPossibleCharacters = MakeAddedCharacters(0, -1, 0, 0);
+        Recruiter.hints = "My ability runs before any Corruption-causing characters, so it still works if I am Corrupted.";
 
         CharacterData Engineer = makeNewCharacter("Engineer", EAlignment.Good, ECharacterType.Villager, true, false, "\"The long lost brother of the Architect.\"");
         Engineer.role = new Engineer();
@@ -267,7 +269,7 @@ public class MainMod : MelonMod
 
         CharacterData Necromancer = makeNewCharacter("Necromancer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Second chances are real. Just like Empaths and Mayors.\"", true);
         Necromancer.role = new Necromancer();
-        Necromancer.description = "On first use:\nPick 1 alive card (not myself) and kill it, taking 2 damage.\n\nOn second use: Pick 1 dead card: Revive it. I cannot revive Evils or the Ghost.";
+        Necromancer.description = "Pick 2 cards (not myself), one alive and one dead. Kill the alive and revive the dead at a cost of 2 HP. I cannot revive Evils or the Ghost.";
         Necromancer.ifLies = "The revived card will lie with its new info.";
 
         /*
@@ -366,7 +368,7 @@ public class MainMod : MelonMod
         Trickster_m_register.additionalFlavorTexts = new Il2CppStringArray(1);
         Trickster_m_register.additionalFlavorTexts[0] = Trickster_m_register.flavorText;
         */
-        
+
         CharacterData MadScientist = makeNewCharacter("MadScientist", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Lil bro is ANGRY at the village\"");
         MadScientist.role = new MadScientist();
         MadScientist.name = "Mad Scientist";
@@ -385,6 +387,7 @@ public class MainMod : MelonMod
         Ghost.role = new Ghost();
         Ghost.description = "On Reveal: Die, dealing 1 damage to you. One unrevealed Good character is Corrupted. The night counter does not tick.";
         Ghost.hints = "I cannot be revived by the Necromancer.";
+        Ghost.ifLies = "If I am somehow forced to Lie, I still die, dealing 1 damage, but I don't Corrupt anyone.";
 
         CharacterData Muddler = makeNewCharacter("Muddler", EAlignment.Good, ECharacterType.Outcast, true, false, "\"I don't know, was it?\"");
         Muddler.role = new Muddler();
@@ -422,7 +425,13 @@ public class MainMod : MelonMod
         CharacterData Baffler = makeNewCharacter("Baffler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"");
         Baffler.role = new Baffler();
         Baffler.description = "Game Start: One adjacent Villager is Confused.\nConfused characters have a 50% chance of Lying.";
-        
+
+        CharacterData Wizard = makeNewCharacter("Wizard", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It's black magic.\"");
+        Wizard.role = new Wizard();
+        Wizard.description = "Game Start: One random Outcast or Minion (not myself), if there is one, is duplicated.";
+        Wizard.additionalPossibleCharacters = MakeAddedCharacters(0, 1, 1, 0);
+        Wizard.hints = "The duplicated character can replace any other Villager, Outcast, or Minion.";
+
         CharacterData Follower = makeNewCharacter("Follower", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I'm playing chess and you're playing checkers.\"");
         Follower.role = new Follower();
         Follower.description = "You have slightly more HP in larger villages.\nNight falls every 3 ticks.\n<b>At Night:</b>\nKill 1 card, prioritizing more valuable targets.\nDeal 2 damage to you.\n\nI Lie and Disguise.";
@@ -639,7 +648,7 @@ public class MainMod : MelonMod
         CharactersCount infestation_15 = setCharacterCount(9, 2, 3, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> infestationCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
-        
+
         infestationCounterList.Add(infestation_8);
         infestationCounterList.Add(infestation_9);
         infestationCounterList.Add(infestation_10);
@@ -648,7 +657,9 @@ public class MainMod : MelonMod
         infestationCounterList.Add(infestation_13);
         infestationCounterList.Add(infestation_14);
         infestationCounterList.Add(infestation_15);*/
-        
+        //infestationCounterList.Add(setCharacterCount(2, 8, 0, 1)); // outcast test
+        //infestationCounterList.Add(setCharacterCount(2, 0, 8, 1)); // minion test
+
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
 
@@ -784,18 +795,19 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
         Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Escapist", Recruiter);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Infestation);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Infestation", Channeler);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Wizard);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Confectioner);
         /*Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_v", Trickster_o);
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_o", Trickster_m);*/ // These guys have SOMEHOW broke again
+        Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Channeler);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
         Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
         Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Poisoner", Baffler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Baffler", Mystifier);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Mystifier", Infestation);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Follower);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
@@ -847,8 +859,9 @@ public class MainMod : MelonMod
             AddRole(script.startingOutsiders, Ghost);
             AddRole(script.startingOutsiders, Muddler);
             AddRole(script.startingOutsiders, Confectioner);
-            
 
+
+            AddRole(script.startingMinions, Wizard);
             AddRole(script.startingMinions, Accuser);
             AddRole(script.startingMinions, Hypnotist);
             AddRole(script.startingMinions, Channeler);
@@ -1238,6 +1251,18 @@ public class MainMod : MelonMod
             disguisingOutcasts.Add("Lycanthrope");
             string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
             string info = string.Format("#{0} is actually a {1}", UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1), fakeDisguisingOutcastName);
+            if (fakeDisguisingOutcastName == "Drunk")
+            {
+                Gameplay.Instance.AddScriptCharacter(ECharacterType.Outcast, ProjectContext.Instance.gameData.GetCharacterDataOfId("Drunk_15369527"));
+            }
+            if (fakeDisguisingOutcastName == "Doppelganger")
+            {
+                Gameplay.Instance.AddScriptCharacter(ECharacterType.Outcast, ProjectContext.Instance.gameData.GetCharacterDataOfId("Doppleganger_52694042"));
+            }
+            if (fakeDisguisingOutcastName == "Lycanthrope")
+            {
+                Gameplay.Instance.AddScriptCharacter(ECharacterType.Outcast, ProjectContext.Instance.gameData.GetCharacterDataOfId("Lycanthrope_16077432"));
+            }
 
             __result = new ActedInfo(info);
         }

@@ -11,6 +11,9 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.TouchScreenKeyboard;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Kingmaker : Demon
 {
     public override void Act(ETriggerPhase trigger, Character charRef)

@@ -8,6 +8,9 @@ using System.ComponentModel.Design;
 using UnityEngine;
 using HarmonyLib;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Guardian : Minion
 {
     public override string Description

@@ -22,7 +22,7 @@ public class Ghost : Role
     }
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        return new ActedInfo("This text should literally never appear");
+        return new ActedInfo("I haunted someone.");
     }
     public override string Description
     {
@@ -56,6 +56,23 @@ public class Ghost : Role
             target = targetChar.id;
             if (charRef.dataRef.characterId == "Ghost_scm")
                 onActed.Invoke(GetInfo(charRef));
+        }
+    }
+    //this is just in case the Ghost gets corrupted, it should still die and deal 1 damage, but does not corrupt
+    public override void BluffAct(ETriggerPhase trigger, Character charRef)
+    {
+        if (trigger == ETriggerPhase.Day)
+        {
+            charRef.state = ECharacterState.Dead;
+            PlayerController.PlayerInfo.health.Damage(1);
+            ActOnDied(charRef);
+            Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
+            unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
+            unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
+            charRef.RevealAllReal();
+            charRef.RefreshCharacter();
+            if (charRef.dataRef.characterId == "Ghost_scm")
+                onActed.Invoke(GetBluffInfo(charRef));
         }
     }
     public Ghost() : base(ClassInjector.DerivedConstructorPointer<Ghost>())

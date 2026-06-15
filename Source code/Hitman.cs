@@ -44,7 +44,8 @@ public class Hitman : Role
                 foreach (Character target in newList) { 
                     if (target.dataRef.characterId != "Undying_WING" && !target.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
                     {
-                        validTargets.Add(target);
+                        if (!target.statuses.Contains(AvoidingDoubleKills.killed) && !target.statuses.Contains(ECharacterStatus.KilledByEvil))
+                            validTargets.Add(target);
                     }
                 }
                 if (!(newList.Count == 0))
@@ -52,6 +53,7 @@ public class Hitman : Role
                     Character myTarget = validTargets[UnityEngine.Random.Range(0, validTargets.Count)];
                     myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
                     myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
+                    myTarget.statuses.AddStatus(AvoidingDoubleKills.killed, charRef);
                     myTarget.statuses.statuses.Remove(ECharacterStatus.UnkillableByDemon);
                     myTarget.KillByDemon(charRef);
                     myTarget.Reveal();

@@ -11,6 +11,9 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.TouchScreenKeyboard;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Summoner : Demon
 {
     public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()

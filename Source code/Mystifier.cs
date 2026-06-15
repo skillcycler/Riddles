@@ -9,6 +9,9 @@ using MelonLoader;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Mystifier : Demon
 {
     public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
@@ -40,11 +43,13 @@ public class Mystifier : Demon
             characters = Characters.Instance.FilterRealCharacterType(characters, ECharacterType.Villager);
             characters = Characters.Instance.FilterCharacterMissingStatus(characters, Confused.confused);
             characters = Characters.Instance.FilterCharacterMissingStatus(characters, ECharacterStatus.Corrupted); // Prefer to Confuse characters that are not corrupted
+            characters = Characters.Instance.FilterCharactersWithoutResistance(characters, ECharacterStatus.Corrupted);
             if (characters.Count == 0)
             {
                 characters = Gameplay.CurrentCharacters;
                 characters = Characters.Instance.FilterRealCharacterType(characters, ECharacterType.Villager);
                 characters = Characters.Instance.FilterCharacterMissingStatus(characters, Confused.confused);
+                characters = Characters.Instance.FilterCharactersWithoutResistance(characters, ECharacterStatus.Corrupted);
             }
             if (characters.Count > 0)
             {

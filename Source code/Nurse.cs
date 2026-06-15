@@ -65,9 +65,37 @@ public class Nurse : Role
         {
             return;
         }
-        if (c.statuses.Contains(ECharacterStatus.Corrupted))
+        string additional = "\nThere are no Corrupted Characters";
+        foreach (Character cha in Gameplay.CurrentCharacters)
         {
-            c.statuses.statuses.Remove(ECharacterStatus.Corrupted);
+            if (cha.statuses.Contains(ECharacterStatus.Corrupted))
+            {
+                additional = "";
+            }
+        }
+        List<ECharacterStatus> curable = new List<ECharacterStatus>();
+        curable.Add(ECharacterStatus.Corrupted);
+        curable.Add(Accused.accused);
+        curable.Add(Confused.confused);
+        curable.Add((ECharacterStatus)968);
+        curable.Add((ECharacterStatus)918919);
+        bool sick = false;
+        foreach (ECharacterStatus status in curable)
+        {
+            if (c.statuses.Contains(status))
+            {
+                sick = true;
+            }
+        }
+        if (sick)
+        {
+            foreach (ECharacterStatus stat in curable)
+            {
+                if (c.statuses.Contains(stat))
+                {
+                    c.statuses.statuses.Remove(stat);
+                }
+            }
             if (c.bluff)
             {
                 if (c.bluff.picking)
@@ -89,14 +117,6 @@ public class Nurse : Role
             string inf = string.Format("I cured #{0}", c.id);
             onActed?.Invoke(new ActedInfo(inf, chars));
             return;
-        }
-        string additional = "\nThere are no Corrupted Characters";
-        foreach (Character cha in Gameplay.CurrentCharacters)
-        {
-            if (cha.statuses.Contains(ECharacterStatus.Corrupted))
-            {
-                additional = "";
-            }
         }
         string info = string.Format("I couldn't cure #{0}{1}", CharacterPicker.PickedCharacters[0].id, additional);
         onActed?.Invoke(new ActedInfo(info, chars));

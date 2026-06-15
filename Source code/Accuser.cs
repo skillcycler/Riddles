@@ -9,7 +9,10 @@ using MelonLoader;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
 
+
 namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
 public class Accuser : Minion
 {
     public override string Description

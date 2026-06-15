@@ -8,6 +8,10 @@ using System.ComponentModel.Design;
 using UnityEngine;
 using HarmonyLib;
 
+namespace RiddlerMod;
+
+[RegisterTypeInIl2Cpp]
+
 public class Mastermind : Minion
 {
     public override string Description
@@ -31,6 +35,16 @@ public class Mastermind : Minion
         {
             Il2CppSystem.Collections.Generic.List<Character> evils = Characters.Instance.FilterRealAlignmentCharacters(Gameplay.CurrentCharacters, EAlignment.Evil);
             evils.Remove(charRef);
+
+            Il2CppSystem.Collections.Generic.List<CharacterData> findThatMastermindData = Gameplay.Instance.GetAscensionAllStartingCharacters();
+            CharacterData mastermindData = new();
+            foreach (CharacterData character in findThatMastermindData)
+            {
+                if (character.characterId == "Mastermind_scm")
+                {
+                    mastermindData = character;
+                }
+            }
             foreach (Character evil in evils)
             {
                 if (evil.dataRef.name == "Witch")
@@ -38,7 +52,7 @@ public class Mastermind : Minion
                     PlayerController.PlayerInfo.blocks.value.Reduce(1); // You can probably guess why
                 }
                 if (evil.dataRef.characterId != "Mastermind_scm" && evil.dataRef.type == ECharacterType.Minion)
-                    evil.Init(charRef.GetRegisterAs());
+                    evil.Init(mastermindData);
             }
         }
     }
