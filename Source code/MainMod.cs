@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.1.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.1.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -374,7 +374,7 @@ public class MainMod : MelonMod
         MadScientist.name = "Mad Scientist";
         MadScientist.characterName = "Mad Scientist";
         MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
-        MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.\n\nI will not Disguise if part of my Outcast's ability is to Disguise.";
+        MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.\n\nI will not Disguise or turn Evil if part of my Outcast's ability includes those.";
         
         CharacterData Hitman = makeNewCharacter("Hitman", EAlignment.Evil, ECharacterType.Outcast, false, true, "\"No one is safe from me, not even myself\"");
         Hitman.role = new Hitman();
@@ -403,6 +403,7 @@ public class MainMod : MelonMod
 
         CharacterData Hypnotist = makeNewCharacter("Hypnotist", EAlignment.Evil, ECharacterType.Minion, false, true, "\"You are getting sleepy...\"");
         Hypnotist.role = new Hypnotist();
+        Hypnotist.description = "I disguise as and say something that would otherwise always be true.";
         Hypnotist.hints = "I may tell the truth, but that doesn't mean I have their ability.\n\nI always register as Truthful.";
 
         CharacterData Channeler = makeNewCharacter("Channeler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"I will follow in your footsteps.\"");
@@ -1315,6 +1316,27 @@ public class MainMod : MelonMod
             string info = __instance.ConjourInfo(pickedEvil.dataRef, 3, charRef);
 
             __result = new ActedInfo(info);
+        }
+    }
+    // Force night to always be active
+    [HarmonyPatch(typeof(Imp), nameof(Imp.GetRules))]
+    private static class ForceNightBaa
+    {
+        private static void Postfix(Imp __instance, ref Il2CppSystem.Collections.Generic.List<SpecialRule> __result)
+        {
+            Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
+            sr.Add(new NightModeRule(4));
+            __result = sr;
+        }
+    }
+    [HarmonyPatch(typeof(Pooka), nameof(Pooka.GetRules))]
+    private static class ForceNightPooka
+    {
+        private static void Postfix(Pooka __instance, ref Il2CppSystem.Collections.Generic.List<SpecialRule> __result)
+        {
+            Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
+            sr.Add(new NightModeRule(4));
+            __result = sr;
         }
     }
 }

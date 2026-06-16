@@ -14,6 +14,12 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class Veil : Demon
 {
+    public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
+    {
+        Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
+        sr.Add(new NightModeRule(4));
+        return sr;
+    }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (trigger != ETriggerPhase.Start) return;
