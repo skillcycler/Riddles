@@ -59,6 +59,7 @@ public class Wizard : Minion
         availableToBeDuped.Remove(charRef);
 
         Character replaced = availableToBeDuped[UnityEngine.Random.Range(0, availableToBeDuped.Count)];
+        MelonLogger.Msg(string.Format("I am duplicating #{0}, the {1}, onto #{2} which was originally a {3}.", picked.id, picked.dataRef.characterName, replaced.id, replaced.dataRef.characterName));
 
         replaced.Init(picked.dataRef);
 

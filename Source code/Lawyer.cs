@@ -28,6 +28,14 @@ public class Lawyer : Role
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         
         Il2CppSystem.Collections.Generic.List<Character> truthfulCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
+        if (charRef.dataRef.characterId == "Hypnotist_scm") // if Lawyer is a hypnotist, always point to adjacent characters
+        {
+            Il2CppSystem.Collections.Generic.List<Character> adjacent = Characters.Instance.GetAdjacentCharacters(charRef);
+            Character picked = adjacent[UnityEngine.Random.RandomRangeInt(0, adjacent.Count)];
+            string info_h = string.Format("#{0} is Truthful", picked.id);
+            ActedInfo actedInfo_h = new ActedInfo(info_h);
+            return actedInfo_h;
+        }
         foreach (Character character in characters)
         {
             bool isAdjacent = false;
@@ -86,7 +94,7 @@ public class Lawyer : Role
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
-        if (trigger == ETriggerPhase.Start)
+        if (trigger == ETriggerPhase.Start && charRef.dataRef.characterId != "Hypnotist_scm")
         {
             Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(charRef);
             foreach (Character character in adjacentCharacters)

@@ -69,6 +69,10 @@ public class Hypnotist : Spy
         {
             whitelistCharacterIDs.Add("Knitter_32352172");
         }
+
+
+        whitelistCharacterIDs.Add("Riddler_scm");
+        whitelistCharacterIDs.Add("Lawyer_scm");
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))

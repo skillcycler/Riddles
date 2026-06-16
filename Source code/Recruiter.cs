@@ -30,6 +30,20 @@ public class Recruiter : Role
         if (removedOutcast == 0)
         {
             info = "There are no Outcasts in this village";
+            //failsafe for if there are outcasts but they aren't converted
+            bool thereIsAnOutcast = false;
+            List<int> ids = new();
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.dataRef.type == ECharacterType.Outcast) { 
+                    thereIsAnOutcast = true;
+                    ids.Add(c.id);
+                }
+            }
+            if (thereIsAnOutcast)
+            {
+                info = $"#{ids[UnityEngine.Random.RandomRangeInt(0, ids.Count)]} rejected my offer to join the village";
+            }
         }
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;

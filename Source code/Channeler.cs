@@ -52,6 +52,8 @@ public class Channeler : Minion
             blacklistIDs.Add("Zealot_WING");
             blacklistIDs.Add("Swarm_Evil_WING");
             blacklistIDs.Add("Imp_58992273");
+            blacklistIDs.Add("Hypnotist_scm");
+            blacklistIDs.Add("Professional_WING");
             foreach (Character character in characters) {
                 if (!blacklistIDs.Contains(character.dataRef.characterId) && character.GetCharacterType() != ECharacterType.Villager && character.GetCharacterType() != ECharacterType.Outcast)
                     allowedCharacters.Add(character);

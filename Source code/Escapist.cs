@@ -31,10 +31,26 @@ public class Escapist : Demon
                 notInPlayOutsiders = Gameplay.Instance.GetAllAscensionCharacters();
                 notInPlayOutsiders = Characters.Instance.FilterRealCharacterType(notInPlayOutsiders, ECharacterType.Outcast);
             }
-            CharacterData pickedOutsider = notInPlayOutsiders[UnityEngine.Random.Range(0, notInPlayOutsiders.Count - 1)];
+            Il2CppSystem.Collections.Generic.List<CharacterData> validOutcasts = new();
+            List<string> invalidOutcastIds = new();
+            invalidOutcastIds.Add("Bombardier_79093372"); // Evil bombardier still makes you lose.
+            invalidOutcastIds.Add("Doppleganger_52694042"); // Too many bugs.
+            invalidOutcastIds.Add("Hitman_scm"); // This outcast is already evil.
+            invalidOutcastIds.Add("Ghost_scm"); // This would just die and out itself immediately
+            invalidOutcastIds.Add("Renegade_WING"); // This outcast is already evil.
+            invalidOutcastIds.Add("Mutant_WING"); // This outcast might already be evil.
+            invalidOutcastIds.Add("Revolutionary_WING"); // I know for sure this will cause problems
 
-            if (notInPlayOutsiders.Count != 0)
+            foreach (CharacterData data in notInPlayOutsiders)
             {
+                if (!invalidOutcastIds.Contains(data.characterId))
+                {
+                    validOutcasts.Add(data);
+                }
+            }
+            if (validOutcasts.Count != 0)
+            {
+                CharacterData pickedOutsider = validOutcasts[UnityEngine.Random.Range(0, validOutcasts.Count - 1)];
                 Gameplay.Instance.AddScriptCharacter(ECharacterType.Outcast, pickedOutsider);
 
                 viableCharacters = Characters.Instance.FilterAliveCharacters(viableCharacters);
@@ -42,8 +58,6 @@ public class Escapist : Demon
 
                 Character pickedCharacter = viableCharacters[UnityEngine.Random.Range(0, viableCharacters.Count)];
                 pickedCharacter.Init(pickedOutsider);
-                viableCharacters.Remove(pickedCharacter);
-                notInPlayOutsiders.Remove(pickedOutsider);
             }
             // One outcast is evil.
             Il2CppSystem.Collections.Generic.List<Character> outcasts = Gameplay.CurrentCharacters;
@@ -53,7 +67,7 @@ public class Escapist : Demon
             Il2CppSystem.Collections.Generic.List<Character> filter = new();
             foreach (Character character in outcasts)
             {
-                if (character.dataRef.name != "Bombardier")
+                if (!invalidOutcastIds.Contains(character.dataRef.characterId))
                 {
                     filter.Add(character);
                 }
@@ -63,10 +77,8 @@ public class Escapist : Demon
             {
                 Character pickedOutsider2 = filter[UnityEngine.Random.Range(0, filter.Count - 1)];
                 pickedOutsider2.ChangeAlignment(EAlignment.Evil);
-                if (pickedOutsider2.dataRef.name != "Doppelganger") // some weird bug where corrupted doppelganger doesn't disguise
-                    pickedOutsider2.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                else
-                    pickedOutsider2.statuses.RemoveStatusIfAble(ECharacterStatus.HealthyBluff);
+                pickedOutsider2.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                pickedOutsider2.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
                 pickedOutsider2.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 pickedOutsider2.statuses.AddStatus(Escaped.evilTurned, charRef);
             }

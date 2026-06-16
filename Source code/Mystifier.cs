@@ -37,6 +37,24 @@ public class Mystifier : Demon
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Night)
+        {
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.statuses.Contains(Confused.confused))
+                {
+                    if (Calculator.RollDice(2) == 1)
+                    {
+                        c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                    }
+                    else if (c.statuses.Contains(ECharacterStatus.Corrupted))
+                    {
+                        c.statuses.statuses.Remove(ECharacterStatus.Corrupted);
+                    }
+                }
+            }
+        }
+        if (charRef.state == ECharacterState.Dead) return; // don't keep confusing characters after death
         if (trigger == ETriggerPhase.Start || trigger == ETriggerPhase.Night)
         {
             Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
@@ -60,23 +78,6 @@ public class Mystifier : Demon
                 if (Calculator.RollDice(2) == 1)
                 {
                     randomChar.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                }
-            }
-        }
-        if (trigger == ETriggerPhase.Night)
-        {
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                if (c.statuses.Contains(Confused.confused))
-                {
-                    if (Calculator.RollDice(2) == 1)
-                    {
-                        c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                    }
-                    else if (c.statuses.Contains(ECharacterStatus.Corrupted))
-                    {
-                        c.statuses.statuses.Remove(ECharacterStatus.Corrupted);
-                    }
                 }
             }
         }

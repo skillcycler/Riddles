@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.1.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -203,7 +203,7 @@ public class MainMod : MelonMod
 
         CharacterData Nurse = makeNewCharacter("Nurse", EAlignment.Good, ECharacterType.Villager, true, false, "\"I can cure the Drunk, I promise!\"", true);
         Nurse.role = new Nurse();
-        Nurse.description = "Pick 1 alive card: If it has negative status effects, cure them and refresh their ability.\n\nIf I am not Lying and there are no Corrupted characters, I will say so.";
+        Nurse.description = "Pick 1 alive card: I cure most of their negative status effects.\nIf I cure an Evil character, I also kill them.\n\nIf I am not Lying and there are no Corrupted characters, I will say so.";
         Nurse.hints = "My ability refreshes every night.\n\nThe statuses I can cure include, but are not limited to: Corrupted, Confused, Accused.";
         Nurse.ifLies = "\"I couldn't cure #x\"";
         Nurse.abilityUsage = EAbilityUsage.ResetAfterNight;
@@ -232,7 +232,7 @@ public class MainMod : MelonMod
         Recruiter.role = new Recruiter();
         Recruiter.description = "Game Start: 1 random Outcast is turned into a Villager.";
         Recruiter.additionalPossibleCharacters = MakeAddedCharacters(0, -1, 0, 0);
-        Recruiter.hints = "My ability runs before any Corruption-causing characters, so it still works if I am Corrupted.";
+        Recruiter.hints = "My ability runs before any Corruption-causing characters, so it still works if I am Corrupted.\n\nIf I am Truthful and my ability somehow fails when there are Outcasts in play:\n\"#x rejected my offer to join the village\"";
 
         CharacterData Engineer = makeNewCharacter("Engineer", EAlignment.Good, ECharacterType.Villager, true, false, "\"The long lost brother of the Architect.\"");
         Engineer.role = new Engineer();
@@ -387,7 +387,7 @@ public class MainMod : MelonMod
         Ghost.role = new Ghost();
         Ghost.description = "On Reveal: Die, dealing 1 damage to you. One unrevealed Good character is Corrupted. The night counter does not tick.";
         Ghost.hints = "I cannot be revived by the Necromancer.";
-        Ghost.ifLies = "If I am somehow forced to Lie, I still die, dealing 1 damage, but I don't Corrupt anyone.";
+        Ghost.ifLies = "\"I am a real Medium.\"\nI still die, dealing 1 damage, but I don't Corrupt anyone.";
 
         CharacterData Muddler = makeNewCharacter("Muddler", EAlignment.Good, ECharacterType.Outcast, true, false, "\"I don't know, was it?\"");
         Muddler.role = new Muddler();
@@ -1205,6 +1205,21 @@ public class MainMod : MelonMod
         }
     }
     // Hypnotist stuff
+    [HarmonyPatch(typeof(Confessor), nameof(Confessor.GetInfo))]
+    private static class HypnotistConfessor
+    {
+        private static void Postfix(Confessor __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            string info = "I am Good";
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.dataRef.characterId == "Mendaverte_WING") info = "I am dizzy"; // "Good" confessors are never real in a Mendaverte game.
+            }
+
+            __result = new ActedInfo(info);
+        }
+    }
     [HarmonyPatch(typeof(Acrobat2), nameof(Acrobat2.GetInfo))]
     private static class HypnotistBard
     {
@@ -1251,7 +1266,8 @@ public class MainMod : MelonMod
             disguisingOutcasts.Add("Lycanthrope");
             string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
             string info = string.Format("#{0} is actually a {1}", UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1), fakeDisguisingOutcastName);
-            if (fakeDisguisingOutcastName == "Drunk")
+            // well, apparently this doesn't actually work.
+            /*if (fakeDisguisingOutcastName == "Drunk")
             {
                 Gameplay.Instance.AddScriptCharacter(ECharacterType.Outcast, ProjectContext.Instance.gameData.GetCharacterDataOfId("Drunk_15369527"));
             }
@@ -1262,7 +1278,7 @@ public class MainMod : MelonMod
             if (fakeDisguisingOutcastName == "Lycanthrope")
             {
                 Gameplay.Instance.AddScriptCharacter(ECharacterType.Outcast, ProjectContext.Instance.gameData.GetCharacterDataOfId("Lycanthrope_16077432"));
-            }
+            }*/
 
             __result = new ActedInfo(info);
         }

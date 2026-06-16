@@ -77,8 +77,9 @@ public class Nurse : Role
         curable.Add(ECharacterStatus.Corrupted);
         curable.Add(Accused.accused);
         curable.Add(Confused.confused);
-        curable.Add((ECharacterStatus)968);
-        curable.Add((ECharacterStatus)918919);
+        curable.Add((ECharacterStatus)968); // Evil turned by Venelum and the likes
+        curable.Add((ECharacterStatus)918919); // Hypnotised, by Iris
+        curable.Add((ECharacterStatus)16118119); // Mutant Evil
         bool sick = false;
         foreach (ECharacterStatus status in curable)
         {
@@ -96,25 +97,40 @@ public class Nurse : Role
                     c.statuses.statuses.Remove(stat);
                 }
             }
-            if (c.bluff)
+            if (c.GetRegisterAlignment() == EAlignment.Evil)
             {
-                if (c.bluff.picking)
-                {
-                    c.pickableUses = 1;
-                    c.pickable.SetActive(true);
-                    c.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
-                }
-            } else
-            {
-                if (c.dataRef.picking)
-                {
-                    c.pickableUses = 1;
-                    c.pickable.SetActive(true);
-                }
+                c.KillByDemon(charRef);
+                c.Reveal();
+                c.onReveal.Invoke();
+                c.RevealReal();
             }
-            c.RefreshCharacter();
-            c.Act(ETriggerPhase.Day);
+            else
+            {
+                if (c.bluff)
+                {
+                    if (c.bluff.picking)
+                    {
+                        c.pickableUses = 1;
+                        c.pickable.SetActive(true);
+                        c.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+                    }
+                }
+                else
+                {
+                    if (c.dataRef.picking)
+                    {
+                        c.pickableUses = 1;
+                        c.pickable.SetActive(true);
+                    }
+                }
+                c.RefreshCharacter();
+                c.Act(ETriggerPhase.Day);
+            }
             string inf = string.Format("I cured #{0}", c.id);
+            if (c.GetRegisterAlignment() == EAlignment.Evil)
+            {
+                inf = string.Format("I \"cured\" #{0}", c.id);
+            }
             onActed?.Invoke(new ActedInfo(inf, chars));
             return;
         }

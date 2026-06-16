@@ -22,7 +22,7 @@ public class Ghost : Role
     }
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        return new ActedInfo("I haunted someone.");
+        return new ActedInfo("I am a real Medium.");
     }
     public override string Description
     {

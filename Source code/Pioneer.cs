@@ -33,7 +33,7 @@ public class Pioneer : Role
         Il2CppSystem.Collections.Generic.List<Character> evils = new Il2CppSystem.Collections.Generic.List<Character>();
         foreach (Character c in characters)
         {
-            if (c.alignment == EAlignment.Evil)
+            if (c.GetRegisterAlignment() == EAlignment.Evil)
             {
                 evils.Add(c);
             }
@@ -45,7 +45,7 @@ public class Pioneer : Role
             Il2CppSystem.Collections.Generic.List<Character> check = Characters.Instance.GetCharactersAtRange(i, charRef); 
             foreach (Character c in check)
             {
-                if (c.alignment == EAlignment.Evil)
+                if (c.GetRegisterAlignment() == EAlignment.Evil)
                 {
                     closestid = c.id;
                     found = true;
@@ -74,7 +74,7 @@ public class Pioneer : Role
         Il2CppSystem.Collections.Generic.List<Character> evils = new Il2CppSystem.Collections.Generic.List<Character>();
         foreach (Character c in characters)
         {
-            if (c.alignment == EAlignment.Evil)
+            if (c.GetRegisterAlignment() == EAlignment.Evil)
             {
                 evils.Add(c);
             }
@@ -87,7 +87,7 @@ public class Pioneer : Role
             Il2CppSystem.Collections.Generic.List<Character> check = Characters.Instance.GetCharactersAtRange(i, charRef);
             foreach (Character c in check)
             {
-                if (c.alignment == EAlignment.Evil)
+                if (c.GetRegisterAlignment() == EAlignment.Evil)
                 {
                     closestid = c.id;
                     found = true;
