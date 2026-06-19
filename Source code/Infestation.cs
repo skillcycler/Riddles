@@ -68,11 +68,14 @@ public class Infestation : Demon
                 {
                     if (oldCorruptions.Contains(c.id) && c.state != ECharacterState.Dead && !c.statuses.Contains(ECharacterStatus.KilledByEvil))
                     {
+                        bool hidden = (c.state != ECharacterState.Revealed);
                         c.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
                         c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                         c.statuses.AddStatus(AvoidingDoubleKills.killed, charRef);
                         c.KillByDemon(charRef);
                         PlayerController.PlayerInfo.health.Damage(1);
+                        if (!hidden)
+                            c.RevealReal();
                     }
                     else if (newCorruptions.Contains(c.id))
                         c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);

@@ -41,7 +41,9 @@ public class Channeler : Minion
             blacklistIDs.Add("Undying_WING");
             blacklistIDs.Add("Legion_WING");
             blacklistIDs.Add("Blackmailer_VP");
-            blacklistIDs.Add("Summoner_scm"); // just in case
+            blacklistIDs.Add("Summoner_scm"); // just in cases
+            blacklistIDs.Add("Wizard_scm"); // so this might create infinite wizards which is bad
+            blacklistIDs.Add("Kingmaker_scm"); // Once a Channeler replaced the Kingmaker with a minion. This should not happen.
             //the below characters do nothing when copied, so don't copy them if possible
             blacklistIDs.Add("Puppet_15989619");
             blacklistIDs.Add("Turncoat_WING");

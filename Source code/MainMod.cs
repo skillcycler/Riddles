@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.1.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -60,7 +60,10 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Ghost>();
         ClassInjector.RegisterTypeInIl2Cpp<Muddler>();
         ClassInjector.RegisterTypeInIl2Cpp<Confectioner>();
-        
+        ClassInjector.RegisterTypeInIl2Cpp<Captivator>();
+        ClassInjector.RegisterTypeInIl2Cpp<Reflector>();
+        ClassInjector.RegisterTypeInIl2Cpp<Gambler>();
+
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
         ClassInjector.RegisterTypeInIl2Cpp<Hypnotist>();
@@ -70,6 +73,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Mastermind>();
         ClassInjector.RegisterTypeInIl2Cpp<Baffler>();
         ClassInjector.RegisterTypeInIl2Cpp<Wizard>();
+        ClassInjector.RegisterTypeInIl2Cpp<Slanderer>();
 
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
@@ -397,6 +401,19 @@ public class MainMod : MelonMod
         Confectioner.role = new Confectioner();
         Confectioner.description = "Game Start: One random Villager is turned into a Corrupted Baker.\n\nI disguise as the Original Baker.";
 
+        CharacterData Captivator = makeNewCharacter("Captivator", EAlignment.Good, ECharacterType.Outcast, false, true, "\"My information makes sense, I swear!\"");
+        Captivator.role = new Captivator();
+        Captivator.description = "I disguise as and say something that neither a truth teller nor liar could say in my position.\n\nI am normally seen as Lying.";
+        Captivator.hints = "Some examples of what I can say are: Empress pointing to 2 Evils, Bishop pointing to 3 Outcasts";
+
+        CharacterData Reflector = makeNewCharacter("Reflector", EAlignment.Good, ECharacterType.Outcast, false, true, "\"Look at you, you're so confused!\"");
+        Reflector.role = new Reflector();
+        Reflector.description = "I disguise and am Confused.\nConfused characters have a 50% chance of Lying.\n\nYou only take 3 damage if I am Executed.";
+
+        CharacterData Gambler = makeNewCharacter("Gambler", EAlignment.Good, ECharacterType.Outcast, true, false, "\"Aw dang it!\"");
+        Gambler.role = new Gambler();
+        Gambler.description = "Game Start: 1 random character is afflicted with a random status effect: Accused, Corrupted, Confused, Evil-turned. Learn who I affected.";
+
         CharacterData Accuser = makeNewCharacter("Accuser", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Uno reverse card!\"");
         Accuser.role = new Accuser();
         Accuser.description = "Game Start: One adjacent Good Villager registers a random Evil Minion.\n\nI Lie and Disguise.";
@@ -432,6 +449,10 @@ public class MainMod : MelonMod
         Wizard.description = "Game Start: One random Outcast or Minion (not myself), if there is one, is duplicated.";
         Wizard.additionalPossibleCharacters = MakeAddedCharacters(0, 1, 1, 0);
         Wizard.hints = "The duplicated character can replace any other Villager, Outcast, or Minion.";
+
+        CharacterData Slanderer = makeNewCharacter("Slanderer", EAlignment.Evil, ECharacterType.Minion, false, true, "\"They're not Corrupted! They're just Evil!\"");
+        Slanderer.role = new Slanderer();
+        Slanderer.description = "Game Start: The card(s) furthest away from me register as the wrong alignment.";
 
         CharacterData Follower = makeNewCharacter("Follower", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I'm playing chess and you're playing checkers.\"");
         Follower.role = new Follower();
@@ -807,8 +828,11 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
         Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Poisoner", Baffler);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Baffler", Mystifier);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Mystifier", Infestation);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Baffler", Slanderer);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Slanderer", Mystifier);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Mystifier", Reflector);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Reflector", Infestation);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Infestation", Gambler);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Follower);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
@@ -860,6 +884,9 @@ public class MainMod : MelonMod
             AddRole(script.startingOutsiders, Ghost);
             AddRole(script.startingOutsiders, Muddler);
             AddRole(script.startingOutsiders, Confectioner);
+            AddRole(script.startingOutsiders, Captivator);
+            AddRole(script.startingOutsiders, Reflector);
+            AddRole(script.startingOutsiders, Gambler);
 
 
             AddRole(script.startingMinions, Wizard);
@@ -870,6 +897,7 @@ public class MainMod : MelonMod
             AddRole(script.startingMinions, Guardian);
             AddRole(script.startingMinions, Mastermind);
             AddRole(script.startingMinions, Baffler);
+            AddRole(script.startingMinions, Slanderer);
         }
     }
     public void AddRole(Il2CppSystem.Collections.Generic.List<CharacterData> list, CharacterData data)
@@ -1227,6 +1255,10 @@ public class MainMod : MelonMod
         private static void Postfix(Acrobat2 __instance, Character charRef, ref ActedInfo __result)
         {
             if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            if (Calculator.RollDice(2) == 1)
+            {
+                __result = new ActedInfo("There are no Corrupted characters");
+            }
             string info = __instance.ConjourInfo(UnityEngine.Random.RandomRangeInt(4, (int)(Gameplay.CurrentCharacters.Count / 2)+1), charRef);
 
             __result = new ActedInfo(info);
@@ -1265,6 +1297,8 @@ public class MainMod : MelonMod
             disguisingOutcasts.Add("Drunk");
             disguisingOutcasts.Add("Doppelganger");
             disguisingOutcasts.Add("Lycanthrope");
+            disguisingOutcasts.Add("Confectioner");
+            disguisingOutcasts.Add("Captivator");
             string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
             string info = string.Format("#{0} is actually a {1}", UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1), fakeDisguisingOutcastName);
             // well, apparently this doesn't actually work.
@@ -1337,6 +1371,298 @@ public class MainMod : MelonMod
             Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
             sr.Add(new NightModeRule(4));
             __result = sr;
+        }
+    }
+    public static Il2CppSystem.Collections.Generic.List<Character> GetGameplayCurrentCharacters()
+    {
+        Il2CppSystem.Collections.Generic.List<Character> characters = new();
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            characters.Add(c);
+        }
+        return characters;
+    }
+    // Captivator stuff. Gotta patch both truth and lying info just in case
+    // Oracle is gonna be horribly complicated. Not doing it this update. Everything else will be here though
+    /*[HarmonyPatch(typeof(Investigator), nameof(Investigator.GetInfo))]
+    private static class CaptivatorOracleTruth
+    {
+        private static void Postfix(Investigator __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Captivator_scm") return;
+            Il2CppSystem.Collections.Generic.List<Character> pickedCharacters = new();
+
+            Il2CppSystem.Collections.Generic.List<Character> evils = GetGameplayCurrentCharacters();
+            evils = Characters.Instance.FilterCharacterType(evils, ECharacterType.Minion);
+
+            string info = __instance.ConjourInfo(0, 0, null, charRef, true);
+            ActedInfo newInfo = new ActedInfo(info);
+
+            if (evils.Count == 0)
+                return;
+
+            Il2CppSystem.Collections.Generic.List<Character> goods = new();
+
+            Character evil = evils[UnityEngine.Random.Range(0, evils.Count)];
+
+            pickedCharacters.Add(evil);
+            foreach (Character character in GetGameplayCurrentCharacters())
+            {
+                if (character.id != evil.id)
+                    goods.Add(character);
+            }
+            pickedCharacters.Add(goods[UnityEngine.Random.Range(0, goods.Count)]);
+            List<int> pickedIds = new();
+            foreach (Character character in pickedCharacters)
+            {
+                pickedIds.Add(character.id);
+            }
+            pickedIds.Sort();
+            info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], evil.GetCharacterData());
+            __result = new ActedInfo(info, pickedCharacters);
+        }
+    }*/
+    [HarmonyPatch(typeof(Noble), nameof(Noble.GetInfo))]
+    private static class CaptivatorEmpress1
+    {
+        private static void Postfix(Noble __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Captivator_scm") return;
+            Il2CppSystem.Collections.Generic.List<Character> picked = new();
+            Il2CppSystem.Collections.Generic.List<Character> chars = GetGameplayCurrentCharacters();
+            Il2CppSystem.Collections.Generic.List<Character> evil = new();
+            Il2CppSystem.Collections.Generic.List<Character> good = new();
+            foreach (Character c in chars) { 
+                if (c.GetRegisterAlignment() == EAlignment.Good)
+                {
+                    good.Add(c);
+                } else
+                {
+                    evil.Add(c);
+                }
+            }
+
+            Character pick = evil[UnityEngine.Random.Range(0, evil.Count)];
+            picked.Add(pick);
+            evil.Remove(pick);
+            pick = evil[UnityEngine.Random.Range(0, evil.Count)];
+            picked.Add(pick);
+            evil.Remove(pick);
+            if (evil.Count > 0 && Calculator.RollDice(2) == 1)
+            {
+                pick = evil[UnityEngine.Random.Range(0, evil.Count)];
+                picked.Add(pick);
+            }
+            else if (good.Count > 0)
+            {
+                pick = good[UnityEngine.Random.Range(0, good.Count)];
+                picked.Add(pick);
+            } else
+            {
+                pick = evil[UnityEngine.Random.Range(0, evil.Count)];
+                picked.Add(pick);
+            }
+            List<int> pickedIds = new();
+            foreach (Character character in picked)
+            {
+                pickedIds.Add(character.id);
+            }
+            pickedIds.Sort();
+            string info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], pickedIds[2], charRef);
+            __result = new ActedInfo(info, picked);
+        }
+    }
+    [HarmonyPatch(typeof(Noble), nameof(Noble.GetBluffInfo))]
+    private static class CaptivatorEmpress2
+    {
+        private static void Postfix(Noble __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Captivator_scm") return;
+            Il2CppSystem.Collections.Generic.List<Character> picked = new();
+            Il2CppSystem.Collections.Generic.List<Character> chars = GetGameplayCurrentCharacters();
+            Il2CppSystem.Collections.Generic.List<Character> evil = new();
+            Il2CppSystem.Collections.Generic.List<Character> good = new();
+            foreach (Character c in chars)
+            {
+                if (c.GetRegisterAlignment() == EAlignment.Good)
+                {
+                    good.Add(c);
+                }
+                else
+                {
+                    evil.Add(c);
+                }
+            }
+
+            Character pick = evil[UnityEngine.Random.Range(0, evil.Count)];
+            picked.Add(pick);
+            evil.Remove(pick);
+            pick = evil[UnityEngine.Random.Range(0, evil.Count)];
+            picked.Add(pick);
+            evil.Remove(pick);
+            if (evil.Count > 0 && Calculator.RollDice(2) == 1)
+            {
+                pick = evil[UnityEngine.Random.Range(0, evil.Count)];
+                picked.Add(pick);
+            }
+            else if (good.Count > 0)
+            {
+                pick = good[UnityEngine.Random.Range(0, good.Count)];
+                picked.Add(pick);
+            }
+            else
+            {
+                pick = evil[UnityEngine.Random.Range(0, evil.Count)];
+                picked.Add(pick);
+            }
+            List<int> pickedIds = new();
+            foreach (Character character in picked)
+            {
+                pickedIds.Add(character.id);
+            }
+            pickedIds.Sort();
+            string info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], pickedIds[2], charRef);
+            __result = new ActedInfo(info, picked);
+        }
+    }
+    public static bool checkCaptivatorBishopInfo(Il2CppSystem.Collections.Generic.List<Character> chars)
+    {
+        int villagers = 0;
+        int outcasts = 0;
+        int evils = 0;
+        foreach (Character c in chars)
+        {
+            switch (c.GetCharacterType())
+            {
+                case ECharacterType.Villager:
+                    villagers++;
+                    break;
+                case ECharacterType.Outcast:
+                    outcasts++;
+                    break;
+                case ECharacterType.Minion:
+                    evils++;
+                    break;
+                case ECharacterType.Demon:
+                    evils++;
+                    break;
+            }
+        }
+        return (evils >= 2 || outcasts >= 2 || villagers == 2 || villagers == 0);
+    }
+
+    [HarmonyPatch(typeof(Bishop), nameof(Bishop.GetInfo))]
+    private static class CaptivatorBishop1
+    {
+        private static void Postfix(Bishop __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Captivator_scm") return;
+            Il2CppSystem.Collections.Generic.List<Character> pickedCharacters = new();
+            bool isValid = false;
+            do
+            {
+                pickedCharacters = new();
+
+                Il2CppSystem.Collections.Generic.List<Character> allCharacters = GetGameplayCurrentCharacters();
+
+                Character picked = allCharacters[UnityEngine.Random.Range(0, allCharacters.Count)];
+                pickedCharacters.Add(picked);
+                allCharacters.Remove(picked);
+
+                picked = allCharacters[UnityEngine.Random.Range(0, allCharacters.Count)];
+                pickedCharacters.Add(picked);
+                allCharacters.Remove(picked);
+
+                if (Gameplay.CurrentScript.outs > 0)
+                {
+                    picked = allCharacters[UnityEngine.Random.Range(0, allCharacters.Count)];
+                    pickedCharacters.Add(picked);
+                    allCharacters.Remove(picked);
+                }
+                isValid = checkCaptivatorBishopInfo(pickedCharacters);
+            } while (!isValid);
+
+            Il2CppSystem.Collections.Generic.List<int> ids = new Il2CppSystem.Collections.Generic.List<int>();
+            foreach (Character c in pickedCharacters)
+                ids.Add(c.id);
+            ids.Sort();
+            List<ECharacterType> possiblePicks = new List<ECharacterType>();
+
+            if (Gameplay.CurrentScript.minion > 0)
+                possiblePicks.Add(ECharacterType.Minion);
+            else
+                possiblePicks.Add(ECharacterType.Demon);
+
+            if (Gameplay.CurrentScript.outs > 0)
+                possiblePicks.Add(ECharacterType.Outcast);
+            if (Gameplay.CurrentScript.town > 0)
+                possiblePicks.Add(ECharacterType.Villager);
+
+            pickedCharacters = ListHelper.ShuffleList(pickedCharacters);
+
+            Il2CppSystem.Collections.Generic.List<ECharacterType> types = new();
+            foreach (ECharacterType ct in possiblePicks)
+                types.Add(ct);
+
+            string info = __instance.ConjourInfo(ids, types, charRef);
+            __result = new ActedInfo(info, pickedCharacters);
+        }
+    }
+    [HarmonyPatch(typeof(Bishop), nameof(Bishop.GetBluffInfo))]
+    private static class CaptivatorBishop2
+    {
+        private static void Postfix(Bishop __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Captivator_scm") return;
+            Il2CppSystem.Collections.Generic.List<Character> pickedCharacters = new();
+            bool isValid = false;
+            do
+            {
+                pickedCharacters = new();
+
+                Il2CppSystem.Collections.Generic.List<Character> allCharacters = GetGameplayCurrentCharacters();
+
+                Character picked = allCharacters[UnityEngine.Random.Range(0, allCharacters.Count)];
+                pickedCharacters.Add(picked);
+                allCharacters.Remove(picked);
+
+                picked = allCharacters[UnityEngine.Random.Range(0, allCharacters.Count)];
+                pickedCharacters.Add(picked);
+                allCharacters.Remove(picked);
+
+                if (Gameplay.CurrentScript.outs > 0)
+                {
+                    picked = allCharacters[UnityEngine.Random.Range(0, allCharacters.Count)];
+                    pickedCharacters.Add(picked);
+                    allCharacters.Remove(picked);
+                }
+                isValid = checkCaptivatorBishopInfo(pickedCharacters);
+            } while (!isValid);
+
+            Il2CppSystem.Collections.Generic.List<int> ids = new Il2CppSystem.Collections.Generic.List<int>();
+            foreach (Character c in pickedCharacters)
+                ids.Add(c.id);
+            ids.Sort();
+            List<ECharacterType> possiblePicks = new List<ECharacterType>();
+
+            if (Gameplay.CurrentScript.minion > 0)
+                possiblePicks.Add(ECharacterType.Minion);
+            else
+                possiblePicks.Add(ECharacterType.Demon);
+
+            if (Gameplay.CurrentScript.outs > 0)
+                possiblePicks.Add(ECharacterType.Outcast);
+            if (Gameplay.CurrentScript.town > 0)
+                possiblePicks.Add(ECharacterType.Villager);
+
+            pickedCharacters = ListHelper.ShuffleList(pickedCharacters);
+
+            Il2CppSystem.Collections.Generic.List<ECharacterType> types = new();
+            foreach (ECharacterType ct in possiblePicks)
+                types.Add(ct);
+
+            string info = __instance.ConjourInfo(ids, types, charRef);
+            __result = new ActedInfo(info, pickedCharacters);
         }
     }
 }

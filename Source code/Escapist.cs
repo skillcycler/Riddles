@@ -106,7 +106,7 @@ public class Escapist : Demon
     }
     public Escapist(System.IntPtr ptr) : base(ptr) { }
 }
-public static class Escaped
+public static class Escaped // or rather, just literally any evil-turned thing
 {
     public static ECharacterStatus evilTurned = (ECharacterStatus)880;
 

@@ -59,20 +59,7 @@ public class Baffler : Minion
         }
         if (trigger == ETriggerPhase.Night)
         {
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                if (c.statuses.Contains(Confused.confused))
-                {
-                    if (Calculator.RollDice(2) == 1)
-                    {
-                        c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                    }
-                    else if (c.statuses.Contains(ECharacterStatus.Corrupted))
-                    {
-                        c.statuses.statuses.Remove(ECharacterStatus.Corrupted);
-                    }
-                }
-            }
+            Confused.updateConfusion(charRef);
         }
     }
 
@@ -95,6 +82,23 @@ public static class Confused
             if (__instance.statuses.Contains(confused))
             {
                 __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#DDDD00><size=18>\n<Confused></color></size>";
+            }
+        }
+    }
+    public static void updateConfusion(Character charRef)
+    {
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (c.statuses.Contains(confused))
+            {
+                if (Calculator.RollDice(2) == 1)
+                {
+                    c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                }
+                else if (c.statuses.Contains(ECharacterStatus.Corrupted))
+                {
+                    c.statuses.statuses.Remove(ECharacterStatus.Corrupted);
+                }
             }
         }
     }

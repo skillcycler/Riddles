@@ -33,6 +33,9 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 - Ghost: Dies when revealed, haunting (corrupting) an unrevealed Villager.
 - Muddler: Status effects such as Corrupted are not shown when cards are executed.
 - Confectioner: I disguise as a Baker. On game start: One random villager becomes a Corrupted Baker.
+- Captivator: I say something that neither a truth teller nor liar would be able to say.
+- Reflector: I am Confused. I disguise.
+- Gambler: I apply a random status effect to a random character. Learn who I gambled with.
 
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil.

@@ -39,20 +39,7 @@ public class Mystifier : Demon
     {
         if (trigger == ETriggerPhase.Night)
         {
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                if (c.statuses.Contains(Confused.confused))
-                {
-                    if (Calculator.RollDice(2) == 1)
-                    {
-                        c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                    }
-                    else if (c.statuses.Contains(ECharacterStatus.Corrupted))
-                    {
-                        c.statuses.statuses.Remove(ECharacterStatus.Corrupted);
-                    }
-                }
-            }
+            Confused.updateConfusion(charRef);
         }
         if (charRef.state == ECharacterState.Dead) return; // don't keep confusing characters after death
         if (trigger == ETriggerPhase.Start || trigger == ETriggerPhase.Night)

@@ -9,6 +9,7 @@ using Il2CppSystem;
 using Il2CppSystem.Reflection;
 using MelonLoader;
 using UnityEngine;
+using static MelonLoader.Modules.MelonModule;
 
 namespace RiddlerMod;
 
@@ -37,6 +38,28 @@ public class Nurse : Role
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.OnReveal)
+        {
+            bool isThereCure = false;
+            List<ECharacterStatus> curable = new List<ECharacterStatus>();
+            curable.Add(ECharacterStatus.Corrupted);
+            curable.Add(Accused.accused);
+            curable.Add(Confused.confused);
+            curable.Add((ECharacterStatus)968); // Evil turned by Venelum and the likes
+            curable.Add((ECharacterStatus)918919); // Hypnotised, by Iris
+            curable.Add((ECharacterStatus)16118119); // Mutant Evil
+            foreach (Character cha in Gameplay.CurrentCharacters)
+            {
+                foreach (ECharacterStatus status in curable)
+                {
+                    if (cha.statuses.Contains(status)) isThereCure = true;
+                }
+            }
+            if (!isThereCure)
+            {
+                onActed?.Invoke(new ActedInfo("There are no curable characters"));
+            }
+        }
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
         CharacterPicker.Instance.StartPickCharacters(1, charRef);
@@ -65,14 +88,7 @@ public class Nurse : Role
         {
             return;
         }
-        string additional = "\nThere are no Corrupted Characters";
-        foreach (Character cha in Gameplay.CurrentCharacters)
-        {
-            if (cha.statuses.Contains(ECharacterStatus.Corrupted))
-            {
-                additional = "";
-            }
-        }
+        
         List<ECharacterStatus> curable = new List<ECharacterStatus>();
         curable.Add(ECharacterStatus.Corrupted);
         curable.Add(Accused.accused);
@@ -134,7 +150,7 @@ public class Nurse : Role
             onActed?.Invoke(new ActedInfo(inf, chars));
             return;
         }
-        string info = string.Format("I couldn't cure #{0}{1}", CharacterPicker.PickedCharacters[0].id, additional);
+        string info = string.Format("I couldn't cure #{0}", CharacterPicker.PickedCharacters[0].id);
         onActed?.Invoke(new ActedInfo(info, chars));
     }
     private void CharacterPickedLiar()

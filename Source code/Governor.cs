@@ -35,6 +35,7 @@ public class Governor : Role
             }
         }
         string info = string.Format("There are {0} Villagers", villagers);
+        if (villagers == 1) info = "There is 1 Villager";
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
@@ -52,6 +53,7 @@ public class Governor : Role
         }
         villagers += UnityEngine.Random.RandomRangeInt(0, 2)*2-1;
         string info = string.Format("There are {0} Villagers", villagers);
+        if (villagers == 1) info = "There is 1 Villager";
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }

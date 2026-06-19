@@ -43,6 +43,16 @@ public class Guardian : Minion
                 }
             }
         }
+        if (trigger == ETriggerPhase.AfterRoundStart)
+        {
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.statuses.Contains(Guarding.guarded))
+                {
+                    c.UpdateRegisterAsRole(c.bluff);
+                }
+            }
+        }
     }
     private void SitNextToDemon(Character charRef)
     {

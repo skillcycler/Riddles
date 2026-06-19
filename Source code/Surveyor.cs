@@ -23,6 +23,20 @@ public class Surveyor : Role
             return "";
         }
     }
+    public string GetCaptivatorInfo(int outcasts, int minions)
+    {
+        bool modifyOutcasts = (Calculator.RollDice(2) == 1);
+        if (modifyOutcasts)
+        {
+            outcasts += UnityEngine.Random.RandomRangeInt(0, 2) * 2 - 1;
+        } else
+        {
+            minions += UnityEngine.Random.RandomRangeInt(0, 2) * 2 - 1;
+        }
+        if (outcasts == -1) outcasts = 1;
+        if (minions == -1) minions = 1;
+        return string.Format("There {2} {0} Outcast{3} and {1} Minion{4}", outcasts, minions, outcasts == 1 ? "is" : "are", outcasts == 1 ? "" : "s", minions == 1 ? "" : "s");
+    }
     public override ActedInfo GetInfo(Character charRef)
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;

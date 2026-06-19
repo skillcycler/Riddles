@@ -41,6 +41,7 @@ public class Ghost : Role
             Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
             unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
             unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
+            unrevealedCharacters = Characters.Instance.FilterCharactersWithoutResistance(unrevealedCharacters, ECharacterStatus.Corrupted);
             charRef.RevealAllReal();
             charRef.RefreshCharacter();
             if (unrevealedCharacters.Count == 0)
@@ -66,9 +67,6 @@ public class Ghost : Role
             charRef.state = ECharacterState.Dead;
             PlayerController.PlayerInfo.health.Damage(1);
             ActOnDied(charRef);
-            Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
-            unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
-            unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
             charRef.RevealAllReal();
             charRef.RefreshCharacter();
             if (charRef.dataRef.characterId == "Ghost_scm")

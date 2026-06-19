@@ -30,6 +30,7 @@ public class Riddler : Role
         infos.Add("A bard claiming to be 5 cards away from a Corrupted character is always truthful.");
         infos.Add("A Druid that claims to have seen a Wretch is lying.");
         infos.Add("Lilis cannot kill herself in the night.");
+        infos.Add("The Puppet can sometimes lie.");
         infos.Add("Puppeteer acts before Poisoner in the Game Start order.");
         infos.Add("The Bishop will only name 2 cards if Wretch is the only Outcast.");
         infos.Add("A card cannot be both Evil and Corrupted.");
@@ -63,7 +64,6 @@ public class Riddler : Role
         infos.Add("A village with 9 cards can have anywhere from 2 to 4 evils.");
         infos.Add("A 10 card village can have at most 9 Baker claims.");
         infos.Add("Lilis will prioritize killing Good characters over Minions.");
-        infos.Add("The Poet is the only character that can directly call someone Evil.");
         infos.Add("The night cycle continues after Lilis is killed.");
         infos.Add("The Puppeteer acts before the Plague Doctor in the Game Start order.");
         infos.Add("A truthful Bishop can reference herself.");
@@ -73,6 +73,8 @@ public class Riddler : Role
         infos.Add("A Chancellor can create a Drunk that is not Corrupted.");
         infos.Add("Chancellor will always sit next to the outcast he adds.");
         infos.Add("If a Lycanthrope turns into a Werewolf, information may become outdated.");
+        infos.Add("Single target abilities cannot be used on themselves.");
+        infos.Add("If Lycanthrope and Lilis are in play, two separate night cycle objects are created.");
 
         // easter eggs
         infos.Add("A lying Oracle can mention a Marionette if there are no Minions in play.");
@@ -89,6 +91,8 @@ public class Riddler : Role
         List<string> infos = new List<string>();
         infos.Add("It is impossible for an Alchemist to claim there were 4 Corruptions around him.");
         //infos.Add("The Wretch can register as different minions to different characters."); This statement has conflicting info whether it is true or not
+        infos.Add("A Puppet disguised as a Slayer can kill itself.");
+        infos.Add("A Puppet disguised as an Alchemist will always tell the truth.");
         infos.Add("A Gemcrafter or Medium referencing herself can be Good.");
         infos.Add("A bard claiming to be 5 cards away from a Corrupted character is always lying.");
         infos.Add("A bard claiming to be 4 cards away from a Corrupted character is always lying.");
@@ -138,6 +142,10 @@ public class Riddler : Role
         infos.Add("2 truthful Lovers next to each other can both claim to be adjacent to 2 Evils.");
         infos.Add("The Minion and Twin Minion might register as each other's characters.");
         infos.Add("Chancellor can sit next to an outcast he didn't create.");
+        infos.Add("The Lycanthrope can disguise as a Baker.");
+        //infos.Add("The Doppelganger can disguise as a Baker");
+        infos.Add("The Puppet always tells the truth.");
+        infos.Add("The Poet can directly call someone Evil.");
 
         string info = infos[UnityEngine.Random.RandomRangeInt(0, infos.Count)];
         ActedInfo actedInfo = new ActedInfo(info);

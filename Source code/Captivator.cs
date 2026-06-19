@@ -11,12 +11,13 @@ using Il2CppSystem.Collections.Generic;
 using MelonLoader;
 using RiddlerMod;
 using UnityEngine;
+using static Il2CppSystem.Globalization.HebrewNumber;
 using static MelonLoader.MelonLogger;
 
 namespace RiddlerMod;
 
 [RegisterTypeInIl2Cpp]
-public class Hypnotist : Spy
+public class Captivator : Role
 {
     public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();
     public override string Description
@@ -36,7 +37,7 @@ public class Hypnotist : Spy
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
-        
+
     }
     public override CharacterData GetBluffIfAble(Character charRef)
     {
@@ -48,32 +49,36 @@ public class Hypnotist : Spy
         Il2CppSystem.Collections.Generic.List<CharacterData> listV = new Il2CppSystem.Collections.Generic.List<CharacterData>();
         Il2CppSystem.Collections.Generic.List<string> whitelistCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
 
-        whitelistCharacterIDs.Add("Confessor_18741708");
-        whitelistCharacterIDs.Add("Baker_22847064");
-        whitelistCharacterIDs.Add("Alchemist_94446803");
-        if (Gameplay.CurrentCharacters.Count >= 8)
-        {
-            whitelistCharacterIDs.Add("Athlete_95133291");
-            whitelistCharacterIDs.Add("Scout_88081716");
-        }
-        whitelistCharacterIDs.Add("Lookout_41018246");
-        whitelistCharacterIDs.Add("Witness_25155076");
-        Il2CppSystem.Collections.Generic.List<Character> chs = Gameplay.CurrentCharacters;
+        //whitelistCharacterIDs.Add("Oracle_07039445");
+        whitelistCharacterIDs.Add("Bishop_58855542");
         int evils = 0;
-        foreach (Character c in chs)
+        foreach (Character c in Gameplay.CurrentCharacters)
         {
             if (c.GetRegisterAlignment() == EAlignment.Evil)
                 evils++;
         }
-        if (evils >= 4)
+        if (evils >= 3)
         {
-            whitelistCharacterIDs.Add("Knitter_32352172");
+            whitelistCharacterIDs.Add("Empress_13782227");
         }
-
-
-        whitelistCharacterIDs.Add("Riddler_scm");
-        whitelistCharacterIDs.Add("Lawyer_scm");
-        whitelistCharacterIDs.Add("Sentinel_WING");
+        foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
+        {
+            if (c.alignment == EAlignment.Good)
+            {
+                whitelistCharacterIDs.Add("Lawyer_scm");
+                break;
+            }
+        }
+        whitelistCharacterIDs.Add("Surveyor_scm");
+        whitelistCharacterIDs.Add("Chiromancer_WING");
+        whitelistCharacterIDs.Add("Prince_WING");
+        int corrupted = 0;
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (c.statuses.Contains(ECharacterStatus.Corrupted)) corrupted++;
+        }
+        if (corrupted >= 2)
+            whitelistCharacterIDs.Add("Sentinel_WING");
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))
@@ -85,13 +90,13 @@ public class Hypnotist : Spy
         charRef.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
         return bluff;
     }
-    public override CharacterData GetRegisterAsRole(Character charRef)
+    public override int GetDamageToYou()
     {
-        return null;
+        return 2;
     }
-    public Hypnotist() : base(ClassInjector.DerivedConstructorPointer<Hypnotist>())
+    public Captivator() : base(ClassInjector.DerivedConstructorPointer<Captivator>())
     {
         ClassInjector.DerivedConstructorBody((Il2CppObjectBase)this);
     }
-    public Hypnotist(System.IntPtr ptr) : base(ptr) { }
+    public Captivator(System.IntPtr ptr) : base(ptr) { }
 }

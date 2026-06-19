@@ -37,11 +37,11 @@ public class Psychic : Role
                 if (character.dataRef.characterId == c.characterId)
                     inPlay = true;
             }
-            if (!inPlay)
+            if (!inPlay && c.name != "Psychic")
             {
                 outOfPlay.Add(c);
             }
-            else
+            else if (c.name != "Psychic")
             {
                 inPlayChars.Add(c);
             }
@@ -71,11 +71,11 @@ public class Psychic : Role
                 if (character.dataRef.characterId == c.characterId)
                     inPlay = true;
             }
-            if (!inPlay)
+            if (!inPlay && c.name != "Psychic")
             {
                 outOfPlay.Add(c);
             }
-            else
+            else if (c.name != "Psychic")
             {
                 inPlayChars.Add(c);
             }
@@ -98,8 +98,13 @@ public class Psychic : Role
         }
         int randomOutOfPlay1 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
         CharacterData oop1 = outOfPlay[randomOutOfPlay1];
+        int randomOutOfPlay2 = 0;
         outOfPlay.Remove(oop1);
-        int randomOutOfPlay2 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
+        do
+        {
+            randomOutOfPlay2 = UnityEngine.Random.RandomRangeInt(0, outOfPlay.Count);
+        }
+        while (oop1.name == outOfPlay[randomOutOfPlay2].name);
         string info = string.Format("Exactly one of the {0} or the {1} is in play", oop1.name, outOfPlay[randomOutOfPlay2].name);
         if (Calculator.RollDice(2) == 1)
         {
