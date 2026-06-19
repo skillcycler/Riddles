@@ -14,6 +14,7 @@ namespace RiddlerMod;
 public class Channeler : Minion
 {
     public CharacterData copy = GetGenericMinion();
+    public int damageTimerForRitualist = 0;
     public override string Description
     {
         get
@@ -38,12 +39,14 @@ public class Channeler : Minion
             characters.Remove(charRef);
             Il2CppSystem.Collections.Generic.List<Character> allowedCharacters = new();
             List<string> blacklistIDs = new();
-            blacklistIDs.Add("Undying_WING");
-            blacklistIDs.Add("Legion_WING");
+            blacklistIDs.Add("Undying_WING"); // This is gonna make 2 unkillable evils.
+            blacklistIDs.Add("Legion_WING"); // instant death go
             blacklistIDs.Add("Blackmailer_VP");
-            blacklistIDs.Add("Summoner_scm"); // just in cases
+            blacklistIDs.Add("Summoner_scm"); // just in case
             blacklistIDs.Add("Wizard_scm"); // so this might create infinite wizards which is bad
             blacklistIDs.Add("Kingmaker_scm"); // Once a Channeler replaced the Kingmaker with a minion. This should not happen.
+            blacklistIDs.Add("Snake Charmer_WING"); // The way it's coded is not compatible. At least for now. Might get removed later
+
             //the below characters do nothing when copied, so don't copy them if possible
             blacklistIDs.Add("Puppet_15989619");
             blacklistIDs.Add("Turncoat_WING");
@@ -53,9 +56,13 @@ public class Channeler : Minion
             blacklistIDs.Add("Fanatic_WING");
             blacklistIDs.Add("Zealot_WING");
             blacklistIDs.Add("Swarm_Evil_WING");
-            blacklistIDs.Add("Imp_58992273");
+            blacklistIDs.Add("Imp_58992273"); // Channeler+Baa doesn't work for some reason.
             blacklistIDs.Add("Hypnotist_scm");
             blacklistIDs.Add("Professional_WING");
+            blacklistIDs.Add("Tenecaligo_WING"); // This won't do anything because of game start act order.
+            blacklistIDs.Add("Mendaverte_WING"); // Having 2 of Mendaverte's effects does nothing.
+            blacklistIDs.Add("Leviathan_WING"); // Having 2 of Leviathan's effects does nothing.
+            blacklistIDs.Add("Viciyon_WING"); // This makes you forced to take damage.
             foreach (Character character in characters) {
                 if (!blacklistIDs.Contains(character.dataRef.characterId) && character.GetCharacterType() != ECharacterType.Villager && character.GetCharacterType() != ECharacterType.Outcast)
                     allowedCharacters.Add(character);
@@ -68,6 +75,19 @@ public class Channeler : Minion
         }
         if (trigger != ETriggerPhase.Start)
         {
+            if (copy.characterId == "Ritualist_WING")
+            {
+                if (trigger == (ETriggerPhase)1121218522)
+                {
+                    damageTimerForRitualist++;
+                    if (damageTimerForRitualist >= 3)
+                    {
+                        damageTimerForRitualist -= 3;
+                        Health health = PlayerController.PlayerInfo.health;
+                        health.Damage(1);
+                    }
+                }
+            }
             copy.role.Act(trigger, charRef);
         }
     }

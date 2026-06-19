@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -424,7 +424,7 @@ public class MainMod : MelonMod
 
         CharacterData Channeler = makeNewCharacter("Channeler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"I will follow in your footsteps.\"");
         Channeler.role = new Channeler();
-        Channeler.description = "I copy the ability of another Minion or Demon.";
+        Channeler.description = "I copy the ability of another Evil Minion or Demon. Some Evil abilities cannot be copied.";
         
         CharacterData Sleeper = makeNewCharacter("Sleeper", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Ever feel like you get enough sleep? Not anymore!\"");
         Sleeper.role = new Sleeper();
@@ -613,9 +613,11 @@ public class MainMod : MelonMod
         CharactersCount summoner_9b = setCharacterCount(7, 1, 0, 1);
         CharactersCount summoner_10a = setCharacterCount(8, 1, 0, 1);
         CharactersCount summoner_10b = setCharacterCount(7, 2, 0, 1);
+        CharactersCount summoner_10c = setCharacterCount(9, 0, 0, 1);
         // 11-12 cards: 2 summons
         CharactersCount summoner_11a = setCharacterCount(9, 1, 0, 1);
         CharactersCount summoner_11b = setCharacterCount(8, 2, 0, 1);
+        CharactersCount summoner_11c = setCharacterCount(10, 0, 0, 1);
         CharactersCount summoner_12a = setCharacterCount(10, 1, 0, 1);
         CharactersCount summoner_12b = setCharacterCount(9, 2, 0, 1);
         // 13+ cards: 2-3 summons
@@ -629,15 +631,17 @@ public class MainMod : MelonMod
 
 
         summonerCounterList.Add(summoner_7a);
-        summonerCounterList.Add(summoner_7b);
+        //summonerCounterList.Add(summoner_7b);
         summonerCounterList.Add(summoner_8a);
-        summonerCounterList.Add(summoner_8b);
+        //summonerCounterList.Add(summoner_8b);
         summonerCounterList.Add(summoner_9a);
-        summonerCounterList.Add(summoner_9b);
-        summonerCounterList.Add(summoner_10a);
-        summonerCounterList.Add(summoner_10b);
-        summonerCounterList.Add(summoner_11a);
-        summonerCounterList.Add(summoner_11b);
+        //summonerCounterList.Add(summoner_9b);
+        //summonerCounterList.Add(summoner_10a);
+        //summonerCounterList.Add(summoner_10b);
+        summonerCounterList.Add(summoner_10c);
+        //summonerCounterList.Add(summoner_11a);
+        //summonerCounterList.Add(summoner_11b);
+        summonerCounterList.Add(summoner_11c);
         /*summonerCounterList.Add(summoner_12a);
         summonerCounterList.Add(summoner_12b);
         summonerCounterList.Add(summoner_13a);

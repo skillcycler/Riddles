@@ -20,6 +20,7 @@ public class MadScientist : Role
     public int targetForGhost = 0;
     public int targetForGambler = 0;
     public bool killedLastNight = false; // this is for if Mad Scientist copies Hitman
+    public int damageTimerForRitualist = 0;
     public override ActedInfo GetInfo(Character charRef)
     {
         if (fakeMinion.name == "Minion")
@@ -114,7 +115,7 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
             whitelistMinionCharacterIDs.Add("Swarm_Good_WING");
-            whitelistMinionCharacterIDs.Add("Snake Charmer_WING");
+            //whitelistMinionCharacterIDs.Add("Snake Charmer_WING"); gonna make this work in some future update
             whitelistMinionCharacterIDs.Add("Ritualist_WING");
             whitelistMinionCharacterIDs.Add("Heretic_WING");
 
@@ -387,7 +388,20 @@ public class MadScientist : Role
                 }
             } else
                 fakeOutcast.role.Act(trigger, charRef);
-            fakeMinion.role.Act(trigger, charRef);
+            if (fakeMinion.characterId == "Ritualist_WING")
+            {
+                if (trigger == (ETriggerPhase)1121218522)
+                {
+                    damageTimerForRitualist++;
+                    if (damageTimerForRitualist >= 3)
+                    {
+                        damageTimerForRitualist -= 3;
+                        Health health = PlayerController.PlayerInfo.health;
+                        health.Damage(1);
+                    }
+                }
+            } else 
+                fakeMinion.role.Act(trigger, charRef);
         }
     }
     public override bool CheckIfCanBeKilled(Character charRef)
