@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -165,7 +165,7 @@ public class MainMod : MelonMod
         CharacterData Swapper = makeNewCharacter("Swapper", EAlignment.Good, ECharacterType.Villager, true, false, "\"Didn't like the role you got? I'm here to save the day!\"", true);
         Swapper.role = new Swapper();
         Swapper.description = "Pick 2 cards: They disguise as each other's apparent role. Refresh both of their statements or abilities.";
-        Swapper.hints = "A Swapper cannot swap itself or another Swapper.";
+        Swapper.hints = "A Swapper cannot swap itself or another Swapper.\n\nIf you have Wingidon's Expansion Pack installed, Swapper also cannot swap Devout claims.";
         Swapper.ifLies = "Both targets are Corrupted if they are Villagers.";
 
 
@@ -220,7 +220,6 @@ public class MainMod : MelonMod
         CharacterData Coach = makeNewCharacter("Coach", EAlignment.Good, ECharacterType.Villager, true, false, "\"Demon Bluff is a team building game.\"", true);
         Coach.role = new Coach();
         Coach.description = "Pick 1 card: Learn how many characters near them [Range 2] are the same Type as them.";
-        Coach.abilityUsage = EAbilityUsage.ResetAfterNight;
 
         CharacterData Comedian = makeNewCharacter("Comedian", EAlignment.Good, ECharacterType.Villager, true, false, "\"You will be blown away by his performance when he teams up with the Jester!\"", true);
         Comedian.role = new Comedian();
@@ -1292,29 +1291,19 @@ public class MainMod : MelonMod
         private static void Postfix(Lookout __instance, Character charRef, ref ActedInfo __result)
         {
             if (charRef.dataRef.characterId != "Hypnotist_scm") return;
-            Il2CppSystem.Collections.Generic.List<string> disguisingOutcasts = new Il2CppSystem.Collections.Generic.List<string>();
 
-            disguisingOutcasts.Add("Drunk");
-            disguisingOutcasts.Add("Doppelganger");
-            disguisingOutcasts.Add("Lycanthrope");
-            disguisingOutcasts.Add("Confectioner");
-            disguisingOutcasts.Add("Captivator");
+            Il2CppSystem.Collections.Generic.List<CharacterData> inDeckOutcasts = Gameplay.Instance.GetScriptCharactersOfType(ECharacterType.Outcast);
+            Il2CppSystem.Collections.Generic.List<string> disguisingOutcasts = new Il2CppSystem.Collections.Generic.List<string>();
+            foreach (CharacterData outcast in inDeckOutcasts)
+            {
+                if (outcast.usuallyDisguised)
+                {
+                    disguisingOutcasts.Add(outcast.characterName);
+                }
+            }
+
             string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
             string info = string.Format("#{0} is actually a {1}", UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1), fakeDisguisingOutcastName);
-            // well, apparently this doesn't actually work.
-            /*if (fakeDisguisingOutcastName == "Drunk")
-            {
-                Gameplay.Instance.AddScriptCharacter(ECharacterType.Outcast, ProjectContext.Instance.gameData.GetCharacterDataOfId("Drunk_15369527"));
-            }
-            if (fakeDisguisingOutcastName == "Doppelganger")
-            {
-                Gameplay.Instance.AddScriptCharacter(ECharacterType.Outcast, ProjectContext.Instance.gameData.GetCharacterDataOfId("Doppleganger_52694042"));
-            }
-            if (fakeDisguisingOutcastName == "Lycanthrope")
-            {
-                Gameplay.Instance.AddScriptCharacter(ECharacterType.Outcast, ProjectContext.Instance.gameData.GetCharacterDataOfId("Lycanthrope_16077432"));
-            }*/
-
             __result = new ActedInfo(info);
         }
     }

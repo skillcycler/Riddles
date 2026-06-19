@@ -56,7 +56,15 @@ public class Hypnotist : Spy
             whitelistCharacterIDs.Add("Athlete_95133291");
             whitelistCharacterIDs.Add("Scout_88081716");
         }
-        whitelistCharacterIDs.Add("Lookout_41018246");
+        Il2CppSystem.Collections.Generic.List<CharacterData> inDeckOutcasts = gameplay.GetScriptCharactersOfType(ECharacterType.Outcast);
+        foreach (CharacterData outcast in inDeckOutcasts)
+        {
+            if (outcast.usuallyDisguised)
+            {
+                whitelistCharacterIDs.Add("Lookout_41018246");
+                break;
+            }
+        }
         whitelistCharacterIDs.Add("Witness_25155076");
         Il2CppSystem.Collections.Generic.List<Character> chs = Gameplay.CurrentCharacters;
         int evils = 0;

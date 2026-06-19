@@ -42,6 +42,7 @@ public class Guardian : Minion
                     demon.statuses.AddStatus(Guarding.guarded, charRef);
                 }
             }
+
         }
         if (trigger == ETriggerPhase.AfterRoundStart)
         {
@@ -50,6 +51,17 @@ public class Guardian : Minion
                 if (c.statuses.Contains(Guarding.guarded))
                 {
                     c.UpdateRegisterAsRole(c.bluff);
+                }
+                if (c.dataRef.characterId == "Mendaverte_WING")
+                {
+                    foreach (Character ch in Gameplay.CurrentCharacters)
+                    {
+                        if (c.alignment == EAlignment.Evil)
+                        {
+                            // I noticed that the problem only happens when Guardian is in play. So to fix it, Guardian will gain Mendaverte's ability if both are in play.
+                            charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef); // if Wingidon can't fix the bug, maybe I can
+                        }
+                    }
                 }
             }
         }

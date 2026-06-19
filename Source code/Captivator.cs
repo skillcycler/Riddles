@@ -61,6 +61,10 @@ public class Captivator : Role
         {
             whitelistCharacterIDs.Add("Empress_13782227");
         }
+        if (evils >= 2)
+        {
+            whitelistCharacterIDs.Add("Chiromancer_WING");
+        }
         foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
         {
             if (c.alignment == EAlignment.Good)
@@ -69,9 +73,19 @@ public class Captivator : Role
                 break;
             }
         }
+        int bluffs = 0;
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (c.bluff)
+            {
+                bluffs++;
+            }
+        }
+        if (bluffs >= 2)
+        {
+            whitelistCharacterIDs.Add("Prince_WING");
+        }
         whitelistCharacterIDs.Add("Surveyor_scm");
-        whitelistCharacterIDs.Add("Chiromancer_WING");
-        whitelistCharacterIDs.Add("Prince_WING");
         int corrupted = 0;
         foreach (Character c in Gameplay.CurrentCharacters)
         {

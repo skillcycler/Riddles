@@ -18,6 +18,7 @@ public class MadScientist : Role
     //public CharacterData fakeOutcast2 = GetGenericOutcast();
     public Character chargedActor = new Character();
     public int targetForGhost = 0;
+    public int targetForGambler = 0;
     public bool killedLastNight = false; // this is for if Mad Scientist copies Hitman
     public override ActedInfo GetInfo(Character charRef)
     {
@@ -42,11 +43,19 @@ public class MadScientist : Role
             }
             else { info += string.Format("I haunted #{0}", targetForGhost); }
         }
+        else if (fakeOutcast.name == "Gambler")
+        {
+            if (targetForGambler == 0)
+            {
+                info += "\n\nI couldn't target anyone. You found a bug.";
+            }
+            else { info += string.Format("I invited #{0} to my casino", targetForGambler); }
+        }
         return new ActedInfo(info);
     }
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        return new ActedInfo("This statement should never appear");
+        return GetInfo(charRef);
     }
     public override string Description
     {
@@ -99,12 +108,16 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Muddler_scm");
             whitelistOutcastCharacterIDs.Add("Hitman_scm");
             whitelistOutcastCharacterIDs.Add("Confectioner_scm");
+            whitelistOutcastCharacterIDs.Add("Gambler_scm");
             // Wingidon
 
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
             whitelistMinionCharacterIDs.Add("Swarm_Good_WING");
-            
+            whitelistMinionCharacterIDs.Add("Snake Charmer_WING");
+            whitelistMinionCharacterIDs.Add("Ritualist_WING");
+            whitelistMinionCharacterIDs.Add("Heretic_WING");
+
             whitelistOutcastCharacterIDs.Add("Chatterbox_WING");
             whitelistOutcastCharacterIDs.Add("Revolutionary_WING");
             whitelistOutcastCharacterIDs.Add("Marionette_WING");
@@ -211,76 +224,32 @@ public class MadScientist : Role
                 {
                     fakeMinion.role.Act(trigger, charRef);
                 }
-                if (fakeOutcast.characterId == "Ghost_scm" && trigger == ETriggerPhase.Day)
-                {
-                    charRef.statuses.AddStatus(SpecialMadScientistTags.hasGhostAbility, charRef);
-                    charRef.state = ECharacterState.Dead;
-                    PlayerController.PlayerInfo.health.Damage(1);
-                    ActOnDied(charRef);
-                    Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
-                    unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
-                    unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
-                    charRef.RevealAllReal();
-                    charRef.RefreshCharacter();
-                    if (unrevealedCharacters.Count == 0)
-                    {
-                        targetForGhost = 0;
-                    }
-                    else
-                    {
-                        Character targetChar = unrevealedCharacters[UnityEngine.Random.RandomRangeInt(0, unrevealedCharacters.Count)];
-                        targetChar.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                        targetChar.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
-                        targetForGhost = targetChar.id;
-                    }
-                } else if (fakeOutcast.characterId == "Hitman_scm")
-                {
-                    if (trigger == ETriggerPhase.Night && charRef.state != ECharacterState.Dead)
-                    {
-                        if (!killedLastNight)
-                        {
-                            Il2CppSystem.Collections.Generic.List<Character> newList = Gameplay.CurrentCharacters;
-                            newList = Characters.Instance.FilterAliveCharacters(newList);
-                            Il2CppSystem.Collections.Generic.List<Character> validTargets = new();
-                            // not gonna have this guy try to kill the Undying or the Mad Scientist with the Undying ability. It causes too many bugs.
-                            foreach (Character target in newList)
-                            {
-                                if (target.dataRef.characterId != "Undying_WING" && !target.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
-                                {
-                                    if (!target.statuses.Contains(AvoidingDoubleKills.killed) && !target.statuses.Contains(ECharacterStatus.KilledByEvil))
-                                        validTargets.Add(target);
-                                }
-                            }
-                            if (!(newList.Count == 0))
-                            {
-                                Character myTarget = validTargets[UnityEngine.Random.Range(0, validTargets.Count)];
-                                myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
-                                myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
-                                myTarget.statuses.AddStatus(AvoidingDoubleKills.killed, charRef);
-                                myTarget.statuses.statuses.Remove(ECharacterStatus.UnkillableByDemon);
-                                myTarget.KillByDemon(charRef);
-                                myTarget.Reveal();
-                                myTarget.onReveal.Invoke();
-                                myTarget.RevealReal();
-                                if (myTarget.dataRef.picking)
-                                {
-                                    myTarget.pickableUses = 0;
-                                    myTarget.pickable.SetActive(false);
-                                }
-                            }
-                            killedLastNight = true;
-                        }
-                        else
-                        {
-                            Health health = PlayerController.PlayerInfo.health;
-                            health.Damage(3);
-                            killedLastNight = false;
-                        }
-                    }
-                }
-                else if (fakeOutcast.characterId == "Marionette_WING")
+                if (fakeOutcast.characterId == "Marionette_WING")
                 {
                     MoveDemonNextToMe(charRef);
+                }
+                else if (fakeOutcast.characterId == "Gambler_scm")
+                {
+                    Il2CppSystem.Collections.Generic.List<Character> charss = Gameplay.CurrentCharacters;
+                    Character picked = charss[UnityEngine.Random.RandomRangeInt(0, chars.Count)];
+                    
+                    targetForGambler = picked.id;
+                    switch (Calculator.RollDice(4))
+                    {
+                        case 1:
+                            picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
+                        case 2:
+                            picked.statuses.AddStatus(Escaped.evilTurned, charRef);
+                            picked.ChangeAlignment(EAlignment.Evil);
+                            break;
+                        case 3:
+                            picked.statuses.AddStatus(Accused.accused, charRef); break;
+                        case 4:
+                            picked.statuses.AddStatus(Confused.confused, charRef);
+                            Confused.updateConfusion(charRef);
+                            break;
+
+                    }
                 }
                 else
                 {
@@ -338,12 +307,87 @@ public class MadScientist : Role
         }
         if (trigger == ETriggerPhase.Day)
         {
+
+            if (fakeOutcast.characterId == "Ghost_scm")
+            {
+                charRef.statuses.AddStatus(SpecialMadScientistTags.hasGhostAbility, charRef);
+                charRef.state = ECharacterState.Dead;
+                PlayerController.PlayerInfo.health.Damage(1);
+                ActOnDied(charRef);
+                Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
+                unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
+                unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
+                charRef.RevealAllReal();
+                charRef.RefreshCharacter();
+                if (unrevealedCharacters.Count == 0)
+                {
+                    targetForGhost = 0;
+                }
+                else
+                {
+                    Character targetChar = unrevealedCharacters[UnityEngine.Random.RandomRangeInt(0, unrevealedCharacters.Count)];
+                    targetChar.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                    targetChar.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
+                    targetForGhost = targetChar.id;
+                }
+            }
             onActed.Invoke(GetInfo(charRef));
         }
         if (charRef.GetCharacterData().characterId == "MadScientist_scm" && trigger != ETriggerPhase.Start)
         {
+            if (fakeOutcast.characterId == "Hitman_scm")
+            {
+                if (trigger == ETriggerPhase.Night && charRef.state != ECharacterState.Dead)
+                {
+                    if (!killedLastNight)
+                    {
+                        Il2CppSystem.Collections.Generic.List<Character> newList = Gameplay.CurrentCharacters;
+                        newList = Characters.Instance.FilterAliveCharacters(newList);
+                        Il2CppSystem.Collections.Generic.List<Character> validTargets = new();
+                        // not gonna have this guy try to kill the Undying or the Mad Scientist with the Undying ability. It causes too many bugs.
+                        foreach (Character target in newList)
+                        {
+                            if (target.dataRef.characterId != "Undying_WING" && !target.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
+                            {
+                                if (!target.statuses.Contains(AvoidingDoubleKills.killed) && !target.statuses.Contains(ECharacterStatus.KilledByEvil))
+                                    validTargets.Add(target);
+                            }
+                        }
+                        if (!(newList.Count == 0))
+                        {
+                            Character myTarget = validTargets[UnityEngine.Random.Range(0, validTargets.Count)];
+                            myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
+                            myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
+                            myTarget.statuses.AddStatus(AvoidingDoubleKills.killed, charRef);
+                            myTarget.statuses.statuses.Remove(ECharacterStatus.UnkillableByDemon);
+                            myTarget.KillByDemon(charRef);
+                            myTarget.Reveal();
+                            myTarget.onReveal.Invoke();
+                            myTarget.RevealReal();
+                            if (myTarget.dataRef.picking)
+                            {
+                                myTarget.pickableUses = 0;
+                                myTarget.pickable.SetActive(false);
+                            }
+                        }
+                        killedLastNight = true;
+                    }
+                    else
+                    {
+                        Health health = PlayerController.PlayerInfo.health;
+                        health.Damage(3);
+                        killedLastNight = false;
+                    }
+                }
+            } else if (fakeOutcast.characterId == "Gambler_scm")
+            {
+                if (trigger == ETriggerPhase.Night)
+                {
+                    Confused.updateConfusion(charRef);
+                }
+            } else
+                fakeOutcast.role.Act(trigger, charRef);
             fakeMinion.role.Act(trigger, charRef);
-            fakeOutcast.role.Act(trigger, charRef);
         }
     }
     public override bool CheckIfCanBeKilled(Character charRef)

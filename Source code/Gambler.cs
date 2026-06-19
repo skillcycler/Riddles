@@ -29,12 +29,13 @@ public class Gambler : Role
     }
     public override ActedInfo GetInfo(Character charRef)
     {
+        if (affected == 0 && charRef.alignment == EAlignment.Evil) { return new ActedInfo("I am a Truthful Evil disguised as the Gambler."); }
         if (affected == 0) { return new ActedInfo($"I forgot who I gambled with."); }
         return new ActedInfo($"I invited #{affected} to my casino.");
     }
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        int fake = UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count);
+        int fake = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count+1);
         return new ActedInfo($"I invited #{fake} to my casino.");
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
@@ -49,7 +50,9 @@ public class Gambler : Role
                 case 1:
                     picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
                 case 2:
-                    picked.statuses.AddStatus(Escaped.evilTurned, charRef); break;
+                    picked.statuses.AddStatus(Escaped.evilTurned, charRef);
+                    picked.ChangeAlignment(EAlignment.Evil);
+                    break;
                 case 3:
                     picked.statuses.AddStatus(Accused.accused, charRef); break;
                 case 4:
