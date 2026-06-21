@@ -20,7 +20,7 @@ public class MadScientist : Role
     public int targetForGhost = 0;
     public int targetForGambler = 0;
     public bool killedLastNight = false; // this is for if Mad Scientist copies Hitman
-    public int damageTimerForRitualist = 0;
+    //public int damageTimerForRitualist = 0;
     public override ActedInfo GetInfo(Character charRef)
     {
         if (fakeMinion.name == "Minion")
@@ -116,7 +116,7 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Undying_WING");
             whitelistMinionCharacterIDs.Add("Swarm_Good_WING");
             //whitelistMinionCharacterIDs.Add("Snake Charmer_WING"); gonna make this work in some future update
-            whitelistMinionCharacterIDs.Add("Ritualist_WING");
+            //whitelistMinionCharacterIDs.Add("Ritualist_WING");
             whitelistMinionCharacterIDs.Add("Heretic_WING");
 
             whitelistOutcastCharacterIDs.Add("Chatterbox_WING");
@@ -335,6 +335,7 @@ public class MadScientist : Role
                 ActOnDied(charRef);
                 Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
                 unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
+                unrevealedCharacters = Characters.Instance.FilterRealAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
                 unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
                 charRef.RevealAllReal();
                 charRef.RefreshCharacter();
@@ -406,7 +407,7 @@ public class MadScientist : Role
                 }
             } else
                 fakeOutcast.role.Act(trigger, charRef);
-            if (fakeMinion.characterId == "Ritualist_WING")
+            /*if (fakeMinion.characterId == "Ritualist_WING")
             {
                 if (trigger == (ETriggerPhase)1121218522)
                 {
@@ -418,7 +419,7 @@ public class MadScientist : Role
                         health.Damage(1);
                     }
                 }
-            } else 
+            } else */
                 fakeMinion.role.Act(trigger, charRef);
         }
     }

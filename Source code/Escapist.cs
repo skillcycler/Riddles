@@ -47,6 +47,7 @@ public class Escapist : Demon
             invalidOutcastIds.Add("Mutant_WING"); // This outcast might already be evil.
             invalidOutcastIds.Add("Revolutionary_WING"); // I know for sure this will cause problems
             invalidOutcastIds.Add("Tergiversator_WING"); // Wow, something that might already be evil!
+            invalidOutcastIds.Add("Lycanthrope_16077432"); // Guess what? This outcast can turn evil!
 
             foreach (CharacterData data in notInPlayOutsiders)
             {

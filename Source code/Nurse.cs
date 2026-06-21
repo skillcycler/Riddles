@@ -38,7 +38,7 @@ public class Nurse : Role
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
-        if (trigger == ETriggerPhase.OnReveal)
+        /*if (trigger == ETriggerPhase.OnReveal)
         {
             bool isThereCure = false;
             List<ECharacterStatus> curable = new List<ECharacterStatus>();
@@ -60,7 +60,7 @@ public class Nurse : Role
             {
                 onActed?.Invoke(new ActedInfo("There are no curable characters"));
             }
-        }
+        }*/ //This does not actually work, so I will revert it to the old way
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
         CharacterPicker.Instance.StartPickCharacters(1, charRef);
@@ -82,7 +82,7 @@ public class Nurse : Role
 
         Il2CppSystem.Collections.Generic.List<Character> chars = new Il2CppSystem.Collections.Generic.List<Character>();
         chars.Add(CharacterPicker.PickedCharacters[0]);
-
+        bool isThereCure = false;
         Character c = chars[0];
 
         if (c.state == ECharacterState.Dead)
@@ -99,6 +99,18 @@ public class Nurse : Role
         curable.Add((ECharacterStatus)16118119); // Mutant Evil
         curable.Add((ECharacterStatus)1615919151); // Poisoned by Snake Charmer
         bool sick = false;
+        string add = "";
+        foreach (Character cha in Gameplay.CurrentCharacters)
+        {
+            foreach (ECharacterStatus status in curable)
+            {
+                if (cha.statuses.Contains(status)) isThereCure = true;
+            }
+        }
+        if (!isThereCure)
+        {
+            add = "\nThere are no curable characters";
+        }
         foreach (ECharacterStatus status in curable)
         {
             if (c.statuses.Contains(status))
@@ -152,7 +164,7 @@ public class Nurse : Role
             onActed?.Invoke(new ActedInfo(inf, chars));
             return;
         }
-        string info = string.Format("I couldn't cure #{0}", CharacterPicker.PickedCharacters[0].id);
+        string info = string.Format("I couldn't cure #{0}{1}", CharacterPicker.PickedCharacters[0].id, add);
         onActed?.Invoke(new ActedInfo(info, chars));
     }
     private void CharacterPickedLiar()

@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.4", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -159,7 +159,7 @@ public class MainMod : MelonMod
         CharacterData Riddler = makeNewCharacter("Riddler", EAlignment.Good, ECharacterType.Villager, true, false, "\"One day I'll cause a paradox.\"");
         Riddler.role = new Riddler();
         Riddler.description = "Learn a true fact about the game.";
-        Riddler.hints = "Statements are accurate as of June 8th, 2026, or version 0.730 of the game. If you are playing in a later version, statements may not be accurate.";
+        Riddler.hints = "Statements are accurate as of June 21, 2026, or version 0.761h of the game. If you are playing in a later version, statements may not be accurate.";
         Riddler.ifLies = "Learn a false fact about the game.";
 
         CharacterData Swapper = makeNewCharacter("Swapper", EAlignment.Good, ECharacterType.Villager, true, false, "\"Didn't like the role you got? I'm here to save the day!\"", true);
@@ -207,7 +207,7 @@ public class MainMod : MelonMod
 
         CharacterData Nurse = makeNewCharacter("Nurse", EAlignment.Good, ECharacterType.Villager, true, false, "\"I can cure the Drunk, I promise!\"", true);
         Nurse.role = new Nurse();
-        Nurse.description = "Pick 1 alive card: I cure most of their negative status effects.\nIf I cure an Evil character, I also kill them.\n\nIf I am not Lying and there are no Corrupted characters, I will say so.";
+        Nurse.description = "Pick 1 alive card: I cure most of their negative status effects.\nIf I cure an Evil character, I also kill them.\n\nIf I am not Lying and there are no curable characters, I will say so.";
         Nurse.hints = "My ability refreshes every night.\n\nThe statuses I can cure include, but are not limited to: Corrupted, Confused, Accused.";
         Nurse.ifLies = "\"I couldn't cure #x\"";
         Nurse.abilityUsage = EAbilityUsage.ResetAfterNight;
@@ -260,6 +260,7 @@ public class MainMod : MelonMod
         CharacterData Surveyor = makeNewCharacter("Surveyor", EAlignment.Good, ECharacterType.Villager, true, false, "This land belongs to the Outcasts, not the Minions. Wretch, you're not welcome here.");
         Surveyor.role = new Surveyor();
         Surveyor.description = "Learn how many Outcasts and Minions there actually are";
+        Surveyor.ifLies = "Both the Outcast and Minion count will be wrong";
 
         CharacterData Tracker = makeNewCharacter("Tracker", EAlignment.Good, ECharacterType.Villager, true, false, "\"You're not hiding from me that easily!\"");
         Tracker.role = new Tracker();
@@ -433,7 +434,7 @@ public class MainMod : MelonMod
         CharacterData Guardian = makeNewCharacter("Guardian", EAlignment.Evil, ECharacterType.Minion, false, true, "\"You're gonna have to get through me first.\"");
         Guardian.role = new Guardian();
         Guardian.description = "The Demon registers as a Good Villager.\n\nI sit next to a Demon.";
-        Guardian.hints = "If there are multiple Demons, all of them register as Good.";
+        Guardian.hints = "If there are multiple Demons, all of them register as Good.\nI might cause some characters to be in positions they normally should not be in.";
 
         CharacterData Mastermind = makeNewCharacter("Mastermind", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It all comes back to me.\"");
         Mastermind.role = new Mastermind();
@@ -482,7 +483,7 @@ public class MainMod : MelonMod
         CharacterData Kingmaker = makeNewCharacter("Kingmaker", EAlignment.Evil, ECharacterType.Demon, false, true, "\"'Puppet Master' is more like it.\"");
         Kingmaker.role = new Kingmaker();
         Kingmaker.description = "Game Start: Both my neighbors become Minions.\n\nYou don't know how many Evils there are.\n\nI tell the truth and Disguise.";
-        Kingmaker.hints = "There may be fewer Outcasts in play than expected.";
+        Kingmaker.hints = "There may be fewer Outcasts in play than expected.\n\nIf I add a Chancellor, I may not neighbor 2 minions.";
         Kingmaker.additionalPossibleCharacters = MakeAddedCharacters(0, 0, 2, 0);
 
         CharacterData Mystifier = makeNewCharacter("Mystifier", EAlignment.Evil, ECharacterType.Demon, false, true, "\"Puzzled, confounded, or astonished yet?\"");
@@ -821,15 +822,15 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Escapist", Recruiter);
         Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Wizard);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Confectioner);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Guardian);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("MadScientist", Confectioner);
         /*Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_v", Trickster_o);
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_o", Trickster_m);*/ // These guys have SOMEHOW broke again
         Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Channeler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Pooka", Guardian);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Poisoner", Baffler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Baffler", Slanderer);
         Characters.Instance.startGameActOrder = InsertAfterAct("Slanderer", Mystifier);

@@ -38,7 +38,7 @@ public class Wizard : Minion
         Il2CppSystem.Collections.Generic.List<Character> availableToDupe = new();
         foreach (Character character in characters)
         {
-            if (character.dataRef.type == ECharacterType.Outcast || character.dataRef.type == ECharacterType.Minion)
+            if (character.dataRef.type == ECharacterType.Outcast || character.dataRef.type == ECharacterType.Minion && character.dataRef.characterId != "Undying_WING")
             {
                 availableToDupe.Add(character);
             }

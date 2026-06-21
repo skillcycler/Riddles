@@ -14,7 +14,7 @@ namespace RiddlerMod;
 public class Channeler : Minion
 {
     public CharacterData copy = GetGenericMinion();
-    public int damageTimerForRitualist = 0;
+    //public int damageTimerForRitualist = 0;
     public override string Description
     {
         get
@@ -75,7 +75,7 @@ public class Channeler : Minion
         }
         if (trigger != ETriggerPhase.Start)
         {
-            if (copy.characterId == "Ritualist_WING")
+            /*if (copy.characterId == "Ritualist_WING")
             {
                 if (trigger == (ETriggerPhase)1121218522)
                 {
@@ -87,7 +87,7 @@ public class Channeler : Minion
                         health.Damage(1);
                     }
                 }
-            }
+            }*/
             copy.role.Act(trigger, charRef);
         }
     }

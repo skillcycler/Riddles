@@ -40,6 +40,7 @@ public class Ghost : Role
             ActOnDied(charRef);
             Il2CppSystem.Collections.Generic.List<Character> unrevealedCharacters = Characters.Instance.FilterHiddenCharacters(Gameplay.CurrentCharacters);
             unrevealedCharacters = Characters.Instance.FilterAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
+            unrevealedCharacters = Characters.Instance.FilterRealAlignmentCharacters(unrevealedCharacters, EAlignment.Good);
             unrevealedCharacters = Characters.Instance.FilterCharacterMissingStatus(unrevealedCharacters, ECharacterStatus.Corrupted);
             unrevealedCharacters = Characters.Instance.FilterCharactersWithoutResistance(unrevealedCharacters, ECharacterStatus.Corrupted);
             charRef.RevealAllReal();
