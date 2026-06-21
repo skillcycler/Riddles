@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.3", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -184,7 +184,7 @@ public class MainMod : MelonMod
 
         CharacterData Scanner = makeNewCharacter("Scanner", EAlignment.Good, ECharacterType.Villager, true, false, "\"I spy with my two little eyes, two Outcasts in disguise!\"");
         Scanner.role = new Scanner();
-        Scanner.description = "Learn how many Outcasts are Disguised or being used as a Disguise.";
+        Scanner.description = "Learn how many cards are either Disguised as Outcasts or Outcasts that are Disguised.";
 
         CharacterData Obsessor = makeNewCharacter("Obsessor", EAlignment.Good, ECharacterType.Villager, true, false, "\"Once snuck into the Lover's house at night. You'll never guess what happened next\"");
         Obsessor.role = new Obsessor();
@@ -377,7 +377,7 @@ public class MainMod : MelonMod
         MadScientist.name = "Mad Scientist";
         MadScientist.characterName = "Mad Scientist";
         MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
-        MadScientist.hints = "I cannot be disguised as. No Evil is crazy enough.\n\nI will not Disguise or turn Evil if part of my Outcast's ability includes those.";
+        MadScientist.hints = "I cannot be disguised as.\nI will not Disguise or turn Evil if part of my Outcast's ability includes those.";
         
         CharacterData Hitman = makeNewCharacter("Hitman", EAlignment.Evil, ECharacterType.Outcast, false, true, "\"No one is safe from me, not even myself\"");
         Hitman.role = new Hitman();

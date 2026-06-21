@@ -106,3 +106,15 @@ public static class Guarding
         }
     }
 }
+
+[HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+public static class GuardianText
+{
+    public static void Postfix(Character __instance)
+    {
+        if (__instance.statuses.Contains(Guarding.guarded))
+        {
+            __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#55FF55><size=18>\n<Guarded></color></size>";
+        }
+    }
+}

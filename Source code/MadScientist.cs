@@ -42,7 +42,7 @@ public class MadScientist : Role
             {
                 info += "\n\nI couldn't haunt anyone";
             }
-            else { info += string.Format("I haunted #{0}", targetForGhost); }
+            else { info += string.Format("\nI haunted #{0}", targetForGhost); }
         }
         else if (fakeOutcast.name == "Gambler")
         {
@@ -50,7 +50,7 @@ public class MadScientist : Role
             {
                 info += "\n\nI couldn't target anyone. You found a bug.";
             }
-            else { info += string.Format("I invited #{0} to my casino", targetForGambler); }
+            else { info += string.Format("\nI invited #{0} to my casino", targetForGambler); }
         }
         return new ActedInfo(info);
     }
@@ -92,7 +92,7 @@ public class MadScientist : Role
             //whitelistMinionCharacterIDs.Add("Baron_04539999"); oops this is bugged as well
             whitelistOutcastCharacterIDs.Add("Plague Doctor_49312486");
             whitelistOutcastCharacterIDs.Add("Wretch_80988916");
-            whitelistOutcastCharacterIDs.Add("Bombardier_79093372");
+            // whitelistOutcastCharacterIDs.Add("Bombardier_79093372"); broken also you won't ever stab the mad scientist
             //whitelistOutcastCharacterIDs.Add("Rambler_57930131"); Does not work at all.
             //whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
             // This Mod
@@ -120,7 +120,7 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Heretic_WING");
 
             whitelistOutcastCharacterIDs.Add("Chatterbox_WING");
-            whitelistOutcastCharacterIDs.Add("Revolutionary_WING");
+            //whitelistOutcastCharacterIDs.Add("Revolutionary_WING");
             whitelistOutcastCharacterIDs.Add("Marionette_WING");
             //whitelistOutcastCharacterIDs.Add("Renegade_WING");
             //whitelistOutcastCharacterIDs.Add("Lunatic_WING");
@@ -235,21 +235,39 @@ public class MadScientist : Role
                     Character picked = charss[UnityEngine.Random.RandomRangeInt(0, chars.Count)];
                     
                     targetForGambler = picked.id;
-                    switch (Calculator.RollDice(4))
+                    if (picked.alignment == EAlignment.Evil)
                     {
-                        case 1:
-                            picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
-                        case 2:
-                            picked.statuses.AddStatus(Escaped.evilTurned, charRef);
-                            picked.ChangeAlignment(EAlignment.Evil);
-                            break;
-                        case 3:
-                            picked.statuses.AddStatus(Accused.accused, charRef); break;
-                        case 4:
-                            picked.statuses.AddStatus(Confused.confused, charRef);
-                            Confused.updateConfusion(charRef);
-                            break;
+                        switch (Calculator.RollDice(3))
+                        {
+                            case 1:
+                                picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
+                            case 2:
+                                picked.statuses.AddStatus(Accused.accused, charRef); break;
+                            case 3:
+                                picked.statuses.AddStatus(Confused.confused, charRef);
+                                Confused.updateConfusion(charRef);
+                                break;
 
+                        }
+                    }
+                    else
+                    {
+                        switch (Calculator.RollDice(4))
+                        {
+                            case 1:
+                                picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
+                            case 2:
+                                picked.statuses.AddStatus(Escaped.evilTurned, charRef);
+                                picked.ChangeAlignment(EAlignment.Evil);
+                                break;
+                            case 3:
+                                picked.statuses.AddStatus(Accused.accused, charRef); break;
+                            case 4:
+                                picked.statuses.AddStatus(Confused.confused, charRef);
+                                Confused.updateConfusion(charRef);
+                                break;
+
+                        }
                     }
                 }
                 else
@@ -406,6 +424,7 @@ public class MadScientist : Role
     }
     public override bool CheckIfCanBeKilled(Character charRef)
     {
+        if (fakeOutcast.characterName == "Witch") PlayerController.PlayerInfo.blocks.value.Reduce(1);
         return fakeMinion.role.CheckIfCanBeKilled(charRef) && fakeOutcast.role.CheckIfCanBeKilled(charRef);
     }
     public override void ActOnDied(Character charRef)

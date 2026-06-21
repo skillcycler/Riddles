@@ -133,7 +133,6 @@ public class Riddler : Role
         infos.Add("The Demon can disguise as an in play villager.");
         infos.Add("The Demon can disguise as an Outcast.");
         infos.Add("The Drunk can disguise as an in play villager.");
-        infos.Add("There is a character with 3 different skins.");
         infos.Add("The night cycle stops after Lilis is killed.");
         infos.Add("The Plague Doctor acts before the Puppeteer in the Game Start order.");
         infos.Add("A truthful Bishop must reference 3 other cards.");

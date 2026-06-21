@@ -48,6 +48,7 @@ public class Nurse : Role
             curable.Add((ECharacterStatus)968); // Evil turned by Venelum and the likes
             curable.Add((ECharacterStatus)918919); // Hypnotised, by Iris
             curable.Add((ECharacterStatus)16118119); // Mutant Evil
+            curable.Add((ECharacterStatus)1615919151); // Poisoned by Snake Charmer
             foreach (Character cha in Gameplay.CurrentCharacters)
             {
                 foreach (ECharacterStatus status in curable)
@@ -96,6 +97,7 @@ public class Nurse : Role
         curable.Add((ECharacterStatus)968); // Evil turned by Venelum and the likes
         curable.Add((ECharacterStatus)918919); // Hypnotised, by Iris
         curable.Add((ECharacterStatus)16118119); // Mutant Evil
+        curable.Add((ECharacterStatus)1615919151); // Poisoned by Snake Charmer
         bool sick = false;
         foreach (ECharacterStatus status in curable)
         {

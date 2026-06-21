@@ -45,21 +45,38 @@ public class Gambler : Role
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
             Character picked = chars[UnityEngine.Random.RandomRangeInt(0, chars.Count)];
             affected = picked.id;
-            switch (Calculator.RollDice(4))
+            if (picked.alignment == EAlignment.Evil)
             {
-                case 1:
-                    picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
-                case 2:
-                    picked.statuses.AddStatus(Escaped.evilTurned, charRef);
-                    picked.ChangeAlignment(EAlignment.Evil);
-                    break;
-                case 3:
-                    picked.statuses.AddStatus(Accused.accused, charRef); break;
-                case 4:
-                    picked.statuses.AddStatus(Confused.confused, charRef);
-                    Confused.updateConfusion(charRef); 
-                    break;
+                switch (Calculator.RollDice(3))
+                {
+                    case 1:
+                        picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
+                    case 2:
+                        picked.statuses.AddStatus(Accused.accused, charRef); break;
+                    case 3:
+                        picked.statuses.AddStatus(Confused.confused, charRef);
+                        Confused.updateConfusion(charRef);
+                        break;
 
+                }
+            } else
+            {
+                switch (Calculator.RollDice(4))
+                {
+                    case 1:
+                        picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
+                    case 2:
+                        picked.statuses.AddStatus(Escaped.evilTurned, charRef);
+                        picked.ChangeAlignment(EAlignment.Evil);
+                        break;
+                    case 3:
+                        picked.statuses.AddStatus(Accused.accused, charRef); break;
+                    case 4:
+                        picked.statuses.AddStatus(Confused.confused, charRef);
+                        Confused.updateConfusion(charRef);
+                        break;
+
+                }
             }
         }
         if (trigger == ETriggerPhase.Night)
