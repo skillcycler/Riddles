@@ -45,15 +45,23 @@ public class Mastermind : Minion
                     mastermindData = character;
                 }
             }
+            List<string> doNotTurn = new(); // Certain characters need to still exist for their abilities to work.
+            doNotTurn.Add("Snake Charmer_WING");
+            doNotTurn.Add("Ritualist_WING");
+            doNotTurn.Add("Professional_WING");
+            doNotTurn.Add("Mastermind_scm");
+            doNotTurn.Add("Witch_25286521");
+            doNotTurn.Add("Sleeper_scm");
+
             foreach (Character evil in evils)
             {
-                if (evil.dataRef.name == "Witch")
-                {
-                    PlayerController.PlayerInfo.blocks.value.Reduce(1); // You can probably guess why
-                }
-                if (evil.dataRef.characterId != "Mastermind_scm" && evil.dataRef.type == ECharacterType.Minion)
+                if (!doNotTurn.Contains(evil.dataRef.characterId) && evil.dataRef.type == ECharacterType.Minion)
                     evil.Init(mastermindData);
             }
+        }
+        if (trigger == ETriggerPhase.Night)
+        {
+            Confused.updateConfusion(charRef); // just in case the Baffler gets turned
         }
     }
 

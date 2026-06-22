@@ -31,6 +31,7 @@ public class Kingmaker : Demon
             notInPlayMinions = Characters.Instance.FilterRealCharacterType(notInPlayMinions, ECharacterType.Minion);
             foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
             { // always have 2 extra minions in the deck list
+                c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 CharacterData picked = notInPlayMinions[UnityEngine.Random.Range(0, notInPlayMinions.Count - 1)];
                 Gameplay.Instance.AddScriptCharacter(ECharacterType.Minion, picked);
                 if (c.dataRef.type != ECharacterType.Minion)

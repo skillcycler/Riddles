@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.7", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.8", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -158,11 +158,38 @@ public class MainMod : MelonMod
         GameObject circle14 = CreateCircle(14);
         GameObject circle15 = CreateCircle(15);
     }
+    public static void UpdateWitness()
+    {
+        CharacterData[] allDatas = System.Array.Empty<CharacterData>();
+        var loadedCharList = Resources.FindObjectsOfTypeAll(Il2CppType.Of<CharacterData>());
+        if (loadedCharList != null)
+        {
+            allDatas = new CharacterData[loadedCharList.Length];
+            for (int i = 0; i < loadedCharList.Length; i++)
+            {
+                allDatas[i] = loadedCharList[i]!.Cast<CharacterData>();
+            }
+        }
+        for (int i = 0; i < allDatas.Count(); i++)
+        {
+            if (allDatas[i].characterName == "Witness")
+            {
+                allDatas[i].hints += "\n- Demon protected by Guardian" +
+                                     "\n- Character accused by Accuser" +
+                                     "\n- Characters Confused by Baffler or Mystifier" +
+                                     "\n- Characters duplicated by Wizard" +
+                                     "\n- Characters summoned by Summoner" +
+                                     "\n- Outcast added or turned evil by Escapist" +
+                                     "\n- Minions next to Kingmaker";
+            }
+        }
+    }
     public override void OnLateInitializeMelon()
     {
         GameObject content = GameObject.Find("Game/Gameplay/Content");
         NightPhase nightPhase = content.GetComponent<NightPhase>();
         MakeTwelve();
+        UpdateWitness();
 
         CharacterData Riddler = makeNewCharacter("Riddler", EAlignment.Good, ECharacterType.Villager, true, false, "\"One day I'll cause a paradox.\"");
         Riddler.role = new Riddler();
@@ -424,7 +451,7 @@ public class MainMod : MelonMod
 
         CharacterData Accuser = makeNewCharacter("Accuser", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Uno reverse card!\"");
         Accuser.role = new Accuser();
-        Accuser.description = "Game Start: One adjacent Good Villager registers a random Evil Minion.\n\nI Lie and Disguise.";
+        Accuser.description = "Game Start: One adjacent Good character registers a random Evil Minion.\n\nI Lie and Disguise.";
 
         CharacterData Hypnotist = makeNewCharacter("Hypnotist", EAlignment.Evil, ECharacterType.Minion, false, true, "\"You are getting sleepy...\"");
         Hypnotist.role = new Hypnotist();
@@ -446,7 +473,8 @@ public class MainMod : MelonMod
 
         CharacterData Mastermind = makeNewCharacter("Mastermind", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It all comes back to me.\"");
         Mastermind.role = new Mastermind();
-        Mastermind.description = "Game Start: Every Evil Minion becomes a Mastermind after all other Game Start effects.";
+        Mastermind.description = "Game Start: Most Evil Minions become a Mastermind after all other Game Start effects.";
+        Mastermind.hints = "Characters that need to exist to have their ability, such as the Witch and the Sleeper, will not be converted.";
 
         CharacterData Baffler = makeNewCharacter("Baffler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"");
         Baffler.role = new Baffler();
@@ -496,7 +524,7 @@ public class MainMod : MelonMod
 
         CharacterData Mystifier = makeNewCharacter("Mystifier", EAlignment.Evil, ECharacterType.Demon, false, true, "\"Puzzled, confounded, or astonished yet?\"");
         Mystifier.role = new Mystifier();
-        Mystifier.description = "Game Start: One random Villager is Confused.\nConfused characters have a 50% chance of Lying.\n\nAt night: One random Villager is Confused.\n\nI Lie and Disguise.";
+        Mystifier.description = "At night: One random Villager is Confused.\nConfused characters have a 50% chance of Lying.\n\nI Lie and Disguise.";
         Mystifier.hints = "Confused characters that are currently Lying also register as Corrupted.";
         
         CustomScriptData followerScriptData = new CustomScriptData();
@@ -865,6 +893,13 @@ public class MainMod : MelonMod
         MystifierCounterList.Add(Mystifier_10a);
         MystifierCounterList.Add(Mystifier_10b);
         MystifierCounterList.Add(Mystifier_10c);
+        MystifierCounterList.Add(Mystifier_8a);
+        MystifierCounterList.Add(Mystifier_8b);
+        MystifierCounterList.Add(Mystifier_9a);
+        MystifierCounterList.Add(Mystifier_9b);
+        MystifierCounterList.Add(Mystifier_10a);
+        MystifierCounterList.Add(Mystifier_10b);
+        MystifierCounterList.Add(Mystifier_10c);
         MystifierCounterList.Add(Mystifier_11a);
         MystifierCounterList.Add(Mystifier_11b);
         MystifierCounterList.Add(Mystifier_11c);
@@ -872,7 +907,6 @@ public class MainMod : MelonMod
         MystifierCounterList.Add(Mystifier_12);
         MystifierCounterList.Add(Mystifier_13);
         MystifierCounterList.Add(Mystifier_14);
-        MystifierCounterList.Add(Mystifier_15);
         MystifierCounterList.Add(Mystifier_15);
 
         MystifierScript.characterCounts = MystifierCounterList;
@@ -891,9 +925,9 @@ public class MainMod : MelonMod
         // ------------ GAME START ------------
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
         Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Kingmaker", Wizard);
         Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Escapist", Recruiter);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Puppeteer", Wizard);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Guardian);
         Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Mad Scientist", Confectioner);

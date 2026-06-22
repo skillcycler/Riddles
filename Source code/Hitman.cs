@@ -51,6 +51,7 @@ public class Hitman : Role
                 if (!(newList.Count == 0))
                 {
                     Character myTarget = validTargets[UnityEngine.Random.Range(0, validTargets.Count)];
+                    myTarget.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                     myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
                     myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
                     myTarget.statuses.AddStatus(AvoidingDoubleKills.killed, charRef);

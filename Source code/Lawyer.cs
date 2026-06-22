@@ -28,7 +28,7 @@ public class Lawyer : Role
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         
         Il2CppSystem.Collections.Generic.List<Character> truthfulCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
-        if (charRef.dataRef.characterId == "Hypnotist_scm") // if Lawyer is a hypnotist, always point to adjacent characters
+        /*if (charRef.dataRef.characterId == "Hypnotist_scm") // if Lawyer is a hypnotist, always point to adjacent characters
         {
             Il2CppSystem.Collections.Generic.List<Character> adjacent = Characters.Instance.GetAdjacentCharacters(charRef);
             Character picked = adjacent[UnityEngine.Random.RandomRangeInt(0, adjacent.Count)];
@@ -45,7 +45,7 @@ public class Lawyer : Role
             string info_h = string.Format("#{0} is Truthful", picked.id);
             ActedInfo actedInfo_h = new ActedInfo(info_h);
             return actedInfo_h;
-        }
+        }*/
         foreach (Character character in characters)
         {
             bool isAdjacent = false;
@@ -74,7 +74,7 @@ public class Lawyer : Role
 
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        if (charRef.dataRef.characterId == "Captivator_scm")
+        /*if (charRef.dataRef.characterId == "Captivator_scm")
         {
             Il2CppSystem.Collections.Generic.List<Character> adjacent = Characters.Instance.GetAdjacentCharacters(charRef);
             adjacent = Characters.Instance.FilterAlignmentCharacters(adjacent, EAlignment.Good);
@@ -83,7 +83,7 @@ public class Lawyer : Role
             string info_h = string.Format("#{0} is Truthful", picked.id);
             ActedInfo actedInfo_h = new ActedInfo(info_h);
             return actedInfo_h;
-        }
+        }*/
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         
         Il2CppSystem.Collections.Generic.List<Character> untruthfulCharacters = new Il2CppSystem.Collections.Generic.List<Character>();

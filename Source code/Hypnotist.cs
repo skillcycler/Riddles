@@ -80,7 +80,7 @@ public class Hypnotist : Spy
 
 
         whitelistCharacterIDs.Add("Riddler_scm");
-        whitelistCharacterIDs.Add("Lawyer_scm");
+        //whitelistCharacterIDs.Add("Lawyer_scm");
         whitelistCharacterIDs.Add("Sentinel_WING");
         for (int i = 0; i < villagers.Count; i++)
         {

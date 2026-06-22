@@ -85,6 +85,7 @@ public class Summoner : Demon
                 CharacterData selectedDemon = possibleDemons[chosen];
                 possibleDemons.Remove(selectedDemon);
                 c.Init(selectedDemon);
+                c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
             }
         }
         summons.Remove(charRef);
@@ -111,6 +112,7 @@ public class Summoner : Demon
             CharacterData selectedDemon = possibleDemons[chosen];
             possibleDemons.Remove(selectedDemon);
             currentSummon.Init(selectedDemon);
+            currentSummon.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
             summons.Remove(currentSummon);
         }
 

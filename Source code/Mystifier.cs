@@ -42,7 +42,7 @@ public class Mystifier : Demon
             Confused.updateConfusion(charRef);
         }
         if (charRef.state == ECharacterState.Dead) return; // don't keep confusing characters after death
-        if (trigger == ETriggerPhase.Start || trigger == ETriggerPhase.Night)
+        if (trigger == ETriggerPhase.Night)
         {
             Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
             characters = Characters.Instance.FilterRealCharacterType(characters, ECharacterType.Villager);

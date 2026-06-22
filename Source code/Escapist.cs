@@ -66,6 +66,7 @@ public class Escapist : Demon
 
                 Character pickedCharacter = viableCharacters[UnityEngine.Random.Range(0, viableCharacters.Count)];
                 pickedCharacter.Init(pickedOutsider);
+                pickedCharacter.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
             }
             // One outcast is evil.
             Il2CppSystem.Collections.Generic.List<Character> outcasts = Gameplay.CurrentCharacters;

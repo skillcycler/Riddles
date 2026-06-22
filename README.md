@@ -1,5 +1,11 @@
 # Riddles
 A Demon Bluff mod that adds over 40 brand new characters to the game!
+
+## Changes from Base Game
+- All Demons will have a Night Cycle to fix duplicate night bugs
+- Lycanthrope's night cycle is removed since it is now redundant
+- Witness can additionally see many of the effects from these characters
+
 ## Villagers
 - Riddler: Gives you a fun fact about the game. 
 - Swapper: Swaps the disguises of two cards. Corrupts chosen villagers if lying.
@@ -54,4 +60,4 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 - Infestation: One random character is Corrupted. The corruption spreads at night.
 - Escapist: There is an extra Evil Outcast in play.
 - Kingmaker: Both of my neighbors are Minions. I tell the truth and hide the max Evil counter.
-- Mystifier: One random Villager is Confused each night and at the start. Confused characters have a 50% chance to Lie.
+- Mystifier: One random Villager is Confused each night. Confused characters have a 50% chance to Lie.

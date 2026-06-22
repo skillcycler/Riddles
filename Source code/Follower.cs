@@ -204,6 +204,7 @@ public class Follower : Demon
             }
             Character nightAttackTarget = targetChars[UnityEngine.Random.RandomRangeInt(0, targetChars.Count)];
             PlayerController.PlayerInfo.health.Damage(2);
+            nightAttackTarget.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
             nightAttackTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
             nightAttackTarget.statuses.AddStatus(FollowerKill.followerKill, charRef);
             nightAttackTarget.statuses.AddStatus(AvoidingDoubleKills.killed, charRef);

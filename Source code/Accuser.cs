@@ -35,11 +35,10 @@ public class Accuser : Minion
         if (trigger == ETriggerPhase.Start)
         {
             Il2CppSystem.Collections.Generic.List<Character> neighbors = Characters.Instance.GetAdjacentCharacters(charRef);
-            // I only want actual Villagers that register as Good Villagers to be Accused.
-            // No shenanigans involving Guardian or Evils registering as Villagers
-            neighbors = Characters.Instance.FilterCharacterType(neighbors, ECharacterType.Villager);
-            neighbors = Characters.Instance.FilterRealCharacterType(neighbors, ECharacterType.Villager);
+            // I only want actual Good characters that register as Good to be Accused.
+            // No shenanigans involving Guardian or Evils registering as Good some other way
             neighbors = Characters.Instance.FilterAlignmentCharacters(neighbors, EAlignment.Good);
+            neighbors = Characters.Instance.FilterRealAlignmentCharacters(neighbors, EAlignment.Good);
             if (neighbors.Count > 0)
             {
                 Character randomChar = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
@@ -97,7 +96,16 @@ public static class Accused
         {
             if (__instance.statuses.Contains(accused))
             {
-                __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#FF8000><size=18>\n<Accused></color></size>";
+                if (__instance.statuses.Contains(Confused.confused))
+                {
+                    __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#DDDD00><size=14>\n<Confused+</color></size><color=#FF8000><size=14>Accused></color></size>";
+                } else if (__instance.statuses.Contains(ECharacterStatus.Corrupted))
+                {
+                    __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#999999><size=14>\nCorrupted+</color></size><color=#FF8000><size=14>Accused</color></size>";
+                } else
+                {
+                    __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#FF8000><size=18>\n<Accused></color></size>";
+                }
             }
         }
     }

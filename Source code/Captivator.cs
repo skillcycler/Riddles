@@ -50,7 +50,14 @@ public class Captivator : Role
         Il2CppSystem.Collections.Generic.List<string> whitelistCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
 
         //whitelistCharacterIDs.Add("Oracle_07039445");
-        whitelistCharacterIDs.Add("Bishop_58855542");
+        int nonVillagers = 0;
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (c.GetRegisterAs().type != ECharacterType.Villager)
+                nonVillagers++;
+        }
+        if (nonVillagers >= 2)
+            whitelistCharacterIDs.Add("Bishop_58855542");
         int evils = 0;
         foreach (Character c in Gameplay.CurrentCharacters)
         {
@@ -65,14 +72,14 @@ public class Captivator : Role
         {
             whitelistCharacterIDs.Add("Chiromancer_WING");
         }
-        foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
+        /*foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
         {
             if (c.alignment == EAlignment.Good)
             {
                 whitelistCharacterIDs.Add("Lawyer_scm");
                 break;
             }
-        }
+        }*/
         int bluffs = 0;
         foreach (Character c in Gameplay.CurrentCharacters)
         {
