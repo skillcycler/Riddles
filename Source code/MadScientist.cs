@@ -232,7 +232,7 @@ public class MadScientist : Role
                 else if (fakeOutcast.characterId == "Gambler_scm")
                 {
                     Il2CppSystem.Collections.Generic.List<Character> charss = Gameplay.CurrentCharacters;
-                    Character picked = charss[UnityEngine.Random.RandomRangeInt(0, chars.Count)];
+                    Character picked = charss[UnityEngine.Random.RandomRangeInt(0, charss.Count)];
                     
                     targetForGambler = picked.id;
                     if (picked.alignment == EAlignment.Evil)

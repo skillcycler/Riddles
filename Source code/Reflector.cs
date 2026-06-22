@@ -44,6 +44,7 @@ public class Reflector : Role
     public override CharacterData GetBluffIfAble(Character charRef)
     {
         charRef.statuses.AddStatus(Confused.confused, charRef);
+        Confused.updateConfusion(charRef);
         int diceRoll = Calculator.RollDice(10);
 
         if (diceRoll < 5)

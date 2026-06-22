@@ -61,11 +61,7 @@ public class Mystifier : Demon
                 Character randomChar = characters[UnityEngine.Random.Range(0, characters.Count)];
                 randomChar.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 randomChar.statuses.AddStatus(Confused.confused, charRef);
-
-                if (Calculator.RollDice(2) == 1)
-                {
-                    randomChar.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                }
+                Confused.updateConfusion(charRef);
             }
         }
     }

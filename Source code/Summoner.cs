@@ -95,18 +95,15 @@ public class Summoner : Demon
         }
         if (Gameplay.CurrentCharacters.Count >= 11)
         {
-            extraDemons = 2;
+            extraDemons = Calculator.RollDice(2) + 1;
         }
         if (Gameplay.CurrentCharacters.Count >= 13)
         {
-            extraDemons = Calculator.RollDice(2)+1;
+            extraDemons = Calculator.RollDice(2) + 2;
         }
-        if (extraDemons > 1)
-        {
-            Health health = PlayerController.PlayerInfo.health;
-            health.AddMaxHp(5);
-            health.Heal(100);
-        }
+        Health health = PlayerController.PlayerInfo.health;
+        health.AddMaxHp(5);
+        health.Heal(100);
         for (int i = 0; i < extraDemons; i++)
         {
             Character currentSummon = summons[UnityEngine.Random.RandomRangeInt(0, summons.Count)];

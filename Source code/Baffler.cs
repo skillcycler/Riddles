@@ -50,11 +50,7 @@ public class Baffler : Minion
                 Character randomChar = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
                 randomChar.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 randomChar.statuses.AddStatus(Confused.confused, charRef);
-
-                if (Calculator.RollDice(2) == 1)
-                {
-                    randomChar.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                }
+                Confused.updateConfusion(charRef);
             }
         }
         if (trigger == ETriggerPhase.Night)
@@ -94,10 +90,12 @@ public static class Confused
                 if (Calculator.RollDice(2) == 1)
                 {
                     c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                    c.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
                 }
                 else if (c.statuses.Contains(ECharacterStatus.Corrupted))
                 {
                     c.statuses.statuses.Remove(ECharacterStatus.Corrupted);
+                    c.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
                 }
             }
         }

@@ -202,10 +202,8 @@ public class Swapper : Role
             bluff2 = c2.dataRef;
         }
         c1.GiveBluff(bluff2);
-        if (c1.GetCharacterType() == ECharacterType.Villager)
-        {
-            c1.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-        }
+        c1.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+        c1.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
 
         if (c1.bluff.picking)
         {
@@ -221,10 +219,8 @@ public class Swapper : Role
         }
 
         c2.GiveBluff(bluff1);
-        if (c2.GetCharacterType() == ECharacterType.Villager)
-        {
-            c2.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-        }
+        c2.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+        c2.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
         
         if (c2.bluff.picking)
         {
