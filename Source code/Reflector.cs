@@ -45,21 +45,10 @@ public class Reflector : Role
     {
         charRef.statuses.AddStatus(Confused.confused, charRef);
         Confused.updateConfusion(charRef);
-        int diceRoll = Calculator.RollDice(10);
+        CharacterData bluff = Characters.Instance.GetRandomUniqueVillagerBluff();
+        Gameplay.Instance.AddScriptCharacterIfAble(bluff.type, bluff);
 
-        if (diceRoll < 5)
-        {
-            // 100% Double Claim
-            return Characters.Instance.GetRandomDuplicateBluff();
-        }
-        else
-        {
-            // Become a new character
-            CharacterData bluff = Characters.Instance.GetRandomUniqueBluff();
-            Gameplay.Instance.AddScriptCharacterIfAble(bluff.type, bluff);
-
-            return bluff;
-        }
+        return bluff;
     }
     public override int GetDamageToYou()
     {

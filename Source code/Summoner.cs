@@ -55,6 +55,10 @@ public class Summoner : Demon
         bannedDemons.Add("RainbowJoker_scm"); // Adds minions AND outcasts.
         bannedDemons.Add("Dominion_LRZH"); // I don't think this plays well with Summoner
         bannedDemons.Add("Ringleader_LRZH"); // Probably adds minions.
+        bannedDemons.Add("Famine_POW"); // This mod's Demons are too strong.
+        bannedDemons.Add("Pestilence_POW");
+        bannedDemons.Add("War_POW");
+        bannedDemons.Add("Death_POW");
         List<string> bannedDemonsByName = new List<string>();
         bannedDemonsByName.Add("relic_copyvillager");
         for (int j = 0; j < allDatas.Length; j++)

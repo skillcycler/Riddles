@@ -33,8 +33,8 @@ public class Mastermind : Minion
     {
         if (trigger == ETriggerPhase.Start)
         {
-            Il2CppSystem.Collections.Generic.List<Character> evils = Characters.Instance.FilterRealAlignmentCharacters(Gameplay.CurrentCharacters, EAlignment.Evil);
-            evils.Remove(charRef);
+            Il2CppSystem.Collections.Generic.List<Character> minions = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Minion);
+            minions.Remove(charRef);
 
             Il2CppSystem.Collections.Generic.List<CharacterData> findThatMastermindData = Gameplay.Instance.GetAscensionAllStartingCharacters();
             CharacterData mastermindData = new();
@@ -53,10 +53,10 @@ public class Mastermind : Minion
             doNotTurn.Add("Witch_25286521");
             doNotTurn.Add("Sleeper_scm");
 
-            foreach (Character evil in evils)
+            foreach (Character minion in minions)
             {
-                if (!doNotTurn.Contains(evil.dataRef.characterId) && evil.dataRef.type == ECharacterType.Minion)
-                    evil.Init(mastermindData);
+                if (!doNotTurn.Contains(minion.dataRef.characterId) && minion.dataRef.type == ECharacterType.Minion)
+                    minion.Init(mastermindData);
             }
         }
         if (trigger == ETriggerPhase.Night)

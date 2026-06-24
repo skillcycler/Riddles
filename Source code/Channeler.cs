@@ -50,6 +50,13 @@ public class Channeler : Minion
             blacklistIDs.Add("Enigma_scm"); // umm... might cause problems?
             blacklistIDs.Add("Vizier_LRZH"); // This is gonna make 2 unkillable evils.
             blacklistIDs.Add("Po_LRZH"); // flips 8 cards, insta death
+            blacklistIDs.Add("Baron_04539999"); // Bugged.
+            blacklistIDs.Add("Slinger_POW"); // This mod's characters are too strong and channeling them will make it worse.
+            blacklistIDs.Add("Grenadier_POW");
+            blacklistIDs.Add("Famine_POW");
+            blacklistIDs.Add("Pestilence_POW");
+            blacklistIDs.Add("War_POW");
+            blacklistIDs.Add("Death_POW");
 
             //the below characters do nothing when copied, so don't copy them if possible
             blacklistIDs.Add("Puppet_15989619");
@@ -65,7 +72,8 @@ public class Channeler : Minion
             blacklistIDs.Add("Professional_WING");
             blacklistIDs.Add("Tenecaligo_WING"); // This won't do anything because of game start act order.
             blacklistIDs.Add("Mendaverte_WING"); // Having 2 of Mendaverte's effects does nothing.
-            blacklistIDs.Add("Leviathan_WING"); // Having 2 of Leviathan's effects does nothing.
+            blacklistIDs.Add("Leviathan_WING"); // Having 2 of Leviathan's effects does nothing
+            blacklistIDs.Add("Guardian_scm"); // Having 2 of Guardian's effects does nothing.
             blacklistIDs.Add("Viciyon_WING"); // This makes you forced to take damage.
             blacklistIDs.Add("Shroud_TST"); // If its only ability is to disguise a certain way, it doesn't work.
             blacklistIDs.Add("Illusionist_TST"); // If its only ability is to disguise a certain way, it doesn't work.

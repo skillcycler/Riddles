@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.3.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.3.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -53,7 +53,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Pioneer>();
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
         ClassInjector.RegisterTypeInIl2Cpp<Astronaut>();
-        ClassInjector.RegisterTypeInIl2Cpp<Sharpshooter>();
+        //ClassInjector.RegisterTypeInIl2Cpp<Sharpshooter>();
         ClassInjector.RegisterTypeInIl2Cpp<Motivator>();
 
         // Outcasts
@@ -318,9 +318,9 @@ public class MainMod : MelonMod
         Astronaut.role = new Astronaut();
         Astronaut.description = "At Night: Learn a character of a different Alignment than the previous night.";
 
-        CharacterData Sharpshooter = makeNewCharacter("Sharpshooter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Fastest gunslinger in the West, getting even faster each night\"");
+        /*CharacterData Sharpshooter = makeNewCharacter("Sharpshooter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Fastest gunslinger in the West, getting even faster each night\"");
         Sharpshooter.role = new Sharpshooter();
-        Sharpshooter.description = "Learn that a particular Evil is between 1 of 5 Cards.\n\nAt Night: Remove one of the possibilities.";
+        Sharpshooter.description = "Learn that a particular Evil is between 1 of 5 Cards.\n\nAt Night: Remove one of the possibilities.";*/
 
         CharacterData Motivator = makeNewCharacter("Motivator", EAlignment.Good, ECharacterType.Villager, true, false, "\"Go Go Go! You can do it!\"");
         Motivator.role = new Motivator();
@@ -457,9 +457,9 @@ public class MainMod : MelonMod
 
         CharacterData Reflector = makeNewCharacter("Reflector", EAlignment.Good, ECharacterType.Outcast, false, true, "\"Look at you, you're so confused!\"");
         Reflector.role = new Reflector();
-        Reflector.description = "I disguise and am Confused.\nConfused characters have a 50% chance of Lying.\n\nYou only take 3 damage if I am Executed.";
+        Reflector.description = "I disguise as a Villager and am Confused.\nConfused characters have a 50% chance of Lying.\n\nYou only take 3 damage if I am Executed.";
 
-        CharacterData Gambler = makeNewCharacter("Gambler", EAlignment.Good, ECharacterType.Outcast, true, false, "\"Aw dang it!\"");
+        CharacterData Gambler = makeNewCharacter("Gambler", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Aw dang it!\"");
         Gambler.role = new Gambler();
         Gambler.description = "Game Start: 1 random character is afflicted with a random status effect: Accused, Corrupted, Confused, Evil-turned. Learn who I affected.";
 
@@ -487,7 +487,7 @@ public class MainMod : MelonMod
 
         CharacterData Mastermind = makeNewCharacter("Mastermind", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It all comes back to me.\"");
         Mastermind.role = new Mastermind();
-        Mastermind.description = "Game Start: Most Evil Minions become a Mastermind after all other Game Start effects.";
+        Mastermind.description = "Game Start: Most Minions become a Mastermind after all other Game Start effects.";
         Mastermind.hints = "Characters that need to exist to have their ability, such as the Witch and the Sleeper, will not be converted.";
 
         CharacterData Baffler = makeNewCharacter("Baffler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"");
@@ -976,7 +976,7 @@ public class MainMod : MelonMod
         nightPhase.nightCharactersOrder.Add(Sleeper);
         // and now for the characters that will learn info at night
         nightPhase.nightCharactersOrder.Add(Astronaut);
-        nightPhase.nightCharactersOrder.Add(Sharpshooter);
+        //nightPhase.nightCharactersOrder.Add(Sharpshooter);
         nightPhase.nightCharactersOrder.Add(Motivator);
 
         // ------------ GAME START ------------
@@ -1008,7 +1008,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Muddler);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Enigma);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
-        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sharpshooter);
+        //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sharpshooter);
 
 
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
@@ -1050,7 +1050,7 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Pioneer);
             AddRole(script.startingTownsfolks, Necromancer);
             AddRole(script.startingTownsfolks, Astronaut);
-            AddRole(script.startingTownsfolks, Sharpshooter);
+            //AddRole(script.startingTownsfolks, Sharpshooter);
             AddRole(script.startingTownsfolks, Motivator);
 
 
@@ -1325,6 +1325,25 @@ public class MainMod : MelonMod
             string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
             string info = string.Format("#{0} is actually a {1}", UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1), fakeDisguisingOutcastName);
             __result = new ActedInfo(info);
+        }
+    }
+    //this one is for Mediums to call out "#x is actually a <disguised outcast>" instead of "#x is a real <disguised outcast>"
+    [HarmonyPatch(typeof(Lookout), nameof(Lookout.ConjourInfo))]
+    private static class MediumDisguised
+    {
+        private static void Postfix(Lookout __instance, int id, CharacterData ch, Character charef, ref string __result)
+        {
+            bool surprised = false;
+            if (ch.usuallyDisguised)
+                surprised = true;
+
+            string info = "";
+            if (surprised)
+                info += $"#{id} is actually a\n";
+            else
+                info += $"#{id} is a real\n";
+            info += $"{ch.GetCharacterName()}";
+            __result = info;
         }
     }
     [HarmonyPatch(typeof(Knitter), nameof(Knitter.GetInfo))]

@@ -16,9 +16,10 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class Sharpshooter : Role
 {
-    int real;
+    public int real;
     public HashSet<int> fakeIDs = new();
     public CharacterData cd;
+    public bool hasActivated = false;
     public override string Description
     {
         get
@@ -61,10 +62,11 @@ public class Sharpshooter : Role
     {
         if (trigger == ETriggerPhase.Start)
         {
+            hasActivated = true;
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
             Il2CppSystem.Collections.Generic.List<Character> evils = new();
             foreach (Character c in chars) {
-                if (c.GetRegisterAlignment() == EAlignment.Evil) { evils.Add(c); }
+                if (c.GetRegisterAlignment() == EAlignment.Evil && c.dataRef.characterId != "Professional_WING" && c.dataRef.characterId != "Iris_WING") { evils.Add(c); }
             }
             Character picked = evils[UnityEngine.Random.RandomRangeInt(0, evils.Count)];
             real = picked.id;
@@ -93,6 +95,7 @@ public class Sharpshooter : Role
     {
         if (trigger == ETriggerPhase.Start)
         {
+            hasActivated = true;
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
             if (chars.Count >= 6)
             {
@@ -115,6 +118,11 @@ public class Sharpshooter : Role
         {
             if (Gameplay.CurrentCharacters.Count >= 6)
             {
+                if (!hasActivated)
+                {
+                    hasActivated = true;
+                    BluffAct(ETriggerPhase.Start, charRef);
+                }
                 fakeIDs.Remove(fakeIDs.Last());
                 if (charRef.revealed)
                 {
@@ -126,6 +134,11 @@ public class Sharpshooter : Role
         {
             if (Gameplay.CurrentCharacters.Count >= 6)
             {
+                if (!hasActivated)
+                {
+                    hasActivated = true;
+                    BluffAct(ETriggerPhase.Start, charRef);
+                }
                 charRef.revealed = true;
                 onActed.Invoke(GetInfo(charRef));
             }
