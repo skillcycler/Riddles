@@ -1,5 +1,5 @@
 # Riddles
-A Demon Bluff mod that adds 50 brand new characters to the game!
+A Demon Bluff mod that adds 53 brand new characters to the game!
 
 ## Changes from Base Game
 - All Demons will have a Night Cycle to fix duplicate night bugs
@@ -32,6 +32,9 @@ A Demon Bluff mod that adds 50 brand new characters to the game!
 - Tracker: Learn someone disguised as an Outcast.
 - Pioneer: Learn how many cards away a particular Evil is from my closest Evil.
 - Necromancer: Kill any card and Revive a dead Good card for 2 HP. If I am lying, the revived card will lie.
+- Astronaut: Each night, learn a character of the opposite alignment to the previous night.
+- Sharpshooter: Learn that an evil is one of 5 cards. At night, remove one of the possibilities.
+- Motivator: If revealed, Neighbors refresh at night.
 
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.

@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.3.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -52,6 +52,9 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Tracker>();
         ClassInjector.RegisterTypeInIl2Cpp<Pioneer>();
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
+        ClassInjector.RegisterTypeInIl2Cpp<Astronaut>();
+        ClassInjector.RegisterTypeInIl2Cpp<Sharpshooter>();
+        ClassInjector.RegisterTypeInIl2Cpp<Motivator>();
 
         // Outcasts
 
@@ -159,6 +162,7 @@ public class MainMod : MelonMod
         GameObject circle13 = CreateCircle(13);
         GameObject circle14 = CreateCircle(14);
         GameObject circle15 = CreateCircle(15);
+        //GameObject circleForTestingVillager = CreateCircle(25);
     }
     public static void UpdateWitness()
     {
@@ -310,6 +314,17 @@ public class MainMod : MelonMod
         Necromancer.description = "Pick 2 cards (not myself), one alive and one dead. Kill the alive and revive the dead at a cost of 2 HP. I cannot revive Evils or the Ghost.";
         Necromancer.ifLies = "The revived card will lie with its new info.";
 
+        CharacterData Astronaut = makeNewCharacter("Astronaut", EAlignment.Good, ECharacterType.Villager, true, false, "\"Always has been.\"");
+        Astronaut.role = new Astronaut();
+        Astronaut.description = "At Night: Learn a character of a different Alignment than the previous night.";
+
+        CharacterData Sharpshooter = makeNewCharacter("Sharpshooter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Fastest gunslinger in the West, getting even faster each night\"");
+        Sharpshooter.role = new Sharpshooter();
+        Sharpshooter.description = "Learn that a particular Evil is between 1 of 5 Cards.\n\nAt Night: Remove one of the possibilities.";
+
+        CharacterData Motivator = makeNewCharacter("Motivator", EAlignment.Good, ECharacterType.Villager, true, false, "\"Go Go Go! You can do it!\"");
+        Motivator.role = new Motivator();
+        Motivator.description = "If revealed: Both of my neighbors refresh at night.";
         /*
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
@@ -766,8 +781,9 @@ public class MainMod : MelonMod
         infestationCounterList.Add(infestation_13);
         infestationCounterList.Add(infestation_14);
         infestationCounterList.Add(infestation_15);
-        //infestationCounterList.Add(setCharacterCount(2, 8, 0, 1)); // outcast test
-        //infestationCounterList.Add(setCharacterCount(2, 0, 8, 1)); // minion test
+        //infestationCounterList.Add(setCharacterCount(2, 12, 0, 1)); // outcast test
+        //infestationCounterList.Add(setCharacterCount(2, 0, 12, 1)); // minion test
+        //infestationCounterList.Add(setCharacterCount(24, 0, 0, 1)); // villager test
 
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
@@ -958,6 +974,10 @@ public class MainMod : MelonMod
         nightPhase.nightCharactersOrder.Add(Hitman);
         //nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
         nightPhase.nightCharactersOrder.Add(Sleeper);
+        // and now for the characters that will learn info at night
+        nightPhase.nightCharactersOrder.Add(Astronaut);
+        nightPhase.nightCharactersOrder.Add(Sharpshooter);
+        nightPhase.nightCharactersOrder.Add(Motivator);
 
         // ------------ GAME START ------------
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
@@ -987,6 +1007,8 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Muddler);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Enigma);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sharpshooter);
 
 
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
@@ -1027,6 +1049,9 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Tracker);
             AddRole(script.startingTownsfolks, Pioneer);
             AddRole(script.startingTownsfolks, Necromancer);
+            AddRole(script.startingTownsfolks, Astronaut);
+            AddRole(script.startingTownsfolks, Sharpshooter);
+            AddRole(script.startingTownsfolks, Motivator);
 
 
             AddRole(script.startingOutsiders, MadScientist);

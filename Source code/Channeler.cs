@@ -48,6 +48,8 @@ public class Channeler : Minion
             blacklistIDs.Add("Snake Charmer_WING"); // The way it's coded is not compatible. At least for now. Might get removed later
             blacklistIDs.Add("Rainbow Joker_scm"); // #1 leading cause of bugs
             blacklistIDs.Add("Enigma_scm"); // umm... might cause problems?
+            blacklistIDs.Add("Vizier_LRZH"); // This is gonna make 2 unkillable evils.
+            blacklistIDs.Add("Po_LRZH"); // flips 8 cards, insta death
 
             //the below characters do nothing when copied, so don't copy them if possible
             blacklistIDs.Add("Puppet_15989619");
@@ -65,6 +67,11 @@ public class Channeler : Minion
             blacklistIDs.Add("Mendaverte_WING"); // Having 2 of Mendaverte's effects does nothing.
             blacklistIDs.Add("Leviathan_WING"); // Having 2 of Leviathan's effects does nothing.
             blacklistIDs.Add("Viciyon_WING"); // This makes you forced to take damage.
+            blacklistIDs.Add("Shroud_TST"); // If its only ability is to disguise a certain way, it doesn't work.
+            blacklistIDs.Add("Illusionist_TST"); // If its only ability is to disguise a certain way, it doesn't work.
+            blacklistIDs.Add("Clown_LRZH"); // two of this does nothing
+            blacklistIDs.Add("Dominion_LRZH"); // Just in case.
+            blacklistIDs.Add("Ringleader_LRZH");
             foreach (Character character in characters) {
                 if (!blacklistIDs.Contains(character.dataRef.characterId) && character.GetCharacterType() != ECharacterType.Villager && character.GetCharacterType() != ECharacterType.Outcast)
                     allowedCharacters.Add(character);

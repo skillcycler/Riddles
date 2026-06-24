@@ -54,6 +54,7 @@ public class Surveyor : Role
             }
         }
         string info = string.Format("There {2} {0} Outcast{3} and {1} Minion{4}", outcasts, minions, outcasts == 1 ? "is" : "are", outcasts == 1 ? "" : "s", minions == 1 ? "" : "s");
+        if (charRef.dataRef.characterId == "Captivator_scm") info = GetCaptivatorInfo(outcasts, minions);
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
@@ -79,6 +80,7 @@ public class Surveyor : Role
         minions += UnityEngine.Random.RandomRangeInt(0, 2) * 2 - 1;
         if (minions == -1) minions = 1;
         string info = string.Format("There {2} {0} Outcast{3} and {1} Minion{4}", outcasts, minions, outcasts == 1 ? "is" : "are", outcasts == 1 ? "" : "s", minions == 1 ? "" : "s");
+        if (charRef.dataRef.characterId == "Captivator_scm") info = GetCaptivatorInfo(outcasts, minions);
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }

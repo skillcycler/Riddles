@@ -124,6 +124,13 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Marionette_WING");
             //whitelistOutcastCharacterIDs.Add("Renegade_WING");
             //whitelistOutcastCharacterIDs.Add("Lunatic_WING");
+
+            // LRZH's circus
+
+            whitelistMinionCharacterIDs.Add("Clown_LRZH");
+            whitelistMinionCharacterIDs.Add("Wraith_LRZH");
+            whitelistOutcastCharacterIDs.Add("Moonchild_LRZH");
+
             /* a lot of these are abandoned and will no longer officially be supported
             // Carlz
             //whitelistMinionCharacterIDs.Add("Lycaon_VP"); This has been causing too many bugs
