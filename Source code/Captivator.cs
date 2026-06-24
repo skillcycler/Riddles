@@ -49,7 +49,13 @@ public class Captivator : Role
         Il2CppSystem.Collections.Generic.List<CharacterData> listV = new Il2CppSystem.Collections.Generic.List<CharacterData>();
         Il2CppSystem.Collections.Generic.List<string> whitelistCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
 
-        //whitelistCharacterIDs.Add("Oracle_07039445");
+        int scriptMinions = 0;
+        foreach (CharacterData d in gameplay.GetScriptCharactersOfType(ECharacterType.Minion))
+        {
+            scriptMinions++;
+        }
+        if (scriptMinions >= 2)
+            whitelistCharacterIDs.Add("Oracle_07039445");
         int nonVillagers = 0;
         foreach (Character c in Gameplay.CurrentCharacters)
         {

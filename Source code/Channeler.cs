@@ -46,6 +46,8 @@ public class Channeler : Minion
             blacklistIDs.Add("Wizard_scm"); // so this might create infinite wizards which is bad
             blacklistIDs.Add("Kingmaker_scm"); // Once a Channeler replaced the Kingmaker with a minion. This should not happen.
             blacklistIDs.Add("Snake Charmer_WING"); // The way it's coded is not compatible. At least for now. Might get removed later
+            blacklistIDs.Add("Rainbow Joker_scm"); // #1 leading cause of bugs
+            blacklistIDs.Add("Enigma_scm"); // umm... might cause problems?
 
             //the below characters do nothing when copied, so don't copy them if possible
             blacklistIDs.Add("Puppet_15989619");

@@ -17,7 +17,7 @@ using static Il2CppSystem.Array;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.2.8", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.3", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -74,6 +74,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Baffler>();
         ClassInjector.RegisterTypeInIl2Cpp<Wizard>();
         ClassInjector.RegisterTypeInIl2Cpp<Slanderer>();
+        ClassInjector.RegisterTypeInIl2Cpp<Enigma>();
 
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
@@ -83,6 +84,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Escapist>();
         ClassInjector.RegisterTypeInIl2Cpp<Kingmaker>();
         ClassInjector.RegisterTypeInIl2Cpp<Mystifier>();
+        ClassInjector.RegisterTypeInIl2Cpp<RainbowJoker>();
         Instance = this;
     }
     public CharacterData makeNewCharacter(string name, EAlignment startingAlignment, ECharacterType type, bool bluffable, bool usuallyDisguised, string flavorText, bool picking = false)
@@ -175,12 +177,9 @@ public class MainMod : MelonMod
             if (allDatas[i].characterName == "Witness")
             {
                 allDatas[i].hints += "\n- Demon protected by Guardian" +
-                                     "\n- Character accused by Accuser" +
-                                     "\n- Characters Confused by Baffler or Mystifier" +
-                                     "\n- Characters duplicated by Wizard" +
-                                     "\n- Characters summoned by Summoner" +
-                                     "\n- Outcast added or turned evil by Escapist" +
-                                     "\n- Minions next to Kingmaker";
+                                     "\n- Character targeted by Accuser, Baffler, Mystifier, or Wizard" +
+                                     "\n- Characters summoned by Summoner, Kingmaker, or Rainbow Joker" +
+                                     "\n- Outcast added or turned evil by Escapist";
             }
         }
     }
@@ -490,6 +489,11 @@ public class MainMod : MelonMod
         Slanderer.role = new Slanderer();
         Slanderer.description = "Game Start: The card(s) furthest away from me register as the wrong alignment.";
 
+        CharacterData Enigma = makeNewCharacter("Enigma", EAlignment.Evil, ECharacterType.Minion, false, true, "\"lbh jvyy arire thrff jung guvf fnlf\"");
+        Enigma.role = new Enigma();
+        Enigma.description = "There are extra fake characters in the deck equal to my card number.";
+        Enigma.hints = "I can add fake disguised Outcasts, fake Minions, and fake Demons.";
+
         CharacterData Follower = makeNewCharacter("Follower", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I'm playing chess and you're playing checkers.\"");
         Follower.role = new Follower();
         Follower.description = "You have slightly more HP in larger villages.\nNight falls every 3 ticks.\n<b>At Night:</b>\nKill 1 card, prioritizing more valuable targets.\nDeal 2 damage to you.\n\nI Lie and Disguise.";
@@ -519,14 +523,21 @@ public class MainMod : MelonMod
         CharacterData Kingmaker = makeNewCharacter("Kingmaker", EAlignment.Evil, ECharacterType.Demon, false, true, "\"'Puppet Master' is more like it.\"");
         Kingmaker.role = new Kingmaker();
         Kingmaker.description = "Game Start: Both my neighbors become Minions. I act before any Minions do.\n\nYou don't know how many Evils there are.\n\nI tell the truth and Disguise.";
-        Kingmaker.hints = "There may be fewer Outcasts in play than expected.\n\nIf I add a Chancellor, I may not neighbor 2 minions.";
+        Kingmaker.hints = "There may be fewer Outcasts in play than expected.\n\nIf I add a Chancellor, I may not neighbor 2 minions.\nIf a Marionette was in play, it gets turned into a Drunk.";
         Kingmaker.additionalPossibleCharacters = MakeAddedCharacters(0, 0, 2, 0);
 
         CharacterData Mystifier = makeNewCharacter("Mystifier", EAlignment.Evil, ECharacterType.Demon, false, true, "\"Puzzled, confounded, or astonished yet?\"");
         Mystifier.role = new Mystifier();
         Mystifier.description = "At night: One random Villager is Confused.\nConfused characters have a 50% chance of Lying.\n\nI Lie and Disguise.";
         Mystifier.hints = "Confused characters that are currently Lying also register as Corrupted.";
-        
+
+        CharacterData RainbowJoker = makeNewCharacter("RainbowJoker", EAlignment.Evil, ECharacterType.Demon, false, true, "\"A total wild card.\"");
+        RainbowJoker.role = new RainbowJoker();
+        RainbowJoker.description = "1/3 (rounded down) of all non-Demons become random Minions. Then, 0-4 characters become random Outcasts. None of these characters are added to the Deck.";
+        RainbowJoker.name = "Rainbow Joker";
+        RainbowJoker.characterName = "Rainbow Joker";
+        RainbowJoker.additionalPossibleCharacters = MakeAddedCharacters(0, 4, 4, 0);
+
         CustomScriptData followerScriptData = new CustomScriptData();
         followerScriptData.name = "Follower_1";
         ScriptInfo followerScript = new ScriptInfo();
@@ -912,6 +923,32 @@ public class MainMod : MelonMod
         MystifierScript.characterCounts = MystifierCounterList;
         MystifierScriptData.scriptInfo = MystifierScript;
 
+        CustomScriptData RainbowJokerScriptData = new CustomScriptData();
+        RainbowJokerScriptData.name = "RainbowJoker_1";
+        ScriptInfo RainbowJokerScript = new ScriptInfo();
+        Il2CppSystem.Collections.Generic.List<CharacterData> RainbowJokerList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        RainbowJokerList.Add(RainbowJoker);
+        RainbowJokerScript.mustInclude = RainbowJokerList;
+        RainbowJokerScript.startingDemons = RainbowJokerList;
+        RainbowJokerScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
+        RainbowJokerScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
+        RainbowJokerScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
+        Il2CppSystem.Collections.Generic.List<CharactersCount> RainbowJokerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
+
+        // same compositions as Summoner
+        RainbowJokerCounterList.Add(summoner_7);
+        RainbowJokerCounterList.Add(summoner_8);
+        RainbowJokerCounterList.Add(summoner_9);
+        RainbowJokerCounterList.Add(summoner_10);
+        RainbowJokerCounterList.Add(summoner_11);
+        RainbowJokerCounterList.Add(summoner_12);
+        RainbowJokerCounterList.Add(summoner_13);
+        RainbowJokerCounterList.Add(summoner_14);
+        RainbowJokerCounterList.Add(summoner_15);
+
+        RainbowJokerScript.characterCounts = RainbowJokerCounterList;
+        RainbowJokerScriptData.scriptInfo = RainbowJokerScript;
+
         // ------------ NIGHT PHASE ------------
         nightPhase.nightCharactersOrder.Add(Baffler);
         nightPhase.nightCharactersOrder.Add(Mystifier);
@@ -924,6 +961,7 @@ public class MainMod : MelonMod
 
         // ------------ GAME START ------------
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
+        Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(RainbowJoker);
         Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
         Characters.Instance.startGameActOrder = InsertAfterAct("Kingmaker", Wizard);
         Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
@@ -948,6 +986,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Muddler);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Enigma);
 
 
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
@@ -958,6 +997,7 @@ public class MainMod : MelonMod
         addDemonRole(advancedAscension, Escapist, "Baa_Difficult", "Escapist_1", escapistScriptData, 2);
         addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 2);
         addDemonRole(advancedAscension, Mystifier, "Baa_Difficult", "Mystifier_1", MystifierScriptData, 2);
+        addDemonRole(advancedAscension, RainbowJoker, "Baa_Difficult", "RainbowJoker_1", RainbowJokerScriptData, 2);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
@@ -1008,6 +1048,7 @@ public class MainMod : MelonMod
             AddRole(script.startingMinions, Mastermind);
             AddRole(script.startingMinions, Baffler);
             AddRole(script.startingMinions, Slanderer);
+            AddRole(script.startingMinions, Enigma);
         }
     }
     public void AddRole(Il2CppSystem.Collections.Generic.List<CharacterData> list, CharacterData data)
@@ -1111,163 +1152,6 @@ public class MainMod : MelonMod
             }
         }
     }
-    /*
-    public override void OnUpdate()
-    {
-        if (allDatas.Length == 0)
-        {
-            var loadedCharList = Resources.FindObjectsOfTypeAll(Il2CppType.Of<CharacterData>());
-            if (loadedCharList != null)
-            {
-                allDatas = new CharacterData[loadedCharList.Length];
-                for (int i = 0; i < loadedCharList.Length; i++)
-                {
-                    allDatas[i] = loadedCharList[i]!.Cast<CharacterData>();
-                }
-            }
-        }
-        if (Statics.charactersArray.Length == 0)
-        {
-            var loadedCharList = Resources.FindObjectsOfTypeAll(Il2CppType.Of<CharacterData>());
-            if (loadedCharList != null)
-            {
-                Statics.charactersArray = new CharacterData[loadedCharList.Length];
-                for (int i = 0; i < loadedCharList.Length; i++)
-                {
-                    CharacterData data = loadedCharList[i]!.Cast<CharacterData>();
-                    Statics.CheckAddRole(data);
-                    Statics.charactersArray[i] = data;
-                }
-            }
-            if (Statics.charactersArray.Length > 0)
-            {
-                this.OnFirstUpdate();
-            }
-        }
-    }
-    public void OnFirstUpdate()
-    {
-        Transform chars = GameObject.Find("Game/Gameplay/Content/Canvas/Characters").transform;
-        for (int i = 12; i < 16; i++)
-        {
-            Statics.checkCreateCircle(chars, i);
-        }
-    }
-    public static class Statics
-    {
-        public static Dictionary<string, CharacterData> roles = new Dictionary<string, CharacterData>();
-        public static CharacterData[] charactersArray = Il2CppSystem.Array.Empty<CharacterData>();
-        static GameObject circChar = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/CardPlaceholder");
-        static GameObject circCharLeft = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/CardPlaceholder (1)");
-        static GameObject circCharRight = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/CardPlaceholder (4)");
-        static GameObject circCharDown = GameObject.Find("Game/Gameplay/Content/Canvas/Characters/Circle_6/CardPlaceholder (3)");
-        public static void checkCreateCircle(Transform parent, int size)
-        {
-            string name = "Circle_" + size;
-            Transform t = parent.FindChild(name);
-            if (t != null)
-            {
-                MelonLogger.Msg("Object Already exists!: " + name);
-                return;
-            }
-            createCircle(parent, size, name);
-        }
-        public static void createCircle(Transform parent, int size, string name)
-        {
-            GameObject circle = new GameObject();
-            circle.name = name;
-            circle.transform.SetParent(parent);
-            CharactersPool circlePool = circle.AddComponent<CharactersPool>();
-            circlePool.characters = new Character[size];
-            
-            for (int i = 0; i < size; i++)
-            {
-                GameObject card;
-                int rotation = 360 * i / size;
-                if (rotation <= 30)
-                {
-                    card = GameObject.Instantiate(circChar);
-                }
-                else if (rotation <= 149)
-                {
-                    card = GameObject.Instantiate(circCharLeft);
-                    rotation += 300;
-                }
-                else if (rotation <= 210)
-                {
-                    card = GameObject.Instantiate(circCharDown);
-                    rotation += 180;
-                }
-                else if (rotation <= 329)
-                {
-                    card = GameObject.Instantiate(circCharRight);
-                    rotation += 120;
-                }
-                else
-                {
-                    card = GameObject.Instantiate(circChar);
-                }
-                card.transform.SetParent(circle.transform);
-                string cardname = "Character";
-                if (i > 0)
-                {
-                    cardname += " (" + i + ")";
-                }
-                card.name = cardname;
-                Transform icon = card.transform.Find("Icon");
-                card.transform.Rotate(0, 0, rotation);
-                icon.Rotate(0, 0, 360 - rotation);
-
-
-                circlePool.characters[i] = new Character();
-            }
-            circle.transform.position = new UnityEngine.Vector3(0f, 1f, 85.9444f);
-            circle.transform.localScale = new UnityEngine.Vector3(1f, 1f, 1f);
-            circle.SetActive(false);
-            addToCharsPool(circlePool);
-        }
-        public static void addToCharsPool(CharactersPool pool)
-        {
-            CharactersPool[] pools = Characters.Instance.characterPool;
-            CharactersPool[] newPools = new CharactersPool[pools.Length + 1];
-            for (int i = 0; i < pools.Length; i++)
-            {
-                newPools[i] = pools[i];
-            }
-            newPools[pools.Length] = pool;
-            Characters.Instance.characterPool = newPools;
-        }
-
-        public static void GetStartingRoles()
-        {
-            AscensionsData allCharactersAscension = ProjectContext.Instance.gameData.allCharactersAscension;
-            foreach (CharacterData data in allCharactersAscension.startingTownsfolks)
-            {
-                CheckAddRole(data);
-            }
-            foreach (CharacterData data in allCharactersAscension.startingOutsiders)
-            {
-                CheckAddRole(data);
-            }
-            foreach (CharacterData data in allCharactersAscension.startingMinions)
-            {
-                CheckAddRole(data);
-            }
-            foreach (CharacterData data in allCharactersAscension.startingDemons)
-            {
-                CheckAddRole(data);
-            }
-        }
-        public static void CheckAddRole(CharacterData data)
-        {
-            string name = data.name;
-            if (!roles.ContainsKey(name))
-            {
-                roles.Add(name, data);
-            }
-        }
-    }
-    */
     
     public int shortenNight = 0;
     public static MainMod Instance;
@@ -1493,8 +1377,7 @@ public class MainMod : MelonMod
         return characters;
     }
     // Captivator stuff. Gotta patch both truth and lying info just in case
-    // Oracle is gonna be horribly complicated. Not doing it this update. Everything else will be here though
-    /*[HarmonyPatch(typeof(Investigator), nameof(Investigator.GetInfo))]
+    [HarmonyPatch(typeof(Investigator), nameof(Investigator.GetInfo))]
     private static class CaptivatorOracleTruth
     {
         private static void Postfix(Investigator __instance, Character charRef, ref ActedInfo __result)
@@ -1503,15 +1386,10 @@ public class MainMod : MelonMod
             Il2CppSystem.Collections.Generic.List<Character> pickedCharacters = new();
 
             Il2CppSystem.Collections.Generic.List<Character> evils = GetGameplayCurrentCharacters();
-            evils = Characters.Instance.FilterCharacterType(evils, ECharacterType.Minion);
+            evils = Characters.Instance.FilterAlignmentCharacters(evils, EAlignment.Evil);
+            string info = "";
 
-            string info = __instance.ConjourInfo(0, 0, null, charRef, true);
-            ActedInfo newInfo = new ActedInfo(info);
-
-            if (evils.Count == 0)
-                return;
-
-            Il2CppSystem.Collections.Generic.List<Character> goods = new();
+            Il2CppSystem.Collections.Generic.List<Character> other = new();
 
             Character evil = evils[UnityEngine.Random.Range(0, evils.Count)];
 
@@ -1519,19 +1397,94 @@ public class MainMod : MelonMod
             foreach (Character character in GetGameplayCurrentCharacters())
             {
                 if (character.id != evil.id)
-                    goods.Add(character);
+                    other.Add(character);
             }
-            pickedCharacters.Add(goods[UnityEngine.Random.Range(0, goods.Count)]);
+            pickedCharacters.Add(other[UnityEngine.Random.Range(0, other.Count)]);
             List<int> pickedIds = new();
             foreach (Character character in pickedCharacters)
             {
                 pickedIds.Add(character.id);
             }
             pickedIds.Sort();
-            info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], evil.GetCharacterData());
+            CharacterData cd = new();
+            Il2CppSystem.Collections.Generic.List<CharacterData> minions = Gameplay.Instance.GetScriptCharactersOfType(ECharacterType.Minion);
+            if (pickedCharacters[0].GetRegisterAlignment() == EAlignment.Evil && pickedCharacters[1].GetRegisterAlignment()== EAlignment.Evil)
+            {
+                cd = minions[UnityEngine.Random.Range(0, minions.Count)];
+            } else if (pickedCharacters[0].GetRegisterAlignment() == EAlignment.Evil)
+            {
+                string evilName = pickedCharacters[0].GetRegisterAs().characterName;
+                do
+                {
+                    cd = minions[UnityEngine.Random.Range(0, minions.Count)];
+                } while (cd.characterName == evilName);
+            } else
+            {
+                string evilName = pickedCharacters[1].GetRegisterAs().characterName;
+                do
+                {
+                    cd = minions[UnityEngine.Random.Range(0, minions.Count)];
+                } while (cd.characterName == evilName);
+            }
+                info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], cd, charRef);
             __result = new ActedInfo(info, pickedCharacters);
         }
-    }*/
+    }
+    [HarmonyPatch(typeof(Investigator), nameof(Investigator.GetBluffInfo))]
+    private static class CaptivatorOracleLie
+    {
+        private static void Postfix(Investigator __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Captivator_scm") return;
+            Il2CppSystem.Collections.Generic.List<Character> pickedCharacters = new();
+
+            Il2CppSystem.Collections.Generic.List<Character> evils = GetGameplayCurrentCharacters();
+            evils = Characters.Instance.FilterAlignmentCharacters(evils, EAlignment.Evil);
+            string info = "";
+
+            Il2CppSystem.Collections.Generic.List<Character> other = new();
+
+            Character evil = evils[UnityEngine.Random.Range(0, evils.Count)];
+
+            pickedCharacters.Add(evil);
+            foreach (Character character in GetGameplayCurrentCharacters())
+            {
+                if (character.id != evil.id)
+                    other.Add(character);
+            }
+            pickedCharacters.Add(other[UnityEngine.Random.Range(0, other.Count)]);
+            List<int> pickedIds = new();
+            foreach (Character character in pickedCharacters)
+            {
+                pickedIds.Add(character.id);
+            }
+            pickedIds.Sort();
+            CharacterData cd = new();
+            Il2CppSystem.Collections.Generic.List<CharacterData> minions = Gameplay.Instance.GetScriptCharactersOfType(ECharacterType.Minion);
+            if (pickedCharacters[0].GetRegisterAlignment() == EAlignment.Evil && pickedCharacters[1].GetRegisterAlignment() == EAlignment.Evil)
+            {
+                cd = minions[UnityEngine.Random.Range(0, minions.Count)];
+            }
+            else if (pickedCharacters[0].GetRegisterAlignment() == EAlignment.Evil)
+            {
+                string evilName = pickedCharacters[0].GetRegisterAs().characterName;
+                do
+                {
+                    cd = minions[UnityEngine.Random.Range(0, minions.Count)];
+                } while (cd.characterName == evilName);
+            }
+            else
+            {
+                string evilName = pickedCharacters[1].GetRegisterAs().characterName;
+                do
+                {
+                    cd = minions[UnityEngine.Random.Range(0, minions.Count)];
+                } while (cd.characterName == evilName);
+            }
+            info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], cd, charRef);
+            __result = new ActedInfo(info, pickedCharacters);
+        }
+    }
     [HarmonyPatch(typeof(Noble), nameof(Noble.GetInfo))]
     private static class CaptivatorEmpress1
     {

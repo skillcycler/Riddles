@@ -1,5 +1,5 @@
 # Riddles
-A Demon Bluff mod that adds over 40 brand new characters to the game!
+A Demon Bluff mod that adds 50 brand new characters to the game!
 
 ## Changes from Base Game
 - All Demons will have a Night Cycle to fix duplicate night bugs
@@ -52,6 +52,7 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 - Guardian: The Demon registers as what they're bluffing. I sit next to the Demon.
 - Baffler: One adjacent Villager is Confused. Confused characters have a 50% chance to Lie.
 - Wizard: There are two of the same Outcast or Minion in play.
+- Enigma: There are many fake characters added to the deck.
 
 ## Demons
 - Follower: Kills smartly. Night is 3 ticks long.
@@ -61,3 +62,4 @@ A Demon Bluff mod that adds over 40 brand new characters to the game!
 - Escapist: There is an extra Evil Outcast in play.
 - Kingmaker: Both of my neighbors are Minions. I tell the truth and hide the max Evil counter.
 - Mystifier: One random Villager is Confused each night. Confused characters have a 50% chance to Lie.
+- Rainbow Joker: You don't know what minions or outcasts are in play.

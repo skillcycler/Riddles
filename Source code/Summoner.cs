@@ -52,6 +52,7 @@ public class Summoner : Demon
         bannedDemons.Add("Kingmaker_scm"); // Adds minions.
         bannedDemons.Add("Escapist_scm"); // Adds outcasts.
         bannedDemons.Add("Leviathan_WING"); // This is kinda unbalanced. You don't know whether stabbing a good villager will instantly make you lose, even when you have +5 hp. So I'll just make it not show up.
+        bannedDemons.Add("RainbowJoker_scm"); // Adds minions AND outcasts.
         List<string> bannedDemonsByName = new List<string>();
         bannedDemonsByName.Add("relic_copyvillager");
         for (int j = 0; j < allDatas.Length; j++)

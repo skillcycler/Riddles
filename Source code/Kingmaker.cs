@@ -29,6 +29,7 @@ public class Kingmaker : Demon
             Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayMinions = Gameplay.Instance.GetAscensionAllStartingCharacters();
             notInPlayMinions = Characters.Instance.FilterNotInPlayCharactersUnique(notInPlayMinions);
             notInPlayMinions = Characters.Instance.FilterRealCharacterType(notInPlayMinions, ECharacterType.Minion);
+            notInPlayMinions.Remove(ProjectContext.Instance.gameData.GetCharacterDataOfId("Baron_04539999"));
             foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
             { // always have 2 extra minions in the deck list
                 c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
@@ -39,6 +40,17 @@ public class Kingmaker : Demon
                     c.Init(picked);
                 }
                 notInPlayMinions.Remove(picked);
+                if (picked.characterId == "Cryptid_WING")
+                {
+                    c.Act(ETriggerPhase.Start);
+                }
+            }
+            foreach (Character ch in Gameplay.CurrentCharacters)
+            {
+                if (ch.dataRef.characterId == "Marionette_WING")
+                {
+                    ch.Init(ProjectContext.Instance.gameData.GetCharacterDataOfId("Drunk_15369527"));
+                }
             }
         }
         if (trigger == ETriggerPhase.AfterRoundStart)
