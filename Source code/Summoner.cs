@@ -59,6 +59,7 @@ public class Summoner : Demon
         bannedDemons.Add("Pestilence_POW");
         bannedDemons.Add("War_POW");
         bannedDemons.Add("Death_POW");
+        bannedDemons.Add("Mendaverte_WING"); // A bit too strong in blind deck. Really often forces you to make 1 or more wrong stabs to figure out it's in play.
         List<string> bannedDemonsByName = new List<string>();
         bannedDemonsByName.Add("relic_copyvillager");
         for (int j = 0; j < allDatas.Length; j++)

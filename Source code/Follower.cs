@@ -102,6 +102,7 @@ public class Follower : Demon
         }
         // don't attack Knights or evils or things that can't die
         if (neverAttackIDs.Contains(character.dataRef.characterId)) targetValue = 0f;
+        if (character.bluff && neverAttackIDs.Contains(character.bluff.characterId)) targetValue = 0f; // This is so that it doesn't kill characters disguised as the Knight.
         if (character.alignment == EAlignment.Evil) targetValue = 0f;
         if (character.statuses.Contains(ECharacterStatus.UnkillableByDemon)) targetValue = 0f;
         //MelonLogger.Msg(string.Format("Checking character #{0}: Role is {1}, value is {2}, state: {3}", character.id, character.dataRef.name, Mathf.RoundToInt(targetValue * statusMult), character.state));
@@ -109,7 +110,7 @@ public class Follower : Demon
     }
     public bool shouldIEvenTry(Character ch)
     {
-        return (ch.state != ECharacterState.Dead && !ch.statuses.Contains(ECharacterStatus.UnkillableByDemon) && !ch.statuses.Contains(ECharacterStatus.KilledByEvil) && !ch.statuses.Contains(AvoidingDoubleKills.killed));
+        return (ch.state != ECharacterState.Dead && !ch.statuses.Contains(ECharacterStatus.UnkillableByDemon) && !ch.statuses.Contains(ECharacterStatus.KilledByEvil) && !ch.statuses.Contains(AvoidingDoubleKills.killed) && ch.dataRef.characterId != "Knight_47970624");
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {

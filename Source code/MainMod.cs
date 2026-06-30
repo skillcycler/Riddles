@@ -14,10 +14,11 @@ using RiddlerMod;
 using UnityEngine;
 using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
+using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.3.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.4", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -52,7 +53,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Tracker>();
         ClassInjector.RegisterTypeInIl2Cpp<Pioneer>();
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
-        ClassInjector.RegisterTypeInIl2Cpp<Astronaut>();
+        //ClassInjector.RegisterTypeInIl2Cpp<Astronaut>();
         //ClassInjector.RegisterTypeInIl2Cpp<Sharpshooter>();
         ClassInjector.RegisterTypeInIl2Cpp<Motivator>();
 
@@ -314,9 +315,9 @@ public class MainMod : MelonMod
         Necromancer.description = "Pick 2 cards (not myself), one alive and one dead. Kill the alive and revive the dead at a cost of 2 HP. I cannot revive Evils or the Ghost.";
         Necromancer.ifLies = "The revived card will lie with its new info.";
 
-        CharacterData Astronaut = makeNewCharacter("Astronaut", EAlignment.Good, ECharacterType.Villager, true, false, "\"Always has been.\"");
+        /*CharacterData Astronaut = makeNewCharacter("Astronaut", EAlignment.Good, ECharacterType.Villager, true, false, "\"Always has been.\"");
         Astronaut.role = new Astronaut();
-        Astronaut.description = "At Night: Learn a character of a different Alignment than the previous night.";
+        Astronaut.description = "At Night: Learn a character of a different Alignment than the previous night.";*/
 
         /*CharacterData Sharpshooter = makeNewCharacter("Sharpshooter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Fastest gunslinger in the West, getting even faster each night\"");
         Sharpshooter.role = new Sharpshooter();
@@ -975,7 +976,7 @@ public class MainMod : MelonMod
         //nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
         nightPhase.nightCharactersOrder.Add(Sleeper);
         // and now for the characters that will learn info at night
-        nightPhase.nightCharactersOrder.Add(Astronaut);
+        //nightPhase.nightCharactersOrder.Add(Astronaut);
         //nightPhase.nightCharactersOrder.Add(Sharpshooter);
         nightPhase.nightCharactersOrder.Add(Motivator);
 
@@ -1007,7 +1008,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Muddler);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Enigma);
-        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
+        //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
         //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sharpshooter);
 
 
@@ -1049,7 +1050,7 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Tracker);
             AddRole(script.startingTownsfolks, Pioneer);
             AddRole(script.startingTownsfolks, Necromancer);
-            AddRole(script.startingTownsfolks, Astronaut);
+            //AddRole(script.startingTownsfolks, Astronaut);
             //AddRole(script.startingTownsfolks, Sharpshooter);
             AddRole(script.startingTownsfolks, Motivator);
 
@@ -1278,9 +1279,19 @@ public class MainMod : MelonMod
             {
                 __result = new ActedInfo("There are no Corrupted characters");
             }
-            string info = __instance.ConjourInfo(UnityEngine.Random.RandomRangeInt(4, (int)(Gameplay.CurrentCharacters.Count / 2)+1), charRef);
+            int distance = UnityEngine.Random.RandomRangeInt(4, (int)(Gameplay.CurrentCharacters.Count / 2) + 1);
+            string info = __instance.ConjourInfo(distance, charRef);
 
-            __result = new ActedInfo(info);
+            Il2CppSystem.Collections.Generic.List<Character> hintArrows = new();
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                int d = Math.Abs(c.id - charRef.id);
+                if (d == distance || d == Gameplay.CurrentCharacters.Count - distance)
+                {
+                    hintArrows.Add(c);
+                }
+            }
+            __result = new ActedInfo(info, hintArrows);
         }
     }
     [HarmonyPatch(typeof(Alchemist), nameof(Alchemist.GetInfo))]
@@ -1323,8 +1334,17 @@ public class MainMod : MelonMod
             }
 
             string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
-            string info = string.Format("#{0} is actually a {1}", UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1), fakeDisguisingOutcastName);
-            __result = new ActedInfo(info);
+            int card = UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1);
+            string info = string.Format("#{0} is actually a {1}", card, fakeDisguisingOutcastName);
+            Il2CppSystem.Collections.Generic.List<Character> hintArrows = new();
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (card == c.id)
+                {
+                    hintArrows.Add(c);
+                }
+            }
+            __result = new ActedInfo(info, hintArrows);
         }
     }
     //this one is for Mediums to call out "#x is actually a <disguised outcast>" instead of "#x is a real <disguised outcast>"
@@ -1687,13 +1707,19 @@ public class MainMod : MelonMod
                 ids.Add(c.id);
             ids.Sort();
             List<ECharacterType> possiblePicks = new List<ECharacterType>();
-
-            if (Gameplay.CurrentScript.minion > 0)
+            bool minion = false;
+            bool outcast = false;
+            foreach (Character ch in Gameplay.CurrentCharacters)
+            {
+                if (ch.GetCharacterType() == ECharacterType.Outcast) outcast = true;
+                if (ch.GetCharacterType() == ECharacterType.Minion) minion = true;
+            }
+            if (minion)
                 possiblePicks.Add(ECharacterType.Minion);
             else
                 possiblePicks.Add(ECharacterType.Demon);
 
-            if (Gameplay.CurrentScript.outs > 0)
+            if (outcast)
                 possiblePicks.Add(ECharacterType.Outcast);
             if (Gameplay.CurrentScript.town > 0)
                 possiblePicks.Add(ECharacterType.Villager);
@@ -1738,15 +1764,23 @@ public class MainMod : MelonMod
             ids.Sort();
             List<ECharacterType> possiblePicks = new List<ECharacterType>();
 
-            if (Gameplay.CurrentScript.minion > 0)
+            bool minion = false;
+            bool outcast = false;
+            foreach (Character ch in Gameplay.CurrentCharacters)
+            {
+                if (ch.GetCharacterType() == ECharacterType.Outcast) outcast = true;
+                if (ch.GetCharacterType() == ECharacterType.Minion) minion = true;
+            }
+            if (minion)
                 possiblePicks.Add(ECharacterType.Minion);
             else
                 possiblePicks.Add(ECharacterType.Demon);
 
-            if (Gameplay.CurrentScript.outs > 0)
+            if (outcast)
                 possiblePicks.Add(ECharacterType.Outcast);
             if (Gameplay.CurrentScript.town > 0)
                 possiblePicks.Add(ECharacterType.Villager);
+
 
             pickedCharacters = ListHelper.ShuffleList(pickedCharacters);
 
@@ -1822,5 +1856,96 @@ public class MainMod : MelonMod
         }
         newPool[oldpool.Length] = pool;
         Characters.Instance.characterPool = newPool;
+    }
+
+    // messing with the disguise functions to give more bluff variety
+    [HarmonyPatch(typeof(Characters), nameof(Characters.PickRoundBluffs))]
+    public class MoreBluffVariety
+    {
+        private static bool Prefix(Characters __instance)
+        {
+            Il2CppSystem.Collections.Generic.List<CharacterData> allCharacters = Gameplay.Instance.GetAscensionAllStartingCharacters();
+            Il2CppSystem.Collections.Generic.List<CharacterData> currentCharacters = Gameplay.Instance.GetScriptCharacters();
+            Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayCharacters = new();
+
+            __instance.UniquePool.Clear();
+
+            foreach (CharacterData cd in allCharacters)
+            {
+                if (!currentCharacters.Contains(cd))
+                {
+                    notInPlayCharacters.Add(cd);
+                }
+            }
+            notInPlayCharacters = __instance.FilterBluffableCharacters(notInPlayCharacters);
+            __instance.UniquePool = notInPlayCharacters;
+
+            // Safeguard
+            if (__instance.UniquePool.Count < 1)
+            {
+                notInPlayCharacters = Gameplay.Instance.GetAllAscensionCharacters();
+                notInPlayCharacters = __instance.FilterBluffableCharacters(notInPlayCharacters);
+                notInPlayCharacters = __instance.FilterAlignmentCharacters(notInPlayCharacters, EAlignment.Good);
+                notInPlayCharacters = __instance.FilterRealCharacterType(notInPlayCharacters, ECharacterType.Villager);
+
+                __instance.UniquePool.Add(notInPlayCharacters[UnityEngine.Random.Range(0, notInPlayCharacters.Count)]);
+            }
+            return false;
+        }
+    }
+    // Minions (and some outcasts) can now disguise as any not in play character, not just one of 4
+    [HarmonyPatch(typeof(Characters), nameof(Characters.GetRandomUniqueBluff))]
+    public class MoreBluffVariety2
+    {
+        private static void Postfix(Characters __instance, ref CharacterData __result)
+        {
+            Il2CppSystem.Collections.Generic.List<CharacterData> allCharacters = Gameplay.Instance.GetAscensionAllStartingCharacters();
+            Il2CppSystem.Collections.Generic.List<Character> currentCharacters = Gameplay.CurrentCharacters;
+            Il2CppSystem.Collections.Generic.List<CharacterData> currentCharacterDatas = new();
+            foreach (Character c in currentCharacters)
+            {
+                currentCharacterDatas.Add(c.dataRef);
+            }
+            Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayCharacters = new();
+
+
+            foreach (CharacterData cd in allCharacters)
+            {
+                if (!currentCharacterDatas.Contains(cd))
+                {
+                    notInPlayCharacters.Add(cd);
+                }
+            }
+            notInPlayCharacters = __instance.FilterBluffableCharacters(notInPlayCharacters);
+            __result = notInPlayCharacters[UnityEngine.Random.RandomRangeInt(0, notInPlayCharacters.Count)];
+        }
+    }
+    // Demons (and some other outcasts) can now disguise as any not in play villager, not just one of 4
+    [HarmonyPatch(typeof(Characters), nameof(Characters.GetRandomUniqueVillagerBluff))]
+    public class MoreBluffVariety3
+    {
+        private static void Postfix(Characters __instance, ref CharacterData __result)
+        {
+            Il2CppSystem.Collections.Generic.List<CharacterData> allCharacters = Gameplay.Instance.GetAscensionAllStartingCharacters();
+            Il2CppSystem.Collections.Generic.List<Character> currentCharacters = Gameplay.CurrentCharacters;
+            Il2CppSystem.Collections.Generic.List<CharacterData> currentCharacterDatas = new();
+            foreach (Character c in currentCharacters)
+            {
+                currentCharacterDatas.Add(c.dataRef);
+            }
+            Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayCharacters = new();
+
+
+            foreach (CharacterData cd in allCharacters)
+            {
+                if (!currentCharacterDatas.Contains(cd) && cd.type == ECharacterType.Villager)
+                {
+                    notInPlayCharacters.Add(cd);
+                }
+            }
+            notInPlayCharacters = __instance.FilterBluffableCharacters(notInPlayCharacters);
+
+            __result = notInPlayCharacters[UnityEngine.Random.RandomRangeInt(0, notInPlayCharacters.Count)];
+        }
     }
 }

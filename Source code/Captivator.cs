@@ -106,6 +106,7 @@ public class Captivator : Role
         }
         if (corrupted >= 2)
             whitelistCharacterIDs.Add("Sentinel_WING");
+        whitelistCharacterIDs.Add("Knave_WING");
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))

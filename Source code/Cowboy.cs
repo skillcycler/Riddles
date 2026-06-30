@@ -61,6 +61,7 @@ public class Cowboy : Role
                 notevilVillagersOutcasts.Add(character.id);
             }
         }
+        notevilVillagersOutcasts.Remove(charRef.id);
         string info = string.Format("#{0} is an Evil {1}", notevilVillagersOutcasts[UnityEngine.Random.RandomRangeInt(0, notevilVillagersOutcasts.Count)], UnityEngine.Random.RandomRangeInt(0, 2) == 1 ? "Outcast" : "Villager");
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;

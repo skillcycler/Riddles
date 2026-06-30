@@ -98,6 +98,7 @@ public class Nurse : Role
         curable.Add((ECharacterStatus)918919); // Hypnotised, by Iris
         curable.Add((ECharacterStatus)16118119); // Mutant Evil
         curable.Add((ECharacterStatus)1615919151); // Poisoned by Snake Charmer
+        curable.Add((ECharacterStatus)2051879522);
         bool sick = false;
         string add = "";
         foreach (Character cha in Gameplay.CurrentCharacters)
