@@ -18,7 +18,7 @@ using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.4", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -188,12 +188,92 @@ public class MainMod : MelonMod
             }
         }
     }
+    public bool PatchNights()
+    {
+        // This code is my attempt at patching Wingidon's demons to have a night cycle. I've never tried something like this before so hopefully it isn't broken.
+        Assembly wingsAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "WingsExpansion");
+
+        if (wingsAssembly == null)
+        {
+            return false;
+        }
+        foreach (Type t in wingsAssembly.GetTypes())
+            MelonLogger.Msg(t.FullName);
+        List<string> demons = new();
+        demons.Add("w_Iris");
+        demons.Add("w_Leviathan");
+        demons.Add("w_InvertDemon");
+        demons.Add("w_Praesect");
+        demons.Add("w_Mezepheles");
+        demons.Add("w_TwinDemon");
+        demons.Add("w_TwinDemonThree");
+        demons.Add("w_TwinDemonTwin");
+        HashSet<MethodInfo> patched = new();
+        foreach (string demon in demons)
+        {
+            Type targetType = wingsAssembly.GetType($"ExpansionPack.{demon}");
+
+            if (targetType == null)
+            {
+                MelonLogger.Msg($"Could not find {demon}");
+                continue;
+            }
+            MethodInfo targetMethod = targetType.GetMethod("GetRules", BindingFlags.Instance | BindingFlags.Public);
+
+            if (targetMethod != null)
+            {
+                targetMethod = targetMethod.GetBaseDefinition();
+            }
+            if (targetMethod == null)
+            {
+                MelonLogger.Msg($"Could not find {demon}.GetRules");
+                continue;
+            }
+            if (!patched.Add(targetMethod))
+            {
+                MelonLogger.Msg($"Already patched {targetMethod.DeclaringType.Name}.GetRules");
+                continue;
+            }
+            MelonLogger.Msg($"Target type: {targetType.FullName}");
+            MelonLogger.Msg($"Method: {targetMethod}");
+            MelonLogger.Msg($"Declared in: {targetMethod.DeclaringType.FullName}");
+            HarmonyInstance.Patch(
+                targetMethod,
+                postfix: new HarmonyMethod(
+                    typeof(MyCompatPatch),
+                    nameof(MyCompatPatch.Postfix))
+            );
+        }
+        return true;
+    }
+    public static class MyCompatPatch
+    {
+        public static void Postfix(object __instance, ref Il2CppSystem.Collections.Generic.List<SpecialRule> __result)
+        {
+            List<string> demons = new();
+            demons.Add("w_Iris");
+            demons.Add("w_Leviathan");
+            demons.Add("w_InvertDemon");
+            demons.Add("w_Praesect");
+            demons.Add("w_Mezepheles");
+            demons.Add("w_TwinDemon");
+            demons.Add("w_TwinDemonThree");
+            demons.Add("w_TwinDemonTwin");
+            if (demons.Contains(__instance.GetType().Name))
+            {
+                Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
+                sr.Add(new NightModeRule(4));
+                __result = sr;
+            }
+        }
+    }
     public override void OnLateInitializeMelon()
     {
         GameObject content = GameObject.Find("Game/Gameplay/Content");
         NightPhase nightPhase = content.GetComponent<NightPhase>();
         MakeTwelve();
         UpdateWitness();
+        PatchNights();
 
         CharacterData Riddler = makeNewCharacter("Riddler", EAlignment.Good, ECharacterType.Villager, true, false, "\"One day I'll cause a paradox.\"");
         Riddler.role = new Riddler();
@@ -312,7 +392,7 @@ public class MainMod : MelonMod
 
         CharacterData Necromancer = makeNewCharacter("Necromancer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Second chances are real. Just like Empaths and Mayors.\"", true);
         Necromancer.role = new Necromancer();
-        Necromancer.description = "Pick 2 cards (not myself), one alive and one dead. Kill the alive and revive the dead at a cost of 2 HP. I cannot revive Evils or the Ghost.";
+        Necromancer.description = "Pick 2 cards (not myself), one alive and one dead. Kill the alive and revive the dead at a cost of 0-2 HP. I cannot revive Evils or the Ghost.";
         Necromancer.ifLies = "The revived card will lie with its new info.";
 
         /*CharacterData Astronaut = makeNewCharacter("Astronaut", EAlignment.Good, ECharacterType.Villager, true, false, "\"Always has been.\"");

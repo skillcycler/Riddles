@@ -66,7 +66,7 @@ public class Necromancer : Role
             return;
         }
 
-        PlayerController.PlayerInfo.health.Damage(2);
+        PlayerController.PlayerInfo.health.Damage(Calculator.RollDice(3) - 1);
         alive.KillByDemon(charRef);
         alive.Reveal();
         alive.onReveal.Invoke();
@@ -111,7 +111,7 @@ public class Necromancer : Role
             return;
         }
 
-        PlayerController.PlayerInfo.health.Damage(2);
+        PlayerController.PlayerInfo.health.Damage(Calculator.RollDice(3)-1);
         alive.KillByDemon(charRef);
         alive.Reveal();
         alive.onReveal.Invoke();

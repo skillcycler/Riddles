@@ -3,6 +3,7 @@ A Demon Bluff mod that adds 53 brand new characters to the game!
 
 ## Changes from Base Game
 - All Demons will have a Night Cycle to fix duplicate night bugs
+- This now includes all Demons from Wingidon's mod as well
 - Lycanthrope's night cycle is removed since it is now redundant
 - Witness can additionally see many of the effects from these characters
 - Characters can now choose from every out of play character to bluff instead of just 4 options

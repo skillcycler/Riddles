@@ -42,8 +42,7 @@ public class Hypnotist : Spy
     {
         Gameplay gameplay = Gameplay.Instance;
         Characters instance = Characters.Instance;
-        Il2CppSystem.Collections.Generic.List<CharacterData> chars = gameplay.GetAscensionAllStartingCharacters();
-        Il2CppSystem.Collections.Generic.List<CharacterData> villagers = instance.FilterRealCharacterType(chars, ECharacterType.Villager);
+        Il2CppSystem.Collections.Generic.List<CharacterData> villagers = gameplay.GetAscensionAllStartingCharacters();
 
         Il2CppSystem.Collections.Generic.List<CharacterData> listV = new Il2CppSystem.Collections.Generic.List<CharacterData>();
         Il2CppSystem.Collections.Generic.List<string> whitelistCharacterIDs = new Il2CppSystem.Collections.Generic.List<string>();
@@ -82,13 +81,21 @@ public class Hypnotist : Spy
         whitelistCharacterIDs.Add("Riddler_scm");
         //whitelistCharacterIDs.Add("Lawyer_scm");
         whitelistCharacterIDs.Add("Sentinel_WING");
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (c.dataRef.characterId == "Swarm_Good_WING")
+            {
+                whitelistCharacterIDs.Add("Swarm_Good_WING");
+                break;
+            }
+        }
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))
                 listV.Add(villagers[i]);
         }
         CharacterData bluff = listV[UnityEngine.Random.RandomRangeInt(0, listV.Count)];
-        gameplay.AddScriptCharacterIfAble(ECharacterType.Villager, bluff);
+        gameplay.AddScriptCharacterIfAble(bluff.type, bluff);
         charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
         charRef.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
         return bluff;
