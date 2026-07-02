@@ -73,8 +73,14 @@ public class Scanner : Role
             {
                 counterLie = UnityEngine.Random.RandomRangeInt(0, max);
             }
+        } else
+        {
+            if (counter == counterLie)
+            {
+                counterLie = 1 - counterLie;
+            }
         }
-        string info = string.Format("{0} Outcasts are Disguised or being used as a Disguise", counterLie);
+            string info = string.Format("{0} Outcasts are Disguised or being used as a Disguise", counterLie);
         if (counterLie == 0)
             info = "NO Outcasts are Disguised or being used as a Disguise";
         if (counterLie == 1)

@@ -77,7 +77,7 @@ public class Enigma : Minion
                     fake.Add(d);
                 }
             }
-            for (int i = 0; i < charRef.id; i++)
+            for (int i = 0; i < charRef.id % 10; i++)
             {
                 CharacterData add = fake[UnityEngine.Random.RandomRangeInt(0, fake.Count)];
                 fake.Remove(add);

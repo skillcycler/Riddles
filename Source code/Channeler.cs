@@ -57,6 +57,7 @@ public class Channeler : Minion
             blacklistIDs.Add("Pestilence_POW");
             blacklistIDs.Add("War_POW");
             blacklistIDs.Add("Death_POW");
+            blacklistIDs.Add("Channeler_scm"); // For some reason this got duped, so let's get that fixed
 
             //the below characters do nothing when copied, so don't copy them if possible
             blacklistIDs.Add("Puppet_15989619");

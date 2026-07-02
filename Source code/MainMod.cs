@@ -18,7 +18,7 @@ using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -555,39 +555,39 @@ public class MainMod : MelonMod
 
         CharacterData Channeler = makeNewCharacter("Channeler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"I will follow in your footsteps.\"");
         Channeler.role = new Channeler();
-        Channeler.description = "I copy the ability of another Evil Minion or Demon. Some Evil abilities cannot be copied.";
+        Channeler.description = "I copy the ability of another Evil Minion or Demon. Some Evil abilities cannot be copied.\n\nI Lie and Disguise.";
         
         CharacterData Sleeper = makeNewCharacter("Sleeper", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Ever feel like you get enough sleep? Not anymore!\"");
         Sleeper.role = new Sleeper();
-        Sleeper.description = "The night cycle is 1 tick shorter if there is one.";
+        Sleeper.description = "The night cycle is 1 tick shorter if there is one.\n\nI Lie and Disguise.";
 
         CharacterData Guardian = makeNewCharacter("Guardian", EAlignment.Evil, ECharacterType.Minion, false, true, "\"You're gonna have to get through me first.\"");
         Guardian.role = new Guardian();
-        Guardian.description = "The Demon registers as a Good Villager.\n\nI sit next to a Demon.";
+        Guardian.description = "The Demon registers as a Good Villager.\n\nI Lie, Disguise, and sit next to a Demon.";
         Guardian.hints = "If there are multiple Demons, all of them register as Good.\nI might cause some characters to be in positions they normally should not be in.";
 
         CharacterData Mastermind = makeNewCharacter("Mastermind", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It all comes back to me.\"");
         Mastermind.role = new Mastermind();
-        Mastermind.description = "Game Start: Most Minions become a Mastermind after all other Game Start effects.";
+        Mastermind.description = "Game Start: Most Minions become a Mastermind after all other Game Start effects.\n\nI Lie and Disguise.";
         Mastermind.hints = "Characters that need to exist to have their ability, such as the Witch and the Sleeper, will not be converted.";
 
         CharacterData Baffler = makeNewCharacter("Baffler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"");
         Baffler.role = new Baffler();
-        Baffler.description = "Game Start: One adjacent Villager is Confused.\nConfused characters have a 50% chance of Lying.";
+        Baffler.description = "Game Start: One adjacent Villager is Confused.\nConfused characters have a 50% chance of Lying.\n\nI Lie and Disguise.";
 
         CharacterData Wizard = makeNewCharacter("Wizard", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It's black magic.\"");
         Wizard.role = new Wizard();
-        Wizard.description = "Game Start: One random Outcast or Minion (not myself), if there is one, is duplicated.";
+        Wizard.description = "Game Start: One random Outcast or Minion (not myself), if there is one, is duplicated.\n\nI Lie and Disguise.";
         Wizard.additionalPossibleCharacters = MakeAddedCharacters(0, 1, 1, 0);
         Wizard.hints = "The duplicated character can replace any other Villager, Outcast, or Minion.";
 
         CharacterData Slanderer = makeNewCharacter("Slanderer", EAlignment.Evil, ECharacterType.Minion, false, true, "\"They're not Corrupted! They're just Evil!\"");
         Slanderer.role = new Slanderer();
-        Slanderer.description = "Game Start: The card(s) furthest away from me register as the wrong alignment.";
+        Slanderer.description = "Game Start: The card(s) furthest away from me register as the wrong alignment.\n\nI Lie and Disguise.";
 
         CharacterData Enigma = makeNewCharacter("Enigma", EAlignment.Evil, ECharacterType.Minion, false, true, "\"lbh jvyy arire thrff jung guvf fnlf\"");
         Enigma.role = new Enigma();
-        Enigma.description = "There are extra fake characters in the deck equal to my card number.";
+        Enigma.description = "There are extra fake characters in the deck equal to the last digit of my card number.\n\nI Lie and Disguise.";
         Enigma.hints = "I can add fake disguised Outcasts, fake Minions, and fake Demons.";
 
         CharacterData Follower = makeNewCharacter("Follower", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I'm playing chess and you're playing checkers.\"");
@@ -629,7 +629,7 @@ public class MainMod : MelonMod
 
         CharacterData RainbowJoker = makeNewCharacter("RainbowJoker", EAlignment.Evil, ECharacterType.Demon, false, true, "\"A total wild card.\"");
         RainbowJoker.role = new RainbowJoker();
-        RainbowJoker.description = "1/3 (rounded down) of all non-Demons become random Minions. Then, 0-4 characters become random Outcasts. None of these characters are added to the Deck.";
+        RainbowJoker.description = "1/3 (rounded down) of all non-Demons become random Minions. Then, 0-4 characters become random Outcasts. None of these characters are added to the Deck.\n\nI Lie and Disguise.";
         RainbowJoker.name = "Rainbow Joker";
         RainbowJoker.characterName = "Rainbow Joker";
         RainbowJoker.additionalPossibleCharacters = MakeAddedCharacters(0, 4, 4, 0);
@@ -1446,6 +1446,34 @@ public class MainMod : MelonMod
             __result = info;
         }
     }
+    // and this one is so that lying mediums stop pointing to evils that register as good because it becomes ambiguous whether the medium is truthful or not
+    [HarmonyPatch(typeof(Lookout), nameof(Lookout.GetBluffInfo))]
+    private static class FixMediums
+    {
+        private static void Postfix(Lookout __instance, Character charRef, ref ActedInfo __result)
+        {
+            Il2CppSystem.Collections.Generic.List<Character> allCharacters = GetGameplayCurrentCharacters();
+            Il2CppSystem.Collections.Generic.List<Character> filteredAllCharacters = new();
+
+            foreach (Character c in allCharacters)
+                if (c.bluff != null && !(c.alignment == EAlignment.Evil && c.GetRegisterAlignment() == EAlignment.Good))
+                    if (c != charRef)
+                        filteredAllCharacters.Add(c);
+
+            if (filteredAllCharacters.Count == 0)
+                foreach (Character c in allCharacters)
+                    if (c.bluff != null && !(c.alignment == EAlignment.Evil && c.GetRegisterAlignment() == EAlignment.Good))
+                        filteredAllCharacters.Add(c);
+
+            Il2CppSystem.Collections.Generic.List<Character> pickedCh = new();
+            pickedCh.Add(filteredAllCharacters[UnityEngine.Random.Range(0, filteredAllCharacters.Count)]);
+
+            string info = __instance.ConjourInfo(pickedCh[0].id, pickedCh[0].bluff, charRef);
+            ActedInfo newInfo = new ActedInfo(info, pickedCh);
+            __result = newInfo;
+        }
+    }
+    
     [HarmonyPatch(typeof(Knitter), nameof(Knitter.GetInfo))]
     private static class HypnotistKnitter
     {
@@ -1464,19 +1492,55 @@ public class MainMod : MelonMod
             __result = new ActedInfo(info);
         }
     }
+    // Hypnotist, plus also remove the ability for Scout to mention good-registering evils as an evil
     [HarmonyPatch(typeof(Scout), nameof(Scout.GetInfo))]
     private static class HypnotistScout
     {
         private static void Postfix(Scout __instance, Character charRef, ref ActedInfo __result)
         {
-            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
-            Il2CppSystem.Collections.Generic.List<Character> allEvils = Gameplay.CurrentCharacters;
-            allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
+            if (charRef.dataRef.characterId != "Hypnotist_scm")
+            {
+                Il2CppSystem.Collections.Generic.List<Character> allEvils = GetGameplayCurrentCharacters();
+                allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
+                allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
 
+                Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+
+                int closestEvil = __instance.GetClosestEvilToEvil(pickedEvil, charRef);
+
+                string info = __instance.ConjourInfo(pickedEvil.GetRegisterAs(), closestEvil, charRef);
+                __result = new ActedInfo(info);
+            }
+            else
+            {
+                Il2CppSystem.Collections.Generic.List<Character> allEvils = Gameplay.CurrentCharacters;
+                allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
+                allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
+
+                Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+
+                string info = __instance.ConjourInfo(pickedEvil.dataRef, 3, charRef);
+
+                __result = new ActedInfo(info);
+            }
+        }
+    }
+    [HarmonyPatch(typeof(Scout), nameof(Scout.GetBluffInfo))]
+    private static class ScoutFix
+    {
+        private static void Postfix(Scout __instance, Character charRef, ref ActedInfo __result)
+        {
+            float randomId = UnityEngine.Random.Range(0f, 1f);
+            Il2CppSystem.Collections.Generic.List<Character> allEvils = GetGameplayCurrentCharacters();
+            allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
+            allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
+                
             Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
 
-            string info = __instance.ConjourInfo(pickedEvil.dataRef, 3, charRef);
+            int id = __instance.GetClosestEvilToEvil(pickedEvil, charRef);
+            id = Calculator.RemoveNumberAndGetRandomNumberFromList(id, 0, 3);
 
+            string info = __instance.ConjourInfo(pickedEvil.GetRegisterAs(), id, charRef);
             __result = new ActedInfo(info);
         }
     }

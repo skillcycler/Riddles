@@ -8,6 +8,8 @@ A Demon Bluff mod that adds 53 brand new characters to the game!
 - Witness can additionally see many of the effects from these characters
 - Characters can now choose from every out of play character to bluff instead of just 4 options
 - The bluff pool is now chosen at the time of deciding the bluff instead of on round start
+- Scout will no longer point to Good-registering Evils and say that Evil's true role
+- Lying Mediums will no longer point to Good-registering Evils
 
 ## Villagers
 - Riddler: Gives you a fun fact about the game. 
