@@ -35,7 +35,7 @@ public class Gambler : Role
     }
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        int fake = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count+1);
+        int fake = Calculator.RemoveNumberAndGetRandomNumberFromList(charRef.id, 1, Gameplay.CurrentCharacters.Count+1);
         return new ActedInfo($"I invited #{fake} to my casino.");
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
@@ -43,6 +43,7 @@ public class Gambler : Role
         if (trigger == ETriggerPhase.Start)
         {
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
+            chars.Remove(charRef);
             Character picked = chars[UnityEngine.Random.RandomRangeInt(0, chars.Count)];
             affected = picked.id;
             if (picked.alignment == EAlignment.Evil)

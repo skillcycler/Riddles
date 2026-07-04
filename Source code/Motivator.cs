@@ -41,6 +41,12 @@ public class Motivator : Role
                     {
                         character.pickableUses = 1;
                         character.pickable.SetActive(true);
+                    } else {
+                        // gonna reuse Stylist's code here
+                        character.GiveBluff(character.bluff);
+                        character.RevealBluff();
+                        character.RefreshCharacter();
+                        character.Act(ETriggerPhase.Day);
                     }
                 } else
                     character.Act(ETriggerPhase.Day);

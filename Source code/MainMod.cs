@@ -18,7 +18,7 @@ using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -347,7 +347,7 @@ public class MainMod : MelonMod
         CharacterData Innkeeper = makeNewCharacter("Innkeeper", EAlignment.Good, ECharacterType.Villager, true, false, "\"Need a place to stay? I got you!\"", true);
         Innkeeper.role = new Innkeeper();
         Innkeeper.description = "On activate: Heal 1 HP. Refreshes at night.";
-        Innkeeper.ifLies = "Lose 3 HP.";
+        Innkeeper.ifLies = "Lose 1 HP.";
         Innkeeper.abilityUsage = EAbilityUsage.ResetAfterNight;
 
         CharacterData Recruiter = makeNewCharacter("Recruiter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Hello and Welcome to the greatest village of all time!\"");
@@ -392,7 +392,7 @@ public class MainMod : MelonMod
 
         CharacterData Necromancer = makeNewCharacter("Necromancer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Second chances are real. Just like Empaths and Mayors.\"", true);
         Necromancer.role = new Necromancer();
-        Necromancer.description = "Pick 2 cards (not myself), one alive and one dead. Kill the alive and revive the dead at a cost of 0-2 HP. I cannot revive Evils or the Ghost.";
+        Necromancer.description = "Pick 2 cards (not myself), one alive and one dead. Kill the alive and revive the dead. I cannot revive Evils or the Ghost.";
         Necromancer.ifLies = "The revived card will lie with its new info.";
 
         /*CharacterData Astronaut = makeNewCharacter("Astronaut", EAlignment.Good, ECharacterType.Villager, true, false, "\"Always has been.\"");
@@ -405,7 +405,7 @@ public class MainMod : MelonMod
 
         CharacterData Motivator = makeNewCharacter("Motivator", EAlignment.Good, ECharacterType.Villager, true, false, "\"Go Go Go! You can do it!\"");
         Motivator.role = new Motivator();
-        Motivator.description = "If revealed: Both of my neighbors refresh at night.";
+        Motivator.description = "If revealed: My neighbors refresh at night.";
         /*
         CharacterData Trickster_v = new CharacterData();
         Trickster_v.role = new Trickster_v();
@@ -542,7 +542,7 @@ public class MainMod : MelonMod
 
         CharacterData Gambler = makeNewCharacter("Gambler", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Aw dang it!\"");
         Gambler.role = new Gambler();
-        Gambler.description = "Game Start: 1 random character is afflicted with a random status effect: Accused, Corrupted, Confused, Evil-turned. Learn who I affected.";
+        Gambler.description = "Game Start: 1 random character (not myself) is afflicted with a random status effect: Accused, Corrupted, Confused, Evil-turned. Learn who I affected.";
 
         CharacterData Accuser = makeNewCharacter("Accuser", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Uno reverse card!\"");
         Accuser.role = new Accuser();
@@ -1348,7 +1348,7 @@ public class MainMod : MelonMod
 
             __result = new ActedInfo(info);
         }
-    }
+    }/*
     [HarmonyPatch(typeof(Acrobat2), nameof(Acrobat2.GetInfo))]
     private static class HypnotistBard
     {
@@ -1373,7 +1373,7 @@ public class MainMod : MelonMod
             }
             __result = new ActedInfo(info, hintArrows);
         }
-    }
+    }*/
     [HarmonyPatch(typeof(Alchemist), nameof(Alchemist.GetInfo))]
     private static class HypnotistAlchemist
     {
@@ -1414,7 +1414,7 @@ public class MainMod : MelonMod
             }
 
             string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
-            int card = UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count + 1);
+            int card = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
             string info = string.Format("#{0} is actually a {1}", card, fakeDisguisingOutcastName);
             Il2CppSystem.Collections.Generic.List<Character> hintArrows = new();
             foreach (Character c in Gameplay.CurrentCharacters)

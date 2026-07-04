@@ -65,7 +65,7 @@ public class Innkeeper : Role
         CharacterPicker.OnCharactersPicked -= action3;
         CharacterPicker.OnStopPick -= action2;
         Health health = PlayerController.PlayerInfo.health;
-        health.Damage(3);
+        health.Damage(1);
         onActed?.Invoke(new ActedInfo("I healed you for 1 HP"));
     }
     private void StopPick()

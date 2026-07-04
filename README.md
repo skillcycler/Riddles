@@ -13,7 +13,7 @@ A Demon Bluff mod that adds 53 brand new characters to the game!
 
 ## Villagers
 - Riddler: Gives you a fun fact about the game. 
-- Swapper: Swaps the disguises of two cards. Corrupts chosen villagers if lying.
+- Swapper: Swaps the disguises of two cards. Corrupts chosen characters if lying.
 - Mathematician: Tells you the sum of two evil characters' positions.
 - Commander: Pick 2 cards. Tells you a character with a different character type than those 2 cards.
 - Director: Tells you a range of cards that contain 2 evils.
@@ -27,35 +27,35 @@ A Demon Bluff mod that adds 53 brand new characters to the game!
 - Nurse: Pick a card. If they are corrupted, uncorrupt them and refresh their ability.
 - Coach: Pick a card. Learn how many cards [Range 2] are the same Type as them.
 - Comedian: Pick 3 cards. Learn 2 that are both Disguised or both Not Disguised.
-- Innkeeper: Heal 1 HP. If lying, take 3 damage. Refreshes at night.
+- Innkeeper: Heal 1 HP. If lying, take 1 damage. Refreshes at night.
 - Recruiter: There is one less outcast in play.
 - Engineer: Learn whether the top or bottom half is more evil.
 - Governor: Learn how many Villagers there are.
 - Cowboy: Learn an Evil Villager or Outcast.
 - Officer: Learn how many characters register as Evil.
-- Surveyor: Learn how many Minions and Outcasts there are.
+- Surveyor: Learn how many cards that register as Minions and Outcasts there are.
 - Tracker: Learn someone disguised as an Outcast.
 - Pioneer: Learn how many cards away a particular Evil is from my closest Evil.
-- Necromancer: Kill any card and Revive a dead Good card for 2 HP. If I am lying, the revived card will lie.
-- Astronaut: Each night, learn a character of the opposite alignment to the previous night.
-- Sharpshooter: Learn that an evil is one of 5 cards. At night, remove one of the possibilities.
-- Motivator: If revealed, Neighbors refresh at night.
+- Necromancer: Kill any card and Revive a dead Good card. If I am lying, the revived card will lie.
+- Astronaut: Each night, learn a character of the opposite alignment to the previous night. [Currently unavailable]
+- Sharpshooter: Learn that an evil is one of 5 cards. At night, remove one of the possibilities. [Currently unavailable]
+- Motivator: If revealed, my neighbors refresh at night.
 
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
-- Hitman: An evil outcast that lies and disguises and kills a random card every night, dealing 3 damage. This can be any card, including normally unkillable cards, Demons, and even itself.
+- Hitman: An evil outcast that lies and disguises and alternates between killing a random card every night and dealing 3 damage. This can be any card, including normally unkillable cards, Demons, and even itself.
 - Ghost: Dies when revealed, haunting (corrupting) an unrevealed Villager.
 - Muddler: Status effects such as Corrupted are not shown when cards are executed.
 - Confectioner: I disguise as a Baker. On game start: One random villager becomes a Corrupted Baker.
 - Captivator: I say something that neither a truth teller nor liar would be able to say.
 - Reflector: I am Confused. I disguise.
-- Gambler: I apply a random status effect to a random character. Learn who I gambled with.
+- Gambler: I apply a random status effect to a random other character. Learn who I gambled with.
 
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil.
 - Hypnotist: Always disguises and says something that would otherwise never be a lie.
 - Channeler: Copies the ability of another Evil.
-- Sleeper: The night cycle is 1 tick shorter. Can you keep up with the demons killing faster?
+- Sleeper: The night cycle is 1 tick shorter.
 - Mastermind: All minions become Masterminds after doing their Game Start actions.
 - Guardian: The Demon registers as what they're bluffing. I sit next to the Demon.
 - Baffler: One adjacent Villager is Confused. Confused characters have a 50% chance to Lie.
