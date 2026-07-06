@@ -71,3 +71,6 @@ A Demon Bluff mod that adds 53 brand new characters to the game!
 - Kingmaker: Both of my neighbors are Minions. I tell the truth and hide the max Evil counter.
 - Mystifier: One random Villager is Confused each night. Confused characters have a 50% chance to Lie.
 - Rainbow Joker: You don't know what minions or outcasts are in play.
+
+## Disclaimer
+The only mods that this mod should be 100% compatible with, as of v1.5.3, are Wingidon's Expansion Pack and The Salem Trials.

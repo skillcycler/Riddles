@@ -18,7 +18,7 @@ using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.3", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -303,7 +303,7 @@ public class MainMod : MelonMod
 
         CharacterData Scanner = makeNewCharacter("Scanner", EAlignment.Good, ECharacterType.Villager, true, false, "\"I spy with my two little eyes, two Outcasts in disguise!\"");
         Scanner.role = new Scanner();
-        Scanner.description = "Learn how many cards are either Disguised as Outcasts or Outcasts that are Disguised.";
+        Scanner.description = "Learn how many cards are either Disguised as Outcasts or Outcasts that are Disguised. I ignore outcasts' misregistration abilities.";
 
         CharacterData Obsessor = makeNewCharacter("Obsessor", EAlignment.Good, ECharacterType.Villager, true, false, "\"Once snuck into the Lover's house at night. You'll never guess what happened next\"");
         Obsessor.role = new Obsessor();

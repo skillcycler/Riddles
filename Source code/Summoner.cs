@@ -23,6 +23,15 @@ public class Summoner : Demon
         return sr;
     }
     public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();
+    public static bool CheckMod(string id) // This is to filter out mods with characters that don't work well when added by Summoner or Channeler
+    {
+        List<string> bannedMods = new();
+        bannedMods.Add("POW");
+        bannedMods.Add("LRZH");
+
+        string[] str = id.Split('_');
+        return !bannedMods.Contains(str.Last());
+    }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (trigger != ETriggerPhase.Start) return;
@@ -53,19 +62,13 @@ public class Summoner : Demon
         bannedDemons.Add("Escapist_scm"); // Adds outcasts.
         bannedDemons.Add("Leviathan_WING"); // This is kinda unbalanced. You don't know whether stabbing a good villager will instantly make you lose, even when you have +5 hp. So I'll just make it not show up.
         bannedDemons.Add("RainbowJoker_scm"); // Adds minions AND outcasts.
-        bannedDemons.Add("Dominion_LRZH"); // I don't think this plays well with Summoner
-        bannedDemons.Add("Ringleader_LRZH"); // Probably adds minions.
-        bannedDemons.Add("Famine_POW"); // This mod's Demons are too strong.
-        bannedDemons.Add("Pestilence_POW");
-        bannedDemons.Add("War_POW");
-        bannedDemons.Add("Death_POW");
         bannedDemons.Add("Mendaverte_WING"); // A bit too strong in blind deck. Really often forces you to make 1 or more wrong stabs to figure out it's in play.
         List<string> bannedDemonsByName = new List<string>();
         bannedDemonsByName.Add("relic_copyvillager");
         for (int j = 0; j < allDatas.Length; j++)
         {
             CharacterData d = allDatas[j];
-            if (d.type == ECharacterType.Demon && !bannedDemons.Contains(d.characterId) && !bannedDemonsByName.Contains(d.characterName.ToLower()) && !bannedDemonsByName.Contains(d.name.ToLower()))
+            if (d.type == ECharacterType.Demon && !bannedDemons.Contains(d.characterId) && !bannedDemonsByName.Contains(d.characterName.ToLower()) && !bannedDemonsByName.Contains(d.name.ToLower()) && CheckMod(d.characterId))
             {
                 possibleDemons.Add(d);
             }

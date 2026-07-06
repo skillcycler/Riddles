@@ -48,15 +48,7 @@ public class Channeler : Minion
             blacklistIDs.Add("Snake Charmer_WING"); // The way it's coded is not compatible. At least for now. Might get removed later
             blacklistIDs.Add("Rainbow Joker_scm"); // #1 leading cause of bugs
             blacklistIDs.Add("Enigma_scm"); // umm... might cause problems?
-            blacklistIDs.Add("Vizier_LRZH"); // This is gonna make 2 unkillable evils.
-            blacklistIDs.Add("Po_LRZH"); // flips 8 cards, insta death
             blacklistIDs.Add("Baron_04539999"); // Bugged.
-            blacklistIDs.Add("Slinger_POW"); // This mod's characters are too strong and channeling them will make it worse.
-            blacklistIDs.Add("Grenadier_POW");
-            blacklistIDs.Add("Famine_POW");
-            blacklistIDs.Add("Pestilence_POW");
-            blacklistIDs.Add("War_POW");
-            blacklistIDs.Add("Death_POW");
             blacklistIDs.Add("Channeler_scm"); // For some reason this got duped, so let's get that fixed
 
             //the below characters do nothing when copied, so don't copy them if possible
@@ -78,11 +70,8 @@ public class Channeler : Minion
             blacklistIDs.Add("Viciyon_WING"); // This makes you forced to take damage.
             blacklistIDs.Add("Shroud_TST"); // If its only ability is to disguise a certain way, it doesn't work.
             blacklistIDs.Add("Illusionist_TST"); // If its only ability is to disguise a certain way, it doesn't work.
-            blacklistIDs.Add("Clown_LRZH"); // two of this does nothing
-            blacklistIDs.Add("Dominion_LRZH"); // Just in case.
-            blacklistIDs.Add("Ringleader_LRZH");
             foreach (Character character in characters) {
-                if (!blacklistIDs.Contains(character.dataRef.characterId) && character.GetCharacterType() != ECharacterType.Villager && character.GetCharacterType() != ECharacterType.Outcast)
+                if (!blacklistIDs.Contains(character.dataRef.characterId) && character.GetCharacterType() != ECharacterType.Villager && character.GetCharacterType() != ECharacterType.Outcast && Summoner.CheckMod(character.dataRef.characterId))
                     allowedCharacters.Add(character);
             }
             if (allowedCharacters.Count > 0)

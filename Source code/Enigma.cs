@@ -72,7 +72,7 @@ public class Enigma : Minion
 
             foreach (CharacterData d in allDatas)
             {
-                if (!inPlayCharacters.Contains(d) && d.type != ECharacterType.Villager && !(d.type == ECharacterType.Outcast && d.usuallyDisguised == false) && !blacklistMinionIDs.Contains(d.characterId) && d.name.ToLower() != "relic_copyvillager")
+                if (!inPlayCharacters.Contains(d) && d.type != ECharacterType.Villager && !(d.type == ECharacterType.Outcast && d.usuallyDisguised == false) && !blacklistMinionIDs.Contains(d.characterId) && d.name.ToLower() != "relic_copyvillager" && Summoner.CheckMod(d.characterId))
                 {
                     fake.Add(d);
                 }
