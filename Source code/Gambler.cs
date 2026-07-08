@@ -43,8 +43,7 @@ public class Gambler : Role
         if (trigger == ETriggerPhase.Start)
         {
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
-            chars.Remove(charRef);
-            Character picked = chars[UnityEngine.Random.RandomRangeInt(0, chars.Count)];
+            Character picked = chars[Calculator.RemoveNumberAndGetRandomNumberFromList(charRef.id, 0, chars.Count)];
             affected = picked.id;
             if (picked.alignment == EAlignment.Evil)
             {

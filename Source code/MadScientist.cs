@@ -103,6 +103,7 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Baffler_scm");
             whitelistMinionCharacterIDs.Add("Mastermind_scm");
             whitelistMinionCharacterIDs.Add("Wizard_scm");
+            whitelistMinionCharacterIDs.Add("Enigma_scm");
 
 
             whitelistOutcastCharacterIDs.Add("Ghost_scm");

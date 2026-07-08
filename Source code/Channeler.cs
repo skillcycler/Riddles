@@ -38,40 +38,55 @@ public class Channeler : Minion
             characters = Characters.Instance.FilterRealAlignmentCharacters(characters, EAlignment.Evil);
             characters.Remove(charRef);
             Il2CppSystem.Collections.Generic.List<Character> allowedCharacters = new();
-            List<string> blacklistIDs = new();
-            blacklistIDs.Add("Undying_WING"); // This is gonna make 2 unkillable evils.
-            blacklistIDs.Add("Legion_WING"); // instant death go
-            blacklistIDs.Add("Blackmailer_VP");
-            blacklistIDs.Add("Summoner_scm"); // just in case
-            blacklistIDs.Add("Wizard_scm"); // so this might create infinite wizards which is bad
-            blacklistIDs.Add("Kingmaker_scm"); // Once a Channeler replaced the Kingmaker with a minion. This should not happen.
-            blacklistIDs.Add("Snake Charmer_WING"); // The way it's coded is not compatible. At least for now. Might get removed later
-            blacklistIDs.Add("Rainbow Joker_scm"); // #1 leading cause of bugs
-            blacklistIDs.Add("Enigma_scm"); // umm... might cause problems?
-            blacklistIDs.Add("Baron_04539999"); // Bugged.
-            blacklistIDs.Add("Channeler_scm"); // For some reason this got duped, so let's get that fixed
 
-            //the below characters do nothing when copied, so don't copy them if possible
-            blacklistIDs.Add("Puppet_15989619");
-            blacklistIDs.Add("Turncoat_WING");
-            blacklistIDs.Add("Minion_71804875");
-            blacklistIDs.Add("Twin Minion_15695218");
-            blacklistIDs.Add("Acolyte_WING");
-            blacklistIDs.Add("Fanatic_WING");
-            blacklistIDs.Add("Zealot_WING");
-            blacklistIDs.Add("Swarm_Evil_WING");
-            blacklistIDs.Add("Imp_58992273"); // Channeler+Baa doesn't work for some reason.
-            blacklistIDs.Add("Hypnotist_scm");
-            blacklistIDs.Add("Professional_WING");
-            blacklistIDs.Add("Tenecaligo_WING"); // This won't do anything because of game start act order.
-            blacklistIDs.Add("Mendaverte_WING"); // Having 2 of Mendaverte's effects does nothing.
-            blacklistIDs.Add("Leviathan_WING"); // Having 2 of Leviathan's effects does nothing
-            blacklistIDs.Add("Guardian_scm"); // Having 2 of Guardian's effects does nothing.
-            blacklistIDs.Add("Viciyon_WING"); // This makes you forced to take damage.
-            blacklistIDs.Add("Shroud_TST"); // If its only ability is to disguise a certain way, it doesn't work.
-            blacklistIDs.Add("Illusionist_TST"); // If its only ability is to disguise a certain way, it doesn't work.
+            List<string> whitelistIDs = new();
+
+            // Vanilla
+            whitelistIDs.Add("Mezepheles_09511163");
+            whitelistIDs.Add("Poisoner_64796285");
+            whitelistIDs.Add("Witch_25286521");
+            whitelistIDs.Add("Shaman_26945607");
+            whitelistIDs.Add("Baron_04539999");
+
+            whitelistIDs.Add("Pooka_13445289");
+            whitelistIDs.Add("Lillith_90453844");
+
+            // This Mod
+            whitelistIDs.Add("Accuser_scm");
+            whitelistIDs.Add("Sleeper_scm");
+            whitelistIDs.Add("Baffler_scm");
+            whitelistIDs.Add("Accuser_scm");
+            whitelistIDs.Add("Enigma_scm");
+
+            whitelistIDs.Add("Follower_scm");
+            whitelistIDs.Add("Veil_scm");
+            whitelistIDs.Add("Infestation_scm");
+            whitelistIDs.Add("Escapist_scm");
+            whitelistIDs.Add("Mystifier_scm");
+
+            // Wingidon's Mod
+            whitelistIDs.Add("Heretic_WING");
+            whitelistIDs.Add("Professional_WING");
+            whitelistIDs.Add("Saboteur_WING");
+            whitelistIDs.Add("Swarm_Good_WING");
+
+            whitelistIDs.Add("Caedoccidere_WING");
+            whitelistIDs.Add("Carnicarius_WING");
+            whitelistIDs.Add("Iris_WING");
+            whitelistIDs.Add("Praesect_WING");
+            whitelistIDs.Add("Sanguitaurus_WING");
+            whitelistIDs.Add("Mezepheles_WING");
+            whitelistIDs.Add("TwinDemon_WING");
+            whitelistIDs.Add("TwinDemonTwin_WING");
+            whitelistIDs.Add("TwinDemonTriplet_WING");
+
+            // Misc
+            whitelistIDs.Add("Wraith_LRZH");
+            // can't guarantee anything else works correctly or is balanced, if they do anything at all
+
+
             foreach (Character character in characters) {
-                if (!blacklistIDs.Contains(character.dataRef.characterId) && character.GetCharacterType() != ECharacterType.Villager && character.GetCharacterType() != ECharacterType.Outcast && Summoner.CheckMod(character.dataRef.characterId))
+                if (whitelistIDs.Contains(character.dataRef.characterId))
                     allowedCharacters.Add(character);
             }
             if (allowedCharacters.Count > 0)
@@ -82,6 +97,19 @@ public class Channeler : Minion
         }
         if (trigger != ETriggerPhase.Start)
         {
+            if (copy.characterId == "Professional_WING")
+            {
+                if (charRef.bluff == true)
+                {
+                    charRef.UpdateRegisterAsRole(charRef.bluff);
+                }
+
+                Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayCh = Gameplay.Instance.GetScriptCharacters();
+                notInPlayCh = Characters.Instance.FilterCharacterType(notInPlayCh, ECharacterType.Villager);
+                notInPlayCh = Characters.Instance.FilterBluffableCharacters(notInPlayCh);
+
+                charRef.UpdateRegisterAsRole(notInPlayCh[UnityEngine.Random.Range(0, notInPlayCh.Count - 1)]);
+            }
             /*if (copy.characterId == "Ritualist_WING")
             {
                 if (trigger == (ETriggerPhase)1121218522)
@@ -96,12 +124,23 @@ public class Channeler : Minion
                 }
             }*/
             copy.role.Act(trigger, charRef);
+
         }
     }
     public override CharacterData GetBluffIfAble(Character charRef)
     {
         if (copy.characterId == "Illusionist_WING") // no disguise for a Channeler copying Emenverax
             return null;
+        if (copy.characterId == "Escapist_scm")
+        {
+            Il2CppSystem.Collections.Generic.List<CharacterData> outsiders = Gameplay.Instance.GetAscensionAllStartingCharacters();
+            outsiders = Characters.Instance.FilterRealCharacterType(outsiders, ECharacterType.Outcast);
+            outsiders = Characters.Instance.FilterBluffableCharacters(outsiders);
+            CharacterData pickedOutsider = outsiders[UnityEngine.Random.Range(0, outsiders.Count - 1)];
+            Gameplay.Instance.AddScriptCharacterIfAble(ECharacterType.Outcast, pickedOutsider);
+
+            return pickedOutsider;
+        }
         int diceRoll = Calculator.RollDice(10);
 
         if (diceRoll < 5)

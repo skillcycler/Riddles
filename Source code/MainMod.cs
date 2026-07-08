@@ -18,7 +18,7 @@ using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.4", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -1065,10 +1065,10 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(RainbowJoker);
         Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
         Characters.Instance.startGameActOrder = InsertAfterAct("Kingmaker", Wizard);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Wizard", Guardian);
         Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Escapist", Recruiter);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", Guardian);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", MadScientist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Mad Scientist", Confectioner);
         /*Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Trickster_v);
         Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_v", Trickster_o);

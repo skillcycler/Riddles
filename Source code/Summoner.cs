@@ -23,15 +23,7 @@ public class Summoner : Demon
         return sr;
     }
     public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();
-    public static bool CheckMod(string id) // This is to filter out mods with characters that don't work well when added by Summoner or Channeler
-    {
-        List<string> bannedMods = new();
-        bannedMods.Add("POW");
-        bannedMods.Add("LRZH");
-
-        string[] str = id.Split('_');
-        return !bannedMods.Contains(str.Last());
-    }
+    
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (trigger != ETriggerPhase.Start) return;
@@ -49,32 +41,45 @@ public class Summoner : Demon
                 }
             }
         }
-        List<string> bannedDemons = new List<string>();
-        bannedDemons.Add("Summoner_scm"); // don't turn something into another summoner
-        bannedDemons.Add("Pandemonium_WING"); // This just might cause problems.
-        bannedDemons.Add("Tenecaligo_WING"); // Adds minions which is not good.
-        bannedDemons.Add("Praesect_WING"); // Adds minions which is not good.
-        bannedDemons.Add("Hypnotist_ER"); // Adds minions which is not good.
-        bannedDemons.Add("Hydra_VP"); // Corrupted hydra telling the truth sucks
-        bannedDemons.Add("Mutant_84675843"); // Why is this one even in the list of demons
-        bannedDemons.Add("Delusion_10561407"); // No unreleased WIP demons allowed
-        bannedDemons.Add("Kingmaker_scm"); // Adds minions.
-        bannedDemons.Add("Escapist_scm"); // Adds outcasts.
-        bannedDemons.Add("Leviathan_WING"); // This is kinda unbalanced. You don't know whether stabbing a good villager will instantly make you lose, even when you have +5 hp. So I'll just make it not show up.
-        bannedDemons.Add("RainbowJoker_scm"); // Adds minions AND outcasts.
-        bannedDemons.Add("Mendaverte_WING"); // A bit too strong in blind deck. Really often forces you to make 1 or more wrong stabs to figure out it's in play.
-        List<string> bannedDemonsByName = new List<string>();
-        bannedDemonsByName.Add("relic_copyvillager");
+
+        List<string> allowed = new();
+
+        // Vanilla
+        allowed.Add("Imp_58992273");
+        allowed.Add("Lillith_90453844");
+        allowed.Add("Pooka_13445289");
+
+        // This mod
+        allowed.Add("Follower_scm");
+        allowed.Add("Veil_scm");
+        allowed.Add("Infestation_scm");
+        allowed.Add("Mystifier_scm");
+
+        // Wingidon's mod
+        allowed.Add("Caedoccidere_WING");
+        allowed.Add("Carnicarius_WING");
+        allowed.Add("Iris_WING");
+        allowed.Add("Mezepheles_WING");
+        allowed.Add("TwinDemon_WING");
+        allowed.Add("TwinDemonTwin_WING");
+        allowed.Add("TwinDemonTriplet_WING");
+
+        // The Salem Trials
+        // This mod has no demons yet.
+
+        // Misc
+        allowed.Add("Lleech_LRZH");
+
         for (int j = 0; j < allDatas.Length; j++)
         {
             CharacterData d = allDatas[j];
-            if (d.type == ECharacterType.Demon && !bannedDemons.Contains(d.characterId) && !bannedDemonsByName.Contains(d.characterName.ToLower()) && !bannedDemonsByName.Contains(d.name.ToLower()) && CheckMod(d.characterId))
+            if (d.type == ECharacterType.Demon && allowed.Contains(d.characterId))
             {
                 possibleDemons.Add(d);
             }
         }
         Il2CppSystem.Collections.Generic.List<Character> summons = new Il2CppSystem.Collections.Generic.List<Character>();
-
+        /* This code is now obsolete since Summoner no longer allows Outcasts.
         //anything that adds minions isn't allowed so it will just turn into a random demon
         List<string> bannedOther = new List<string>();
         bannedOther.Add("Mutant_WING"); // This card might add a minion.
@@ -98,7 +103,7 @@ public class Summoner : Demon
                 c.Init(selectedDemon);
                 c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
             }
-        }
+        }*/
         summons.Remove(charRef);
         int extraDemons = 1;
         if (Gameplay.CurrentCharacters.Count >= 9)
