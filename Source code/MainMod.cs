@@ -18,7 +18,7 @@ using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.4", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.5", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -32,9 +32,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Commander>();
         ClassInjector.RegisterTypeInIl2Cpp<Director>();
         ClassInjector.RegisterTypeInIl2Cpp<Scanner>();
-        /*ClassInjector.RegisterTypeInIl2Cpp<Trickster_o>();
-        ClassInjector.RegisterTypeInIl2Cpp<Trickster_v>();
-        ClassInjector.RegisterTypeInIl2Cpp<Trickster_m>();*/
+        ClassInjector.RegisterTypeInIl2Cpp<Trickster>();
         ClassInjector.RegisterTypeInIl2Cpp<Obsessor>();
         ClassInjector.RegisterTypeInIl2Cpp<Lawyer>();
         ClassInjector.RegisterTypeInIl2Cpp<Psychic>();
@@ -163,7 +161,7 @@ public class MainMod : MelonMod
         GameObject circle13 = CreateCircle(13);
         GameObject circle14 = CreateCircle(14);
         GameObject circle15 = CreateCircle(15);
-        //GameObject circleForTestingVillager = CreateCircle(25);
+        GameObject circleForTesting = CreateCircle(21);
     }
     public static void UpdateWitness()
     {
@@ -406,102 +404,10 @@ public class MainMod : MelonMod
         CharacterData Motivator = makeNewCharacter("Motivator", EAlignment.Good, ECharacterType.Villager, true, false, "\"Go Go Go! You can do it!\"");
         Motivator.role = new Motivator();
         Motivator.description = "If revealed: My neighbors refresh at night.";
-        /*
-        CharacterData Trickster_v = new CharacterData();
-        Trickster_v.role = new Trickster_v();
-        Trickster_v.name = "Trickster";
-        Trickster_v.characterName = "Trickster";
-        Trickster_v.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nYou don't know which is which.\nLearn a card that is the same character type as me.";
-        Trickster_v.flavorText = "\"If you thought the Minion twins were bad, get ready for the three of us!\"";
-        Trickster_v.hints = "If I am Corrupted: \"I feel sick\"\nI cannot be Disguised as.";
-        Trickster_v.ifLies = "";
-        Trickster_v.picking = false;
-        Trickster_v.startingAlignment = EAlignment.Good;
-        Trickster_v.type = ECharacterType.Villager;
-        Trickster_v.bluffable = false;
-        Trickster_v.characterId = "Trickster_v_scm";
-        Trickster_v.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Trickster_v.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Trickster_v.color = new Color(1f, 0.935f, 0.7302f);
-        Trickster_v.additionalFlavorTexts = new Il2CppStringArray(1);
-        Trickster_v.additionalFlavorTexts[0] = Trickster_v.flavorText;
 
-        CharacterData Trickster_o = new CharacterData();
-        Trickster_o.role = new Trickster_o();
-        Trickster_o.name = "Trickster";
-        Trickster_o.characterName = "Trickster";
-        Trickster_o.description = Trickster_v.description;
-        Trickster_o.flavorText = Trickster_v.flavorText;
-        Trickster_o.hints = Trickster_v.hints;
-        Trickster_o.ifLies = "";
-        Trickster_o.picking = false;
-        Trickster_o.startingAlignment = EAlignment.Good;
-        Trickster_o.type = ECharacterType.Villager;
-        Trickster_o.bluffable = false;
-        Trickster_o.characterId = "Trickster_o_scm";
-        Trickster_o.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Trickster_o.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Trickster_o.color = new Color(1f, 0.935f, 0.7302f);
-        Trickster_o.additionalFlavorTexts = new Il2CppStringArray(1);
-        Trickster_o.additionalFlavorTexts[0] = Trickster_o.flavorText;
-
-        CharacterData Trickster_o_register = new CharacterData();
-        Trickster_o_register.role = new Trickster_o_register();
-        Trickster_o_register.name = "Trickster Outcast Register";
-        Trickster_o_register.characterName = "Trickster Outcast Register";
-        Trickster_o_register.description = "";
-        Trickster_o_register.flavorText = "";
-        Trickster_o_register.hints = "";
-        Trickster_o_register.ifLies = "";
-        Trickster_o_register.picking = false;
-        Trickster_o_register.startingAlignment = EAlignment.Good;
-        Trickster_o_register.type = ECharacterType.Outcast;
-        Trickster_o_register.bluffable = false;
-        Trickster_o_register.characterId = "Trickster_o_register_scm";
-        Trickster_o_register.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Trickster_o_register.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Trickster_o_register.color = new Color(1f, 0.935f, 0.7302f);
-        Trickster_o_register.additionalFlavorTexts = new Il2CppStringArray(1);
-        Trickster_o_register.additionalFlavorTexts[0] = Trickster_o_register.flavorText;
-
-        CharacterData Trickster_m = new CharacterData();
-        Trickster_m.role = new Trickster_m();
-        Trickster_m.name = "Trickster";
-        Trickster_m.characterName = "Trickster";
-        Trickster_m.description = Trickster_v.description;
-        Trickster_m.flavorText = Trickster_v.flavorText;
-        Trickster_m.hints = Trickster_v.hints;
-        Trickster_m.ifLies = "";
-        Trickster_m.picking = false;
-        Trickster_m.startingAlignment = EAlignment.Good;
-        Trickster_m.type = ECharacterType.Villager;
-        Trickster_m.bluffable = false;
-        Trickster_m.characterId = "Trickster_m_scm";
-        Trickster_m.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Trickster_m.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Trickster_m.color = new Color(1f, 0.935f, 0.7302f);
-        Trickster_m.additionalFlavorTexts = new Il2CppStringArray(1);
-        Trickster_m.additionalFlavorTexts[0] = Trickster_m.flavorText;
-
-        CharacterData Trickster_m_register = new CharacterData();
-        Trickster_m_register.role = new Trickster_m_register();
-        Trickster_m_register.name = "Trickster Minion Register";
-        Trickster_m_register.characterName = "Trickster Minion Register";
-        Trickster_m_register.description = "";
-        Trickster_m_register.flavorText = "";
-        Trickster_m_register.hints = "";
-        Trickster_m_register.ifLies = "";
-        Trickster_m_register.picking = false;
-        Trickster_m_register.startingAlignment = EAlignment.Good;
-        Trickster_m_register.type = ECharacterType.Minion;
-        Trickster_m_register.bluffable = false;
-        Trickster_m_register.characterId = "Trickster_m_register_scm";
-        Trickster_m_register.cardBgColor = new Color(0.26f, 0.1519f, 0.3396f);
-        Trickster_m_register.cardBorderColor = new Color(0.7133f, 0.339f, 0.8679f);
-        Trickster_m_register.color = new Color(1f, 0.935f, 0.7302f);
-        Trickster_m_register.additionalFlavorTexts = new Il2CppStringArray(1);
-        Trickster_m_register.additionalFlavorTexts[0] = Trickster_m_register.flavorText;
-        */
+        CharacterData Trickster = makeNewCharacter("Trickster", EAlignment.Good, ECharacterType.Villager, false, false, "\"If you thought the Minion twins were bad, get ready for the three of us!\"");
+        Trickster.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nWhile alive, you don't know which is which.\nLearn a card that is the same character type as me.";
+        Trickster.role = new Trickster();
 
         CharacterData MadScientist = makeNewCharacter("MadScientist", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Lil bro is ANGRY at the village\"");
         MadScientist.role = new MadScientist();
@@ -803,6 +709,7 @@ public class MainMod : MelonMod
         CharactersCount summoner_13 = setCharacterCount(12, 0, 0, 1);
         CharactersCount summoner_14 = setCharacterCount(13, 0, 0, 1);
         CharactersCount summoner_15 = setCharacterCount(14, 0, 0, 1);
+
         Il2CppSystem.Collections.Generic.List<CharactersCount> summonerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
 
@@ -815,6 +722,13 @@ public class MainMod : MelonMod
         summonerCounterList.Add(summoner_13);
         summonerCounterList.Add(summoner_14);
         summonerCounterList.Add(summoner_15);
+
+        // Testing only: 21 character village
+        //summonerCounterList.Add(setCharacterCount(8, 12, 0, 1)); // outcast test
+        //summonerCounterList.Add(setCharacterCount(8, 0, 12, 1)); // minion test
+        //summonerCounterList.Add(setCharacterCount(20, 0, 0, 1)); // villager test
+        //summonerCounterList.Add(setCharacterCount(16, 2, 2, 1)); // mixed test
+
         summonerScript.characterCounts = summonerCounterList;
         summonerScriptData.scriptInfo = summonerScript;
         
@@ -862,9 +776,6 @@ public class MainMod : MelonMod
         infestationCounterList.Add(infestation_13);
         infestationCounterList.Add(infestation_14);
         infestationCounterList.Add(infestation_15);
-        //infestationCounterList.Add(setCharacterCount(2, 12, 0, 1)); // outcast test
-        //infestationCounterList.Add(setCharacterCount(2, 0, 12, 1)); // minion test
-        //infestationCounterList.Add(setCharacterCount(24, 0, 0, 1)); // villager test
 
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
@@ -886,7 +797,6 @@ public class MainMod : MelonMod
         CharactersCount escapist_9b = setCharacterCount(5, 1, 2, 1);
         CharactersCount escapist_10a = setCharacterCount(6, 1, 2, 1);
         CharactersCount escapist_10b = setCharacterCount(6, 2, 1, 1);
-        CharactersCount escapist_10c = setCharacterCount(6, 3, 0, 1);
         CharactersCount escapist_11a = setCharacterCount(7, 1, 2, 1);
         CharactersCount escapist_11b = setCharacterCount(7, 2, 1, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> escapistCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
@@ -900,7 +810,6 @@ public class MainMod : MelonMod
         escapistCounterList.Add(escapist_10a);
         escapistCounterList.Add(escapist_10b);
         escapistCounterList.Add(escapist_10b);
-        //escapistCounterList.Add(escapist_10c);
         escapistCounterList.Add(escapist_11a);
         escapistCounterList.Add(escapist_11b);
 
@@ -1070,13 +979,11 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Escapist", Recruiter);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Mad Scientist", Confectioner);
-        /*Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Trickster_v);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_v", Trickster_o);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Trickster_o", Trickster_m);*/ // These guys have SOMEHOW broke again
         Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Channeler);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Accuser);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Trickster);
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Poisoner", Baffler);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Poisoner", Accuser);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Baffler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Baffler", Slanderer);
         Characters.Instance.startGameActOrder = InsertAfterAct("Slanderer", Mystifier);
         Characters.Instance.startGameActOrder = InsertAfterAct("Mystifier", Reflector);
@@ -1095,7 +1002,7 @@ public class MainMod : MelonMod
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
         addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
         addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
-        addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 2);
+        addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 212);
         addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
         addDemonRole(advancedAscension, Escapist, "Baa_Difficult", "Escapist_1", escapistScriptData, 2);
         addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 2);
@@ -1111,7 +1018,7 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Commander);
             AddRole(script.startingTownsfolks, Director);
             AddRole(script.startingTownsfolks, Scanner);
-            //AddRole(script.startingTownsfolks, Trickster_v);
+            AddRole(script.startingTownsfolks, Trickster);
             AddRole(script.startingTownsfolks, Obsessor);
             AddRole(script.startingTownsfolks, Lawyer);
             AddRole(script.startingTownsfolks, Psychic);

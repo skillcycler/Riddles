@@ -79,31 +79,10 @@ public class Summoner : Demon
             }
         }
         Il2CppSystem.Collections.Generic.List<Character> summons = new Il2CppSystem.Collections.Generic.List<Character>();
-        /* This code is now obsolete since Summoner no longer allows Outcasts.
-        //anything that adds minions isn't allowed so it will just turn into a random demon
-        List<string> bannedOther = new List<string>();
-        bannedOther.Add("Mutant_WING"); // This card might add a minion.
-        bannedOther.Add("Lycanthrope_16077432"); // This card might add a minion.
-
-        foreach (Character c in Gameplay.CurrentCharacters) {
-            if (bannedOther.Contains(c.dataRef.characterId))
-            {
-            } else
-            {
-                summons.Add(c);
-            }
-        }
         foreach (Character c in Gameplay.CurrentCharacters)
         {
-            if (bannedOther.Contains(c.dataRef.characterId))
-            {
-                int chosen = UnityEngine.Random.RandomRangeInt(0, possibleDemons.Count);
-                CharacterData selectedDemon = possibleDemons[chosen];
-                possibleDemons.Remove(selectedDemon);
-                c.Init(selectedDemon);
-                c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
-            }
-        }*/
+            summons.Add(c);
+        }
         summons.Remove(charRef);
         int extraDemons = 1;
         if (Gameplay.CurrentCharacters.Count >= 9)
@@ -118,9 +97,19 @@ public class Summoner : Demon
         {
             extraDemons = Calculator.RollDice(2) + 2;
         }
-        Health health = PlayerController.PlayerInfo.health;
-        health.AddMaxHp(5);
-        health.Heal(100);
+        if (Gameplay.CurrentCharacters.Count == 21) // This village size is specifically for testing characters that I add.
+        {
+            extraDemons = 0;
+            Health health = PlayerController.PlayerInfo.health;
+            health.AddMaxHp(100);
+            health.Heal(100);
+        }
+        else
+        {
+            Health health = PlayerController.PlayerInfo.health;
+            health.AddMaxHp(5);
+            health.Heal(100);
+        }
         for (int i = 0; i < extraDemons; i++)
         {
             Character currentSummon = summons[UnityEngine.Random.RandomRangeInt(0, summons.Count)];
