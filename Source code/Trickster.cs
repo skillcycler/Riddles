@@ -59,7 +59,7 @@ public class Trickster : Role
 
     public override ActedInfo GetBluffInfo(Character charRef)
     {
-        return new ActedInfo("I feel sick.");
+        return new ActedInfo("I am dizzy");
     }
 
     public override void Act(ETriggerPhase trigger, Character charRef)
@@ -70,8 +70,10 @@ public class Trickster : Role
         }
         if (charRef.statuses.Contains(ECharacterStatus.BrokenAbility))
             return;
-        if (trigger == ETriggerPhase.Start)
+        if (trigger == ETriggerPhase.Start && !charRef.statuses.Contains(TricksterRegister.NotBugged))
         {
+            MelonLogger.Msg($"I am the original Trickster #{charRef.id}");
+            charRef.statuses.AddStatus(TricksterRegister.NotBugged, charRef);
             Il2CppSystem.Collections.Generic.List<Character> converts = Gameplay.CurrentCharacters;
             converts = Characters.Instance.FilterRealCharacterType(converts, ECharacterType.Villager);
             converts.Remove(charRef);
@@ -93,10 +95,15 @@ public class Trickster : Role
         }
         if (trigger == ETriggerPhase.AfterRoundStart)
         {
-            CharacterData Trickster_Outcast = MainMod.Instance.makeNewCharacter("Trickster", EAlignment.Good, ECharacterType.Outcast, false, false, "");
+            if (charRef.statuses.Contains(TricksterRegister.NotBugged))
+            {
+                charRef.statuses.statuses.Remove(TricksterRegister.Outcast);
+                charRef.statuses.statuses.Remove(TricksterRegister.Minion);
+            }
+            CharacterData Trickster_Outcast = MainMod.Instance.makeNewCharacter("Trickster_o", EAlignment.Good, ECharacterType.Outcast, false, false, "");
             Trickster_Outcast.role = new Trickster();
-            CharacterData Trickster_Minion = MainMod.Instance.makeNewCharacter("Trickster", EAlignment.Good, ECharacterType.Minion, false, false, "");
-            Trickster_Outcast.role = new Trickster();
+            CharacterData Trickster_Minion = MainMod.Instance.makeNewCharacter("Trickster_m", EAlignment.Good, ECharacterType.Minion, false, false, "");
+            Trickster_Minion.role = new Trickster();
             foreach (Character c in Gameplay.CurrentCharacters)
             {
                 if (c.statuses.Contains(TricksterRegister.Outcast))
@@ -139,22 +146,23 @@ public class TricksterRegister
     public static ECharacterStatus Villager = (ECharacterStatus)901;
     public static ECharacterStatus Outcast = (ECharacterStatus)902;
     public static ECharacterStatus Minion = (ECharacterStatus)903;
+    public static ECharacterStatus NotBugged = (ECharacterStatus)904;
     [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
     public static class pvt
     {
         public static void Postfix(Character __instance)
         {
-            if (__instance.statuses.Contains(Villager))
+            if (__instance.statuses.Contains(Minion))
             {
-                __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#4FD659><size=18>\nVillager</color></size>";
+                __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#FA4444><size=18>\nMinion</color></size>";
             }
             else if (__instance.statuses.Contains(Outcast))
             {
                 __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#FFBB33><size=18>\nOutcast</color></size>";
             }
-            else if (__instance.statuses.Contains(Minion))
+            else if (__instance.statuses.Contains(Villager))
             {
-                __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#FA4444><size=18>\nMinion</color></size>";
+                __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#4FD659><size=18>\nVillager</color></size>";
             }
         }
     }

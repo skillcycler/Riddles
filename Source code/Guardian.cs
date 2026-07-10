@@ -76,7 +76,7 @@ public class Guardian : Minion
         Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentAliveCharacters(pickedDemon);
         Il2CppSystem.Collections.Generic.List<Character> filteredCharacters = new();
         foreach (Character c in adjacentCharacters) { 
-            if (c.dataRef.characterId != "MadScientist_scm")
+            if (!c.statuses.Contains(SpecialMadScientistTags.hasGuardianAbility) && c.dataRef.characterId != "Guardian_scm")
             {
                 filteredCharacters.Add(c);
             }

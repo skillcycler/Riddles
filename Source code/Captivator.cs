@@ -114,7 +114,7 @@ public class Captivator : Role
         }
         CharacterData bluff = listV[UnityEngine.Random.RandomRangeInt(0, listV.Count)];
         gameplay.AddScriptCharacterIfAble(ECharacterType.Villager, bluff);
-        charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
+        //charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
         charRef.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
         return bluff;
     }

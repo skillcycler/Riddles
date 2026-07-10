@@ -196,6 +196,7 @@ public class MadScientist : Role
 
             if (fakeMinion.characterId == "Guardian_scm")
             {
+                charRef.statuses.AddStatus(SpecialMadScientistTags.hasGuardianAbility, charRef);
                 while (fakeOutcast.characterId == "Marionette_WING")
                 {
                     fakeOutcast = listOut[s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count)];
@@ -413,7 +414,7 @@ public class MadScientist : Role
                 {
                     Confused.updateConfusion(charRef);
                 }
-            } else
+            } else if (fakeOutcast.characterId != "Ghost_scm")
                 fakeOutcast.role.Act(trigger, charRef);
             /*if (fakeMinion.characterId == "Ritualist_WING")
             {
@@ -581,8 +582,9 @@ public class MadScientist : Role
     }
 }
 public static class SpecialMadScientistTags
-{
+{ // These statuses are used to check, for other characters, what mad scientist's abilities are
     public static ECharacterStatus hasGhostAbility = (ECharacterStatus)1201;
     public static ECharacterStatus hasSleeperAbility = (ECharacterStatus)1202;
     public static ECharacterStatus hasUndyingAbility = (ECharacterStatus)1203;
+    public static ECharacterStatus hasGuardianAbility = (ECharacterStatus)1204;
 }
