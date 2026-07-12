@@ -68,29 +68,71 @@ public class Trickster : Role
         {
             onActed.Invoke(GetInfo(charRef));
         }
-        if (charRef.statuses.Contains(ECharacterStatus.BrokenAbility))
+        if (charRef.statuses.Contains(ECharacterStatus.BrokenAbility) || charRef.statuses.Contains(TricksterRegister.Outcast) || charRef.statuses.Contains(TricksterRegister.Minion))
             return;
         if (trigger == ETriggerPhase.Start && !charRef.statuses.Contains(TricksterRegister.NotBugged))
         {
+            // first check to make sure there aren't extra tricksters
+            int tricksters = 0;
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.dataRef.characterId == "Trickster_scm") tricksters++;
+            }
             MelonLogger.Msg($"I am the original Trickster #{charRef.id}");
             charRef.statuses.AddStatus(TricksterRegister.NotBugged, charRef);
             Il2CppSystem.Collections.Generic.List<Character> converts = Gameplay.CurrentCharacters;
             converts = Characters.Instance.FilterRealCharacterType(converts, ECharacterType.Villager);
             converts.Remove(charRef);
+            charRef.statuses.AddStatus(TricksterRegister.Villager, charRef);
             if (converts.Count > 1) {
-                int c1 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
-                int c2 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
-                while (c1 == c2)
+                if (tricksters == 1)
                 {
-                    c2 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
+                    int c1 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
+                    converts[c1].statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
+                    converts[c1].Init(charRef.dataRef);
+                    converts[c1].statuses.AddStatus(TricksterRegister.Outcast, charRef);
+                    int c2 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
+                    while (c1 == c2)
+                    {
+                        c2 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
+                    }
+                    converts[c2].statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
+                    converts[c2].Init(charRef.dataRef);
+                    converts[c2].statuses.AddStatus(TricksterRegister.Minion, charRef);
+                } else if (tricksters == 2)
+                {
+                    foreach (Character c in Gameplay.CurrentCharacters)
+                    {
+                        if (c.dataRef.characterId == "Trickster_scm" && c != charRef)
+                        {
+                            c.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
+                            c.statuses.AddStatus(TricksterRegister.Minion, charRef);
+                        }
+                    }
+                    int c1 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
+                    converts[c1].statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
+                    converts[c1].Init(charRef.dataRef);
+                    converts[c1].statuses.AddStatus(TricksterRegister.Outcast, charRef);
+
+                } else if (tricksters == 3)
+                {
+                    bool seen = false;
+                    foreach (Character c in Gameplay.CurrentCharacters)
+                    {
+                        if (c.dataRef.characterId == "Trickster_scm" && c != charRef)
+                        {
+                            c.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
+                            if (!seen)
+                            {
+                                c.statuses.AddStatus(TricksterRegister.Minion, charRef);
+                                seen = true;
+                            } else
+                            {
+                                c.statuses.AddStatus(TricksterRegister.Outcast, charRef);
+                            }
+                        }
+                    }
                 }
-                converts[c1].statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
-                converts[c1].Init(charRef.dataRef);
-                converts[c1].statuses.AddStatus(TricksterRegister.Outcast, charRef);
-                converts[c2].statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
-                converts[c2].Init(charRef.dataRef);
-                converts[c2].statuses.AddStatus(TricksterRegister.Minion, charRef);
-                charRef.statuses.AddStatus(TricksterRegister.Villager, charRef);
             }
         }
         if (trigger == ETriggerPhase.AfterRoundStart)
@@ -102,8 +144,12 @@ public class Trickster : Role
             }
             CharacterData Trickster_Outcast = MainMod.Instance.makeNewCharacter("Trickster_o", EAlignment.Good, ECharacterType.Outcast, false, false, "");
             Trickster_Outcast.role = new Trickster();
+            Trickster_Outcast.name = "Trickster";
+            Trickster_Outcast.characterName = "Trickster";
             CharacterData Trickster_Minion = MainMod.Instance.makeNewCharacter("Trickster_m", EAlignment.Good, ECharacterType.Minion, false, false, "");
             Trickster_Minion.role = new Trickster();
+            Trickster_Minion.name = "Trickster";
+            Trickster_Minion.characterName = "Trickster";
             foreach (Character c in Gameplay.CurrentCharacters)
             {
                 if (c.statuses.Contains(TricksterRegister.Outcast))
@@ -124,7 +170,7 @@ public class Trickster : Role
         {
             onActed.Invoke(GetInfo(charRef));
         }
-        if (charRef.statuses.Contains(ECharacterStatus.BrokenAbility))
+        if (charRef.statuses.Contains(ECharacterStatus.BrokenAbility) || charRef.statuses.Contains(TricksterRegister.Outcast) || charRef.statuses.Contains(TricksterRegister.Minion))
             return;
         if (trigger == ETriggerPhase.Start)
         {
