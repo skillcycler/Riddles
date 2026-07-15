@@ -18,7 +18,7 @@ using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.5.8", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.6", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -87,6 +87,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Kingmaker>();
         ClassInjector.RegisterTypeInIl2Cpp<Mystifier>();
         ClassInjector.RegisterTypeInIl2Cpp<RainbowJoker>();
+        ClassInjector.RegisterTypeInIl2Cpp<Atheist>();
         Instance = this;
     }
     public CharacterData makeNewCharacter(string name, EAlignment startingAlignment, ECharacterType type, bool bluffable, bool usuallyDisguised, string flavorText, bool picking = false)
@@ -540,6 +541,10 @@ public class MainMod : MelonMod
         RainbowJoker.characterName = "Rainbow Joker";
         RainbowJoker.additionalPossibleCharacters = MakeAddedCharacters(0, 4, 4, 0);
 
+        CharacterData Atheist = makeNewCharacter("Atheist", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I can break whatever rules I feel like.\"");
+        Atheist.role = new Atheist();
+        Atheist.description = "Game Start: I have a 50% chance to turn Good.\n\nIf Good:\nLose if you execute me.\n\nIf Evil:\nAll other Evils turn Good. Some characters may lie or register as Evil.";
+
         CustomScriptData followerScriptData = new CustomScriptData();
         followerScriptData.name = "Follower_1";
         ScriptInfo followerScript = new ScriptInfo();
@@ -635,35 +640,23 @@ public class MainMod : MelonMod
 
         Il2CppSystem.Collections.Generic.List<CharactersCount> veilCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
-
-        veilCounterList.Add(veil_13a);
-        veilCounterList.Add(veil_13b);
-        veilCounterList.Add(veil_13c);
-        veilCounterList.Add(veil_13d);
-        veilCounterList.Add(veil_14a);
-        veilCounterList.Add(veil_14b);
-        veilCounterList.Add(veil_14c);
-        veilCounterList.Add(veil_15a);
-        veilCounterList.Add(veil_15b);
-        veilCounterList.Add(veil_15c);
-        veilCounterList.Add(veil_14b);
-        veilCounterList.Add(veil_14c);
-        veilCounterList.Add(veil_15a);
-        veilCounterList.Add(veil_15b);
-        veilCounterList.Add(veil_13a);
-        veilCounterList.Add(veil_13b);
-        veilCounterList.Add(veil_13c);
-        veilCounterList.Add(veil_13d);
-        veilCounterList.Add(veil_14a);
-        veilCounterList.Add(veil_14b);
-        veilCounterList.Add(veil_14c);
-        veilCounterList.Add(veil_15a);
-        veilCounterList.Add(veil_15b);
-        veilCounterList.Add(veil_15c);
-        veilCounterList.Add(veil_14b);
-        veilCounterList.Add(veil_14c);
-        veilCounterList.Add(veil_15a);
-        veilCounterList.Add(veil_15b);
+        for (int i = 0; i < 5; i++)
+        {
+            veilCounterList.Add(veil_13a);
+            veilCounterList.Add(veil_13b);
+            veilCounterList.Add(veil_13c);
+            veilCounterList.Add(veil_13d);
+            veilCounterList.Add(veil_14a);
+            veilCounterList.Add(veil_14b);
+            veilCounterList.Add(veil_14c);
+            veilCounterList.Add(veil_15a);
+            veilCounterList.Add(veil_15b);
+            veilCounterList.Add(veil_15c);
+            veilCounterList.Add(veil_14b);
+            veilCounterList.Add(veil_14c);
+            veilCounterList.Add(veil_15a);
+            veilCounterList.Add(veil_15b);
+        }
 
         veilCounterList.Add(veil_8);
         veilCounterList.Add(veil_9a);
@@ -742,40 +735,38 @@ public class MainMod : MelonMod
         infestationScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
         infestationScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
         infestationScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
-        CharactersCount infestation_8 = setCharacterCount(5, 1, 1, 1);
-        CharactersCount infestation_9 = setCharacterCount(5, 2, 1, 1);
+        CharactersCount clocktower_8 = setCharacterCount(5, 1, 1, 1);
+        CharactersCount clocktower_9 = setCharacterCount(5, 2, 1, 1);
         CharactersCount infestation_9b = setCharacterCount(5, 1, 2, 1);
         CharactersCount infestation_9c = setCharacterCount(6, 1, 1, 1);
-        CharactersCount infestation_10 = setCharacterCount(7, 0, 2, 1);
+        CharactersCount clocktower_10 = setCharacterCount(7, 0, 2, 1);
         CharactersCount infestation_10b = setCharacterCount(7, 1, 1, 1);
-        CharactersCount infestation_11 = setCharacterCount(7, 1, 2, 1);
-        CharactersCount infestation_12 = setCharacterCount(7, 2, 2, 1);
-        CharactersCount infestation_13 = setCharacterCount(9, 0, 3, 1);
-        CharactersCount infestation_14 = setCharacterCount(9, 1, 3, 1);
-        CharactersCount infestation_15 = setCharacterCount(9, 2, 3, 1);
+        CharactersCount clocktower_11 = setCharacterCount(7, 1, 2, 1);
+        CharactersCount clocktower_12 = setCharacterCount(7, 2, 2, 1);
+        CharactersCount clocktower_13 = setCharacterCount(9, 0, 3, 1);
+        CharactersCount clocktower_14 = setCharacterCount(9, 1, 3, 1);
+        CharactersCount clocktower_15 = setCharacterCount(9, 2, 3, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> infestationCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
 
-        infestationCounterList.Add(infestation_8);
-        infestationCounterList.Add(infestation_9);
+        infestationCounterList.Add(clocktower_8);
+        infestationCounterList.Add(clocktower_9);
         infestationCounterList.Add(infestation_9b);
         infestationCounterList.Add(infestation_9c);
-        infestationCounterList.Add(infestation_10);
+        infestationCounterList.Add(clocktower_10);
         infestationCounterList.Add(infestation_10b);
-        infestationCounterList.Add(infestation_10);
+        infestationCounterList.Add(clocktower_10);
         infestationCounterList.Add(infestation_10b);
-        infestationCounterList.Add(infestation_11);
-        infestationCounterList.Add(infestation_11);
-        infestationCounterList.Add(infestation_11);
-        infestationCounterList.Add(infestation_11);
-        infestationCounterList.Add(infestation_12);
-        infestationCounterList.Add(infestation_13);
-        infestationCounterList.Add(infestation_14);
-        infestationCounterList.Add(infestation_15);
-        infestationCounterList.Add(infestation_12);
-        infestationCounterList.Add(infestation_13);
-        infestationCounterList.Add(infestation_14);
-        infestationCounterList.Add(infestation_15);
+        infestationCounterList.Add(clocktower_11);
+        infestationCounterList.Add(clocktower_11);
+        infestationCounterList.Add(clocktower_12);
+        infestationCounterList.Add(clocktower_12);
+        infestationCounterList.Add(clocktower_13);
+        infestationCounterList.Add(clocktower_13);
+        infestationCounterList.Add(clocktower_14);
+        infestationCounterList.Add(clocktower_14);
+        infestationCounterList.Add(clocktower_15);
+        infestationCounterList.Add(clocktower_15);
 
         infestationScript.characterCounts = infestationCounterList;
         infestationScriptData.scriptInfo = infestationScript;
@@ -955,6 +946,28 @@ public class MainMod : MelonMod
         RainbowJokerScript.characterCounts = RainbowJokerCounterList;
         RainbowJokerScriptData.scriptInfo = RainbowJokerScript;
 
+        CustomScriptData AtheistScriptData = new CustomScriptData();
+        AtheistScriptData.name = "Atheist_1";
+        ScriptInfo AtheistScript = new ScriptInfo();
+        Il2CppSystem.Collections.Generic.List<CharacterData> AtheistList = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        AtheistList.Add(Atheist);
+        AtheistScript.mustInclude = AtheistList;
+        AtheistScript.startingDemons = AtheistList;
+        AtheistScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
+        AtheistScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
+        AtheistScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
+        Il2CppSystem.Collections.Generic.List<CharactersCount> AtheistCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
+
+        AtheistCounterList.Add(clocktower_8);
+        AtheistCounterList.Add(setCharacterCount(4, 1, 2, 1));
+        AtheistCounterList.Add(clocktower_9);
+        AtheistCounterList.Add(setCharacterCount(5, 1, 2, 1));
+        AtheistCounterList.Add(clocktower_10);
+        AtheistCounterList.Add(setCharacterCount(6, 1, 2, 1));
+
+        AtheistScript.characterCounts = AtheistCounterList;
+        AtheistScriptData.scriptInfo = AtheistScript;
+
         // ------------ NIGHT PHASE ------------
         nightPhase.nightCharactersOrder.Add(Baffler);
         nightPhase.nightCharactersOrder.Add(Mystifier);
@@ -972,6 +985,7 @@ public class MainMod : MelonMod
         // ------------ GAME START ------------
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(RainbowJoker);
+        Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Atheist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
         Characters.Instance.startGameActOrder = InsertAfterAct("Kingmaker", Wizard);
         Characters.Instance.startGameActOrder = InsertAfterAct("Wizard", Guardian);
@@ -1008,6 +1022,7 @@ public class MainMod : MelonMod
         addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 2);
         addDemonRole(advancedAscension, Mystifier, "Baa_Difficult", "Mystifier_1", MystifierScriptData, 2);
         addDemonRole(advancedAscension, RainbowJoker, "Baa_Difficult", "RainbowJoker_1", RainbowJokerScriptData, 2);
+        addDemonRole(advancedAscension, Atheist, "Baa_Difficult", "Atheist_1", AtheistScriptData, 2);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
@@ -1203,14 +1218,19 @@ public class MainMod : MelonMod
         public static void Postfix(ObjectivesUI __instance)
         {
             bool Kingmaker = false;
+            bool Atheist = false;
             foreach (Character c in Gameplay.CurrentCharacters)
             {
                 if (c.dataRef.characterId == "Kingmaker_scm")
                 {
                     Kingmaker = true;
                 }
+                if (c.dataRef.characterId == "Atheist_scm")
+                {
+                    Atheist = true;
+                }
             }
-            if (!Kingmaker) return;
+            if (!Kingmaker && !Atheist) return;
             int minions = Gameplay.CurrentScript.minion;
             int demons = Gameplay.CurrentScript.demon;
             var deadCharacters = Gameplay.DeadCharacters;
@@ -1237,7 +1257,10 @@ public class MainMod : MelonMod
                 demonCountText = "Demon";
             }
             __instance.objective.text = string.Format("Find and Execute all Evil Characters<br><color=grey><size=18>(<color=orange>{0}+ {2}</color> and <color=red>{1}+ {3} </color>)", minions, demons, minionCountText, demonCountText);
-
+            if (Atheist)
+            {
+                __instance.objective.text = "Find and Execute all Evil Characters.";
+            }
         }
     }
     // Hypnotist stuff
