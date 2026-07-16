@@ -15,26 +15,16 @@ public class MadScientist : Role
     public CharacterData fakeMinion = GetGenericMinion();
     public CharacterData fakeMinion2 = GetGenericMinion();
     public CharacterData fakeOutcast = GetGenericOutcast();
-    //public CharacterData fakeOutcast2 = GetGenericOutcast();
     public Character chargedActor = new Character();
     public int targetForGhost = 0;
     public int targetForGambler = 0;
     public bool killedLastNight = false; // this is for if Mad Scientist copies Hitman
-    //public int damageTimerForRitualist = 0;
     public override ActedInfo GetInfo(Character charRef)
     {
         if (fakeMinion.name == "Minion")
         {
             return new ActedInfo("I can't remember what abilities I have.");
-        }/*
-        if (fakeOutcast.name == "Doppelganger")
-        {
-            return new ActedInfo("Something went wrong and I don't have an Outcast ability");
         }
-        if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
-        {
-            return new ActedInfo(string.Format("I have the {0} and {1} abilities", fakeMinion2.name, fakeOutcast2.name));
-        }*/
         string info = string.Format("I have the {0} and {1} abilities", fakeMinion.name, fakeOutcast.name);
         if (fakeOutcast.name == "Ghost")
         {
@@ -89,15 +79,11 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Poisoner_64796285");
             whitelistMinionCharacterIDs.Add("Witch_25286521");
             whitelistMinionCharacterIDs.Add("Shaman_26945607");
-            //whitelistMinionCharacterIDs.Add("Baron_04539999"); oops this is bugged as well
+            whitelistMinionCharacterIDs.Add("Werewolf_78350415");
             whitelistOutcastCharacterIDs.Add("Plague Doctor_49312486");
             whitelistOutcastCharacterIDs.Add("Wretch_80988916");
-            // whitelistOutcastCharacterIDs.Add("Bombardier_79093372"); broken also you won't ever stab the mad scientist
-            //whitelistOutcastCharacterIDs.Add("Rambler_57930131"); Does not work at all.
-            //whitelistOutcastCharacterIDs.Add("Doppleganger_52694042");
             // This Mod
             whitelistMinionCharacterIDs.Add("Accuser_scm");
-            //whitelistMinionCharacterIDs.Add("Channeler_scm");
             whitelistMinionCharacterIDs.Add("Sleeper_scm");
             whitelistMinionCharacterIDs.Add("Guardian_scm");
             whitelistMinionCharacterIDs.Add("Baffler_scm");
@@ -116,15 +102,11 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
             whitelistMinionCharacterIDs.Add("Swarm_Good_WING");
-            //whitelistMinionCharacterIDs.Add("Snake Charmer_WING"); gonna make this work in some future update
-            //whitelistMinionCharacterIDs.Add("Ritualist_WING");
             whitelistMinionCharacterIDs.Add("Heretic_WING");
 
             whitelistOutcastCharacterIDs.Add("Chatterbox_WING");
-            //whitelistOutcastCharacterIDs.Add("Revolutionary_WING");
             whitelistOutcastCharacterIDs.Add("Marionette_WING");
-            //whitelistOutcastCharacterIDs.Add("Renegade_WING");
-            //whitelistOutcastCharacterIDs.Add("Lunatic_WING");
+            whitelistOutcastCharacterIDs.Add("Echo_WING");
 
             // LRZH's circus
 
@@ -132,22 +114,6 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Wraith_LRZH");
             whitelistOutcastCharacterIDs.Add("Moonchild_LRZH");
 
-            /* a lot of these are abandoned and will no longer officially be supported
-            // Carlz
-            //whitelistMinionCharacterIDs.Add("Lycaon_VP"); This has been causing too many bugs
-            whitelistMinionCharacterIDs.Add("Blackmailer_VP");
-            whitelistOutcastCharacterIDs.Add("Rook_VP");
-            //whitelistOutcastCharacterIDs.Add("Mayor_VP");
-            // Mass Hysteria
-            whitelistMinionCharacterIDs.Add("Siren_MaHy");
-            whitelistOutcastCharacterIDs.Add("Magician_MaHy");
-            // Reveal Dilemma
-            whitelistMinionCharacterIDs.Add("Ambusher_rdm");
-            whitelistMinionCharacterIDs.Add("Martyr_rdm");
-            whitelistOutcastCharacterIDs.Add("Saboteur_rdm");
-            // CSK expansion pack
-            whitelistOutcastCharacterIDs.Add("Atheist_EP");
-            whitelistMinionCharacterIDs.Add("Cavalier_EP");*/
             // Extra randomized by WWW
             whitelistMinionCharacterIDs.Add("Purifier_ER");
 
@@ -173,14 +139,7 @@ public class MadScientist : Role
 
             fakeMinion = listMin[r1];
             int s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
-            /*int s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
-            while ((s1 == s2 && listOut.Count > 1) || listOut[s2].characterId == "Hitman_scm" || listOut[s2].characterId == "Renegade_WING"
-                || listOut[s2].name == "Drunk" || listOut[s2].name == "Doppelganger" || listOut[s2].characterId == "Lunatic_WING")
-            {
-                s2 = UnityEngine.Random.RandomRangeInt(0, listOut.Count);
-            }*/
             fakeOutcast = listOut[s1];
-            //fakeOutcast2 = listOut[s2]; // Never actually adds this. It's for the rare case when it needs to lie
             gameplay.AddScriptCharacter(ECharacterType.Minion, fakeMinion);
             gameplay.AddScriptCharacter(ECharacterType.Outcast, fakeOutcast);
 
@@ -190,7 +149,7 @@ public class MadScientist : Role
             {
                 while (fakeOutcast.characterId == "Ghost_scm")
                 {
-                    fakeOutcast = listOut[s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count)];
+                    fakeOutcast = listOut[UnityEngine.Random.RandomRangeInt(0, listOut.Count)];
                 }
             }
 
@@ -199,14 +158,9 @@ public class MadScientist : Role
                 charRef.statuses.AddStatus(SpecialMadScientistTags.hasGuardianAbility, charRef);
                 while (fakeOutcast.characterId == "Marionette_WING")
                 {
-                    fakeOutcast = listOut[s1 = UnityEngine.Random.RandomRangeInt(0, listOut.Count)];
+                    fakeOutcast = listOut[UnityEngine.Random.RandomRangeInt(0, listOut.Count)];
                 }
             }
-            /*
-            if (UnityEngine.Random.RandomRangeInt(0, 2) == 0 || fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
-            {
-                gameplay.AddScriptCharacter(ECharacterType.Minion, fakeMinion2);
-            }*/
             if (charRef.GetCharacterData().characterId == "MadScientist_scm")
             {
                 if (fakeMinion.characterId == "Undying_WING")
@@ -244,7 +198,12 @@ public class MadScientist : Role
                     Character picked = charss[UnityEngine.Random.RandomRangeInt(0, charss.Count)];
                     
                     targetForGambler = picked.id;
-                    if (picked.alignment == EAlignment.Evil)
+                    bool isAtheist = false;
+                    foreach (Character c in Gameplay.CurrentCharacters)
+                    {
+                        if (c.dataRef.characterId == "Atheist_scm" && c.alignment == EAlignment.Evil) isAtheist = true;
+                    }
+                    if (picked.alignment == EAlignment.Evil || isAtheist)
                     {
                         switch (Calculator.RollDice(3))
                         {
@@ -285,32 +244,6 @@ public class MadScientist : Role
                 }
                 MelonLogger.Msg(string.Format("Mad Scientist is copying the {0} and {1} abilities", fakeOutcast.name, fakeMinion.name));
             }
-            // check if I should turn evil
-            /*if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
-            {
-                charRef.ChangeAlignment(EAlignment.Evil);
-            }
-            if (fakeOutcast.characterId == "Mayor_VP")
-            {
-                Il2CppSystem.Collections.Generic.List<Character> charList = new Il2CppSystem.Collections.Generic.List<Character>(Gameplay.CurrentCharacters.Pointer);
-                charList = CharactersHelper.GetSortedListWithCharacterFirst(charList, charRef);
-
-                charList.RemoveAt(0);
-                Il2CppSystem.Collections.Generic.List<Character> adjacentEvils = new Il2CppSystem.Collections.Generic.List<Character>();
-                if (charList[0].alignment == EAlignment.Evil)
-                {
-                    adjacentEvils.Add(charList[0]);
-                }
-                if (charList[charList.Count - 1].alignment == EAlignment.Evil)
-                {
-                    adjacentEvils.Add(charList[charList.Count - 1]);
-                }
-
-                if (adjacentEvils.Count > 0)
-                {
-                    charRef.ChangeAlignment(EAlignment.Evil);
-                }
-            }*/
         }
         if (trigger == ETriggerPhase.AfterRoundStart)
         {
@@ -331,6 +264,22 @@ public class MadScientist : Role
             if (fakeOutcast.characterName == "Marionette")
             {
                 charRef.UpdateRegisterAsRole(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
+            }
+            if (fakeOutcast.characterName == "Echo")
+            {
+                Il2CppSystem.Collections.Generic.List<Character> possibleTargets = new Il2CppSystem.Collections.Generic.List<Character>();
+                foreach (Character character in Gameplay.CurrentCharacters)
+                {
+                    if (character.dataRef.characterId != "MadScientist_scm")
+                    {
+                        possibleTargets.Add(character);
+                    }
+                }
+                if (possibleTargets.Count != 0)
+                {
+                    Character chosenTarget = possibleTargets[UnityEngine.Random.RandomRangeInt(0, possibleTargets.Count)];
+                    charRef.UpdateRegisterAsRole(chosenTarget.dataRef);
+                }
             }
         }
         if (trigger == ETriggerPhase.Day)
@@ -416,20 +365,7 @@ public class MadScientist : Role
                 }
             } else if (fakeOutcast.characterId != "Ghost_scm")
                 fakeOutcast.role.Act(trigger, charRef);
-            /*if (fakeMinion.characterId == "Ritualist_WING")
-            {
-                if (trigger == (ETriggerPhase)1121218522)
-                {
-                    damageTimerForRitualist++;
-                    if (damageTimerForRitualist >= 3)
-                    {
-                        damageTimerForRitualist -= 3;
-                        Health health = PlayerController.PlayerInfo.health;
-                        health.Damage(1);
-                    }
-                }
-            } else */
-                fakeMinion.role.Act(trigger, charRef);
+            fakeMinion.role.Act(trigger, charRef);
         }
     }
     public override bool CheckIfCanBeKilled(Character charRef)
@@ -454,19 +390,11 @@ public class MadScientist : Role
         if (fakeOutcast.characterId == "Marionette_WING" || fakeOutcast.characterId == "Revolutionary_WING")
         {
             return 3;
-        }/*
-        if (fakeOutcast.characterId == "Drunk_15369527")
-        {
-            return 2;
-        }*/
+        }
         if (fakeOutcast.characterId == "Ghost_scm")
         {
             return 1;
-        }/*
-        if (fakeOutcast.characterId == "Renegade_WING" || fakeOutcast.characterId == "Hitman_scm")
-        {
-            return 0;
-        }*/
+        }
         return 5;
     }
     public static CharacterData GetGenericMinion()
@@ -496,7 +424,7 @@ public class MadScientist : Role
     public MadScientist(IntPtr ptr) : base(ptr) { }
     public override CharacterData GetRegisterAsRole(Character charRef)
     {
-        /*if (fakeOutcast.name == "Wretch")
+        if (fakeOutcast.name == "Wretch")
         {
             Il2CppSystem.Collections.Generic.List<CharacterData> allChars = new Il2CppSystem.Collections.Generic.List<CharacterData>();
             foreach (CharacterData charData in Gameplay.Instance.GetScriptCharacters()) {
@@ -508,65 +436,13 @@ public class MadScientist : Role
             CharacterData randomMinion = allChars[UnityEngine.Random.Range(0, allChars.Count)];
 
             return randomMinion;
-        }*/
+        }
         if (fakeOutcast.characterId == "Marionette_WING")
         {
             return ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619");
         }
         return ProjectContext.Instance.gameData.GetCharacterDataOfId("MadScientist_scm");
-    }/*
-    public override CharacterData GetBluffIfAble(Character charRef)
-    {
-        if (fakeOutcast.characterId == "Drunk_15369527")
-        {
-            CharacterData bluff = Characters.Instance.GetRandomUniqueVillagerBluff();
-            Gameplay.Instance.AddScriptCharacterIfAble(bluff.type, bluff);
-            charRef.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-
-            return bluff;
-        }
-        if (fakeOutcast.characterId == "Doppleganger_52694042")
-        {
-            charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
-            Il2CppSystem.Collections.Generic.List<Character> characters = new Il2CppSystem.Collections.Generic.List<Character>();
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                characters.Add(c);
-            }
-            characters = Characters.Instance.FilterBluffableCharacters(characters);
-            characters = Characters.Instance.FilterCharacterType(characters, ECharacterType.Villager);
-            characters = Characters.Instance.FilterAlignmentCharacters(characters, EAlignment.Good);
-            CharacterData character = characters[UnityEngine.Random.Range(0, characters.Count)].dataRef;
-
-            return character;
-        }
-        if (fakeOutcast.characterId == "Lunatic_WING")
-        {
-            int diceRoll2 = Calculator.RollDice(10);
-            if (diceRoll2 < 6 && !charRef.statuses.Contains(ECharacterStatus.Corrupted))
-            {
-                charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
-            }
-            else
-            {
-                charRef.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-            }
-            int diceRoll = Calculator.RollDice(10);
-            if (diceRoll < 5)
-            {
-                return Characters.Instance.GetRandomDuplicateBluff();
-            }
-            else
-            {
-                CharacterData bluff = Characters.Instance.GetRandomUniqueBluff();
-                Gameplay.Instance.AddScriptCharacterIfAble(bluff.type, bluff);
-
-                return bluff;
-            }
-        }
-        // if not one of those don't disguise
-        return null;
-    }*/
+    }
     private void MoveDemonNextToMe(Character charRef)
     {
         Il2CppSystem.Collections.Generic.List<Character> checkDemons = new Il2CppSystem.Collections.Generic.List<Character>();

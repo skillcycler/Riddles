@@ -45,7 +45,12 @@ public class Gambler : Role
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
             Character picked = chars[Calculator.RemoveNumberAndGetRandomNumberFromList(charRef.id, 0, chars.Count)];
             affected = picked.id;
-            if (picked.alignment == EAlignment.Evil)
+            bool isAtheist = false;
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.dataRef.characterId == "Atheist_scm" && c.alignment == EAlignment.Evil) isAtheist = true;
+            }
+            if (picked.alignment == EAlignment.Evil || isAtheist)
             {
                 switch (Calculator.RollDice(3))
                 {
