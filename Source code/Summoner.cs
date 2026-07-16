@@ -106,8 +106,12 @@ public class Summoner : Demon
         }
         else
         {
+            int extra = 0;
+            if (Gameplay.CurrentCharacters.Count >= 9) extra = 1;
+            if (Gameplay.CurrentCharacters.Count >= 11) extra = 3;
+            if (Gameplay.CurrentCharacters.Count >= 13) extra = 5;
             Health health = PlayerController.PlayerInfo.health;
-            health.AddMaxHp(5);
+            health.AddMaxHp(extra);
             health.Heal(100);
         }
         for (int i = 0; i < extraDemons; i++)

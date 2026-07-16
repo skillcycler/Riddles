@@ -18,7 +18,7 @@ using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.6", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.6.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -277,7 +277,7 @@ public class MainMod : MelonMod
         CharacterData Riddler = makeNewCharacter("Riddler", EAlignment.Good, ECharacterType.Villager, true, false, "\"One day I'll cause a paradox.\"");
         Riddler.role = new Riddler();
         Riddler.description = "Learn a true fact about the game.";
-        Riddler.hints = "Statements are accurate as of June 21, 2026, or version 0.761h of the game. If you are playing in a later version, statements may not be accurate.";
+        Riddler.hints = "Statements are accurate as of July 15, 2026, or version 0.762a of the game. If you are playing in a later version, statements may not be accurate.";
         Riddler.ifLies = "Learn a false fact about the game.";
 
         CharacterData Swapper = makeNewCharacter("Swapper", EAlignment.Good, ECharacterType.Villager, true, false, "\"Didn't like the role you got? I'm here to save the day!\"", true);
@@ -509,7 +509,7 @@ public class MainMod : MelonMod
         
         CharacterData Summoner = makeNewCharacter("Summoner", EAlignment.Evil, ECharacterType.Demon, false, true, "\"Let's see... What does this spell do? Summon a demon? That sounds useful.\"");
         Summoner.role = new Summoner();
-        Summoner.description = "Game Start: There are no Outcasts or Minions in play. One or more other cards become Demons, which are not added to the Deck.\n\nI Lie and Disguise.\n\nYou start with 5 extra HP.";
+        Summoner.description = "Game Start: There are no Outcasts or Minions in play. One or more other cards become Demons, which are not added to the Deck.\n\nI Lie and Disguise.\n\nYou start with 0-5 extra HP.";
         Summoner.hints = "The night cycle is always active if I am in play.";
         Summoner.additionalPossibleCharacters = MakeAddedCharacters(0, 0, 0, 4);
 
@@ -708,11 +708,14 @@ public class MainMod : MelonMod
 
         summonerCounterList.Add(summoner_7);
         summonerCounterList.Add(summoner_8);
-        summonerCounterList.Add(summoner_9);
-        summonerCounterList.Add(summoner_10);
-        summonerCounterList.Add(summoner_11);
-        summonerCounterList.Add(summoner_12);
-        summonerCounterList.Add(summoner_13);
+        for (int i = 0; i < 3; i++)
+        {
+            summonerCounterList.Add(summoner_9);
+            summonerCounterList.Add(summoner_10);
+            summonerCounterList.Add(summoner_11);
+            summonerCounterList.Add(summoner_12);
+            summonerCounterList.Add(summoner_13);
+        }
         summonerCounterList.Add(summoner_14);
         summonerCounterList.Add(summoner_15);
 

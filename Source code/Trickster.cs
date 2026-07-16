@@ -44,7 +44,11 @@ public class Trickster : Role
         if (converted < 3)
             return new ActedInfo("This village has too few Villagers! I can't perform my tricks here!");
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        characters = Characters.Instance.FilterCharacterType(characters, charRef.GetCharacterType());
+        // time for a more robust way of dealing with this
+        ECharacterType ctype = ECharacterType.Villager;
+        if (charRef.statuses.Contains(TricksterRegister.Minion)) ctype = ECharacterType.Minion;
+        if (charRef.statuses.Contains(TricksterRegister.Outcast)) ctype = ECharacterType.Outcast;
+        characters = Characters.Instance.FilterCharacterType(characters, ctype);
         if (characters.Count > 1)
         {
             characters.Remove(charRef);
@@ -144,11 +148,9 @@ public class Trickster : Role
             }
             CharacterData Trickster_Outcast = MainMod.Instance.makeNewCharacter("Trickster_o", EAlignment.Good, ECharacterType.Outcast, false, false, "");
             Trickster_Outcast.role = new Trickster();
-            Trickster_Outcast.name = "Trickster";
             Trickster_Outcast.characterName = "Trickster";
             CharacterData Trickster_Minion = MainMod.Instance.makeNewCharacter("Trickster_m", EAlignment.Good, ECharacterType.Minion, false, false, "");
             Trickster_Minion.role = new Trickster();
-            Trickster_Minion.name = "Trickster";
             Trickster_Minion.characterName = "Trickster";
             foreach (Character c in Gameplay.CurrentCharacters)
             {
