@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Linq;
+using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppSystem.Reflection;
 using MelonLoader;
 using UnityEngine;
 using static Il2CppSystem.Collections.SortedList;
 using static MelonLoader.Modules.MelonModule;
-using HarmonyLib;
 
 namespace RiddlerMod;
 
@@ -18,6 +20,39 @@ namespace RiddlerMod;
 public class Trickster : Role
 {
     public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();
+    public static CharacterData makeTricksterData(string id, ECharacterType type)
+    {
+        CharacterData character = new CharacterData();
+        character.name = "Trickster";
+        character.characterName = "Trickster";
+        character.picking = false;
+        character.startingAlignment = EAlignment.Good;
+        character.flavorText = "I register as a Good Outcast/Minion.";
+        character.type = type;
+        character.bluffable = false;
+        character.additionalFlavorTexts = new Il2CppStringArray(1);
+        character.additionalFlavorTexts[0] = character.flavorText;
+        character.characterId = id + "_scm";
+        switch (type)
+        {
+            case ECharacterType.Outcast:
+                character.cardBgColor = new Color(0.102f, 0.0667f, 0.0392f);
+                character.cardBorderColor = new Color(0.7843f, 0.6471f, 0f);
+                character.color = new Color(0.9659f, 1f, 0.4472f);
+                break;
+            case ECharacterType.Minion:
+                character.cardBgColor = new Color(0.0941f, 0.0431f, 0.0431f);
+                character.cardBorderColor = new Color(0.8208f, 0f, 0.0241f);
+                character.color = new Color(0.8491f, 0.4555f, 0f);
+                break;
+        }
+        character.bundledCharacters = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+        character.additionalPossibleCharacters = new AddedCharacterTypes();
+        character.usuallyDisguised = false;
+        character.hints = "";
+        character.ifLies = "";
+        return character;
+    }
     public override string Description
     {
         get
@@ -95,6 +130,7 @@ public class Trickster : Role
                     converts[c1].statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
                     converts[c1].Init(charRef.dataRef);
                     converts[c1].statuses.AddStatus(TricksterRegister.Outcast, charRef);
+                    converts[c1].UpdateRegisterAsRole(makeTricksterData("Trickster_o", ECharacterType.Outcast));
                     int c2 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
                     while (c1 == c2)
                     {
@@ -103,6 +139,7 @@ public class Trickster : Role
                     converts[c2].statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
                     converts[c2].Init(charRef.dataRef);
                     converts[c2].statuses.AddStatus(TricksterRegister.Minion, charRef);
+                    converts[c1].UpdateRegisterAsRole(makeTricksterData("Trickster_m", ECharacterType.Minion));
                 } else if (tricksters == 2)
                 {
                     foreach (Character c in Gameplay.CurrentCharacters)
@@ -111,12 +148,14 @@ public class Trickster : Role
                         {
                             c.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
                             c.statuses.AddStatus(TricksterRegister.Minion, charRef);
+                            c.UpdateRegisterAsRole(makeTricksterData("Trickster_m", ECharacterType.Minion));
                         }
                     }
                     int c1 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
                     converts[c1].statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
                     converts[c1].Init(charRef.dataRef);
                     converts[c1].statuses.AddStatus(TricksterRegister.Outcast, charRef);
+                    converts[c1].UpdateRegisterAsRole(makeTricksterData("Trickster_o", ECharacterType.Outcast));
 
                 } else if (tricksters == 3)
                 {
@@ -130,38 +169,35 @@ public class Trickster : Role
                             {
                                 c.statuses.AddStatus(TricksterRegister.Minion, charRef);
                                 seen = true;
+                                c.UpdateRegisterAsRole(makeTricksterData("Trickster_m", ECharacterType.Minion));
                             } else
                             {
                                 c.statuses.AddStatus(TricksterRegister.Outcast, charRef);
+                                c.UpdateRegisterAsRole(makeTricksterData("Trickster_o", ECharacterType.Outcast));
                             }
                         }
                     }
                 }
             }
         }
-        if (trigger == ETriggerPhase.AfterRoundStart)
+        // keep updating these on literally any trigger because they keep losing their registration for some reason
+        if (trigger == ETriggerPhase.AfterRoundStart || true)
         {
             if (charRef.statuses.Contains(TricksterRegister.NotBugged))
             {
                 charRef.statuses.statuses.Remove(TricksterRegister.Outcast);
                 charRef.statuses.statuses.Remove(TricksterRegister.Minion);
             }
-            CharacterData Trickster_Outcast = MainMod.Instance.makeNewCharacter("Trickster_o", EAlignment.Good, ECharacterType.Outcast, false, false, "");
-            Trickster_Outcast.role = new Trickster();
-            Trickster_Outcast.characterName = "Trickster";
-            CharacterData Trickster_Minion = MainMod.Instance.makeNewCharacter("Trickster_m", EAlignment.Good, ECharacterType.Minion, false, false, "");
-            Trickster_Minion.role = new Trickster();
-            Trickster_Minion.characterName = "Trickster";
             foreach (Character c in Gameplay.CurrentCharacters)
             {
                 if (c.statuses.Contains(TricksterRegister.Outcast))
                 {
-                    c.UpdateRegisterAsRole(Trickster_Outcast);
+                    c.UpdateRegisterAsRole(makeTricksterData("Trickster_o", ECharacterType.Outcast));
                 }
                 else
                 if (c.statuses.Contains(TricksterRegister.Minion))
                 {
-                    c.UpdateRegisterAsRole(Trickster_Minion);
+                    c.UpdateRegisterAsRole(makeTricksterData("Trickster_m", ECharacterType.Minion));
                 }
             }
         }
@@ -178,6 +214,12 @@ public class Trickster : Role
         {
             Act(trigger, charRef);
         }
+    }
+    public override CharacterData GetRegisterAsRole(Character charRef)
+    {
+        if (charRef.statuses.Contains(TricksterRegister.Outcast)) return makeTricksterData("Trickster_o", ECharacterType.Outcast);
+        if (charRef.statuses.Contains(TricksterRegister.Minion)) return makeTricksterData("Trickster_m", ECharacterType.Minion);
+        return null;
     }
     public Trickster() : base(ClassInjector.DerivedConstructorPointer<Trickster>())
     {
@@ -210,7 +252,9 @@ public class TricksterRegister
             }
             else if (__instance.statuses.Contains(Villager))
             {
-                __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#4FD659><size=18>\nVillager</color></size>";
+                if (__instance.statuses.Contains(Accused.accused))
+                    __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#4FD659><size=14>\nVillager</color><color=#FF8000>(Accused)</color></size>";
+                else __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#4FD659><size=18>\nVillager</color></size>";
             }
         }
     }

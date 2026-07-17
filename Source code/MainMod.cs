@@ -10,15 +10,17 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppRewired.UI.ControlMapper;
 using Il2CppSystem.IO;
 using MelonLoader;
+using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
 using static Il2Cpp.Interop;
 using static Il2CppSystem.Array;
 using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
+using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.6.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.6.3", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -266,6 +268,21 @@ public class MainMod : MelonMod
             }
         }
     }
+    public static void AddConfigs()
+    {
+        MelonPreferences_Category configCategory = MelonPreferences.CreateCategory("RiddlesConfig");
+        configCategory.CreateEntry("Follower", true, "Follower", "Whether Follower can show up");
+        configCategory.CreateEntry("Summoner", true, "Summoner", "Whether Summoner can show up");
+        configCategory.CreateEntry("Escapist", true, "Escapist", "Whether Escapist can show up");
+        configCategory.CreateEntry("Rainbow Joker", true, "Rainbow Joker", "Whether Rainbow Joker can show up");
+        configCategory.CreateEntry("Atheist", true, "Atheist", "Whether Atheist can show up");
+        configCategory.CreateEntry("Veil", true, "Veil", "Whether Veil can show up");
+        configCategory.CreateEntry("Kingmaker", true, "Kingmaker", "Whether Kingmaker can show up");
+        configCategory.CreateEntry("Infestation", true, "Infestation", "Whether Infestation can show up");
+        configCategory.CreateEntry("Mystifier", true, "Mystifier", "Whether Mystifier can show up");
+        configCategory.SetFilePath(System.IO.Path.Combine(MelonEnvironment.UserDataDirectory, "RiddlesConfig.cfg"));
+        configCategory.SaveToFile();
+    }
     public override void OnLateInitializeMelon()
     {
         GameObject content = GameObject.Find("Game/Gameplay/Content");
@@ -273,6 +290,7 @@ public class MainMod : MelonMod
         MakeTwelve();
         UpdateWitness();
         PatchNights();
+        AddConfigs();
 
         CharacterData Riddler = makeNewCharacter("Riddler", EAlignment.Good, ECharacterType.Villager, true, false, "\"One day I'll cause a paradox.\"");
         Riddler.role = new Riddler();
@@ -1017,15 +1035,24 @@ public class MainMod : MelonMod
 
 
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
-        addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
-        addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
-        addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 2);
-        addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
-        addDemonRole(advancedAscension, Escapist, "Baa_Difficult", "Escapist_1", escapistScriptData, 2);
-        addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 2);
-        addDemonRole(advancedAscension, Mystifier, "Baa_Difficult", "Mystifier_1", MystifierScriptData, 2);
-        addDemonRole(advancedAscension, RainbowJoker, "Baa_Difficult", "RainbowJoker_1", RainbowJokerScriptData, 2);
-        addDemonRole(advancedAscension, Atheist, "Baa_Difficult", "Atheist_1", AtheistScriptData, 2);
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Follower").GetValueAsString().ToLower() == "true")
+            addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Veil").GetValueAsString().ToLower() == "true")
+            addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Summoner").GetValueAsString().ToLower() == "true")
+            addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 2);
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Infestation").GetValueAsString().ToLower() == "true")
+            addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Escapist").GetValueAsString().ToLower() == "true")
+            addDemonRole(advancedAscension, Escapist, "Baa_Difficult", "Escapist_1", escapistScriptData, 2);
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Kingmaker").GetValueAsString().ToLower() == "true")
+            addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 2);
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Mystifier").GetValueAsString().ToLower() == "true")
+            addDemonRole(advancedAscension, Mystifier, "Baa_Difficult", "Mystifier_1", MystifierScriptData, 2);
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Rainbow Joker").GetValueAsString().ToLower() == "true")
+            addDemonRole(advancedAscension, RainbowJoker, "Baa_Difficult", "RainbowJoker_1", RainbowJokerScriptData, 2);
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Atheist").GetValueAsString().ToLower() == "true")
+            addDemonRole(advancedAscension, Atheist, "Baa_Difficult", "Atheist_1", AtheistScriptData, 2);
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
@@ -1439,6 +1466,8 @@ public class MainMod : MelonMod
 
                 Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
 
+                while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+
                 int closestEvil = __instance.GetClosestEvilToEvil(pickedEvil, charRef);
 
                 string info = __instance.ConjourInfo(pickedEvil.GetRegisterAs(), closestEvil, charRef);
@@ -1469,6 +1498,8 @@ public class MainMod : MelonMod
             allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
                 
             Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+
+            while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
 
             int id = __instance.GetClosestEvilToEvil(pickedEvil, charRef);
             id = Calculator.RemoveNumberAndGetRandomNumberFromList(id, 0, 3);

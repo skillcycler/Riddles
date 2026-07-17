@@ -102,7 +102,10 @@ public static class Accused
                 } else if (__instance.statuses.Contains(ECharacterStatus.Corrupted))
                 {
                     __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#999999><size=14>\nCorrupted+</color></size><color=#FF8000><size=14>Accused</color></size>";
-                } else
+                }
+                else if (__instance.statuses.Contains(TricksterRegister.Villager))
+                    __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#4FD659><size=14>\nVillager</color><color=#FF8000>(Accused)</color></size>";
+                else
                 {
                     __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#FF8000><size=18>\n<Accused></color></size>";
                 }
