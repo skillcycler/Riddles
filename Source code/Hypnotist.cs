@@ -89,6 +89,8 @@ public class Hypnotist : Spy
                 break;
             }
         }
+        whitelistCharacterIDs.Add("Underling_V_WING");
+        whitelistCharacterIDs.Add("Monarch_POW");
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))

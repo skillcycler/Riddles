@@ -38,29 +38,6 @@ public class Nurse : Role
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
-        /*if (trigger == ETriggerPhase.OnReveal)
-        {
-            bool isThereCure = false;
-            List<ECharacterStatus> curable = new List<ECharacterStatus>();
-            curable.Add(ECharacterStatus.Corrupted);
-            curable.Add(Accused.accused);
-            curable.Add(Confused.confused);
-            curable.Add((ECharacterStatus)968); // Evil turned by Venelum and the likes
-            curable.Add((ECharacterStatus)918919); // Hypnotised, by Iris
-            curable.Add((ECharacterStatus)16118119); // Mutant Evil
-            curable.Add((ECharacterStatus)1615919151); // Poisoned by Snake Charmer
-            foreach (Character cha in Gameplay.CurrentCharacters)
-            {
-                foreach (ECharacterStatus status in curable)
-                {
-                    if (cha.statuses.Contains(status)) isThereCure = true;
-                }
-            }
-            if (!isThereCure)
-            {
-                onActed?.Invoke(new ActedInfo("There are no curable characters"));
-            }
-        }*/ //This does not actually work, so I will revert it to the old way
         if (trigger != ETriggerPhase.Day) return;
         chRef = charRef;
         CharacterPicker.Instance.StartPickCharacters(1, charRef);
@@ -99,6 +76,10 @@ public class Nurse : Role
         curable.Add((ECharacterStatus)16118119); // Mutant Evil
         curable.Add((ECharacterStatus)1615919151); // Poisoned by Snake Charmer
         curable.Add((ECharacterStatus)2051879522);
+        curable.Add((ECharacterStatus)230);
+        curable.Add((ECharacterStatus)200);
+        curable.Add((ECharacterStatus)195);
+        curable.Add((ECharacterStatus)270);
         bool sick = false;
         string add = "";
         foreach (Character cha in Gameplay.CurrentCharacters)

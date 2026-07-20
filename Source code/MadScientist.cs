@@ -94,7 +94,7 @@ public class MadScientist : Role
 
             whitelistOutcastCharacterIDs.Add("Ghost_scm");
             whitelistOutcastCharacterIDs.Add("Muddler_scm");
-            whitelistOutcastCharacterIDs.Add("Hitman_scm");
+            //whitelistOutcastCharacterIDs.Add("Hitman_scm"); I've tried to fix this so many times and it just won't work.
             whitelistOutcastCharacterIDs.Add("Confectioner_scm");
             whitelistOutcastCharacterIDs.Add("Gambler_scm");
             // Wingidon

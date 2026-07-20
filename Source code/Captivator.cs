@@ -107,6 +107,8 @@ public class Captivator : Role
         if (corrupted >= 2)
             whitelistCharacterIDs.Add("Sentinel_WING");
         whitelistCharacterIDs.Add("Knave_WING");
+        /*whitelistCharacterIDs.Add("Politician_WING");
+        whitelistCharacterIDs.Add("Puzzlemaster_WING");*/ //These are gonna be available when v2.3.3 of Wingidon's mod is released.
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))
@@ -114,7 +116,6 @@ public class Captivator : Role
         }
         CharacterData bluff = listV[UnityEngine.Random.RandomRangeInt(0, listV.Count)];
         gameplay.AddScriptCharacterIfAble(ECharacterType.Villager, bluff);
-        //charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
         charRef.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
         return bluff;
     }

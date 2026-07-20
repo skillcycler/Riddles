@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.6.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.7.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -56,6 +56,7 @@ public class MainMod : MelonMod
         //ClassInjector.RegisterTypeInIl2Cpp<Astronaut>();
         //ClassInjector.RegisterTypeInIl2Cpp<Sharpshooter>();
         ClassInjector.RegisterTypeInIl2Cpp<Motivator>();
+        ClassInjector.RegisterTypeInIl2Cpp<Therapist>();
 
         // Outcasts
 
@@ -67,6 +68,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Captivator>();
         ClassInjector.RegisterTypeInIl2Cpp<Reflector>();
         ClassInjector.RegisterTypeInIl2Cpp<Gambler>();
+        ClassInjector.RegisterTypeInIl2Cpp<Anchor>();
 
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
@@ -79,6 +81,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Wizard>();
         ClassInjector.RegisterTypeInIl2Cpp<Slanderer>();
         ClassInjector.RegisterTypeInIl2Cpp<Enigma>();
+        ClassInjector.RegisterTypeInIl2Cpp<Squire>();
 
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
@@ -212,7 +215,7 @@ public class MainMod : MelonMod
         HashSet<MethodInfo> patched = new();
         foreach (string demon in demons)
         {
-            Type targetType = wingsAssembly.GetType($"ExpansionPack.{demon}");
+            Type targetType = wingsAssembly.GetType($"WingidonExpansionPack.{demon}");
 
             if (targetType == null)
             {
@@ -428,6 +431,10 @@ public class MainMod : MelonMod
         Trickster.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nWhile alive, you don't know which is which.\nLearn a card that is the same character type as me.";
         Trickster.role = new Trickster();
 
+        CharacterData Therapist = makeNewCharacter("Therapist", EAlignment.Good, ECharacterType.Villager, true, false, "\"Let's all get along, shall we?\"");
+        Therapist.description = "Learn the 2 characters that I think have the least in common.";
+        Therapist.role = new Therapist();
+
         CharacterData MadScientist = makeNewCharacter("MadScientist", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Lil bro is ANGRY at the village\"");
         MadScientist.role = new MadScientist();
         MadScientist.name = "Mad Scientist";
@@ -468,6 +475,10 @@ public class MainMod : MelonMod
         CharacterData Gambler = makeNewCharacter("Gambler", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Aw dang it!\"");
         Gambler.role = new Gambler();
         Gambler.description = "Game Start: 1 random character (not myself) is afflicted with a random status effect: Accused, Corrupted, Confused, Evil-turned. Learn who I affected.";
+
+        CharacterData Anchor = makeNewCharacter("Anchor", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Where do you think you're going?\"");
+        Anchor.role = new Anchor();
+        Anchor.description = "You have 9 max HP, even if other cards add or subtract from max HP.";
 
         CharacterData Accuser = makeNewCharacter("Accuser", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Uno reverse card!\"");
         Accuser.role = new Accuser();
@@ -514,6 +525,10 @@ public class MainMod : MelonMod
         Enigma.role = new Enigma();
         Enigma.description = "There are extra fake characters in the deck equal to the last digit of my card number.\n\nI Lie and Disguise.";
         Enigma.hints = "I can add fake disguised Outcasts, fake Minions, and fake Demons.";
+
+        CharacterData Squire = makeNewCharacter("Squire", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Come on, show me how much you can take!\"");
+        Squire.role = new Squire();
+        Squire.description = "I disguise as a Knight and can't be killed unless all other Evils are dead.\nI register as a Truthful and Honest Knight.";
 
         CharacterData Follower = makeNewCharacter("Follower", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I'm playing chess and you're playing checkers.\"");
         Follower.role = new Follower();
@@ -742,6 +757,7 @@ public class MainMod : MelonMod
         //summonerCounterList.Add(setCharacterCount(8, 0, 12, 1)); // minion test
         //summonerCounterList.Add(setCharacterCount(20, 0, 0, 1)); // villager test
         //summonerCounterList.Add(setCharacterCount(16, 2, 2, 1)); // mixed test
+        //summonerCounterList.Add(setCharacterCount(6, 7, 7, 1)); // mixed test 2
 
         summonerScript.characterCounts = summonerCounterList;
         summonerScriptData.scriptInfo = summonerScript;
@@ -1027,9 +1043,10 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sleeper);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Follower);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
-        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Muddler);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Enigma);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind); // This must act after any minions.
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Anchor);
         //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
         //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sharpshooter);
 
@@ -1085,6 +1102,7 @@ public class MainMod : MelonMod
             //AddRole(script.startingTownsfolks, Astronaut);
             //AddRole(script.startingTownsfolks, Sharpshooter);
             AddRole(script.startingTownsfolks, Motivator);
+            AddRole(script.startingTownsfolks, Therapist);
 
 
             AddRole(script.startingOutsiders, MadScientist);
@@ -1095,6 +1113,7 @@ public class MainMod : MelonMod
             AddRole(script.startingOutsiders, Captivator);
             AddRole(script.startingOutsiders, Reflector);
             AddRole(script.startingOutsiders, Gambler);
+            AddRole(script.startingOutsiders, Anchor);
 
 
             AddRole(script.startingMinions, Wizard);
@@ -1107,6 +1126,7 @@ public class MainMod : MelonMod
             AddRole(script.startingMinions, Baffler);
             AddRole(script.startingMinions, Slanderer);
             AddRole(script.startingMinions, Enigma);
+            AddRole(script.startingMinions, Squire);
         }
     }
     public void AddRole(Il2CppSystem.Collections.Generic.List<CharacterData> list, CharacterData data)
@@ -1475,7 +1495,7 @@ public class MainMod : MelonMod
             }
             else
             {
-                Il2CppSystem.Collections.Generic.List<Character> allEvils = Gameplay.CurrentCharacters;
+                Il2CppSystem.Collections.Generic.List<Character> allEvils = GetGameplayCurrentCharacters();
                 allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
                 allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
 
