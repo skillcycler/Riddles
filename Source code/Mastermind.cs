@@ -49,9 +49,14 @@ public class Mastermind : Minion
             doNotTurn.Add("Snake Charmer_WING");
             doNotTurn.Add("Ritualist_WING");
             doNotTurn.Add("Professional_WING");
-            doNotTurn.Add("Mastermind_scm");
+            doNotTurn.Add("Undying_WING");
             doNotTurn.Add("Witch_25286521");
             doNotTurn.Add("Sleeper_scm");
+            doNotTurn.Add("Squire_scm");
+            doNotTurn.Add("Mastermind_scm");
+            doNotTurn.Add("Supporter_POW");
+            doNotTurn.Add("Ambusher_POW");
+            doNotTurn.Add("Grenadier_POW");
 
             foreach (Character minion in minions)
             {

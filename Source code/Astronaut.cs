@@ -87,10 +87,6 @@ public class Astronaut : Role
     }
     public override void BluffAct(ETriggerPhase trigger, Character charRef)
     {
-        if (trigger == ETriggerPhase.Start)
-        {
-            characters.Add(UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1));
-        }
         if (trigger == ETriggerPhase.Night)
         {
             Il2CppSystem.Collections.Generic.List<Character> ch = Gameplay.CurrentCharacters;
@@ -122,6 +118,18 @@ public class Astronaut : Role
         }
         if (trigger == ETriggerPhase.Day)
         {
+            if (characters.Count == 0)
+            { // Completely random info if lying
+                int add = Gameplay.Instance.currentDay;
+                int previous = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
+                for (int i = 0; i < add; i++)
+                {
+                    int next = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
+                    while (next == previous) next = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
+                    characters.Add(next);
+                    previous = next;
+                }
+            }
             charRef.revealed = true;
             onActed.Invoke(GetInfo(charRef));
         }

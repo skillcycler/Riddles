@@ -82,6 +82,7 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Werewolf_78350415");
             whitelistOutcastCharacterIDs.Add("Plague Doctor_49312486");
             whitelistOutcastCharacterIDs.Add("Wretch_80988916");
+
             // This Mod
             whitelistMinionCharacterIDs.Add("Accuser_scm");
             whitelistMinionCharacterIDs.Add("Sleeper_scm");
@@ -91,14 +92,12 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Wizard_scm");
             whitelistMinionCharacterIDs.Add("Enigma_scm");
 
-
             whitelistOutcastCharacterIDs.Add("Ghost_scm");
             whitelistOutcastCharacterIDs.Add("Muddler_scm");
-            //whitelistOutcastCharacterIDs.Add("Hitman_scm"); I've tried to fix this so many times and it just won't work.
             whitelistOutcastCharacterIDs.Add("Confectioner_scm");
             whitelistOutcastCharacterIDs.Add("Gambler_scm");
-            // Wingidon
 
+            // Wingidon
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
             whitelistMinionCharacterIDs.Add("Undying_WING");
             whitelistMinionCharacterIDs.Add("Swarm_Good_WING");
@@ -109,15 +108,14 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Echo_WING");
 
             // LRZH's circus
-
             whitelistMinionCharacterIDs.Add("Clown_LRZH");
             whitelistMinionCharacterIDs.Add("Wraith_LRZH");
             whitelistOutcastCharacterIDs.Add("Moonchild_LRZH");
 
-            // Extra randomized by WWW
-            whitelistMinionCharacterIDs.Add("Purifier_ER");
-
-
+            // Powerplay - Not everything that "works" will be added, for balance.
+            whitelistMinionCharacterIDs.Add("Supporter_POW");
+            whitelistMinionCharacterIDs.Add("Manipulator_POW");
+            whitelistOutcastCharacterIDs.Add("Industrialist_POW");
 
             for (int i = 0; i < minions.Count; i++)
             {

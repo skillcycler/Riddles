@@ -51,7 +51,7 @@ public class Squire : Minion
             // don't want this interacting weirdly with undying
             if (character.id != charRef.id && character.dataRef.characterId != "Undying_WING" && !character.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
             {
-                if (character.state != ECharacterState.Dead && character.alignment == EAlignment.Evil && character.dataRef.characterId != "Squire_scm") // Wizard-proofing it
+                if (character.state != ECharacterState.Dead && character.alignment == EAlignment.Evil && character.dataRef.characterId != "Squire_scm" && character.dataRef.characterId != "Vizier_LRZH") // Wizard-proofing it
                 {
                     evilsAlive = true;
                 }

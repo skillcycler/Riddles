@@ -52,7 +52,6 @@ public class Hypnotist : Spy
         whitelistCharacterIDs.Add("Alchemist_94446803");
         if (Gameplay.CurrentCharacters.Count >= 8)
         {
-            //whitelistCharacterIDs.Add("Athlete_95133291");
             whitelistCharacterIDs.Add("Scout_88081716");
         }
         Il2CppSystem.Collections.Generic.List<CharacterData> inDeckOutcasts = gameplay.GetScriptCharactersOfType(ECharacterType.Outcast);
@@ -79,7 +78,6 @@ public class Hypnotist : Spy
 
 
         whitelistCharacterIDs.Add("Riddler_scm");
-        //whitelistCharacterIDs.Add("Lawyer_scm");
         whitelistCharacterIDs.Add("Sentinel_WING");
         foreach (Character c in Gameplay.CurrentCharacters)
         {
@@ -97,7 +95,15 @@ public class Hypnotist : Spy
                 listV.Add(villagers[i]);
         }
         CharacterData bluff = listV[UnityEngine.Random.RandomRangeInt(0, listV.Count)];
-        gameplay.AddScriptCharacterIfAble(bluff.type, bluff);
+        if (bluff.characterId == "Monarch_POW")
+        {
+            for (int i = 0; i < villagers.Count; i++)
+            {
+                if (villagers[i].characterId == "Executive_POW")
+                    gameplay.AddScriptCharacterIfAble(ECharacterType.Villager, villagers[i]);
+            }
+        }
+        else gameplay.AddScriptCharacterIfAble(bluff.type, bluff);
         charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
         charRef.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
         return bluff;

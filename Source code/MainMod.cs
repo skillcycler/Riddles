@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.7.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -53,10 +53,11 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Tracker>();
         ClassInjector.RegisterTypeInIl2Cpp<Pioneer>();
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
-        //ClassInjector.RegisterTypeInIl2Cpp<Astronaut>();
+        ClassInjector.RegisterTypeInIl2Cpp<Astronaut>();
         //ClassInjector.RegisterTypeInIl2Cpp<Sharpshooter>();
         ClassInjector.RegisterTypeInIl2Cpp<Motivator>();
         ClassInjector.RegisterTypeInIl2Cpp<Therapist>();
+        ClassInjector.RegisterTypeInIl2Cpp<Crewmate>();
 
         // Outcasts
 
@@ -197,57 +198,105 @@ public class MainMod : MelonMod
         // This code is my attempt at patching Wingidon's demons to have a night cycle. I've never tried something like this before so hopefully it isn't broken.
         Assembly wingsAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "WingsExpansion");
 
-        if (wingsAssembly == null)
+        if (wingsAssembly != null)
         {
-            return false;
+            foreach (Type t in wingsAssembly.GetTypes())
+                MelonLogger.Msg(t.FullName);
+            List<string> demons = new();
+            demons.Add("w_Iris");
+            demons.Add("w_Leviathan");
+            demons.Add("w_InvertDemon");
+            demons.Add("w_Praesect");
+            demons.Add("w_Mezepheles");
+            demons.Add("w_TwinDemon");
+            demons.Add("w_TwinDemonThree");
+            demons.Add("w_TwinDemonTwin");
+            HashSet<MethodInfo> patched = new();
+            foreach (string demon in demons)
+            {
+                Type targetType = wingsAssembly.GetType($"WingidonExpansionPack.{demon}");
+
+                if (targetType == null)
+                {
+                    MelonLogger.Msg($"Could not find {demon}");
+                    continue;
+                }
+                MethodInfo targetMethod = targetType.GetMethod("GetRules", BindingFlags.Instance | BindingFlags.Public);
+
+                if (targetMethod != null)
+                {
+                    targetMethod = targetMethod.GetBaseDefinition();
+                }
+                if (targetMethod == null)
+                {
+                    MelonLogger.Msg($"Could not find {demon}.GetRules");
+                    continue;
+                }
+                if (!patched.Add(targetMethod))
+                {
+                    MelonLogger.Msg($"Already patched {targetMethod.DeclaringType.Name}.GetRules");
+                    continue;
+                }
+                MelonLogger.Msg($"Target type: {targetType.FullName}");
+                MelonLogger.Msg($"Method: {targetMethod}");
+                MelonLogger.Msg($"Declared in: {targetMethod.DeclaringType.FullName}");
+                HarmonyInstance.Patch(
+                    targetMethod,
+                    postfix: new HarmonyMethod(
+                        typeof(MyCompatPatch),
+                        nameof(MyCompatPatch.Postfix))
+                );
+            }
         }
-        foreach (Type t in wingsAssembly.GetTypes())
-            MelonLogger.Msg(t.FullName);
-        List<string> demons = new();
-        demons.Add("w_Iris");
-        demons.Add("w_Leviathan");
-        demons.Add("w_InvertDemon");
-        demons.Add("w_Praesect");
-        demons.Add("w_Mezepheles");
-        demons.Add("w_TwinDemon");
-        demons.Add("w_TwinDemonThree");
-        demons.Add("w_TwinDemonTwin");
-        HashSet<MethodInfo> patched = new();
-        foreach (string demon in demons)
+        
+
+        Assembly powerplay = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "Demon Bluff Mods" || a.GetName().Name == "Demon_Bluff_Mods");
+
+        if (powerplay != null)
         {
-            Type targetType = wingsAssembly.GetType($"WingidonExpansionPack.{demon}");
+            foreach (Type t in powerplay.GetTypes())
+                MelonLogger.Msg(t.FullName);
+            List<string> demons2 = new();
+            demons2.Add("w_Iris");
+            demons2.Add("w_Leviathan");
+            HashSet<MethodInfo> patched2 = new();
+            foreach (string demon in demons2)
+            {
+                Type targetType = powerplay.GetType($"Demon_Bluff_Mods.{demon}");
 
-            if (targetType == null)
-            {
-                MelonLogger.Msg($"Could not find {demon}");
-                continue;
-            }
-            MethodInfo targetMethod = targetType.GetMethod("GetRules", BindingFlags.Instance | BindingFlags.Public);
+                if (targetType == null)
+                {
+                    MelonLogger.Msg($"Could not find {demon}");
+                    continue;
+                }
+                MethodInfo targetMethod = targetType.GetMethod("GetRules", BindingFlags.Instance | BindingFlags.Public);
 
-            if (targetMethod != null)
-            {
-                targetMethod = targetMethod.GetBaseDefinition();
+                if (targetMethod != null)
+                {
+                    targetMethod = targetMethod.GetBaseDefinition();
+                }
+                if (targetMethod == null)
+                {
+                    MelonLogger.Msg($"Could not find {demon}.GetRules");
+                    continue;
+                }
+                if (!patched2.Add(targetMethod))
+                {
+                    MelonLogger.Msg($"Already patched {targetMethod.DeclaringType.Name}.GetRules");
+                    continue;
+                }
+                MelonLogger.Msg($"Target type: {targetType.FullName}");
+                MelonLogger.Msg($"Method: {targetMethod}");
+                MelonLogger.Msg($"Declared in: {targetMethod.DeclaringType.FullName}");
+                HarmonyInstance.Patch(
+                    targetMethod,
+                    postfix: new HarmonyMethod(
+                        typeof(MyCompatPatch),
+                        nameof(MyCompatPatch.Postfix))
+                );
             }
-            if (targetMethod == null)
-            {
-                MelonLogger.Msg($"Could not find {demon}.GetRules");
-                continue;
-            }
-            if (!patched.Add(targetMethod))
-            {
-                MelonLogger.Msg($"Already patched {targetMethod.DeclaringType.Name}.GetRules");
-                continue;
-            }
-            MelonLogger.Msg($"Target type: {targetType.FullName}");
-            MelonLogger.Msg($"Method: {targetMethod}");
-            MelonLogger.Msg($"Declared in: {targetMethod.DeclaringType.FullName}");
-            HarmonyInstance.Patch(
-                targetMethod,
-                postfix: new HarmonyMethod(
-                    typeof(MyCompatPatch),
-                    nameof(MyCompatPatch.Postfix))
-            );
         }
+        
         return true;
     }
     public static class MyCompatPatch
@@ -263,6 +312,8 @@ public class MainMod : MelonMod
             demons.Add("w_TwinDemon");
             demons.Add("w_TwinDemonThree");
             demons.Add("w_TwinDemonTwin");
+            demons.Add("Vortox_POW");
+            demons.Add("Famine_POW");
             if (demons.Contains(__instance.GetType().Name))
             {
                 Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
@@ -415,11 +466,13 @@ public class MainMod : MelonMod
         Necromancer.description = "Pick 2 cards (not myself), one alive and one dead. Kill the alive and revive the dead. I cannot revive Evils or the Ghost.";
         Necromancer.ifLies = "The revived card will lie with its new info.";
 
-        /*CharacterData Astronaut = makeNewCharacter("Astronaut", EAlignment.Good, ECharacterType.Villager, true, false, "\"Always has been.\"");
+        CharacterData Astronaut = makeNewCharacter("Astronaut", EAlignment.Good, ECharacterType.Villager, true, false, "\"Always has been.\"");
         Astronaut.role = new Astronaut();
-        Astronaut.description = "At Night: Learn a character of a different Alignment than the previous night.";*/
+        Astronaut.description = "At Night: Learn a character of a different Alignment than the previous night.";
+        Astronaut.ifLies = "I provide arbitrary info for nights before I was flipped and false info after being flipped.";
 
-        /*CharacterData Sharpshooter = makeNewCharacter("Sharpshooter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Fastest gunslinger in the West, getting even faster each night\"");
+        // still can't make this work...
+        /*CharacterData Sharpshooter = makeNewCharacter("Sharpshooter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Fastest gunslinger in the West\"");
         Sharpshooter.role = new Sharpshooter();
         Sharpshooter.description = "Learn that a particular Evil is between 1 of 5 Cards.\n\nAt Night: Remove one of the possibilities.";*/
 
@@ -434,6 +487,12 @@ public class MainMod : MelonMod
         CharacterData Therapist = makeNewCharacter("Therapist", EAlignment.Good, ECharacterType.Villager, true, false, "\"Let's all get along, shall we?\"");
         Therapist.description = "Learn the 2 characters that I think have the least in common.";
         Therapist.role = new Therapist();
+        Therapist.hints = "Any two characters of different alignments will always have less in common than any two characters of the same alignment.";
+        Therapist.ifLies = "I point to two random characters.";
+
+        CharacterData Crewmate = makeNewCharacter("Crewmate", EAlignment.Good, ECharacterType.Villager, true, false, "\"Red.\"");
+        Crewmate.description = "Learn someone who is Sus. (In other words, a Demon or someone that can affect someone else)";
+        Crewmate.role = new Crewmate();
 
         CharacterData MadScientist = makeNewCharacter("MadScientist", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Lil bro is ANGRY at the village\"");
         MadScientist.role = new MadScientist();
@@ -758,6 +817,7 @@ public class MainMod : MelonMod
         //summonerCounterList.Add(setCharacterCount(20, 0, 0, 1)); // villager test
         //summonerCounterList.Add(setCharacterCount(16, 2, 2, 1)); // mixed test
         //summonerCounterList.Add(setCharacterCount(6, 7, 7, 1)); // mixed test 2
+        //summonerCounterList.Add(setCharacterCount(10, 0, 10, 1)); // Test lying villagers.
 
         summonerScript.characterCounts = summonerCounterList;
         summonerScriptData.scriptInfo = summonerScript;
@@ -1012,10 +1072,9 @@ public class MainMod : MelonMod
         nightPhase.nightCharactersOrder.Add(Follower);
         nightPhase.nightCharactersOrder.Add(Channeler);
         nightPhase.nightCharactersOrder.Add(Hitman);
-        //nightPhase.nightCharactersOrder.Add(MadScientist); // for if it copies an outcast that acts at night
         nightPhase.nightCharactersOrder.Add(Sleeper);
-        // and now for the characters that will learn info at night
-        //nightPhase.nightCharactersOrder.Add(Astronaut);
+        // and now for the villagers that will act at night
+        nightPhase.nightCharactersOrder.Add(Astronaut);
         //nightPhase.nightCharactersOrder.Add(Sharpshooter);
         nightPhase.nightCharactersOrder.Add(Motivator);
 
@@ -1047,7 +1106,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Enigma);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind); // This must act after any minions.
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Anchor);
-        //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
         //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sharpshooter);
 
 
@@ -1099,10 +1158,11 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Tracker);
             AddRole(script.startingTownsfolks, Pioneer);
             AddRole(script.startingTownsfolks, Necromancer);
-            //AddRole(script.startingTownsfolks, Astronaut);
+            AddRole(script.startingTownsfolks, Astronaut);
             //AddRole(script.startingTownsfolks, Sharpshooter);
             AddRole(script.startingTownsfolks, Motivator);
             AddRole(script.startingTownsfolks, Therapist);
+            AddRole(script.startingTownsfolks, Crewmate);
 
 
             AddRole(script.startingOutsiders, MadScientist);
@@ -1557,6 +1617,32 @@ public class MainMod : MelonMod
         {
             Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
             __result = sr;
+        }
+    }
+    //super janky fix
+    [HarmonyPatch(typeof(NightCycle), nameof(NightCycle.ResetClock))]
+    private static class BluffsActivationAtNight
+    {
+        private static void Postfix()
+        {
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.bluff)
+                {
+                    if (c.bluff.characterId == "Astronaut_scm"/* || c.bluff.characterId == "Sharpshooter_scm"*/)
+                    {
+                        if (!c.statuses.Contains(ECharacterStatus.HealthyBluff))
+                        {
+                            c.bluff.role.BluffAct(ETriggerPhase.Night, c);
+                        }
+                        else
+                        {
+                            c.bluff.role.Act(ETriggerPhase.Night, c);
+                        }
+                    }
+                }
+                
+            }
         }
     }
     public static Il2CppSystem.Collections.Generic.List<Character> GetGameplayCurrentCharacters()

@@ -16,10 +16,8 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class Sharpshooter : Role
 {
-    public int real;
-    public HashSet<int> fakeIDs = new();
-    public CharacterData cd;
-    public bool hasActivated = false;
+    public List<int> characters = new List<int>();
+    public CharacterData cd = new();
     public override string Description
     {
         get
@@ -29,12 +27,10 @@ public class Sharpshooter : Role
     }
     public string makeInfo()
     {
-        if (fakeIDs.Count == 0) { return $"#{real} is the {cd.characterName}"; }
+        if (characters.Count < 2) return $"#{characters[0]} is the {cd.characterName}";
         string info = "Among ";
         List<int> ints = new();
-        ints.Add(real);
-
-        foreach (int i in fakeIDs)
+        foreach (int i in characters)
         {
             ints.Add(i);
         }
@@ -62,27 +58,30 @@ public class Sharpshooter : Role
     {
         if (trigger == ETriggerPhase.Start)
         {
-            hasActivated = true;
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
             Il2CppSystem.Collections.Generic.List<Character> evils = new();
-            foreach (Character c in chars) {
+            foreach (Character c in chars)
+            {
                 if (c.GetRegisterAlignment() == EAlignment.Evil && c.dataRef.characterId != "Professional_WING" && c.dataRef.characterId != "Iris_WING") { evils.Add(c); }
             }
             Character picked = evils[UnityEngine.Random.RandomRangeInt(0, evils.Count)];
-            real = picked.id;
-            while (fakeIDs.Count < 4)
+            characters.Add(picked.id);
+            while (characters.Count < 5)
             {
                 int rand = Calculator.RollDice(chars.Count);
-                if (rand != real) fakeIDs.Add(rand);
+                if (!characters.Contains(rand)) characters.Add(rand);
             }
             cd = picked.GetRegisterAs();
         }
         if (trigger == ETriggerPhase.Night)
         {
-            fakeIDs.Remove(fakeIDs.Last());
-            if (charRef.revealed)
-            {
-                onActed.Invoke(GetInfo(charRef));
+            if (characters.Count > 1) {
+                int last = characters.Last();
+                characters.Remove(last);
+                if (charRef.revealed)
+                {
+                    onActed.Invoke(GetInfo(charRef));
+                }
             }
         }
         if (trigger == ETriggerPhase.Day)
@@ -93,9 +92,23 @@ public class Sharpshooter : Role
     }
     public override void BluffAct(ETriggerPhase trigger, Character charRef)
     {
-        if (trigger == ETriggerPhase.Start)
+        if (trigger == ETriggerPhase.Night)
         {
-            hasActivated = true;
+            if (characters.Count > 1)
+            {
+                int last = characters.Last();
+                characters.Remove(last);
+                if (charRef.revealed)
+                {
+                    onActed.Invoke(GetInfo(charRef));
+                }
+            }
+        }
+        if (trigger == ETriggerPhase.Day)
+        {
+            
+            int addFake = 5 - Gameplay.Instance.currentDay;
+            if (addFake < 1) addFake = 1;
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
             if (chars.Count >= 6)
             {
@@ -105,47 +118,20 @@ public class Sharpshooter : Role
                     if (c.GetRegisterAlignment() == EAlignment.Evil) { evils.Add(c); }
                 }
                 Character picked = evils[UnityEngine.Random.RandomRangeInt(0, evils.Count)];
-                real = Calculator.RemoveNumberAndGetRandomNumberFromList(picked.id, 1, chars.Count);
-                while (fakeIDs.Count < 4)
+                int real = Calculator.RemoveNumberAndGetRandomNumberFromList(picked.id, 1, chars.Count);
+                while (characters.Count < addFake)
                 {
                     int rand = Calculator.RollDice(chars.Count);
-                    if (rand != real && rand != picked.id) fakeIDs.Add(rand);
+                    if (rand != real && !characters.Contains(rand)) characters.Add(rand);
                 }
                 cd = picked.GetRegisterAs();
             }
-        }
-        if (trigger == ETriggerPhase.Night)
-        {
-            if (Gameplay.CurrentCharacters.Count >= 6)
-            {
-                if (!hasActivated)
-                {
-                    hasActivated = true;
-                    BluffAct(ETriggerPhase.Start, charRef);
-                }
-                fakeIDs.Remove(fakeIDs.Last());
-                if (charRef.revealed)
-                {
-                    onActed.Invoke(GetInfo(charRef));
-                }
-            }
-        }
-        if (trigger == ETriggerPhase.Day)
-        {
-            if (Gameplay.CurrentCharacters.Count >= 6)
-            {
-                if (!hasActivated)
-                {
-                    hasActivated = true;
-                    BluffAct(ETriggerPhase.Start, charRef);
-                }
-                charRef.revealed = true;
-                onActed.Invoke(GetInfo(charRef));
-            }
             else
             {
-                onActed.Invoke(new ActedInfo("I am a dizzy Confessor"));
+                onActed.Invoke(new ActedInfo("This role needs 6 cards to function correctly."));
             }
+            charRef.revealed = true;
+            onActed.Invoke(GetInfo(charRef));
         }
     }
     public Sharpshooter() : base(ClassInjector.DerivedConstructorPointer<Sharpshooter>())

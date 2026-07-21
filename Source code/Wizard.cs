@@ -36,9 +36,16 @@ public class Wizard : Minion
 
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         Il2CppSystem.Collections.Generic.List<Character> availableToDupe = new();
+        List<string> banned = new();
+        banned.Add("Undying_WING");
+        banned.Add("Vizier_LRZH");
+        banned.Add("Squire_scm");
+        banned.Add("Marionette_WING");
+        banned.Add("Guardian_scm");
+        banned.Add("MadScientist_scm");
         foreach (Character character in characters)
         {
-            if (character.dataRef.type == ECharacterType.Outcast || character.dataRef.type == ECharacterType.Minion && character.dataRef.characterId != "Undying_WING" && character.dataRef.characterId != "Vizier_LRZH")
+            if (character.dataRef.type == ECharacterType.Outcast || character.dataRef.type == ECharacterType.Minion)
             {
                 availableToDupe.Add(character);
             }

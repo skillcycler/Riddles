@@ -1,15 +1,17 @@
 # Riddles
-A Demon Bluff mod that adds 53 brand new characters to the game!
+A Demon Bluff mod that adds 58 brand new characters to the game!
 
 ## Changes from Base Game
 - All Demons will have a Night Cycle to fix duplicate night bugs
 - This now includes all Demons from Wingidon's mod as well
+- This also now includes demons from Powerplay as well, as of v1.8
 - Lycanthrope's night cycle is removed since it is now redundant
 - Witness can additionally see many of the effects from these characters
 - Characters can now choose from every out of play character to bluff instead of just 4 options
 - The bluff pool is now chosen at the time of deciding the bluff instead of on round start
 - Scout will no longer point to Good-registering Evils and say that Evil's true role
 - Lying Mediums will no longer point to Good-registering Evils
+- Characters bluffing as roles will now have the bluff roles also act at night
 
 ## Villagers
 - Riddler: Gives you a fun fact about the game. 
@@ -37,9 +39,11 @@ A Demon Bluff mod that adds 53 brand new characters to the game!
 - Tracker: Learn someone disguised as an Outcast.
 - Pioneer: Learn how many cards away a particular Evil is from my closest Evil.
 - Necromancer: Kill any card and Revive a dead Good card. If I am lying, the revived card will lie.
-- Astronaut: Each night, learn a character of the opposite alignment to the previous night. [Currently unavailable]
+- Astronaut: Each night, learn a character of the opposite alignment to the previous night.
 - Sharpshooter: Learn that an evil is one of 5 cards. At night, remove one of the possibilities. [Currently unavailable]
 - Motivator: If revealed, my neighbors refresh at night.
+- Therapist: Learn 2 characters that don't have much in common.
+- Crewmate: Learn someone who is Sus.
 
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
@@ -50,6 +54,7 @@ A Demon Bluff mod that adds 53 brand new characters to the game!
 - Captivator: I say something that neither a truth teller nor liar would be able to say.
 - Reflector: I am Confused. I disguise.
 - Gambler: I apply a random status effect to a random other character. Learn who I gambled with.
+- Anchor: You have 9 max hp. Anything else that affects max hp is disabled.
 
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil.
@@ -61,6 +66,7 @@ A Demon Bluff mod that adds 53 brand new characters to the game!
 - Baffler: One adjacent Villager is Confused. Confused characters have a 50% chance to Lie.
 - Wizard: There are two of the same Outcast or Minion in play.
 - Enigma: There are many fake characters added to the deck.
+- Squire: I disguise as a Knight. I can't die unless I'm the last evil.
 
 ## Demons
 - Follower: Kills smartly. Night is 3 ticks long.
@@ -71,6 +77,10 @@ A Demon Bluff mod that adds 53 brand new characters to the game!
 - Kingmaker: Both of my neighbors are Minions. I tell the truth and hide the max Evil counter.
 - Mystifier: One random Villager is Confused each night. Confused characters have a 50% chance to Lie.
 - Rainbow Joker: You don't know what minions or outcasts are in play.
+- Atheist: Good luck figuring out if there are evils!
 
-## Disclaimer
-The only mods that this mod should be 100% compatible with, as of v1.5.3, are Wingidon's Expansion Pack and The Salem Trials.
+## Compatible Mods
+The following mods should be compatible with this mod as of v1.8.
+- Wingidon's Expansion Pack
+- The Salem Trials
+- Powerplay
