@@ -1,6 +1,12 @@
 # Riddles
 A Demon Bluff mod that adds 58 brand new characters to the game!
 
+## Compatible Mods
+The following mods should be compatible with this mod as of v1.8.2: The Fixed Astronaut Update
+- Wingidon's Expansion Pack
+- The Salem Trials
+- Powerplay
+
 ## Changes from Base Game
 - All Demons will have a Night Cycle to fix duplicate night bugs
 - This now includes all Demons from Wingidon's mod as well
@@ -78,9 +84,3 @@ A Demon Bluff mod that adds 58 brand new characters to the game!
 - Mystifier: One random Villager is Confused each night. Confused characters have a 50% chance to Lie.
 - Rainbow Joker: You don't know what minions or outcasts are in play.
 - Atheist: Good luck figuring out if there are evils!
-
-## Compatible Mods
-The following mods should be compatible with this mod as of v1.8.
-- Wingidon's Expansion Pack
-- The Salem Trials
-- Powerplay

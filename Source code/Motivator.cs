@@ -30,6 +30,7 @@ public class Motivator : Role
             Il2CppSystem.Collections.Generic.List<Character> neighbors = Characters.Instance.GetAdjacentCharacters(charRef);
             foreach (Character character in neighbors)
             {
+                if (character.state == ECharacterState.Dead) continue;
                 if (character.dataRef.picking)
                 {
                     character.pickableUses = 1;

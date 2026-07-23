@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -478,7 +478,7 @@ public class MainMod : MelonMod
 
         CharacterData Motivator = makeNewCharacter("Motivator", EAlignment.Good, ECharacterType.Villager, true, false, "\"Go Go Go! You can do it!\"");
         Motivator.role = new Motivator();
-        Motivator.description = "If revealed: My neighbors refresh at night.";
+        Motivator.description = "If revealed: My alive neighbors refresh at night.";
 
         CharacterData Trickster = makeNewCharacter("Trickster", EAlignment.Good, ECharacterType.Villager, false, false, "\"If you thought the Minion twins were bad, get ready for the three of us!\"");
         Trickster.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nWhile alive, you don't know which is which.\nLearn a card that is the same character type as me.";
@@ -798,7 +798,7 @@ public class MainMod : MelonMod
         Il2CppSystem.Collections.Generic.List<CharactersCount> summonerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
 
-        summonerCounterList.Add(summoner_7);
+        /*summonerCounterList.Add(summoner_7);
         summonerCounterList.Add(summoner_8);
         for (int i = 0; i < 3; i++)
         {
@@ -809,7 +809,7 @@ public class MainMod : MelonMod
             summonerCounterList.Add(summoner_13);
         }
         summonerCounterList.Add(summoner_14);
-        summonerCounterList.Add(summoner_15);
+        summonerCounterList.Add(summoner_15);*/
 
         // Testing only: 21 character village
         //summonerCounterList.Add(setCharacterCount(8, 12, 0, 1)); // outcast test
@@ -818,6 +818,7 @@ public class MainMod : MelonMod
         //summonerCounterList.Add(setCharacterCount(16, 2, 2, 1)); // mixed test
         //summonerCounterList.Add(setCharacterCount(6, 7, 7, 1)); // mixed test 2
         //summonerCounterList.Add(setCharacterCount(10, 0, 10, 1)); // Test lying villagers.
+        summonerCounterList.Add(setCharacterCount(5, 0, 15, 1)); // Test lying villagers 2.
 
         summonerScript.characterCounts = summonerCounterList;
         summonerScriptData.scriptInfo = summonerScript;
@@ -1116,7 +1117,7 @@ public class MainMod : MelonMod
         if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Veil").GetValueAsString().ToLower() == "true")
             addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
         if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Summoner").GetValueAsString().ToLower() == "true")
-            addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 2);
+            addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 222);
         if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Infestation").GetValueAsString().ToLower() == "true")
             addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
         if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Escapist").GetValueAsString().ToLower() == "true")
@@ -1133,7 +1134,7 @@ public class MainMod : MelonMod
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
             ScriptInfo script = scriptData.scriptInfo;
-            AddRole(script.startingTownsfolks, Riddler);
+            /*AddRole(script.startingTownsfolks, Riddler);
             AddRole(script.startingTownsfolks, Swapper);
             AddRole(script.startingTownsfolks, Mathematician);
             AddRole(script.startingTownsfolks, Commander);
@@ -1157,12 +1158,12 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Surveyor);
             AddRole(script.startingTownsfolks, Tracker);
             AddRole(script.startingTownsfolks, Pioneer);
-            AddRole(script.startingTownsfolks, Necromancer);
+            AddRole(script.startingTownsfolks, Necromancer);*/
             AddRole(script.startingTownsfolks, Astronaut);
             //AddRole(script.startingTownsfolks, Sharpshooter);
-            AddRole(script.startingTownsfolks, Motivator);
+            /*AddRole(script.startingTownsfolks, Motivator);
             AddRole(script.startingTownsfolks, Therapist);
-            AddRole(script.startingTownsfolks, Crewmate);
+            AddRole(script.startingTownsfolks, Crewmate);*/
 
 
             AddRole(script.startingOutsiders, MadScientist);
@@ -1633,11 +1634,11 @@ public class MainMod : MelonMod
                     {
                         if (!c.statuses.Contains(ECharacterStatus.HealthyBluff))
                         {
-                            c.bluff.role.BluffAct(ETriggerPhase.Night, c);
+                            c.bluffRole.BluffAct(ETriggerPhase.Night, c);
                         }
                         else
                         {
-                            c.bluff.role.Act(ETriggerPhase.Night, c);
+                            c.bluffRole.Act(ETriggerPhase.Night, c);
                         }
                     }
                 }

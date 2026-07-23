@@ -101,11 +101,11 @@ public class Crewmate : Role
         }
         if (truth)
         {
-            return $"#{sus[UnityEngine.Random.RandomRangeInt(0, sus.Count)]} is Sus";
+            return $"#{sus[UnityEngine.Random.RandomRangeInt(0, sus.Count)].id} is Sus";
         }
         else
         {
-            return $"#{notSus[UnityEngine.Random.RandomRangeInt(0, notSus.Count)]} is Sus";
+            return $"#{notSus[UnityEngine.Random.RandomRangeInt(0, notSus.Count)].id} is Sus";
         }
     }
     public override ActedInfo GetInfo(Character charRef)

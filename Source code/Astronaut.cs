@@ -54,6 +54,7 @@ public class Astronaut : Role
         }
         if (trigger == ETriggerPhase.Night)
         {
+            if (charRef.state == ECharacterState.Dead) return;
             Il2CppSystem.Collections.Generic.List<Character> ch = Gameplay.CurrentCharacters;
             if (characters.Count == 0) characters.Add(UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1));
             int last = characters.Last();
@@ -89,7 +90,9 @@ public class Astronaut : Role
     {
         if (trigger == ETriggerPhase.Night)
         {
+            if (charRef.state == ECharacterState.Dead) return;
             Il2CppSystem.Collections.Generic.List<Character> ch = Gameplay.CurrentCharacters;
+            if (characters == null) characters = new List<int>();
             if (characters.Count == 0) characters.Add(UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1));
             int last = characters.Last();
             Il2CppSystem.Collections.Generic.List<Character> valid = new();
@@ -109,15 +112,22 @@ public class Astronaut : Role
                     valid.Add(c);
                 }
             }
-            characters.Add(valid[UnityEngine.Random.RandomRangeInt(0, valid.Count)].id);
-            
+            Character chr = valid[UnityEngine.Random.RandomRangeInt(0, valid.Count)];
+            if (valid.Count > 1)
+            {
+                while (chr.id == last) chr = valid[UnityEngine.Random.RandomRangeInt(0, valid.Count)];
+            }
+            characters.Add(chr.id);
+
             if (charRef.revealed)
             {
-                onActed.Invoke(GetInfo(charRef));
+                var info = GetInfo(charRef);
+                onActed?.Invoke(info);
             }
         }
         if (trigger == ETriggerPhase.Day)
         {
+            if (characters == null) characters = new List<int>();
             if (characters.Count == 0)
             { // Completely random info if lying
                 int add = Gameplay.Instance.currentDay;
@@ -131,7 +141,7 @@ public class Astronaut : Role
                 }
             }
             charRef.revealed = true;
-            onActed.Invoke(GetInfo(charRef));
+            onActed?.Invoke(GetInfo(charRef));
         }
     }
     public Astronaut() : base(ClassInjector.DerivedConstructorPointer<Astronaut>())
