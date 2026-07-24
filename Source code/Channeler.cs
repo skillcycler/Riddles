@@ -83,6 +83,9 @@ public class Channeler : Minion
             // Misc
             whitelistIDs.Add("Wraith_LRZH");
             // can't guarantee anything else works correctly or is balanced, if they do anything at all
+            whitelistIDs.Add("Slinger_POW");
+            whitelistIDs.Add("Manipulator_POW");
+            whitelistIDs.Add("Ambusher_POW");
 
 
             foreach (Character character in characters) {

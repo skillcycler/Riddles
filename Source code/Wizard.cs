@@ -37,17 +37,27 @@ public class Wizard : Minion
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         Il2CppSystem.Collections.Generic.List<Character> availableToDupe = new();
         List<string> banned = new();
+        // can't have multiple things that can't die
         banned.Add("Undying_WING");
         banned.Add("Vizier_LRZH");
         banned.Add("Squire_scm");
+        // Stuff that moves around... isn't the best to duplicate
         banned.Add("Marionette_WING");
         banned.Add("Guardian_scm");
         banned.Add("MadScientist_scm");
+        // The following are very unbalanced with multiple of them in play (mainly just the ones that do damage)
+        banned.Add("Ritualist_WING");
+        banned.Add("Snake Charmer_WING");
+        banned.Add("Grenadier_POW");
+        banned.Add("Balancer_POW");
+        // Broken if 2 of these are in play
+        banned.Add("Supporter_POW");
         foreach (Character character in characters)
         {
             if (character.dataRef.type == ECharacterType.Outcast || character.dataRef.type == ECharacterType.Minion)
             {
-                availableToDupe.Add(character);
+                if (!banned.Contains(character.dataRef.characterId))
+                    availableToDupe.Add(character);
             }
         }
         availableToDupe.Remove(charRef);
