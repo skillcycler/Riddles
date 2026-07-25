@@ -65,7 +65,7 @@ public class Hypnotist : Spy
         }
         whitelistCharacterIDs.Add("Witness_25155076");
         Il2CppSystem.Collections.Generic.List<Character> chs = Gameplay.CurrentCharacters;
-        int evils = 0;
+        /*int evils = 0;
         foreach (Character c in chs)
         {
             if (c.GetRegisterAlignment() == EAlignment.Evil)
@@ -74,7 +74,7 @@ public class Hypnotist : Spy
         if (evils >= 4)
         {
             whitelistCharacterIDs.Add("Knitter_32352172");
-        }
+        }*/
 
 
         whitelistCharacterIDs.Add("Riddler_scm");
@@ -87,7 +87,7 @@ public class Hypnotist : Spy
                 break;
             }
         }
-        whitelistCharacterIDs.Add("Underling_V_WING");
+        whitelistCharacterIDs.Add("Underling_V_WING"); // will always say "I am Good" if disguised as this
         whitelistCharacterIDs.Add("Monarch_POW");
         for (int i = 0; i < villagers.Count; i++)
         {
@@ -107,10 +107,6 @@ public class Hypnotist : Spy
         charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
         charRef.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
         return bluff;
-    }
-    public override CharacterData GetRegisterAsRole(Character charRef)
-    {
-        return null;
     }
     public Hypnotist() : base(ClassInjector.DerivedConstructorPointer<Hypnotist>())
     {

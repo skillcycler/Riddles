@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.4", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.5", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -426,6 +426,7 @@ public class MainMod : MelonMod
         Recruiter.description = "Game Start: 1 random Outcast is turned into a Villager.";
         Recruiter.additionalPossibleCharacters = MakeAddedCharacters(0, -1, 0, 0);
         Recruiter.hints = "My ability runs before any Corruption-causing characters, so it still works if I am Corrupted.\n\nIf I am Truthful and my ability somehow fails when there are Outcasts in play:\n\"#x rejected my offer to join the village\"";
+        Recruiter.ifLies = "I point to someone that isn't a Villager";
 
         CharacterData Engineer = makeNewCharacter("Engineer", EAlignment.Good, ECharacterType.Villager, true, false, "\"The long lost brother of the Architect.\"");
         Engineer.role = new Engineer();
@@ -488,7 +489,7 @@ public class MainMod : MelonMod
         Therapist.description = "Learn the 2 characters that I think have the least in common.";
         Therapist.role = new Therapist();
         Therapist.hints = "Any two characters of different alignments will always have less in common than any two characters of the same alignment.";
-        Therapist.ifLies = "I point to two random characters.";
+        Therapist.ifLies = "I point to two cards of the same alignment.";
 
         CharacterData Crewmate = makeNewCharacter("Crewmate", EAlignment.Good, ECharacterType.Villager, true, false, "\"Red.\"");
         Crewmate.description = "Learn someone who is Sus. (In other words, a Demon or someone that can affect someone else)";
@@ -498,7 +499,7 @@ public class MainMod : MelonMod
         MadScientist.role = new MadScientist();
         MadScientist.name = "Mad Scientist";
         MadScientist.characterName = "Mad Scientist";
-        MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 1-2 fake Minions to the Deck.";
+        MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 2 fake Minions to the Deck.";
         MadScientist.hints = "I cannot be disguised as.\nI will not Disguise or turn Evil if part of my Outcast's ability includes those.";
         
         CharacterData Hitman = makeNewCharacter("Hitman", EAlignment.Evil, ECharacterType.Outcast, false, true, "\"No one is safe from me, not even myself\"");
@@ -539,6 +540,12 @@ public class MainMod : MelonMod
         Anchor.role = new Anchor();
         Anchor.description = "You have 9 max HP, even if other cards add or subtract from max HP.";
 
+        CharacterData BabyMinion = makeNewCharacter("BabyMinion", EAlignment.Evil, ECharacterType.Minion, false, true, "\"The youngest member of the Minion family.\"");
+        BabyMinion.role = new BabyMinion();
+        BabyMinion.description = "I am a Minion created from a problematic interaction between a Demon from this mod and a Minion from another mod.\nThere may be multiple of me in play.\n\nI Lie and Disguise.";
+        BabyMinion.name = "Baby Minion";
+        BabyMinion.characterName = "Baby Minion";
+
         CharacterData Accuser = makeNewCharacter("Accuser", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Uno reverse card!\"");
         Accuser.role = new Accuser();
         Accuser.description = "Game Start: One adjacent Good character registers a random Evil Minion.\n\nI Lie and Disguise.";
@@ -562,8 +569,7 @@ public class MainMod : MelonMod
 
         CharacterData Mastermind = makeNewCharacter("Mastermind", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It all comes back to me.\"");
         Mastermind.role = new Mastermind();
-        Mastermind.description = "Game Start: Most Minions become a Mastermind after all other Game Start effects.\n\nI Lie and Disguise.";
-        Mastermind.hints = "Characters that need to exist to have their ability, such as the Witch and the Sleeper, will not be converted.";
+        Mastermind.description = "Game Start: All Minions register as the Mastermind and appear as a Mastermind on death.\n\nI Lie and Disguise.";
 
         CharacterData Baffler = makeNewCharacter("Baffler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"");
         Baffler.role = new Baffler();
@@ -1513,7 +1519,7 @@ public class MainMod : MelonMod
             __result = newInfo;
         }
     }
-    
+    /*
     [HarmonyPatch(typeof(Knitter), nameof(Knitter.GetInfo))]
     private static class HypnotistKnitter
     {
@@ -1531,7 +1537,7 @@ public class MainMod : MelonMod
 
             __result = new ActedInfo(info);
         }
-    }
+    }*/
     // Hypnotist, plus also remove the ability for Scout to mention good-registering evils as an evil
     [HarmonyPatch(typeof(Scout), nameof(Scout.GetInfo))]
     private static class HypnotistScout

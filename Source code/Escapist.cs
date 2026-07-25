@@ -24,6 +24,10 @@ public class Escapist : Demon
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Init)
+        {
+            Djinn.Jinx("Escapist");
+        }
         if (trigger == ETriggerPhase.Start)
         {
             //add an outcast

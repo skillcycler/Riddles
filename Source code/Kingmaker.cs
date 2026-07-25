@@ -24,26 +24,29 @@ public class Kingmaker : Demon
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Init)
+        {
+            Djinn.Jinx("Kingmaker");
+        }
         if (trigger == ETriggerPhase.Start)
         {
             Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayMinions = Gameplay.Instance.GetAscensionAllStartingCharacters();
             notInPlayMinions = Characters.Instance.FilterNotInPlayCharactersUnique(notInPlayMinions);
             notInPlayMinions = Characters.Instance.FilterRealCharacterType(notInPlayMinions, ECharacterType.Minion);
-            notInPlayMinions.Remove(ProjectContext.Instance.gameData.GetCharacterDataOfId("Baron_04539999"));
             foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
             { // always have 2 extra minions in the deck list
                 c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
                 CharacterData picked = notInPlayMinions[UnityEngine.Random.Range(0, notInPlayMinions.Count - 1)];
+                while (Djinn.GetInvalidCharacterIDs("Kingmaker").Contains(picked.characterId))
+                {
+                    picked = notInPlayMinions[UnityEngine.Random.Range(0, notInPlayMinions.Count - 1)];
+                }
                 Gameplay.Instance.AddScriptCharacter(ECharacterType.Minion, picked);
                 if (c.dataRef.type != ECharacterType.Minion)
                 {
                     c.Init(picked);
                 }
                 notInPlayMinions.Remove(picked);
-                if (picked.characterId == "Cryptid_WING")
-                {
-                    c.Act(ETriggerPhase.Start);
-                }
             }
             foreach (Character ch in Gameplay.CurrentCharacters)
             {

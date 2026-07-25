@@ -22,6 +22,10 @@ public class Infestation : Demon
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Init)
+        {
+            Djinn.Jinx("Infestation");
+        }
         if (trigger == ETriggerPhase.Start)
         {
             // corrupt someone

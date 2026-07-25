@@ -34,8 +34,13 @@ public class Mastermind : Minion
         if (trigger == ETriggerPhase.Start)
         {
             Il2CppSystem.Collections.Generic.List<Character> minions = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Minion);
-            minions.Remove(charRef);
-
+            foreach (Character minion in minions)
+            {
+                minion.statuses.AddStatus(BigBrain.minion, charRef);
+            }
+        }
+        if (trigger == ETriggerPhase.AfterRoundStart)
+        {
             Il2CppSystem.Collections.Generic.List<CharacterData> findThatMastermindData = Gameplay.Instance.GetAscensionAllStartingCharacters();
             CharacterData mastermindData = new();
             foreach (CharacterData character in findThatMastermindData)
@@ -45,28 +50,13 @@ public class Mastermind : Minion
                     mastermindData = character;
                 }
             }
-            List<string> doNotTurn = new(); // Certain characters need to still exist for their abilities to work.
-            doNotTurn.Add("Snake Charmer_WING");
-            doNotTurn.Add("Ritualist_WING");
-            doNotTurn.Add("Professional_WING");
-            doNotTurn.Add("Undying_WING");
-            doNotTurn.Add("Witch_25286521");
-            doNotTurn.Add("Sleeper_scm");
-            doNotTurn.Add("Squire_scm");
-            doNotTurn.Add("Mastermind_scm");
-            doNotTurn.Add("Supporter_POW");
-            doNotTurn.Add("Ambusher_POW");
-            doNotTurn.Add("Grenadier_POW");
-
-            foreach (Character minion in minions)
+            foreach (Character c in Gameplay.CurrentCharacters)
             {
-                if (!doNotTurn.Contains(minion.dataRef.characterId) && minion.dataRef.type == ECharacterType.Minion)
-                    minion.Init(mastermindData);
+                if (!c.statuses.Contains(Guarding.guarded))
+                {
+                    c.UpdateRegisterAsRole(mastermindData);
+                }
             }
-        }
-        if (trigger == ETriggerPhase.Night)
-        {
-            Confused.updateConfusion(charRef); // just in case the Baffler gets turned
         }
     }
 
@@ -76,4 +66,20 @@ public class Mastermind : Minion
     }
     public Mastermind(System.IntPtr ptr) : base(ptr) { }
 
+}
+public static class BigBrain
+{
+    public static ECharacterStatus minion = (ECharacterStatus)906;
+
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealReal))]
+    public static class pvt
+    {
+        public static void Postfix(Character __instance)
+        {
+            if (__instance.statuses.Contains(minion))
+            {
+                __instance.chName.text = "Mastermind";
+            }
+        }
+    }
 }

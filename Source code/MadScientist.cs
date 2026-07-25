@@ -142,6 +142,7 @@ public class MadScientist : Role
             gameplay.AddScriptCharacter(ECharacterType.Outcast, fakeOutcast);
 
             fakeMinion2 = listMin[r2];
+            gameplay.AddScriptCharacter(ECharacterType.Minion, fakeMinion2);
             // time to deal with bad combos
             if (fakeMinion.characterId == "Undying_WING")
             {
@@ -437,7 +438,7 @@ public class MadScientist : Role
         {
             return ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619");
         }
-        return ProjectContext.Instance.gameData.GetCharacterDataOfId("MadScientist_scm");
+        return null;
     }
     private void MoveDemonNextToMe(Character charRef)
     {

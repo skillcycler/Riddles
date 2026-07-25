@@ -48,8 +48,13 @@ public class RainbowJoker : Demon
             invalidMinions.Add("Cryptid_WING");
             invalidMinions.Add("Heretic_WING");
             invalidMinions.Add("Enigma_scm"); // no point in having fake characters here
+            //Weather is banned
+            invalidMinions.Add("Snowy_POW");
+            invalidMinions.Add("Sunny_POW");
+            invalidMinions.Add("Stormy_POW");
+            invalidMinions.Add("Foggy_POW");
             List<string> invalidOutcasts = new List<string>();
-            invalidMinions.Add("MadScientist_scm"); // too lazy to fix this
+            invalidOutcasts.Add("MadScientist_scm"); // too lazy to fix this
             Il2CppSystem.Collections.Generic.List<CharacterData> validMinions = new();
             foreach (CharacterData m in minions)
             {
