@@ -6,6 +6,7 @@ The following mods should be compatible with this mod as of v1.8.2: The Fixed As
 - Wingidon's Expansion Pack
 - The Salem Trials
 - Powerplay
+Any other mod is not guaranteed to work well with some of the characters in this mod. In particular, Better Lies (also by me) isn't compatible with this mod.
 
 ## Changes from Base Game
 - All Demons will have a Night Cycle to fix duplicate night bugs
@@ -73,6 +74,7 @@ The following mods should be compatible with this mod as of v1.8.2: The Fixed As
 - Wizard: There are two of the same Outcast or Minion in play.
 - Enigma: There are many fake characters added to the deck.
 - Squire: I disguise as a Knight. I can't die unless I'm the last evil.
+- Baby Minion: I lie and disguise. I cannot appear unless you have other mods installed.
 
 ## Demons
 - Follower: Kills smartly. Night is 3 ticks long.
