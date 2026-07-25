@@ -6,6 +6,7 @@ The following mods should be compatible with this mod as of v1.8.2: The Fixed As
 - Wingidon's Expansion Pack
 - The Salem Trials
 - Powerplay
+
 Any other mod is not guaranteed to work well with some of the characters in this mod. In particular, Better Lies (also by me) isn't compatible with this mod.
 
 ## Changes from Base Game
