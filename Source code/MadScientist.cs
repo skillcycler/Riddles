@@ -168,7 +168,7 @@ public class MadScientist : Role
                 if (fakeMinion.characterId == "Sleeper_scm")
                 {
                     charRef.statuses.AddStatus(SpecialMadScientistTags.hasSleeperAbility, charRef);
-                }
+                }/*
                 else if (fakeMinion.characterId == "Guardian_scm")
                 {
                     MoveDemonNextToMe(charRef);
@@ -181,7 +181,7 @@ public class MadScientist : Role
                             demon.statuses.AddStatus(Guarding.guarded, charRef);
                         }
                     }
-                }
+                }*/
                 else
                 {
                     fakeMinion.role.Act(trigger, charRef);
@@ -203,13 +203,11 @@ public class MadScientist : Role
                     }
                     if (picked.alignment == EAlignment.Evil || isAtheist)
                     {
-                        switch (Calculator.RollDice(3))
+                        switch (Calculator.RollDice(2))
                         {
                             case 1:
                                 picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
                             case 2:
-                                picked.statuses.AddStatus(Accused.accused, charRef); break;
-                            case 3:
                                 picked.statuses.AddStatus(Confused.confused, charRef);
                                 Confused.updateConfusion(charRef);
                                 break;

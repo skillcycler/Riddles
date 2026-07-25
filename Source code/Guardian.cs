@@ -32,15 +32,9 @@ public class Guardian : Minion
     {
         if (trigger == ETriggerPhase.Start)
         {
-            SitNextToDemon(charRef);
-            Il2CppSystem.Collections.Generic.List<Character> demons = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Demon);
-            if (demons.Count > 0)
-            {
-                foreach (Character demon in demons)
-                {
-                    demon.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
-                    demon.statuses.AddStatus(Guarding.guarded, charRef);
-                }
+            Il2CppSystem.Collections.Generic.List<Character> adjacent = Characters.Instance.GetAdjacentCharacters(charRef); ;
+            foreach (Character character in adjacent) {
+                character.statuses.AddStatus(Guarding.guarded, charRef);
             }
 
         }
@@ -48,45 +42,15 @@ public class Guardian : Minion
         {
             foreach (Character c in Gameplay.CurrentCharacters)
             {
-                if (c.statuses.Contains(Guarding.guarded))
+                if (c.statuses.Contains(Guarding.guarded) && !c.statuses.Contains(Accused.accused))
                 {
                     c.UpdateRegisterAsRole(c.bluff);
-                }
-                if (c.dataRef.characterId == "Mendaverte_WING")
-                {
-                    foreach (Character ch in Gameplay.CurrentCharacters)
-                    {
-                        if (c.alignment == EAlignment.Evil)
-                        {
-                            // I noticed that the problem only happens when Guardian is in play. So to fix it, Guardian will gain Mendaverte's ability if both are in play.
-                            charRef.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef); // if Wingidon can't fix the bug, maybe I can
-                        }
-                    }
+                    c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
+                    c.statuses.AddStatus(ECharacterStatus.AppearHonest, charRef);
                 }
             }
         }
     }
-    private void SitNextToDemon(Character charRef)
-    {
-        Il2CppSystem.Collections.Generic.List<Character> checkDemons = new Il2CppSystem.Collections.Generic.List<Character>();
-        checkDemons = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Demon);
-
-        Character pickedDemon = checkDemons[UnityEngine.Random.Range(0, checkDemons.Count)];
-
-        Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentAliveCharacters(pickedDemon);
-        Il2CppSystem.Collections.Generic.List<Character> filteredCharacters = new();
-        foreach (Character c in adjacentCharacters) { 
-            if (!c.statuses.Contains(SpecialMadScientistTags.hasGuardianAbility) && c.dataRef.characterId != "Guardian_scm")
-            {
-                filteredCharacters.Add(c);
-            }
-        }
-        Character pickedSwapCharacter = filteredCharacters[UnityEngine.Random.Range(0, filteredCharacters.Count)];
-        CharacterData pickedData = pickedSwapCharacter.dataRef;
-        pickedSwapCharacter.Init(charRef.dataRef);
-        charRef.Init(pickedData);
-    }
-
     public Guardian() : base(ClassInjector.DerivedConstructorPointer<Guardian>())
     {
         ClassInjector.DerivedConstructorBody((Il2CppObjectBase)this);

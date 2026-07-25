@@ -96,7 +96,7 @@ public static class Confused
                     c.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
                     c.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
                 }
-                else if (c.statuses.Contains(ECharacterStatus.Corrupted))
+                else
                 {
                     c.statuses.statuses.Remove(ECharacterStatus.Corrupted);
                     c.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);

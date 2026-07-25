@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.4", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -558,8 +558,7 @@ public class MainMod : MelonMod
 
         CharacterData Guardian = makeNewCharacter("Guardian", EAlignment.Evil, ECharacterType.Minion, false, true, "\"You're gonna have to get through me first.\"");
         Guardian.role = new Guardian();
-        Guardian.description = "The Demon registers as a Good Villager.\n\nI Lie, Disguise, and sit next to a Demon.";
-        Guardian.hints = "If there are multiple Demons, all of them register as Good.\nI might cause some characters to be in positions they normally should not be in.";
+        Guardian.description = "Adjacent non-Accused characters register as Good, as their Disguise, and as Honest.";
 
         CharacterData Mastermind = makeNewCharacter("Mastermind", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It all comes back to me.\"");
         Mastermind.role = new Mastermind();

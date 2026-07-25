@@ -68,7 +68,7 @@ The following mods should be compatible with this mod as of v1.8.2: The Fixed As
 - Channeler: Copies the ability of another Evil.
 - Sleeper: The night cycle is 1 tick shorter.
 - Mastermind: All minions become Masterminds after doing their Game Start actions.
-- Guardian: The Demon registers as what they're bluffing. I sit next to the Demon.
+- Guardian: Adjacent characters register as Good, Honest, & their Disguise.
 - Baffler: One adjacent Villager is Confused. Confused characters have a 50% chance to Lie.
 - Wizard: There are two of the same Outcast or Minion in play.
 - Enigma: There are many fake characters added to the deck.
