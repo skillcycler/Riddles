@@ -36,11 +36,7 @@ public class Wizard : Minion
 
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         Il2CppSystem.Collections.Generic.List<Character> availableToDupe = new();
-        List<string> banned = new();
-        // can't have multiple things that can't die
-        banned.Add("Undying_WING");
-        banned.Add("Vizier_LRZH");
-        banned.Add("Squire_scm");
+        List<string> banned = Djinn.GetCharactersThatCannotDie();
         // Stuff that moves around... isn't the best to duplicate
         banned.Add("Marionette_WING");
         //banned.Add("Guardian_scm"); should no longer be a problem

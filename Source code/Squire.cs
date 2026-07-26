@@ -48,10 +48,10 @@ public class Squire : Minion
         bool evilsAlive = false;
         foreach (Character character in Gameplay.CurrentCharacters)
         {
-            // don't want this interacting weirdly with undying
-            if (character.id != charRef.id && character.dataRef.characterId != "Undying_WING" && !character.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
+            // don't want this interacting weirdly with mad scientist undying
+            if (!character.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
             {
-                if (character.state != ECharacterState.Dead && character.alignment == EAlignment.Evil && character.dataRef.characterId != "Squire_scm" && character.dataRef.characterId != "Vizier_LRZH") // Wizard-proofing it
+                if (character.state != ECharacterState.Dead && character.alignment == EAlignment.Evil && !Djinn.GetCharactersThatCannotDie().Contains(character.dataRef.characterId))
                 {
                     evilsAlive = true;
                 }

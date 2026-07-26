@@ -66,4 +66,14 @@ public class Djinn
         }
         return invalidMinions;
     }
+    public static List<string> GetCharactersThatCannotDie()
+    {
+        List<string> chars = new();
+        chars.Add("Squire_scm");
+        chars.Add("Undying_WING");
+        chars.Add("Vizier_LRZH");
+        chars.Add("WING_Dupery_Scoundrel");
+
+        return chars;
+    }
 }

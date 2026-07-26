@@ -89,6 +89,7 @@ public class Hypnotist : Spy
         }
         whitelistCharacterIDs.Add("Underling_V_WING"); // will always say "I am Good" if disguised as this
         whitelistCharacterIDs.Add("Monarch_POW");
+        whitelistCharacterIDs.Add("WING_Dupery_Priest");
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))

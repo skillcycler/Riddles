@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.5", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.6", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -257,8 +257,9 @@ public class MainMod : MelonMod
             foreach (Type t in powerplay.GetTypes())
                 MelonLogger.Msg(t.FullName);
             List<string> demons2 = new();
-            demons2.Add("w_Iris");
-            demons2.Add("w_Leviathan");
+            demons2.Add("Vortox");
+            demons2.Add("Famine");
+            demons2.Add("Crazed");
             HashSet<MethodInfo> patched2 = new();
             foreach (string demon in demons2)
             {
@@ -296,7 +297,55 @@ public class MainMod : MelonMod
                 );
             }
         }
-        
+
+        Assembly dupery = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "DuperyBluff");
+
+        if (powerplay != null)
+        {
+            foreach (Type t in powerplay.GetTypes())
+                MelonLogger.Msg(t.FullName);
+            List<string> demons3 = new();
+            demons3.Add("w_Dupe_Critic");
+            demons3.Add("w_Dupe_Idol");
+            demons3.Add("w_Dupe_Reporter");
+            HashSet<MethodInfo> patched3 = new();
+            foreach (string demon in demons3)
+            {
+                Type targetType = powerplay.GetType($"DuperyBluff.{demon}");
+
+                if (targetType == null)
+                {
+                    MelonLogger.Msg($"Could not find {demon}");
+                    continue;
+                }
+                MethodInfo targetMethod = targetType.GetMethod("GetRules", BindingFlags.Instance | BindingFlags.Public);
+
+                if (targetMethod != null)
+                {
+                    targetMethod = targetMethod.GetBaseDefinition();
+                }
+                if (targetMethod == null)
+                {
+                    MelonLogger.Msg($"Could not find {demon}.GetRules");
+                    continue;
+                }
+                if (!patched3.Add(targetMethod))
+                {
+                    MelonLogger.Msg($"Already patched {targetMethod.DeclaringType.Name}.GetRules");
+                    continue;
+                }
+                MelonLogger.Msg($"Target type: {targetType.FullName}");
+                MelonLogger.Msg($"Method: {targetMethod}");
+                MelonLogger.Msg($"Declared in: {targetMethod.DeclaringType.FullName}");
+                HarmonyInstance.Patch(
+                    targetMethod,
+                    postfix: new HarmonyMethod(
+                        typeof(MyCompatPatch),
+                        nameof(MyCompatPatch.Postfix))
+                );
+            }
+        }
+
         return true;
     }
     public static class MyCompatPatch
@@ -312,8 +361,11 @@ public class MainMod : MelonMod
             demons.Add("w_TwinDemon");
             demons.Add("w_TwinDemonThree");
             demons.Add("w_TwinDemonTwin");
-            demons.Add("Vortox_POW");
-            demons.Add("Famine_POW");
+            demons.Add("Vortox");
+            demons.Add("Famine");
+            demons.Add("w_Dupe_Critic");
+            demons.Add("w_Dupe_Idol");
+            demons.Add("w_Dupe_Reporter");
             if (demons.Contains(__instance.GetType().Name))
             {
                 Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
@@ -2010,6 +2062,43 @@ public class MainMod : MelonMod
 
             string info = __instance.ConjourInfo(ids, types, charRef);
             __result = new ActedInfo(info, pickedCharacters);
+        }
+    }
+
+    // ban Shaman from duping a Trickster
+    [HarmonyPatch(typeof(Illuzionist), nameof(Illuzionist.Act))]
+    private static class ShamanTricksterFix
+    {
+        private static bool Prefix(ETriggerPhase trigger, Character charRef)
+        {
+            if (trigger != ETriggerPhase.Start) return false;
+
+            Il2CppSystem.Collections.Generic.List<Character> villagers1 = GetGameplayCurrentCharacters();
+            villagers1 = Characters.Instance.FilterCharacterType(villagers1, ECharacterType.Villager);
+
+            Il2CppSystem.Collections.Generic.List<Character> villagers = new();
+            foreach (Character c in villagers1)
+            {
+                if (c.dataRef.characterId != "Trickster_scm")
+                {
+                    villagers.Add(c);
+                }
+            }
+
+            Character pickedVillager = villagers[UnityEngine.Random.Range(0, villagers.Count)];
+            pickedVillager.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
+
+            villagers.Remove(pickedVillager);
+            Character replacedVillager = villagers[UnityEngine.Random.Range(0, villagers.Count)];
+
+            //replacedVillager.InitWithNoReset(pickedVillager.GetCharacterBluffIfAble());
+            replacedVillager.Init(pickedVillager.GetCharacterBluffIfAble());
+
+            if (Characters.Instance.CheckIfCharacterShouldStartAct(pickedVillager.GetCharacterBluffIfAble()))
+                replacedVillager.Act(ETriggerPhase.Start);
+
+            replacedVillager.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
+            return false;
         }
     }
     public static GameObject CreateCircle(int size)

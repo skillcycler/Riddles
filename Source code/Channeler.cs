@@ -87,6 +87,12 @@ public class Channeler : Minion
             whitelistIDs.Add("Manipulator_POW");
             whitelistIDs.Add("Ambusher_POW");
 
+            // Dupery Bluff
+            whitelistIDs.Add("WING_Dupery_Barkeep");
+            whitelistIDs.Add("WING_Dupery_Poisoner");
+            whitelistIDs.Add("WING_Dupery_Serial Killer");
+            whitelistIDs.Add("WING_Dupery_Travel Agent");
+
 
             foreach (Character character in characters) {
                 if (whitelistIDs.Contains(character.dataRef.characterId))
@@ -113,19 +119,6 @@ public class Channeler : Minion
 
                 charRef.UpdateRegisterAsRole(notInPlayCh[UnityEngine.Random.Range(0, notInPlayCh.Count - 1)]);
             }
-            /*if (copy.characterId == "Ritualist_WING")
-            {
-                if (trigger == (ETriggerPhase)1121218522)
-                {
-                    damageTimerForRitualist++;
-                    if (damageTimerForRitualist >= 3)
-                    {
-                        damageTimerForRitualist -= 3;
-                        Health health = PlayerController.PlayerInfo.health;
-                        health.Damage(1);
-                    }
-                }
-            }*/
             copy.role.Act(trigger, charRef);
 
         }

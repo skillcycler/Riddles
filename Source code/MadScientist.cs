@@ -117,6 +117,12 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Manipulator_POW");
             whitelistOutcastCharacterIDs.Add("Industrialist_POW");
 
+            // Dupery Bluff - only adding the ones that aren't clones of existing characters
+            whitelistOutcastCharacterIDs.Add("WING_Dupery_Surgeon");
+            whitelistMinionCharacterIDs.Add("WING_Dupery_Barkeep");
+            whitelistMinionCharacterIDs.Add("WING_Dupery_Serial Killer");
+
+
             for (int i = 0; i < minions.Count; i++)
             {
                 if (whitelistMinionCharacterIDs.Contains(minions[i].characterId))
