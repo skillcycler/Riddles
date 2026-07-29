@@ -52,7 +52,7 @@ public class Mastermind : Minion
             }
             foreach (Character c in Gameplay.CurrentCharacters)
             {
-                if (!c.statuses.Contains(Guarding.guarded))
+                if (!c.statuses.Contains(Guarding.guarded) && c.statuses.Contains(BigBrain.minion))
                 {
                     c.UpdateRegisterAsRole(mastermindData);
                 }

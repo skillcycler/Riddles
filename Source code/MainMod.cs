@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.6", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.8", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -300,7 +300,7 @@ public class MainMod : MelonMod
 
         Assembly dupery = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "DuperyBluff");
 
-        if (powerplay != null)
+        if (dupery != null)
         {
             foreach (Type t in powerplay.GetTypes())
                 MelonLogger.Msg(t.FullName);
@@ -534,7 +534,7 @@ public class MainMod : MelonMod
         Motivator.description = "If revealed: My alive neighbors refresh at night.";
 
         CharacterData Trickster = makeNewCharacter("Trickster", EAlignment.Good, ECharacterType.Villager, false, false, "\"If you thought the Minion twins were bad, get ready for the three of us!\"");
-        Trickster.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nWhile alive, you don't know which is which.\nLearn a card that is the same character type as me.";
+        Trickster.description = "Game Start: There are three of us. One is a Villager, one is an Outcast, and one is a Good Minion.\nWhile alive, you don't know which is which.\nLearn a card that is the same character type as me.\nI am immune to Corruption and getting Accused.";
         Trickster.role = new Trickster();
 
         CharacterData Therapist = makeNewCharacter("Therapist", EAlignment.Good, ECharacterType.Villager, true, false, "\"Let's all get along, shall we?\"");
@@ -692,7 +692,7 @@ public class MainMod : MelonMod
 
         CharacterData Atheist = makeNewCharacter("Atheist", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I can break whatever rules I feel like.\"");
         Atheist.role = new Atheist();
-        Atheist.description = "Game Start: I have a 50% chance to turn Good.\n\nIf Good:\nLose if you execute me.\n\nIf Evil:\nAll other Evils turn Good. Some characters may lie or register as Evil.";
+        Atheist.description = "Game Start: I have a 50% chance to turn Good. All statuses are hidden.\n\nIf Good:\nLose if you execute me. I might register as Evil.\nIf Evil:\nThere are no Evil characters. Some characters may lie or register as Evil.";
 
         CustomScriptData followerScriptData = new CustomScriptData();
         followerScriptData.name = "Follower_1";
@@ -1379,8 +1379,9 @@ public class MainMod : MelonMod
         }
     }
     // Kingmaker hides evil counter
-    
+    // Must modify after all other mods, since Atheist does things
     [HarmonyPatch(typeof(ObjectivesUI), nameof(ObjectivesUI.UpdateObjectives))]
+    [HarmonyPriority(HarmonyLib.Priority.Last)]
     public static class ChangeCounter
     {
         public static void Postfix(ObjectivesUI __instance)
@@ -1411,10 +1412,16 @@ public class MainMod : MelonMod
                     EvilsKilled++;
                 }
             }
-            __instance.evilsKilled.text = string.Format("<color=grey>Evils killed:</color> <color=red>{0}", EvilsKilled);
+            if (Atheist)
+            {
+                __instance.evilsKilled.text = string.Format("<color=grey>Evils killed:</color> <color=red>?");
+            } else
+            {
+                __instance.evilsKilled.text = string.Format("<color=grey>Evils killed:</color> <color=red>{0}", EvilsKilled);
+            }
 
 
-            string minionCountText = "Minions";
+                string minionCountText = "Minions";
             if (minions == 1)
             {
                 minionCountText = "Minion";

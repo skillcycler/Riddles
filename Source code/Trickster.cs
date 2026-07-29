@@ -64,7 +64,7 @@ public class Trickster : Role
     {
         if (charRef.statuses.Contains(ECharacterStatus.Corrupted))
         {
-            return new ActedInfo("I feel sick.");
+            return new ActedInfo("There is a bug where I am corrupted, despite being unable to be corrupted.");
         }
         if (charRef.dataRef.characterId != "Trickster_scm")
         {
@@ -100,7 +100,13 @@ public class Trickster : Role
     {
         return new ActedInfo("I am dizzy");
     }
+    public void AddResistances(Character c)
+    {
 
+        c.statuses.AddResistance(ECharacterStatus.Corrupted, charRef);
+        c.statuses.AddResistance(Accused.accused, charRef);
+        c.statuses.AddResistance(Guarding.guarded, charRef);
+    }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (trigger == ETriggerPhase.Day)
@@ -123,6 +129,7 @@ public class Trickster : Role
             converts = Characters.Instance.FilterRealCharacterType(converts, ECharacterType.Villager);
             converts.Remove(charRef);
             charRef.statuses.AddStatus(TricksterRegister.Villager, charRef);
+            AddResistances(charRef);
             if (converts.Count > 1) {
                 if (tricksters == 1)
                 {
@@ -139,7 +146,9 @@ public class Trickster : Role
                     converts[c2].statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
                     converts[c2].Init(charRef.dataRef);
                     converts[c2].statuses.AddStatus(TricksterRegister.Minion, charRef);
-                    converts[c1].UpdateRegisterAsRole(makeTricksterData("Trickster_m", ECharacterType.Minion));
+                    converts[c2].UpdateRegisterAsRole(makeTricksterData("Trickster_m", ECharacterType.Minion));
+                    AddResistances(converts[c1]);
+                    AddResistances(converts[c2]);
                 } else if (tricksters == 2)
                 {
                     foreach (Character c in Gameplay.CurrentCharacters)
@@ -149,6 +158,7 @@ public class Trickster : Role
                             c.statuses.AddStatus(ECharacterStatus.BrokenAbility, charRef);
                             c.statuses.AddStatus(TricksterRegister.Minion, charRef);
                             c.UpdateRegisterAsRole(makeTricksterData("Trickster_m", ECharacterType.Minion));
+                            AddResistances(c);
                         }
                     }
                     int c1 = UnityEngine.Random.RandomRangeInt(0, converts.Count);
@@ -156,6 +166,7 @@ public class Trickster : Role
                     converts[c1].Init(charRef.dataRef);
                     converts[c1].statuses.AddStatus(TricksterRegister.Outcast, charRef);
                     converts[c1].UpdateRegisterAsRole(makeTricksterData("Trickster_o", ECharacterType.Outcast));
+                    AddResistances(converts[c1]);
 
                 } else if (tricksters == 3)
                 {
@@ -175,6 +186,7 @@ public class Trickster : Role
                                 c.statuses.AddStatus(TricksterRegister.Outcast, charRef);
                                 c.UpdateRegisterAsRole(makeTricksterData("Trickster_o", ECharacterType.Outcast));
                             }
+                            AddResistances(c);
                         }
                     }
                 }

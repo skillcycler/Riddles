@@ -24,7 +24,7 @@ public class Atheist : Demon
     }
     public override ActedInfo GetInfo(Character charRef)
     {
-        return new ActedInfo("Are there Evils?");
+        return new ActedInfo("There are NO Evil characters");
     }
 
     public override void Act(ETriggerPhase trigger, Character charRef)
@@ -36,13 +36,20 @@ public class Atheist : Demon
             {
                 // good
                 charRef.ChangeAlignment(EAlignment.Good);
-            } else
+                if (Calculator.RollDice(2) == 1)
+                    charRef.statuses.AddStatus(Accused.accused, charRef);
+            }
+            else
             {
                 // evil
                 foreach (Character c in Gameplay.CurrentCharacters)
                 {
                     if (c == charRef) continue;
-                    if (c.alignment == EAlignment.Evil) c.ChangeAlignment(EAlignment.Good);
+                    if (c.alignment == EAlignment.Evil)
+                    {
+                        c.ChangeAlignment(EAlignment.Good);
+                        c.Init(Characters.Instance.GetRandomUniqueVillagerBluff());
+                    }
                 }
                 int accuse = Calculator.RollDice((int)(Gameplay.CurrentCharacters.Count / 2));
                 for (int i = 0; i < accuse; i++)
@@ -75,6 +82,10 @@ public class Atheist : Demon
                     ch.statuses.AddStatus(Confused.confused, charRef);
                 }
             }
+        }
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            c.statuses.AddStatus(Muddling.hiddenStatus, charRef);
         }
         if (trigger == ETriggerPhase.Day)
         {
