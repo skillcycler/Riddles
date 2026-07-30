@@ -65,6 +65,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Reflector: I am Confused. I disguise.
 - Gambler: I apply a random status effect to a random other character. Learn who I gambled with.
 - Anchor: You have 9 max hp. Anything else that affects max hp is disabled.
+- Prankster: Two cards' real alignments are swapped. Learn who I swapped.
 
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil.

@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.8", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.9", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -70,6 +70,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Reflector>();
         ClassInjector.RegisterTypeInIl2Cpp<Gambler>();
         ClassInjector.RegisterTypeInIl2Cpp<Anchor>();
+        ClassInjector.RegisterTypeInIl2Cpp<Prankster>();
 
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
@@ -302,7 +303,7 @@ public class MainMod : MelonMod
 
         if (dupery != null)
         {
-            foreach (Type t in powerplay.GetTypes())
+            foreach (Type t in dupery.GetTypes())
                 MelonLogger.Msg(t.FullName);
             List<string> demons3 = new();
             demons3.Add("w_Dupe_Critic");
@@ -311,7 +312,7 @@ public class MainMod : MelonMod
             HashSet<MethodInfo> patched3 = new();
             foreach (string demon in demons3)
             {
-                Type targetType = powerplay.GetType($"DuperyBluff.{demon}");
+                Type targetType = dupery.GetType($"DuperyBluff.{demon}");
 
                 if (targetType == null)
                 {
@@ -591,6 +592,10 @@ public class MainMod : MelonMod
         CharacterData Anchor = makeNewCharacter("Anchor", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Where do you think you're going?\"");
         Anchor.role = new Anchor();
         Anchor.description = "You have 9 max HP, even if other cards add or subtract from max HP.";
+
+        CharacterData Prankster = makeNewCharacter("Prankster", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Oh no, here we go again...\"");
+        Prankster.role = new Prankster();
+        Prankster.description = "Game Start: 2 cards of different alignments swap alignments. Learn who.";
 
         CharacterData BabyMinion = makeNewCharacter("BabyMinion", EAlignment.Evil, ECharacterType.Minion, false, true, "\"The youngest member of the Minion family.\"");
         BabyMinion.role = new BabyMinion();
@@ -1165,6 +1170,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind); // This must act after any minions.
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Anchor);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Prankster);
         //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sharpshooter);
 
 
@@ -1232,6 +1238,7 @@ public class MainMod : MelonMod
             AddRole(script.startingOutsiders, Reflector);
             AddRole(script.startingOutsiders, Gambler);
             AddRole(script.startingOutsiders, Anchor);
+            AddRole(script.startingOutsiders, Prankster);
 
 
             AddRole(script.startingMinions, Wizard);
@@ -1641,7 +1648,7 @@ public class MainMod : MelonMod
             Il2CppSystem.Collections.Generic.List<Character> allEvils = GetGameplayCurrentCharacters();
             allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
             allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
-                
+
             Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
 
             while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
