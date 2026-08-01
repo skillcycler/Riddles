@@ -29,6 +29,10 @@ public class Atheist : Demon
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Init)
+        {
+            Djinn.Jinx("Atheist");
+        }
         if (trigger == ETriggerPhase.Start)
         {
             // determine alignment

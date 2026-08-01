@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.9", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.10", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -247,6 +247,7 @@ public class MainMod : MelonMod
                         typeof(MyCompatPatch),
                         nameof(MyCompatPatch.Postfix))
                 );
+                MelonLogger.Msg($"Patched night cycle for demon: {demon} in mod Wingidon's Expansion Pack");
             }
         }
         
@@ -296,6 +297,7 @@ public class MainMod : MelonMod
                         typeof(MyCompatPatch),
                         nameof(MyCompatPatch.Postfix))
                 );
+                MelonLogger.Msg($"Patched night cycle for demon: {demon} in mod Powerplay");
             }
         }
 
@@ -308,7 +310,7 @@ public class MainMod : MelonMod
             List<string> demons3 = new();
             demons3.Add("w_Dupe_Critic");
             demons3.Add("w_Dupe_Idol");
-            demons3.Add("w_Dupe_Reporter");
+            demons3.Add("w_Dupe_Recruiter");
             HashSet<MethodInfo> patched3 = new();
             foreach (string demon in demons3)
             {
@@ -344,6 +346,7 @@ public class MainMod : MelonMod
                         typeof(MyCompatPatch),
                         nameof(MyCompatPatch.Postfix))
                 );
+                MelonLogger.Msg($"Patched night cycle for demon: {demon} in mod Dupery Bluff");
             }
         }
 
@@ -366,7 +369,7 @@ public class MainMod : MelonMod
             demons.Add("Famine");
             demons.Add("w_Dupe_Critic");
             demons.Add("w_Dupe_Idol");
-            demons.Add("w_Dupe_Reporter");
+            demons.Add("w_Dupe_Recruiter");
             if (demons.Contains(__instance.GetType().Name))
             {
                 Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
@@ -1660,6 +1663,7 @@ public class MainMod : MelonMod
             __result = new ActedInfo(info);
         }
     }
+    
     // Force night to always be active
     [HarmonyPatch(typeof(Imp), nameof(Imp.GetRules))]
     private static class ForceNightBaa

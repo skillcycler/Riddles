@@ -49,11 +49,13 @@ public class Hypnotist : Spy
 
         whitelistCharacterIDs.Add("Confessor_18741708");
         whitelistCharacterIDs.Add("Baker_22847064");
-        whitelistCharacterIDs.Add("Alchemist_94446803");
-        if (Gameplay.CurrentCharacters.Count >= 8)
+        int corruptions = 0;
+        foreach (Character ch in Gameplay.CurrentCharacters)
         {
-            whitelistCharacterIDs.Add("Scout_88081716");
+            if (ch.statuses.Contains(ECharacterStatus.Corrupted)) corruptions++;
         }
+        if (corruptions >= 3)
+            whitelistCharacterIDs.Add("Alchemist_94446803");
         Il2CppSystem.Collections.Generic.List<CharacterData> inDeckOutcasts = gameplay.GetScriptCharactersOfType(ECharacterType.Outcast);
         foreach (CharacterData outcast in inDeckOutcasts)
         {
@@ -65,17 +67,22 @@ public class Hypnotist : Spy
         }
         whitelistCharacterIDs.Add("Witness_25155076");
         Il2CppSystem.Collections.Generic.List<Character> chs = Gameplay.CurrentCharacters;
-        /*int evils = 0;
+        int evils = 0;
         foreach (Character c in chs)
         {
             if (c.GetRegisterAlignment() == EAlignment.Evil)
                 evils++;
         }
+        /*
         if (evils >= 4)
         {
             whitelistCharacterIDs.Add("Knitter_32352172");
         }*/
 
+        if (Gameplay.CurrentCharacters.Count >= 6 + evils && evils >= 2)
+        {
+            whitelistCharacterIDs.Add("Scout_88081716");
+        }
 
         whitelistCharacterIDs.Add("Riddler_scm");
         whitelistCharacterIDs.Add("Sentinel_WING");

@@ -69,10 +69,21 @@ public class Mastermind : Minion
 }
 public static class BigBrain
 {
-    public static ECharacterStatus minion = (ECharacterStatus)906;
+    public static ECharacterStatus minion = (ECharacterStatus)908;
 
     [HarmonyPatch(typeof(Character), nameof(Character.RevealReal))]
     public static class pvt
+    {
+        public static void Postfix(Character __instance)
+        {
+            if (__instance.statuses.Contains(minion) && __instance.bluff != null)
+            {
+                __instance.chName.text = "Mastermind";
+            }
+        }
+    }
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+    public static class pvt2
     {
         public static void Postfix(Character __instance)
         {
