@@ -26,6 +26,10 @@ public class Summoner : Demon
     
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Init)
+        {
+            Djinn.JinxVillagers("Summoner");
+        }
         if (trigger != ETriggerPhase.Start) return;
 
         Il2CppSystem.Collections.Generic.List<CharacterData> possibleDemons = new Il2CppSystem.Collections.Generic.List<CharacterData>();
@@ -64,11 +68,13 @@ public class Summoner : Demon
         allowed.Add("TwinDemonTwin_WING");
         allowed.Add("TwinDemonTriplet_WING");
 
-        // The Salem Trials
-        // This mod has no demons yet.
+        // Dupery Bluff
+        allowed.Add("WING_Dupery_Idol");
 
-        // Misc
-        allowed.Add("Lleech_LRZH");
+        // Powerplay
+        allowed.Add("Auditor_POW");
+        allowed.Add("Starspawn_POW");
+
 
         for (int j = 0; j < allDatas.Length; j++)
         {

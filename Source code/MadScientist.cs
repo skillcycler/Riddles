@@ -96,6 +96,7 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Muddler_scm");
             whitelistOutcastCharacterIDs.Add("Confectioner_scm");
             whitelistOutcastCharacterIDs.Add("Gambler_scm");
+            whitelistOutcastCharacterIDs.Add("Prankster_scm");
 
             // Wingidon
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
@@ -115,6 +116,7 @@ public class MadScientist : Role
             // Powerplay - Not everything that "works" will be added, for balance.
             whitelistMinionCharacterIDs.Add("Supporter_POW");
             whitelistMinionCharacterIDs.Add("Manipulator_POW");
+            whitelistMinionCharacterIDs.Add("Wildling_POW");
             whitelistOutcastCharacterIDs.Add("Industrialist_POW");
 
             // Dupery Bluff - only adding the ones that aren't clones of existing characters
@@ -316,7 +318,7 @@ public class MadScientist : Role
         }
         if (charRef.GetCharacterData().characterId == "MadScientist_scm" && trigger != ETriggerPhase.Start)
         {
-            if (fakeOutcast.characterId == "Hitman_scm")
+            /*if (fakeOutcast.characterId == "Hitman_scm")
             {
                 if (trigger == ETriggerPhase.Night && charRef.state != ECharacterState.Dead)
                 {
@@ -360,13 +362,13 @@ public class MadScientist : Role
                         killedLastNight = false;
                     }
                 }
-            } else if (fakeOutcast.characterId == "Gambler_scm")
+            } else */if (fakeOutcast.characterId == "Gambler_scm")
             {
                 if (trigger == ETriggerPhase.Night)
                 {
                     Confused.updateConfusion(charRef);
                 }
-            } else if (fakeOutcast.characterId != "Ghost_scm")
+            } else if (fakeOutcast.characterId != "Ghost_scm" && fakeOutcast.characterId != "Prankster_scm")
                 fakeOutcast.role.Act(trigger, charRef);
             fakeMinion.role.Act(trigger, charRef);
         }

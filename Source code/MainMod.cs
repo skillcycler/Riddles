@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.10", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.11", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -262,6 +262,8 @@ public class MainMod : MelonMod
             demons2.Add("Vortox");
             demons2.Add("Famine");
             demons2.Add("Crazed");
+            demons2.Add("Starspawn");
+            demons2.Add("Auditor");
             HashSet<MethodInfo> patched2 = new();
             foreach (string demon in demons2)
             {
@@ -356,21 +358,7 @@ public class MainMod : MelonMod
     {
         public static void Postfix(object __instance, ref Il2CppSystem.Collections.Generic.List<SpecialRule> __result)
         {
-            List<string> demons = new();
-            demons.Add("w_Iris");
-            demons.Add("w_Leviathan");
-            demons.Add("w_InvertDemon");
-            demons.Add("w_Praesect");
-            demons.Add("w_Mezepheles");
-            demons.Add("w_TwinDemon");
-            demons.Add("w_TwinDemonThree");
-            demons.Add("w_TwinDemonTwin");
-            demons.Add("Vortox");
-            demons.Add("Famine");
-            demons.Add("w_Dupe_Critic");
-            demons.Add("w_Dupe_Idol");
-            demons.Add("w_Dupe_Recruiter");
-            if (demons.Contains(__instance.GetType().Name))
+            if (__result.Count == 0)
             {
                 Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
                 sr.Add(new NightModeRule(4));
@@ -592,11 +580,11 @@ public class MainMod : MelonMod
         Gambler.role = new Gambler();
         Gambler.description = "Game Start: 1 random character (not myself) is afflicted with a random status effect: Accused, Corrupted, Confused, Evil-turned. Learn who I affected.";
 
-        CharacterData Anchor = makeNewCharacter("Anchor", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Where do you think you're going?\"");
+        CharacterData Anchor = makeNewCharacter("Anchor", EAlignment.Good, ECharacterType.Outcast, true, false, "\"Where do you think you're going?\"");
         Anchor.role = new Anchor();
         Anchor.description = "You have 9 max HP, even if other cards add or subtract from max HP.";
 
-        CharacterData Prankster = makeNewCharacter("Prankster", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Oh no, here we go again...\"");
+        CharacterData Prankster = makeNewCharacter("Prankster", EAlignment.Good, ECharacterType.Outcast, true, false, "\"Oh no, here we go again...\"");
         Prankster.role = new Prankster();
         Prankster.description = "Game Start: 2 cards of different alignments swap alignments. Learn who.";
 
@@ -1151,8 +1139,8 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
         Characters.Instance.startGameActOrder = InsertAfterAct("Kingmaker", Wizard);
         Characters.Instance.startGameActOrder = InsertAfterAct("Wizard", Guardian);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Escapist);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Escapist", Recruiter);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", Escapist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Recruiter);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Mad Scientist", Confectioner);
         Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Channeler);

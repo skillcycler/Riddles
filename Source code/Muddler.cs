@@ -56,7 +56,7 @@ public static class Muddling
         [HarmonyPriority(Priority.Last)]
         public static void Postfix(Character __instance)
         {
-            if (__instance.statuses.Contains(hiddenStatus) && Gameplay.GameplayState != EGameplayState.Summary)
+            if (__instance.statuses.Contains(hiddenStatus))
             {
                 __instance.chName.text = __instance.dataRef.name.ToUpper();
             }

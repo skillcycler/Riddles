@@ -78,7 +78,7 @@ public static class BigBrain
         {
             if (__instance.statuses.Contains(minion) && __instance.bluff != null)
             {
-                __instance.chName.text = "Mastermind";
+                __instance.chName.text = "MASTERMIND";
             }
         }
     }
@@ -89,7 +89,7 @@ public static class BigBrain
         {
             if (__instance.statuses.Contains(minion))
             {
-                __instance.chName.text = "Mastermind";
+                __instance.chName.text = "MASTERMIND";
             }
         }
     }

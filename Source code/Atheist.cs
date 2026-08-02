@@ -55,7 +55,7 @@ public class Atheist : Demon
                         c.Init(Characters.Instance.GetRandomUniqueVillagerBluff());
                     }
                 }
-                int accuse = Calculator.RollDice((int)(Gameplay.CurrentCharacters.Count / 2));
+                int accuse = Calculator.RollDice((int)(Gameplay.CurrentCharacters.Count / 2))+1;
                 for (int i = 0; i < accuse; i++)
                 {
                     Character ch = Gameplay.CurrentCharacters[UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count)];
@@ -65,7 +65,7 @@ public class Atheist : Demon
                     }
                     ch.statuses.AddStatus(Accused.accused, charRef);
                 }
-                int corrupt = Calculator.RollDice((int)(Gameplay.CurrentCharacters.Count / 3));
+                int corrupt = Calculator.RollDice((int)(Gameplay.CurrentCharacters.Count / 3))+1;
                 for (int i = 0; i < corrupt; i++)
                 {
                     Character ch = Gameplay.CurrentCharacters[UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count)];
@@ -75,7 +75,7 @@ public class Atheist : Demon
                     }
                     ch.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
                 }
-                int confuse = Calculator.RollDice((int)(Gameplay.CurrentCharacters.Count / 3));
+                int confuse = Calculator.RollDice((int)(Gameplay.CurrentCharacters.Count / 3))+1;
                 for (int i = 0; i < confuse; i++)
                 {
                     Character ch = Gameplay.CurrentCharacters[UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count)];

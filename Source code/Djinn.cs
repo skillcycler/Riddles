@@ -7,6 +7,7 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppSystem;
 using MelonLoader;
+using RiddlerMod;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
 public class Djinn
@@ -31,11 +32,26 @@ public class Djinn
                 babyMinion = d; break;
             }
         }
+        List<string> invalid = GetInvalidCharacterIDs(demon);
         foreach (Character c in Gameplay.CurrentCharacters)
         {
-            if (GetInvalidCharacterIDs(demon).Contains(c.dataRef.characterId))
+            if (invalid.Contains(c.dataRef.characterId))
             {
                 c.Init(babyMinion);
+            }
+        }
+    }
+    public static void JinxVillagers(string demon)
+    {
+        List<string> invalid = GetInvalidCharacterIDs(demon);
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (invalid.Contains(c.dataRef.characterId))
+            {
+                // this only works because GetRandomUniqueVillagerBluff is no longer limited to 4 random characters
+                CharacterData newRole = Characters.Instance.GetRandomUniqueVillagerBluff();
+                while (invalid.Contains(newRole.characterId)) { newRole = Characters.Instance.GetRandomUniqueVillagerBluff(); }
+                c.Init(newRole);
             }
         }
     }
@@ -65,6 +81,20 @@ public class Djinn
                 break;
             case "Atheist":
                 invalidMinions.Add("Swarm_Good_WING"); // from a bug report
+                break;
+            case "Summoner":
+                // The following characters are villagers that depend on Outcasts or Minions
+                invalidMinions.Add("Druid_89845092");
+                invalidMinions.Add("Oracle_07039445");
+                invalidMinions.Add("Lamb_WING");
+                invalidMinions.Add("Scanner_scm");
+                invalidMinions.Add("Recruiter_scm");
+                invalidMinions.Add("Tracker_scm");
+                invalidMinions.Add("Surveyor_scm");
+                invalidMinions.Add("Marksman_POW");
+                invalidMinions.Add("Executive_POW"); // some of the things this can become don't work without minions
+                invalidMinions.Add("Trapper_TST");
+                invalidMinions.Add("WING_Dupery_Private Eye");
                 break;
         }
         return invalidMinions;
