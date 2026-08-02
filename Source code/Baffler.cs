@@ -80,7 +80,7 @@ public static class Confused
                 __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#DDDD00><size=18>\n<Confused></color></size>";
                 if (__instance.statuses.Contains(Accused.accused))
                 {
-                    __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#DDDD00><size=14>\n<Confused+</color></size><color=#FF8000><size=14>Accused></color></size>";
+                    __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#DDDD00><size=12>\n<Confused+</color></size><color=#FF8000><size=12>Accused></color></size>";
                 }
             }
         }

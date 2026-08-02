@@ -23,10 +23,29 @@ public class Obsessor : Role
             return "";
         }
     }
+    public Character GetValidCharacter(Il2CppSystem.Collections.Generic.List<Character> characters)
+    {
+        // Don't say any character that has multiple of it or shares the same name with another character
+        Il2CppSystem.Collections.Generic.List<Character> nodupe = new();
+        foreach (Character c1 in characters)
+        {
+            int m = 0;
+            foreach (Character c2 in characters)
+            {
+                if (c2.GetRegisterAs().characterName == c1.GetRegisterAs().characterName) m++;
+            }
+            if (m == 1 && c1.GetRegisterAs().characterId == c1.dataRef.characterId)
+            {
+                nodupe.Add(c1);
+            }
+        }
+        return nodupe[UnityEngine.Random.RandomRangeInt(0, nodupe.Count)];
+
+    }
     public override ActedInfo GetInfo(Character charRef)
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        Il2CppSystem.Collections.Generic.List<Character> actualCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
+        /*Il2CppSystem.Collections.Generic.List<Character> actualCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
         bool isSpecularusVillage = true;
         foreach (Character character in characters)
         {
@@ -38,7 +57,8 @@ public class Obsessor : Role
             if (!isSpecularusVillage || character.GetRegisterAlignment() == EAlignment.Evil)
                 actualCharacters.Add(character);
         }
-        Character chosenCharacter = actualCharacters[UnityEngine.Random.RandomRangeInt(0, actualCharacters.Count)];
+        Character chosenCharacter = actualCharacters[UnityEngine.Random.RandomRangeInt(0, actualCharacters.Count)];*/
+        Character chosenCharacter = GetValidCharacter(characters);
         int evils = 0;
         Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(chosenCharacter);
         foreach (Character character in adjacentCharacters)
@@ -58,12 +78,13 @@ public class Obsessor : Role
     public override ActedInfo GetBluffInfo(Character charRef)
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        Il2CppSystem.Collections.Generic.List<Character> actualCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
+        /*Il2CppSystem.Collections.Generic.List<Character> actualCharacters = new Il2CppSystem.Collections.Generic.List<Character>();
         foreach (Character character in characters)
         {
             actualCharacters.Add(character);
         }
-        Character chosenCharacter = actualCharacters[UnityEngine.Random.RandomRangeInt(0, actualCharacters.Count)];
+        Character chosenCharacter = actualCharacters[UnityEngine.Random.RandomRangeInt(0, actualCharacters.Count)];*/
+        Character chosenCharacter = GetValidCharacter(characters);
         int evils = 0;
         Il2CppSystem.Collections.Generic.List<Character> adjacentCharacters = Characters.Instance.GetAdjacentCharacters(chosenCharacter);
         foreach (Character character in adjacentCharacters)
