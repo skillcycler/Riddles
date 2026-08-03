@@ -22,6 +22,10 @@ public class Veil : Demon
     }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
+        if (trigger == ETriggerPhase.Init)
+        {
+            Djinn.Jinx("Veil");
+        }
         if (trigger != ETriggerPhase.Start) return;
         if (charRef.dataRef.characterId != "Veil_scm")
         {
