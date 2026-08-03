@@ -50,7 +50,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Pioneer: Learn how many cards away a particular Evil is from my closest Evil.
 - Necromancer: Kill any card and Revive a dead Good card. If I am lying, the revived card will lie.
 - Astronaut: Each night, learn a character of the opposite alignment to the previous night.
-- Sharpshooter: Learn that an evil is one of 5 cards. At night, remove one of the possibilities. [Currently unavailable]
+- Sharpshooter: Learn that an evil is one of 5 cards at night.
 - Motivator: If revealed, my neighbors refresh at night.
 - Therapist: Learn 2 characters that don't have much in common.
 - Crewmate: Learn someone who is Sus.

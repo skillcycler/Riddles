@@ -70,6 +70,8 @@ public class Summoner : Demon
 
         // Dupery Bluff
         allowed.Add("WING_Dupery_Idol");
+        allowed.Add("WING_Dupery_Kingpin");
+        allowed.Add("WING_Dupery_Hitman");
 
         // Powerplay
         allowed.Add("Auditor_POW");

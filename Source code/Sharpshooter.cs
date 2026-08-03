@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Harmony;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
@@ -16,8 +17,8 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class Sharpshooter : Role
 {
-    public List<int> characters = new List<int>();
-    public CharacterData cd = new();
+    public List<List<int>> characters = new();
+    public List<CharacterData> characterDatas = new();
     public override string Description
     {
         get
@@ -27,19 +28,15 @@ public class Sharpshooter : Role
     }
     public string makeInfo()
     {
-        if (characters.Count < 2) return $"#{characters[0]} is the {cd.characterName}";
-        string info = "Among ";
-        List<int> ints = new();
-        foreach (int i in characters)
+        if (characters.Count < 1) return "I have no information yet";
+        string info = "";
+        for (int i = 0; i < characters.Count; i++)
         {
-            ints.Add(i);
+            List<int> li = characters[i];
+            CharacterData cd = characterDatas[i];
+            li.Sort();
+            info += $"#{li[0]}, #{li[1]}, #{li[2]}, #{li[3]}, or #{li[4]} is the {cd.characterName}\n";
         }
-        ints.Sort();
-        foreach (int i in ints)
-        {
-            info += $"#{i}, ";
-        }
-        info += $"there is: {cd.characterName}";
         return info;
     }
     public override ActedInfo GetInfo(Character charRef)
@@ -55,33 +52,33 @@ public class Sharpshooter : Role
     }
 
     public override void Act(ETriggerPhase trigger, Character charRef)
-    {
-        if (trigger == ETriggerPhase.Start)
+    { 
+        if (trigger == ETriggerPhase.Night)
         {
+            if (charRef.state == ECharacterState.Dead) return;
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
             Il2CppSystem.Collections.Generic.List<Character> evils = new();
             foreach (Character c in chars)
             {
-                if (c.GetRegisterAlignment() == EAlignment.Evil && c.dataRef.characterId != "Professional_WING" && c.dataRef.characterId != "Iris_WING") { evils.Add(c); }
+                if (c.GetRegisterAlignment() == EAlignment.Evil && c.alignment == EAlignment.Evil) { evils.Add(c); }
             }
             Character picked = evils[UnityEngine.Random.RandomRangeInt(0, evils.Count)];
-            characters.Add(picked.id);
-            while (characters.Count < 5)
+            characterDatas.Add(picked.GetRegisterAs());
+            List<int> possibleLocations = new();
+            possibleLocations.Add(picked.id);
+
+            while (possibleLocations.Count < 5)
             {
-                int rand = Calculator.RollDice(chars.Count);
-                if (!characters.Contains(rand)) characters.Add(rand);
+                int random;
+                do { random = UnityEngine.Random.Range(1, Gameplay.CurrentCharacters.Count + 1); }
+                while (possibleLocations.Contains(random));
+                possibleLocations.Add(random);
             }
-            cd = picked.GetRegisterAs();
-        }
-        if (trigger == ETriggerPhase.Night)
-        {
-            if (characters.Count > 1) {
-                int last = characters.Last();
-                characters.Remove(last);
-                if (charRef.revealed)
-                {
-                    onActed.Invoke(GetInfo(charRef));
-                }
+
+            characters.Add(possibleLocations);
+            if (charRef.revealed)
+            {
+                onActed.Invoke(GetInfo(charRef));
             }
         }
         if (trigger == ETriggerPhase.Day)
@@ -94,41 +91,57 @@ public class Sharpshooter : Role
     {
         if (trigger == ETriggerPhase.Night)
         {
-            if (characters.Count > 1)
+            if (charRef.state == ECharacterState.Dead) return;
+            Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
+            Il2CppSystem.Collections.Generic.List<Character> evils = new();
+            foreach (Character c in chars)
             {
-                int last = characters.Last();
-                characters.Remove(last);
-                if (charRef.revealed)
-                {
-                    onActed.Invoke(GetInfo(charRef));
-                }
+                if (c.GetRegisterAlignment() == EAlignment.Evil && c.alignment == EAlignment.Evil) { evils.Add(c); }
+            }
+            Character picked = evils[UnityEngine.Random.RandomRangeInt(0, evils.Count)];
+            characterDatas.Add(picked.GetRegisterAs());
+            List<int> possibleLocations = new();
+            while (possibleLocations.Count < 5)
+            {
+                int random;
+                do { random = UnityEngine.Random.Range(1, Gameplay.CurrentCharacters.Count + 1); }
+                while (possibleLocations.Contains(random) || random == picked.id);
+                possibleLocations.Add(random);
+            }
+
+            characters.Add(possibleLocations);
+            if (charRef.revealed)
+            {
+                onActed.Invoke(GetInfo(charRef));
             }
         }
         if (trigger == ETriggerPhase.Day)
         {
-            
-            int addFake = 5 - Gameplay.Instance.currentDay;
-            if (addFake < 1) addFake = 1;
-            Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
-            if (chars.Count >= 6)
+            if (characters == null) characters = new();
+            if (characters.Count == 0)
             {
+                int add = Gameplay.Instance.currentDay;
+                Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
                 Il2CppSystem.Collections.Generic.List<Character> evils = new();
                 foreach (Character c in chars)
                 {
-                    if (c.GetRegisterAlignment() == EAlignment.Evil) { evils.Add(c); }
+                    if (c.GetRegisterAlignment() == EAlignment.Evil && c.alignment == EAlignment.Evil) { evils.Add(c); }
                 }
-                Character picked = evils[UnityEngine.Random.RandomRangeInt(0, evils.Count)];
-                int real = Calculator.RemoveNumberAndGetRandomNumberFromList(picked.id, 1, chars.Count);
-                while (characters.Count < addFake)
+                for (int i = 0; i < add; i++)
                 {
-                    int rand = Calculator.RollDice(chars.Count);
-                    if (rand != real && !characters.Contains(rand)) characters.Add(rand);
+                    Character picked = evils[UnityEngine.Random.RandomRangeInt(0, evils.Count)];
+                    characterDatas.Add(picked.GetRegisterAs());
+                    List<int> possibleLocations = new();
+                    while (possibleLocations.Count < 5)
+                    {
+                        int random;
+                        do { random = UnityEngine.Random.Range(1, Gameplay.CurrentCharacters.Count + 1); }
+                        while (possibleLocations.Contains(random) || random == picked.id);
+                        possibleLocations.Add(random);
+                    }
+
+                    characters.Add(possibleLocations);
                 }
-                cd = picked.GetRegisterAs();
-            }
-            else
-            {
-                onActed.Invoke(new ActedInfo("This role needs 6 cards to function correctly."));
             }
             charRef.revealed = true;
             onActed.Invoke(GetInfo(charRef));

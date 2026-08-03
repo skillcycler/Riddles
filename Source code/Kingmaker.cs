@@ -32,6 +32,7 @@ public class Kingmaker : Demon
         {
             Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayMinions = Gameplay.Instance.GetAscensionAllStartingCharacters();
             notInPlayMinions = Characters.Instance.FilterNotInPlayCharactersUnique(notInPlayMinions);
+            notInPlayMinions = Characters.Instance.FilterNotInDeckCharactersUnique(notInPlayMinions);
             notInPlayMinions = Characters.Instance.FilterRealCharacterType(notInPlayMinions, ECharacterType.Minion);
             foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
             { // always have 2 extra minions in the deck list

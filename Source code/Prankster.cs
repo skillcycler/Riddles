@@ -68,7 +68,7 @@ public class Prankster : Role
             foreach (Character ch in c)
             {
                 if (ch.alignment == EAlignment.Evil && !ch.dataRef.usuallyDisguised) continue; // don't pick outed evils
-                if (ch.alignment == EAlignment.Good && !ch.dataRef.bluffable && ch.dataRef.usuallyDisguised) continue; // don't pick good characters that can't be disguised as
+                if (ch.alignment == EAlignment.Good && !ch.dataRef.bluffable && !ch.dataRef.usuallyDisguised) continue; // don't pick good characters that can't be disguised as
                 // Don't change the alignment of Neutrals from Powerplay + any other custom types that might pop up from any other mod
                 if (ch.GetCharacterType() != ECharacterType.Villager && ch.GetCharacterType() != ECharacterType.Outcast && ch.GetCharacterType() != ECharacterType.Minion && ch.GetCharacterType() != ECharacterType.Demon) continue;
                 valid.Add(ch);

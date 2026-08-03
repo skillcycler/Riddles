@@ -16,7 +16,7 @@ using static MelonLoader.MelonLogger;
 namespace RiddlerMod;
 
 [RegisterTypeInIl2Cpp]
-public class Hypnotist : Spy
+public class Hypnotist : Minion
 {
     public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();
     public override string Description
@@ -121,4 +121,104 @@ public class Hypnotist : Spy
         ClassInjector.DerivedConstructorBody((Il2CppObjectBase)this);
     }
     public Hypnotist(System.IntPtr ptr) : base(ptr) { }
+
+    // Vanilla character modification for Hypnotist support
+    [HarmonyPatch(typeof(Confessor), nameof(Confessor.GetInfo))]
+    private static class HypnotistConfessor
+    {
+        private static void Postfix(Confessor __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            string info = "I am Good";
+            __result = new ActedInfo(info);
+        }
+    }
+    [HarmonyPatch(typeof(Alchemist), nameof(Alchemist.GetInfo))]
+    private static class HypnotistAlchemist
+    {
+        private static void Postfix(Alchemist __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            string info = __instance.ConjourInfo(3, charRef);
+
+            __result = new ActedInfo(info);
+        }
+    }
+    [HarmonyPatch(typeof(Witness), nameof(Witness.GetInfo))]
+    private static class HypnotistWitness
+    {
+        private static void Postfix(Witness __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            string info = __instance.ConjourInfo(null, charRef);
+
+            __result = new ActedInfo(info);
+        }
+    }
+    [HarmonyPatch(typeof(Lookout), nameof(Lookout.GetInfo))]
+    private static class HypnotistMedium
+    {
+        private static void Postfix(Lookout __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+
+            Il2CppSystem.Collections.Generic.List<CharacterData> inDeckOutcasts = Gameplay.Instance.GetScriptCharactersOfType(ECharacterType.Outcast);
+            Il2CppSystem.Collections.Generic.List<string> disguisingOutcasts = new Il2CppSystem.Collections.Generic.List<string>();
+            foreach (CharacterData outcast in inDeckOutcasts)
+            {
+                if (outcast.usuallyDisguised)
+                {
+                    disguisingOutcasts.Add(outcast.characterName);
+                }
+            }
+
+            string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
+            int card = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
+            string info = string.Format("#{0} is actually a {1}", card, fakeDisguisingOutcastName);
+            Il2CppSystem.Collections.Generic.List<Character> hintArrows = new();
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (card == c.id)
+                {
+                    hintArrows.Add(c);
+                }
+            }
+            __result = new ActedInfo(info, hintArrows);
+        }
+    }
+    // Hypnotist, plus also remove the ability for Scout to mention good-registering evils as an evil
+    [HarmonyPatch(typeof(Scout), nameof(Scout.GetInfo))]
+    private static class HypnotistScout
+    {
+        private static void Postfix(Scout __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.dataRef.characterId != "Hypnotist_scm")
+            {
+                Il2CppSystem.Collections.Generic.List<Character> allEvils = MainMod.GetGameplayCurrentCharacters();
+                allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
+                allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
+
+                Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+
+                while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+
+                int closestEvil = __instance.GetClosestEvilToEvil(pickedEvil, charRef);
+
+                string info = __instance.ConjourInfo(pickedEvil.GetRegisterAs(), closestEvil, charRef);
+                __result = new ActedInfo(info);
+            }
+            else
+            {
+                Il2CppSystem.Collections.Generic.List<Character> allEvils = MainMod.GetGameplayCurrentCharacters();
+                allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
+                allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
+
+                Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+
+                string info = __instance.ConjourInfo(pickedEvil.dataRef, 3, charRef);
+
+                __result = new ActedInfo(info);
+            }
+        }
+    }
 }

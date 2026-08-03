@@ -80,18 +80,21 @@ public class Channeler : Minion
             whitelistIDs.Add("TwinDemonTwin_WING");
             whitelistIDs.Add("TwinDemonTriplet_WING");
 
-            // Misc
-            whitelistIDs.Add("Wraith_LRZH");
-            // can't guarantee anything else works correctly or is balanced, if they do anything at all
+            // Powerplay
+            // Only adding a few because a lot of the demons don't work well with this.
             whitelistIDs.Add("Slinger_POW");
             whitelistIDs.Add("Manipulator_POW");
             whitelistIDs.Add("Ambusher_POW");
+            whitelistIDs.Add("Wildling_POW");
 
             // Dupery Bluff
             whitelistIDs.Add("WING_Dupery_Barkeep");
             whitelistIDs.Add("WING_Dupery_Poisoner");
             whitelistIDs.Add("WING_Dupery_Serial Killer");
             whitelistIDs.Add("WING_Dupery_Travel Agent");
+            whitelistIDs.Add("WING_Dupery_Idol");
+            whitelistIDs.Add("WING_Dupery_Kingpin");
+            whitelistIDs.Add("WING_Dupery_Hitman");
 
 
             foreach (Character character in characters) {

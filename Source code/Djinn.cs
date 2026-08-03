@@ -10,6 +10,8 @@ using MelonLoader;
 using RiddlerMod;
 using UnityEngine;
 using static MelonLoader.MelonLogger;
+
+namespace RiddlerMod;
 public class Djinn
 {
     public static void Jinx(string demon)
@@ -81,6 +83,10 @@ public class Djinn
                 break;
             case "Atheist":
                 invalidMinions.Add("Swarm_Good_WING"); // from a bug report
+                break;
+            case "Veil":
+                invalidMinions.Add("Sunny_POW");
+                invalidMinions.Add("Stormy_POW"); // This might make villages unsolvable
                 break;
             case "Summoner":
                 // The following characters are villagers that depend on Outcasts or Minions

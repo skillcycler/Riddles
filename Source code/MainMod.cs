@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.8.12", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.9", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -54,10 +54,10 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Pioneer>();
         ClassInjector.RegisterTypeInIl2Cpp<Necromancer>();
         ClassInjector.RegisterTypeInIl2Cpp<Astronaut>();
-        //ClassInjector.RegisterTypeInIl2Cpp<Sharpshooter>();
         ClassInjector.RegisterTypeInIl2Cpp<Motivator>();
         ClassInjector.RegisterTypeInIl2Cpp<Therapist>();
         ClassInjector.RegisterTypeInIl2Cpp<Crewmate>();
+        ClassInjector.RegisterTypeInIl2Cpp<Sharpshooter>();
 
         // Outcasts
 
@@ -171,201 +171,6 @@ public class MainMod : MelonMod
         GameObject circle15 = CreateCircle(15);
         GameObject circleForTesting = CreateCircle(21);
     }
-    public static void UpdateWitness()
-    {
-        CharacterData[] allDatas = System.Array.Empty<CharacterData>();
-        var loadedCharList = Resources.FindObjectsOfTypeAll(Il2CppType.Of<CharacterData>());
-        if (loadedCharList != null)
-        {
-            allDatas = new CharacterData[loadedCharList.Length];
-            for (int i = 0; i < loadedCharList.Length; i++)
-            {
-                allDatas[i] = loadedCharList[i]!.Cast<CharacterData>();
-            }
-        }
-        for (int i = 0; i < allDatas.Count(); i++)
-        {
-            if (allDatas[i].characterName == "Witness")
-            {
-                allDatas[i].hints += "\n- Demon protected by Guardian" +
-                                     "\n- Character targeted by Accuser, Baffler, Mystifier, or Wizard" +
-                                     "\n- Characters summoned by Summoner, Kingmaker, or Rainbow Joker" +
-                                     "\n- Outcast added or turned evil by Escapist";
-            }
-        }
-    }
-    public bool PatchNights()
-    {
-        // This code is my attempt at patching Wingidon's demons to have a night cycle. I've never tried something like this before so hopefully it isn't broken.
-        Assembly wingsAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "WingsExpansion");
-
-        if (wingsAssembly != null)
-        {
-            foreach (Type t in wingsAssembly.GetTypes())
-                MelonLogger.Msg(t.FullName);
-            List<string> demons = new();
-            demons.Add("w_Iris");
-            demons.Add("w_Leviathan");
-            demons.Add("w_InvertDemon");
-            demons.Add("w_Praesect");
-            demons.Add("w_Mezepheles");
-            demons.Add("w_TwinDemon");
-            demons.Add("w_TwinDemonThree");
-            demons.Add("w_TwinDemonTwin");
-            HashSet<MethodInfo> patched = new();
-            foreach (string demon in demons)
-            {
-                Type targetType = wingsAssembly.GetType($"WingidonExpansionPack.{demon}");
-
-                if (targetType == null)
-                {
-                    MelonLogger.Msg($"Could not find {demon}");
-                    continue;
-                }
-                MethodInfo targetMethod = targetType.GetMethod("GetRules", BindingFlags.Instance | BindingFlags.Public);
-
-                if (targetMethod != null)
-                {
-                    targetMethod = targetMethod.GetBaseDefinition();
-                }
-                if (targetMethod == null)
-                {
-                    MelonLogger.Msg($"Could not find {demon}.GetRules");
-                    continue;
-                }
-                if (!patched.Add(targetMethod))
-                {
-                    MelonLogger.Msg($"Already patched {targetMethod.DeclaringType.Name}.GetRules");
-                    continue;
-                }
-                MelonLogger.Msg($"Target type: {targetType.FullName}");
-                MelonLogger.Msg($"Method: {targetMethod}");
-                MelonLogger.Msg($"Declared in: {targetMethod.DeclaringType.FullName}");
-                HarmonyInstance.Patch(
-                    targetMethod,
-                    postfix: new HarmonyMethod(
-                        typeof(MyCompatPatch),
-                        nameof(MyCompatPatch.Postfix))
-                );
-                MelonLogger.Msg($"Patched night cycle for demon: {demon} in mod Wingidon's Expansion Pack");
-            }
-        }
-        
-
-        Assembly powerplay = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "Demon Bluff Mods" || a.GetName().Name == "Demon_Bluff_Mods");
-
-        if (powerplay != null)
-        {
-            foreach (Type t in powerplay.GetTypes())
-                MelonLogger.Msg(t.FullName);
-            List<string> demons2 = new();
-            demons2.Add("Vortox");
-            demons2.Add("Famine");
-            demons2.Add("Crazed");
-            demons2.Add("Starspawn");
-            demons2.Add("Auditor");
-            HashSet<MethodInfo> patched2 = new();
-            foreach (string demon in demons2)
-            {
-                Type targetType = powerplay.GetType($"Demon_Bluff_Mods.{demon}");
-
-                if (targetType == null)
-                {
-                    MelonLogger.Msg($"Could not find {demon}");
-                    continue;
-                }
-                MethodInfo targetMethod = targetType.GetMethod("GetRules", BindingFlags.Instance | BindingFlags.Public);
-
-                if (targetMethod != null)
-                {
-                    targetMethod = targetMethod.GetBaseDefinition();
-                }
-                if (targetMethod == null)
-                {
-                    MelonLogger.Msg($"Could not find {demon}.GetRules");
-                    continue;
-                }
-                if (!patched2.Add(targetMethod))
-                {
-                    MelonLogger.Msg($"Already patched {targetMethod.DeclaringType.Name}.GetRules");
-                    continue;
-                }
-                MelonLogger.Msg($"Target type: {targetType.FullName}");
-                MelonLogger.Msg($"Method: {targetMethod}");
-                MelonLogger.Msg($"Declared in: {targetMethod.DeclaringType.FullName}");
-                HarmonyInstance.Patch(
-                    targetMethod,
-                    postfix: new HarmonyMethod(
-                        typeof(MyCompatPatch),
-                        nameof(MyCompatPatch.Postfix))
-                );
-                MelonLogger.Msg($"Patched night cycle for demon: {demon} in mod Powerplay");
-            }
-        }
-
-        Assembly dupery = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "DuperyBluff");
-
-        if (dupery != null)
-        {
-            foreach (Type t in dupery.GetTypes())
-                MelonLogger.Msg(t.FullName);
-            List<string> demons3 = new();
-            demons3.Add("w_Dupe_Critic");
-            demons3.Add("w_Dupe_Idol");
-            demons3.Add("w_Dupe_Recruiter");
-            HashSet<MethodInfo> patched3 = new();
-            foreach (string demon in demons3)
-            {
-                Type targetType = dupery.GetType($"DuperyBluff.{demon}");
-
-                if (targetType == null)
-                {
-                    MelonLogger.Msg($"Could not find {demon}");
-                    continue;
-                }
-                MethodInfo targetMethod = targetType.GetMethod("GetRules", BindingFlags.Instance | BindingFlags.Public);
-
-                if (targetMethod != null)
-                {
-                    targetMethod = targetMethod.GetBaseDefinition();
-                }
-                if (targetMethod == null)
-                {
-                    MelonLogger.Msg($"Could not find {demon}.GetRules");
-                    continue;
-                }
-                if (!patched3.Add(targetMethod))
-                {
-                    MelonLogger.Msg($"Already patched {targetMethod.DeclaringType.Name}.GetRules");
-                    continue;
-                }
-                MelonLogger.Msg($"Target type: {targetType.FullName}");
-                MelonLogger.Msg($"Method: {targetMethod}");
-                MelonLogger.Msg($"Declared in: {targetMethod.DeclaringType.FullName}");
-                HarmonyInstance.Patch(
-                    targetMethod,
-                    postfix: new HarmonyMethod(
-                        typeof(MyCompatPatch),
-                        nameof(MyCompatPatch.Postfix))
-                );
-                MelonLogger.Msg($"Patched night cycle for demon: {demon} in mod Dupery Bluff");
-            }
-        }
-
-        return true;
-    }
-    public static class MyCompatPatch
-    {
-        public static void Postfix(object __instance, ref Il2CppSystem.Collections.Generic.List<SpecialRule> __result)
-        {
-            if (__result.Count == 0)
-            {
-                Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
-                sr.Add(new NightModeRule(4));
-                __result = sr;
-            }
-        }
-    }
     public static void AddConfigs()
     {
         MelonPreferences_Category configCategory = MelonPreferences.CreateCategory("RiddlesConfig");
@@ -386,8 +191,8 @@ public class MainMod : MelonMod
         GameObject content = GameObject.Find("Game/Gameplay/Content");
         NightPhase nightPhase = content.GetComponent<NightPhase>();
         MakeTwelve();
-        UpdateWitness();
-        PatchNights();
+        ModifyBaseGame.UpdateWitness();
+        PatchNights.Patch();
         AddConfigs();
 
         CharacterData Riddler = makeNewCharacter("Riddler", EAlignment.Good, ECharacterType.Villager, true, false, "\"One day I'll cause a paradox.\"");
@@ -516,10 +321,9 @@ public class MainMod : MelonMod
         Astronaut.description = "At Night: Learn a character of a different Alignment than the previous night.";
         Astronaut.ifLies = "I provide arbitrary info for nights before I was flipped and false info after being flipped.";
 
-        // still can't make this work...
-        /*CharacterData Sharpshooter = makeNewCharacter("Sharpshooter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Fastest gunslinger in the West\"");
+        CharacterData Sharpshooter = makeNewCharacter("Sharpshooter", EAlignment.Good, ECharacterType.Villager, true, false, "\"Fastest gunslinger in the West\"");
         Sharpshooter.role = new Sharpshooter();
-        Sharpshooter.description = "Learn that a particular Evil is between 1 of 5 Cards.\n\nAt Night: Remove one of the possibilities.";*/
+        Sharpshooter.description = "At Night: Learn that a particular Evil is among 5 cards.";
 
         CharacterData Motivator = makeNewCharacter("Motivator", EAlignment.Good, ECharacterType.Villager, true, false, "\"Go Go Go! You can do it!\"");
         Motivator.role = new Motivator();
@@ -849,32 +653,6 @@ public class MainMod : MelonMod
         CharactersCount summoner_15 = setCharacterCount(14, 0, 0, 1);
 
         Il2CppSystem.Collections.Generic.List<CharactersCount> summonerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
-
-
-        summonerCounterList.Add(summoner_7);
-        summonerCounterList.Add(summoner_8);
-        for (int i = 0; i < 3; i++)
-        {
-            summonerCounterList.Add(summoner_9);
-            summonerCounterList.Add(summoner_10);
-            summonerCounterList.Add(summoner_11);
-            summonerCounterList.Add(summoner_12);
-            summonerCounterList.Add(summoner_13);
-        }
-        summonerCounterList.Add(summoner_14);
-        summonerCounterList.Add(summoner_15);
-
-        // Testing only: 21 character village
-        //summonerCounterList.Add(setCharacterCount(8, 12, 0, 1)); // outcast test
-        //summonerCounterList.Add(setCharacterCount(8, 0, 12, 1)); // minion test
-        //summonerCounterList.Add(setCharacterCount(20, 0, 0, 1)); // villager test
-        //summonerCounterList.Add(setCharacterCount(16, 2, 2, 1)); // mixed test
-        //summonerCounterList.Add(setCharacterCount(6, 7, 7, 1)); // mixed test 2
-        //summonerCounterList.Add(setCharacterCount(10, 0, 10, 1)); // Test lying villagers.
-        //summonerCounterList.Add(setCharacterCount(5, 0, 15, 1)); // Test lying villagers 2.
-
-        summonerScript.characterCounts = summonerCounterList;
-        summonerScriptData.scriptInfo = summonerScript;
         
         CustomScriptData infestationScriptData = new CustomScriptData();
         infestationScriptData.name = "Infestation_1";
@@ -1119,6 +897,43 @@ public class MainMod : MelonMod
         AtheistScript.characterCounts = AtheistCounterList;
         AtheistScriptData.scriptInfo = AtheistScript;
 
+        int testingMode = 0; // 0=off, 1=villager, 2=outcast, 3=minion, 4-mixed, 5=lying villagers
+
+        switch (testingMode)
+        {
+            case 0:
+                summonerCounterList.Add(summoner_7);
+                summonerCounterList.Add(summoner_8);
+                for (int i = 0; i < 3; i++)
+                {
+                    summonerCounterList.Add(summoner_9);
+                    summonerCounterList.Add(summoner_10);
+                    summonerCounterList.Add(summoner_11);
+                    summonerCounterList.Add(summoner_12);
+                    summonerCounterList.Add(summoner_13);
+                }
+                summonerCounterList.Add(summoner_14);
+                summonerCounterList.Add(summoner_15);
+                break;
+            case 1:
+                summonerCounterList.Add(setCharacterCount(20, 0, 0, 1)); // villager test
+                break;
+            case 2:
+                summonerCounterList.Add(setCharacterCount(8, 12, 0, 1)); // outcast test
+                break;
+            case 3:
+                summonerCounterList.Add(setCharacterCount(8, 0, 12, 1)); // minion test
+                break;
+            case 4:
+                summonerCounterList.Add(setCharacterCount(6, 7, 7, 1)); // mixed test
+                break;
+            case 5:
+                summonerCounterList.Add(setCharacterCount(5, 0, 15, 1)); // Test lying villagers
+                break;
+        }
+        summonerScript.characterCounts = summonerCounterList;
+        summonerScriptData.scriptInfo = summonerScript;
+
         // ------------ NIGHT PHASE ------------
         nightPhase.nightCharactersOrder.Add(Baffler);
         nightPhase.nightCharactersOrder.Add(Mystifier);
@@ -1162,7 +977,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Anchor);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Prankster);
-        //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sharpshooter);
+        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Sharpshooter);
 
 
         AscensionsData advancedAscension = ProjectContext.Instance.gameData.advancedAscension;
@@ -1184,6 +999,11 @@ public class MainMod : MelonMod
             addDemonRole(advancedAscension, RainbowJoker, "Baa_Difficult", "RainbowJoker_1", RainbowJokerScriptData, 2);
         if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Atheist").GetValueAsString().ToLower() == "true")
             addDemonRole(advancedAscension, Atheist, "Baa_Difficult", "Atheist_1", AtheistScriptData, 2);
+
+        if (testingMode != 0)
+        {
+            addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 500);
+        }
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
         {
@@ -1214,10 +1034,10 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Pioneer);
             AddRole(script.startingTownsfolks, Necromancer);
             AddRole(script.startingTownsfolks, Astronaut);
-            //AddRole(script.startingTownsfolks, Sharpshooter);
             AddRole(script.startingTownsfolks, Motivator);
             AddRole(script.startingTownsfolks, Therapist);
             AddRole(script.startingTownsfolks, Crewmate);
+            AddRole(script.startingTownsfolks, Sharpshooter);
 
 
             AddRole(script.startingOutsiders, MadScientist);
@@ -1436,279 +1256,6 @@ public class MainMod : MelonMod
             }
         }
     }
-    // Hypnotist stuff
-    [HarmonyPatch(typeof(Confessor), nameof(Confessor.GetInfo))]
-    private static class HypnotistConfessor
-    {
-        private static void Postfix(Confessor __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
-            string info = "I am Good";
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                if (c.dataRef.characterId == "Mendaverte_WING") info = "I am dizzy"; // "Good" confessors are never real in a Mendaverte game.
-            }
-
-            __result = new ActedInfo(info);
-        }
-    }/*
-    [HarmonyPatch(typeof(Acrobat2), nameof(Acrobat2.GetInfo))]
-    private static class HypnotistBard
-    {
-        private static void Postfix(Acrobat2 __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
-            if (Calculator.RollDice(2) == 1)
-            {
-                __result = new ActedInfo("There are no Corrupted characters");
-            }
-            int distance = UnityEngine.Random.RandomRangeInt(4, (int)(Gameplay.CurrentCharacters.Count / 2) + 1);
-            string info = __instance.ConjourInfo(distance, charRef);
-
-            Il2CppSystem.Collections.Generic.List<Character> hintArrows = new();
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                int d = Math.Abs(c.id - charRef.id);
-                if (d == distance || d == Gameplay.CurrentCharacters.Count - distance)
-                {
-                    hintArrows.Add(c);
-                }
-            }
-            __result = new ActedInfo(info, hintArrows);
-        }
-    }*/
-    [HarmonyPatch(typeof(Alchemist), nameof(Alchemist.GetInfo))]
-    private static class HypnotistAlchemist
-    {
-        private static void Postfix(Alchemist __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
-            string info = __instance.ConjourInfo(3, charRef);
-
-            __result = new ActedInfo(info);
-        }
-    }
-    [HarmonyPatch(typeof(Witness), nameof(Witness.GetInfo))]
-    private static class HypnotistWitness
-    {
-        private static void Postfix(Witness __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
-            string info = __instance.ConjourInfo(null, charRef);
-
-            __result = new ActedInfo(info);
-        }
-    }
-    [HarmonyPatch(typeof(Lookout), nameof(Lookout.GetInfo))]
-    private static class HypnotistMedium
-    {
-        private static void Postfix(Lookout __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
-
-            Il2CppSystem.Collections.Generic.List<CharacterData> inDeckOutcasts = Gameplay.Instance.GetScriptCharactersOfType(ECharacterType.Outcast);
-            Il2CppSystem.Collections.Generic.List<string> disguisingOutcasts = new Il2CppSystem.Collections.Generic.List<string>();
-            foreach (CharacterData outcast in inDeckOutcasts)
-            {
-                if (outcast.usuallyDisguised)
-                {
-                    disguisingOutcasts.Add(outcast.characterName);
-                }
-            }
-
-            string fakeDisguisingOutcastName = disguisingOutcasts[UnityEngine.Random.RandomRangeInt(0, disguisingOutcasts.Count)];
-            int card = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
-            string info = string.Format("#{0} is actually a {1}", card, fakeDisguisingOutcastName);
-            Il2CppSystem.Collections.Generic.List<Character> hintArrows = new();
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                if (card == c.id)
-                {
-                    hintArrows.Add(c);
-                }
-            }
-            __result = new ActedInfo(info, hintArrows);
-        }
-    }
-    //this one is for Mediums to call out "#x is actually a <disguised outcast>" instead of "#x is a real <disguised outcast>"
-    [HarmonyPatch(typeof(Lookout), nameof(Lookout.ConjourInfo))]
-    private static class MediumDisguised
-    {
-        private static void Postfix(Lookout __instance, int id, CharacterData ch, Character charef, ref string __result)
-        {
-            bool surprised = false;
-            if (ch.usuallyDisguised)
-                surprised = true;
-
-            string info = "";
-            if (surprised)
-                info += $"#{id} is actually a\n";
-            else
-                info += $"#{id} is a real\n";
-            info += $"{ch.GetCharacterName()}";
-            __result = info;
-        }
-    }
-    // and this one is so that lying mediums stop pointing to evils that register as good because it becomes ambiguous whether the medium is truthful or not
-    [HarmonyPatch(typeof(Lookout), nameof(Lookout.GetBluffInfo))]
-    private static class FixMediums
-    {
-        private static void Postfix(Lookout __instance, Character charRef, ref ActedInfo __result)
-        {
-            Il2CppSystem.Collections.Generic.List<Character> allCharacters = GetGameplayCurrentCharacters();
-            Il2CppSystem.Collections.Generic.List<Character> filteredAllCharacters = new();
-
-            foreach (Character c in allCharacters)
-                if (c.bluff != null && !(c.alignment == EAlignment.Evil && c.GetRegisterAlignment() == EAlignment.Good))
-                    if (c != charRef)
-                        filteredAllCharacters.Add(c);
-
-            if (filteredAllCharacters.Count == 0)
-                foreach (Character c in allCharacters)
-                    if (c.bluff != null && !(c.alignment == EAlignment.Evil && c.GetRegisterAlignment() == EAlignment.Good))
-                        filteredAllCharacters.Add(c);
-
-            Il2CppSystem.Collections.Generic.List<Character> pickedCh = new();
-            pickedCh.Add(filteredAllCharacters[UnityEngine.Random.Range(0, filteredAllCharacters.Count)]);
-
-            string info = __instance.ConjourInfo(pickedCh[0].id, pickedCh[0].bluff, charRef);
-            ActedInfo newInfo = new ActedInfo(info, pickedCh);
-            __result = newInfo;
-        }
-    }
-    /*
-    [HarmonyPatch(typeof(Knitter), nameof(Knitter.GetInfo))]
-    private static class HypnotistKnitter
-    {
-        private static void Postfix(Knitter __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
-            Il2CppSystem.Collections.Generic.List<Character> chs = Gameplay.CurrentCharacters;
-            int evils = 0;
-            foreach (Character c in chs)
-            {
-                if (c.GetRegisterAlignment() == EAlignment.Evil)
-                    evils++;
-            }
-            string info = __instance.ConjourInfo(3, charRef);
-
-            __result = new ActedInfo(info);
-        }
-    }*/
-    // Hypnotist, plus also remove the ability for Scout to mention good-registering evils as an evil
-    [HarmonyPatch(typeof(Scout), nameof(Scout.GetInfo))]
-    private static class HypnotistScout
-    {
-        private static void Postfix(Scout __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Hypnotist_scm")
-            {
-                Il2CppSystem.Collections.Generic.List<Character> allEvils = GetGameplayCurrentCharacters();
-                allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
-                allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
-
-                Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
-
-                while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
-
-                int closestEvil = __instance.GetClosestEvilToEvil(pickedEvil, charRef);
-
-                string info = __instance.ConjourInfo(pickedEvil.GetRegisterAs(), closestEvil, charRef);
-                __result = new ActedInfo(info);
-            }
-            else
-            {
-                Il2CppSystem.Collections.Generic.List<Character> allEvils = GetGameplayCurrentCharacters();
-                allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
-                allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
-
-                Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
-
-                string info = __instance.ConjourInfo(pickedEvil.dataRef, 3, charRef);
-
-                __result = new ActedInfo(info);
-            }
-        }
-    }
-    [HarmonyPatch(typeof(Scout), nameof(Scout.GetBluffInfo))]
-    private static class ScoutFix
-    {
-        private static void Postfix(Scout __instance, Character charRef, ref ActedInfo __result)
-        {
-            float randomId = UnityEngine.Random.Range(0f, 1f);
-            Il2CppSystem.Collections.Generic.List<Character> allEvils = GetGameplayCurrentCharacters();
-            allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
-            allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
-
-            Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
-
-            while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
-
-            int id = __instance.GetClosestEvilToEvil(pickedEvil, charRef);
-            id = Calculator.RemoveNumberAndGetRandomNumberFromList(id, 0, 3);
-
-            string info = __instance.ConjourInfo(pickedEvil.GetRegisterAs(), id, charRef);
-            __result = new ActedInfo(info);
-        }
-    }
-    
-    // Force night to always be active
-    [HarmonyPatch(typeof(Imp), nameof(Imp.GetRules))]
-    private static class ForceNightBaa
-    {
-        private static void Postfix(Imp __instance, ref Il2CppSystem.Collections.Generic.List<SpecialRule> __result)
-        {
-            Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
-            sr.Add(new NightModeRule(4));
-            __result = sr;
-        }
-    }
-    [HarmonyPatch(typeof(Pooka), nameof(Pooka.GetRules))]
-    private static class ForceNightPooka
-    {
-        private static void Postfix(Pooka __instance, ref Il2CppSystem.Collections.Generic.List<SpecialRule> __result)
-        {
-            Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
-            sr.Add(new NightModeRule(4));
-            __result = sr;
-        }
-    }
-
-    [HarmonyPatch(typeof(Lycanthrope), nameof(Lycanthrope.GetRules))]
-    private static class RemoveDuplicateNight
-    {
-        private static void Postfix(Lycanthrope __instance, ref Il2CppSystem.Collections.Generic.List<SpecialRule> __result)
-        {
-            Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
-            __result = sr;
-        }
-    }
-    //super janky fix
-    [HarmonyPatch(typeof(NightCycle), nameof(NightCycle.ResetClock))]
-    private static class BluffsActivationAtNight
-    {
-        private static void Postfix()
-        {
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                if (c.bluff)
-                {
-                    if (c.bluff.characterId == "Astronaut_scm"/* || c.bluff.characterId == "Sharpshooter_scm"*/)
-                    {
-                        if (!c.statuses.Contains(ECharacterStatus.HealthyBluff))
-                        {
-                            c.bluffRole.BluffAct(ETriggerPhase.Night, c);
-                        }
-                        else
-                        {
-                            c.bluffRole.Act(ETriggerPhase.Night, c);
-                        }
-                    }
-                }
-                
-            }
-        }
-    }
     public static Il2CppSystem.Collections.Generic.List<Character> GetGameplayCurrentCharacters()
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = new();
@@ -1718,395 +1265,7 @@ public class MainMod : MelonMod
         }
         return characters;
     }
-    // Captivator stuff. Gotta patch both truth and lying info just in case
-    [HarmonyPatch(typeof(Investigator), nameof(Investigator.GetInfo))]
-    private static class CaptivatorOracleTruth
-    {
-        private static void Postfix(Investigator __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Captivator_scm") return;
-            Il2CppSystem.Collections.Generic.List<Character> pickedCharacters = new();
-
-            Il2CppSystem.Collections.Generic.List<Character> evils = GetGameplayCurrentCharacters();
-            evils = Characters.Instance.FilterAlignmentCharacters(evils, EAlignment.Evil);
-            string info = "";
-
-            Il2CppSystem.Collections.Generic.List<Character> other = new();
-
-            Character evil = evils[UnityEngine.Random.Range(0, evils.Count)];
-
-            pickedCharacters.Add(evil);
-            foreach (Character character in GetGameplayCurrentCharacters())
-            {
-                if (character.id != evil.id)
-                    other.Add(character);
-            }
-            pickedCharacters.Add(other[UnityEngine.Random.Range(0, other.Count)]);
-            List<int> pickedIds = new();
-            foreach (Character character in pickedCharacters)
-            {
-                pickedIds.Add(character.id);
-            }
-            pickedIds.Sort();
-            CharacterData cd = new();
-            Il2CppSystem.Collections.Generic.List<CharacterData> minions = Gameplay.Instance.GetScriptCharactersOfType(ECharacterType.Minion);
-            if (pickedCharacters[0].GetRegisterAlignment() == EAlignment.Evil && pickedCharacters[1].GetRegisterAlignment()== EAlignment.Evil)
-            {
-                cd = minions[UnityEngine.Random.Range(0, minions.Count)];
-            } else if (pickedCharacters[0].GetRegisterAlignment() == EAlignment.Evil)
-            {
-                string evilName = pickedCharacters[0].GetRegisterAs().characterName;
-                do
-                {
-                    cd = minions[UnityEngine.Random.Range(0, minions.Count)];
-                } while (cd.characterName == evilName);
-            } else
-            {
-                string evilName = pickedCharacters[1].GetRegisterAs().characterName;
-                do
-                {
-                    cd = minions[UnityEngine.Random.Range(0, minions.Count)];
-                } while (cd.characterName == evilName);
-            }
-                info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], cd, charRef);
-            __result = new ActedInfo(info, pickedCharacters);
-        }
-    }
-    [HarmonyPatch(typeof(Investigator), nameof(Investigator.GetBluffInfo))]
-    private static class CaptivatorOracleLie
-    {
-        private static void Postfix(Investigator __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Captivator_scm") return;
-            Il2CppSystem.Collections.Generic.List<Character> pickedCharacters = new();
-
-            Il2CppSystem.Collections.Generic.List<Character> evils = GetGameplayCurrentCharacters();
-            evils = Characters.Instance.FilterAlignmentCharacters(evils, EAlignment.Evil);
-            string info = "";
-
-            Il2CppSystem.Collections.Generic.List<Character> other = new();
-
-            Character evil = evils[UnityEngine.Random.Range(0, evils.Count)];
-
-            pickedCharacters.Add(evil);
-            foreach (Character character in GetGameplayCurrentCharacters())
-            {
-                if (character.id != evil.id)
-                    other.Add(character);
-            }
-            pickedCharacters.Add(other[UnityEngine.Random.Range(0, other.Count)]);
-            List<int> pickedIds = new();
-            foreach (Character character in pickedCharacters)
-            {
-                pickedIds.Add(character.id);
-            }
-            pickedIds.Sort();
-            CharacterData cd = new();
-            Il2CppSystem.Collections.Generic.List<CharacterData> minions = Gameplay.Instance.GetScriptCharactersOfType(ECharacterType.Minion);
-            if (pickedCharacters[0].GetRegisterAlignment() == EAlignment.Evil && pickedCharacters[1].GetRegisterAlignment() == EAlignment.Evil)
-            {
-                cd = minions[UnityEngine.Random.Range(0, minions.Count)];
-            }
-            else if (pickedCharacters[0].GetRegisterAlignment() == EAlignment.Evil)
-            {
-                string evilName = pickedCharacters[0].GetRegisterAs().characterName;
-                do
-                {
-                    cd = minions[UnityEngine.Random.Range(0, minions.Count)];
-                } while (cd.characterName == evilName);
-            }
-            else
-            {
-                string evilName = pickedCharacters[1].GetRegisterAs().characterName;
-                do
-                {
-                    cd = minions[UnityEngine.Random.Range(0, minions.Count)];
-                } while (cd.characterName == evilName);
-            }
-            info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], cd, charRef);
-            __result = new ActedInfo(info, pickedCharacters);
-        }
-    }
-    [HarmonyPatch(typeof(Noble), nameof(Noble.GetInfo))]
-    private static class CaptivatorEmpress1
-    {
-        private static void Postfix(Noble __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Captivator_scm") return;
-            Il2CppSystem.Collections.Generic.List<Character> picked = new();
-            Il2CppSystem.Collections.Generic.List<Character> chars = GetGameplayCurrentCharacters();
-            Il2CppSystem.Collections.Generic.List<Character> evil = new();
-            Il2CppSystem.Collections.Generic.List<Character> good = new();
-            foreach (Character c in chars) { 
-                if (c.GetRegisterAlignment() == EAlignment.Good)
-                {
-                    good.Add(c);
-                } else
-                {
-                    evil.Add(c);
-                }
-            }
-
-            Character pick = evil[UnityEngine.Random.Range(0, evil.Count)];
-            picked.Add(pick);
-            evil.Remove(pick);
-            pick = evil[UnityEngine.Random.Range(0, evil.Count)];
-            picked.Add(pick);
-            evil.Remove(pick);
-            if (evil.Count > 0 && Calculator.RollDice(2) == 1)
-            {
-                pick = evil[UnityEngine.Random.Range(0, evil.Count)];
-                picked.Add(pick);
-            }
-            else if (good.Count > 0)
-            {
-                pick = good[UnityEngine.Random.Range(0, good.Count)];
-                picked.Add(pick);
-            } else
-            {
-                pick = evil[UnityEngine.Random.Range(0, evil.Count)];
-                picked.Add(pick);
-            }
-            List<int> pickedIds = new();
-            foreach (Character character in picked)
-            {
-                pickedIds.Add(character.id);
-            }
-            pickedIds.Sort();
-            string info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], pickedIds[2], charRef);
-            __result = new ActedInfo(info, picked);
-        }
-    }
-    [HarmonyPatch(typeof(Noble), nameof(Noble.GetBluffInfo))]
-    private static class CaptivatorEmpress2
-    {
-        private static void Postfix(Noble __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Captivator_scm") return;
-            Il2CppSystem.Collections.Generic.List<Character> picked = new();
-            Il2CppSystem.Collections.Generic.List<Character> chars = GetGameplayCurrentCharacters();
-            Il2CppSystem.Collections.Generic.List<Character> evil = new();
-            Il2CppSystem.Collections.Generic.List<Character> good = new();
-            foreach (Character c in chars)
-            {
-                if (c.GetRegisterAlignment() == EAlignment.Good)
-                {
-                    good.Add(c);
-                }
-                else
-                {
-                    evil.Add(c);
-                }
-            }
-
-            Character pick = evil[UnityEngine.Random.Range(0, evil.Count)];
-            picked.Add(pick);
-            evil.Remove(pick);
-            pick = evil[UnityEngine.Random.Range(0, evil.Count)];
-            picked.Add(pick);
-            evil.Remove(pick);
-            if (evil.Count > 0 && Calculator.RollDice(2) == 1)
-            {
-                pick = evil[UnityEngine.Random.Range(0, evil.Count)];
-                picked.Add(pick);
-            }
-            else if (good.Count > 0)
-            {
-                pick = good[UnityEngine.Random.Range(0, good.Count)];
-                picked.Add(pick);
-            }
-            else
-            {
-                pick = evil[UnityEngine.Random.Range(0, evil.Count)];
-                picked.Add(pick);
-            }
-            List<int> pickedIds = new();
-            foreach (Character character in picked)
-            {
-                pickedIds.Add(character.id);
-            }
-            pickedIds.Sort();
-            string info = __instance.ConjourInfo(pickedIds[0], pickedIds[1], pickedIds[2], charRef);
-            __result = new ActedInfo(info, picked);
-        }
-    }
-    public static bool checkCaptivatorBishopInfo(Il2CppSystem.Collections.Generic.List<Character> chars)
-    {
-        int villagers = 0;
-        int outcasts = 0;
-        int evils = 0;
-        foreach (Character c in chars)
-        {
-            switch (c.GetCharacterType())
-            {
-                case ECharacterType.Villager:
-                    villagers++;
-                    break;
-                case ECharacterType.Outcast:
-                    outcasts++;
-                    break;
-                case ECharacterType.Minion:
-                    evils++;
-                    break;
-                case ECharacterType.Demon:
-                    evils++;
-                    break;
-            }
-        }
-        return (evils >= 2 || outcasts >= 2 || villagers == 2 || villagers == 0);
-    }
-
-    [HarmonyPatch(typeof(Bishop), nameof(Bishop.GetInfo))]
-    private static class CaptivatorBishop1
-    {
-        private static void Postfix(Bishop __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Captivator_scm") return;
-            Il2CppSystem.Collections.Generic.List<Character> pickedCharacters = new();
-            bool isValid = false;
-            Il2CppSystem.Collections.Generic.List<Character> allCharacters = GetGameplayCurrentCharacters();
-            do
-            {
-                pickedCharacters = new();
-                int a = UnityEngine.Random.Range(0, allCharacters.Count);
-                int b = UnityEngine.Random.Range(0, allCharacters.Count);
-                while (a == b) b = UnityEngine.Random.Range(0, allCharacters.Count);
-                int c = UnityEngine.Random.Range(0, allCharacters.Count);
-                while (a == c || b == c) c = UnityEngine.Random.Range(0, allCharacters.Count);
-                pickedCharacters.Add(allCharacters[a]);
-                pickedCharacters.Add(allCharacters[b]);
-                pickedCharacters.Add(allCharacters[c]);
-
-                isValid = checkCaptivatorBishopInfo(pickedCharacters);
-            } while (!isValid);
-
-            Il2CppSystem.Collections.Generic.List<int> ids = new Il2CppSystem.Collections.Generic.List<int>();
-            foreach (Character c in pickedCharacters)
-                ids.Add(c.id);
-            ids.Sort();
-            List<ECharacterType> possiblePicks = new List<ECharacterType>();
-            bool minion = false;
-            bool outcast = false;
-            foreach (Character ch in Gameplay.CurrentCharacters)
-            {
-                if (ch.GetCharacterType() == ECharacterType.Outcast) outcast = true;
-                if (ch.GetCharacterType() == ECharacterType.Minion) minion = true;
-            }
-            if (minion)
-                possiblePicks.Add(ECharacterType.Minion);
-            else
-                possiblePicks.Add(ECharacterType.Demon);
-
-            if (outcast)
-                possiblePicks.Add(ECharacterType.Outcast);
-            if (Gameplay.CurrentScript.town > 0)
-                possiblePicks.Add(ECharacterType.Villager);
-
-            pickedCharacters = ListHelper.ShuffleList(pickedCharacters);
-
-            Il2CppSystem.Collections.Generic.List<ECharacterType> types = new();
-            foreach (ECharacterType ct in possiblePicks)
-                types.Add(ct);
-
-            string info = __instance.ConjourInfo(ids, types, charRef);
-            __result = new ActedInfo(info, pickedCharacters);
-        }
-    }
-    [HarmonyPatch(typeof(Bishop), nameof(Bishop.GetBluffInfo))]
-    private static class CaptivatorBishop2
-    {
-        private static void Postfix(Bishop __instance, Character charRef, ref ActedInfo __result)
-        {
-            if (charRef.dataRef.characterId != "Captivator_scm") return;
-            Il2CppSystem.Collections.Generic.List<Character> pickedCharacters = new();
-            bool isValid = false;
-            Il2CppSystem.Collections.Generic.List<Character> allCharacters = GetGameplayCurrentCharacters();
-            do
-            {
-                pickedCharacters = new();
-                int a = UnityEngine.Random.Range(0, allCharacters.Count);
-                int b = UnityEngine.Random.Range(0, allCharacters.Count);
-                while (a == b) b = UnityEngine.Random.Range(0, allCharacters.Count);
-                int c = UnityEngine.Random.Range(0, allCharacters.Count);
-                while (a == c || b == c) c = UnityEngine.Random.Range(0, allCharacters.Count);
-                pickedCharacters.Add(allCharacters[a]);
-                pickedCharacters.Add(allCharacters[b]);
-                pickedCharacters.Add(allCharacters[c]);
-
-                isValid = checkCaptivatorBishopInfo(pickedCharacters);
-            } while (!isValid);
-
-            Il2CppSystem.Collections.Generic.List<int> ids = new Il2CppSystem.Collections.Generic.List<int>();
-            foreach (Character c in pickedCharacters)
-                ids.Add(c.id);
-            ids.Sort();
-            List<ECharacterType> possiblePicks = new List<ECharacterType>();
-
-            bool minion = false;
-            bool outcast = false;
-            foreach (Character ch in Gameplay.CurrentCharacters)
-            {
-                if (ch.GetCharacterType() == ECharacterType.Outcast) outcast = true;
-                if (ch.GetCharacterType() == ECharacterType.Minion) minion = true;
-            }
-            if (minion)
-                possiblePicks.Add(ECharacterType.Minion);
-            else
-                possiblePicks.Add(ECharacterType.Demon);
-
-            if (outcast)
-                possiblePicks.Add(ECharacterType.Outcast);
-            if (Gameplay.CurrentScript.town > 0)
-                possiblePicks.Add(ECharacterType.Villager);
-
-
-            pickedCharacters = ListHelper.ShuffleList(pickedCharacters);
-
-            Il2CppSystem.Collections.Generic.List<ECharacterType> types = new();
-            foreach (ECharacterType ct in possiblePicks)
-                types.Add(ct);
-
-            string info = __instance.ConjourInfo(ids, types, charRef);
-            __result = new ActedInfo(info, pickedCharacters);
-        }
-    }
-
-    // ban Shaman from duping a Trickster
-    [HarmonyPatch(typeof(Illuzionist), nameof(Illuzionist.Act))]
-    private static class ShamanTricksterFix
-    {
-        private static bool Prefix(ETriggerPhase trigger, Character charRef)
-        {
-            if (trigger != ETriggerPhase.Start) return false;
-
-            Il2CppSystem.Collections.Generic.List<Character> villagers1 = GetGameplayCurrentCharacters();
-            villagers1 = Characters.Instance.FilterCharacterType(villagers1, ECharacterType.Villager);
-
-            Il2CppSystem.Collections.Generic.List<Character> villagers = new();
-            foreach (Character c in villagers1)
-            {
-                if (c.dataRef.characterId != "Trickster_scm")
-                {
-                    villagers.Add(c);
-                }
-            }
-
-            Character pickedVillager = villagers[UnityEngine.Random.Range(0, villagers.Count)];
-            pickedVillager.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
-
-            villagers.Remove(pickedVillager);
-            Character replacedVillager = villagers[UnityEngine.Random.Range(0, villagers.Count)];
-
-            //replacedVillager.InitWithNoReset(pickedVillager.GetCharacterBluffIfAble());
-            replacedVillager.Init(pickedVillager.GetCharacterBluffIfAble());
-
-            if (Characters.Instance.CheckIfCharacterShouldStartAct(pickedVillager.GetCharacterBluffIfAble()))
-                replacedVillager.Act(ETriggerPhase.Start);
-
-            replacedVillager.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
-            return false;
-        }
-    }
+    
     public static GameObject CreateCircle(int size)
     {
         GameObject circle = new GameObject();
@@ -2171,96 +1330,5 @@ public class MainMod : MelonMod
         }
         newPool[oldpool.Length] = pool;
         Characters.Instance.characterPool = newPool;
-    }
-
-    // messing with the disguise functions to give more bluff variety
-    [HarmonyPatch(typeof(Characters), nameof(Characters.PickRoundBluffs))]
-    public class MoreBluffVariety
-    {
-        private static bool Prefix(Characters __instance)
-        {
-            Il2CppSystem.Collections.Generic.List<CharacterData> allCharacters = Gameplay.Instance.GetAscensionAllStartingCharacters();
-            Il2CppSystem.Collections.Generic.List<CharacterData> currentCharacters = Gameplay.Instance.GetScriptCharacters();
-            Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayCharacters = new();
-
-            __instance.UniquePool.Clear();
-
-            foreach (CharacterData cd in allCharacters)
-            {
-                if (!currentCharacters.Contains(cd))
-                {
-                    notInPlayCharacters.Add(cd);
-                }
-            }
-            notInPlayCharacters = __instance.FilterBluffableCharacters(notInPlayCharacters);
-            __instance.UniquePool = notInPlayCharacters;
-
-            // Safeguard
-            if (__instance.UniquePool.Count < 1)
-            {
-                notInPlayCharacters = Gameplay.Instance.GetAllAscensionCharacters();
-                notInPlayCharacters = __instance.FilterBluffableCharacters(notInPlayCharacters);
-                notInPlayCharacters = __instance.FilterAlignmentCharacters(notInPlayCharacters, EAlignment.Good);
-                notInPlayCharacters = __instance.FilterRealCharacterType(notInPlayCharacters, ECharacterType.Villager);
-
-                __instance.UniquePool.Add(notInPlayCharacters[UnityEngine.Random.Range(0, notInPlayCharacters.Count)]);
-            }
-            return false;
-        }
-    }
-    // Minions (and some outcasts) can now disguise as any not in play character, not just one of 4
-    [HarmonyPatch(typeof(Characters), nameof(Characters.GetRandomUniqueBluff))]
-    public class MoreBluffVariety2
-    {
-        private static void Postfix(Characters __instance, ref CharacterData __result)
-        {
-            Il2CppSystem.Collections.Generic.List<CharacterData> allCharacters = Gameplay.Instance.GetAscensionAllStartingCharacters();
-            Il2CppSystem.Collections.Generic.List<Character> currentCharacters = Gameplay.CurrentCharacters;
-            Il2CppSystem.Collections.Generic.List<CharacterData> currentCharacterDatas = new();
-            foreach (Character c in currentCharacters)
-            {
-                currentCharacterDatas.Add(c.dataRef);
-            }
-            Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayCharacters = new();
-
-
-            foreach (CharacterData cd in allCharacters)
-            {
-                if (!currentCharacterDatas.Contains(cd))
-                {
-                    notInPlayCharacters.Add(cd);
-                }
-            }
-            notInPlayCharacters = __instance.FilterBluffableCharacters(notInPlayCharacters);
-            __result = notInPlayCharacters[UnityEngine.Random.RandomRangeInt(0, notInPlayCharacters.Count)];
-        }
-    }
-    // Demons (and some other outcasts) can now disguise as any not in play villager, not just one of 4
-    [HarmonyPatch(typeof(Characters), nameof(Characters.GetRandomUniqueVillagerBluff))]
-    public class MoreBluffVariety3
-    {
-        private static void Postfix(Characters __instance, ref CharacterData __result)
-        {
-            Il2CppSystem.Collections.Generic.List<CharacterData> allCharacters = Gameplay.Instance.GetAscensionAllStartingCharacters();
-            Il2CppSystem.Collections.Generic.List<Character> currentCharacters = Gameplay.CurrentCharacters;
-            Il2CppSystem.Collections.Generic.List<CharacterData> currentCharacterDatas = new();
-            foreach (Character c in currentCharacters)
-            {
-                currentCharacterDatas.Add(c.dataRef);
-            }
-            Il2CppSystem.Collections.Generic.List<CharacterData> notInPlayCharacters = new();
-
-
-            foreach (CharacterData cd in allCharacters)
-            {
-                if (!currentCharacterDatas.Contains(cd) && cd.type == ECharacterType.Villager)
-                {
-                    notInPlayCharacters.Add(cd);
-                }
-            }
-            notInPlayCharacters = __instance.FilterBluffableCharacters(notInPlayCharacters);
-
-            __result = notInPlayCharacters[UnityEngine.Random.RandomRangeInt(0, notInPlayCharacters.Count)];
-        }
     }
 }
