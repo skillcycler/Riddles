@@ -70,6 +70,7 @@ public class Djinn
                 invalidMinions.Add("Baron_04539999"); // can move, which is bad
                 invalidMinions.Add("Swarm_Good_WING"); // it's pretty weird for a good minion to be next to this demon
                 invalidMinions.Add("Cryptid_WING");
+                invalidMinions.Add("Marionette_WING");
                 break;
             case "Infestation":
                 invalidMinions.Add("Sunny_POW");
@@ -112,6 +113,16 @@ public class Djinn
         chars.Add("Undying_WING");
         chars.Add("Vizier_LRZH");
         chars.Add("WING_Dupery_Scoundrel");
+
+        return chars;
+    }
+
+    public static List<string> GetNightlyInfoActors()
+    {
+        List<string> chars = new();
+        chars.Add("Sharpshooter_scm");
+        chars.Add("Astronaut_scm");
+        chars.Add("Guide_scm");
 
         return chars;
     }

@@ -42,7 +42,7 @@ public class Hitman : Role
                 Il2CppSystem.Collections.Generic.List<Character> validTargets = new();
                 // not gonna have this guy try to kill the Undying or the Mad Scientist with the Undying ability. It causes too many bugs.
                 foreach (Character target in newList) { 
-                    if (target.dataRef.characterId != "Undying_WING" && !target.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
+                    if (!Djinn.GetCharactersThatCannotDie().Contains(target.dataRef.characterId) && !target.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
                     {
                         if (!target.statuses.Contains(AvoidingDoubleKills.killed) && !target.statuses.Contains(ECharacterStatus.KilledByEvil))
                             validTargets.Add(target);

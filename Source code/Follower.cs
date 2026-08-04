@@ -32,7 +32,10 @@ public class Follower : Demon
         highPriorityIDs.Add("Bishop_58855542");
         highPriorityIDs.Add("Empress_13782227");
         highPriorityIDs.Add("Arithmetician_WING");
-        highPriorityIDs.Add("Astronaut_scm");
+        foreach (string st in Djinn.GetNightlyInfoActors())
+        {
+            highPriorityIDs.Add(st);
+        }
 
         midPriorityIDs.Add("Lover_91302708");
         midPriorityIDs.Add("Oracle_07039445");

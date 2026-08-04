@@ -128,6 +128,17 @@ public class Hypnotist : Minion
     {
         private static void Postfix(Confessor __instance, Character charRef, ref ActedInfo __result)
         {
+            if (charRef.statuses.Contains(Preacher.fakePreacher))
+            {
+                if (Calculator.RollDice(10) <= 5)
+                {
+                    __result = new ActedInfo("I am Good");
+                } else
+                {
+                    __result = new ActedInfo("I am dizzy");
+                }
+                return;
+            }
             if (charRef.dataRef.characterId != "Hypnotist_scm") return;
             string info = "I am Good";
             __result = new ActedInfo(info);

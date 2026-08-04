@@ -94,7 +94,7 @@ public class ModifyBaseGame
             {
                 if (c.bluff)
                 {
-                    if (c.bluff.characterId == "Astronaut_scm" || c.bluff.characterId == "Sharpshooter_scm")
+                    if (Djinn.GetNightlyInfoActors().Contains(c.bluff.characterId))
                     {
                         if (!c.statuses.Contains(ECharacterStatus.HealthyBluff))
                         {

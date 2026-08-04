@@ -1,5 +1,5 @@
 # Riddles
-A Demon Bluff mod that adds 58 brand new characters to the game!
+A Demon Bluff mod that adds 61 brand new characters to the game!
 
 ## Compatible Mods
 The following mods should be compatible with this mod.
@@ -54,6 +54,8 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Motivator: If revealed, my neighbors refresh at night.
 - Therapist: Learn 2 characters that don't have much in common.
 - Crewmate: Learn someone who is Sus.
+- Guide: Each night, learn a character of a different type to the previous night.
+- Preacher: Make someone disguise as the Confessor.
 
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
@@ -90,3 +92,4 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Mystifier: One random Villager is Confused each night. Confused characters have a 50% chance to Lie.
 - Rainbow Joker: You don't know what minions or outcasts are in play.
 - Atheist: Good luck figuring out if there are evils!
+- Fracture: Cards are being erased from reality.
