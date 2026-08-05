@@ -28,6 +28,7 @@ public class Cowboy : Role
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
         List<int> evilVillagers = new();
         List<int> evilOutcasts = new();
+        List<int> evilNeutrals = new(); // from Powerplay
         foreach (Character character in characters)
         {
             if (character.dataRef.type == ECharacterType.Villager && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil))
@@ -38,6 +39,10 @@ public class Cowboy : Role
             {
                 evilOutcasts.Add(character.id);
             }
+            if (character.dataRef.type == (ECharacterType)150 && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil))
+            {
+                evilNeutrals.Add(character.id);
+            }
         }
         string info = "There are no Evil Villagers or Outcasts";
         if (evilVillagers.Count > 0) {
@@ -46,7 +51,11 @@ public class Cowboy : Role
         {
             info = string.Format("#{0} is an Evil Outcast", evilOutcasts[UnityEngine.Random.RandomRangeInt(0, evilOutcasts.Count)]);
         }
-            ActedInfo actedInfo = new ActedInfo(info);
+        else if (evilNeutrals.Count > 0)
+        {
+            info = string.Format("#{0} is an Evil Neutral", evilNeutrals[UnityEngine.Random.RandomRangeInt(0, evilNeutrals.Count)]);
+        }
+        ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }
 
@@ -56,7 +65,7 @@ public class Cowboy : Role
         List<int> notevilVillagersOutcasts = new();
         foreach (Character character in characters)
         {
-            if (!((character.dataRef.type == ECharacterType.Villager || character.dataRef.type == ECharacterType.Outcast) && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil)))
+            if (!((character.dataRef.type == ECharacterType.Villager || character.dataRef.type == ECharacterType.Outcast || character.dataRef.type == (ECharacterType)150) && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil)))
             {
                 notevilVillagersOutcasts.Add(character.id);
             }

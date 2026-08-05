@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.10", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.10.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -60,6 +60,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Sharpshooter>();
         ClassInjector.RegisterTypeInIl2Cpp<Guide>();
         ClassInjector.RegisterTypeInIl2Cpp<Preacher>();
+        ClassInjector.RegisterTypeInIl2Cpp<Sphinx>();
 
         // Outcasts
 
@@ -251,7 +252,7 @@ public class MainMod : MelonMod
         CharacterData Nurse = makeNewCharacter("Nurse", EAlignment.Good, ECharacterType.Villager, true, false, "\"I can cure the Drunk, I promise!\"", true);
         Nurse.role = new Nurse();
         Nurse.description = "Pick 1 alive card: I cure most of their negative status effects.\nIf I cure an Evil character, I also kill them.\n\nIf I am not Lying and there are no curable characters, I will say so.";
-        Nurse.hints = "My ability refreshes every night.\n\nThe statuses I can cure include, but are not limited to: Corrupted, Confused, Accused.";
+        Nurse.hints = "My ability refreshes every night.\nI can cure any harmful effect you can think of.";
         Nurse.ifLies = "\"I couldn't cure #x\"";
         Nurse.abilityUsage = EAbilityUsage.ResetAfterNight;
 
@@ -299,7 +300,7 @@ public class MainMod : MelonMod
         CharacterData Cowboy = makeNewCharacter("Cowboy", EAlignment.Good, ECharacterType.Villager, true, false, "\"Never approach a bull from the front, a horse from the rear or a fool from any direction.\"");
         Cowboy.role = new Cowboy();
         Cowboy.description = "Learn an Evil or Evil-registering Villager or Outcast.";
-        Cowboy.hints = "For example, I see the Wretch as an Evil-registering Outcast.";
+        Cowboy.hints = "For example, I see the Wretch as an Evil-registering Outcast.\n\nIf the Powerplay mod is installed, I can also see Evil Neutrals.";
 
         CharacterData Surveyor = makeNewCharacter("Surveyor", EAlignment.Good, ECharacterType.Villager, true, false, "This land belongs to the Outcasts, not the Minions. Wretch, you're not welcome here.");
         Surveyor.role = new Surveyor();
@@ -357,6 +358,12 @@ public class MainMod : MelonMod
         Preacher.role = new Preacher();
         Preacher.ifLies = "The Confessor will be randomly good or dizzy";
         Preacher.abilityUsage = EAbilityUsage.ResetAfterNight;
+
+        CharacterData Sphinx = makeNewCharacter("Sphinx", EAlignment.Good, ECharacterType.Villager, true, false, "\"Answer my riddles!\"");
+        Sphinx.description = "Learn a question. The answer is the card number of the best execution.";
+        Sphinx.role = new Sphinx();
+        Sphinx.hints = "My questions are always affected by misregistration. Answers are never affected.";
+        Sphinx.ifLies = "Learn the worst execution.";
 
         CharacterData MadScientist = makeNewCharacter("MadScientist", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Lil bro is ANGRY at the village\"");
         MadScientist.role = new MadScientist();
@@ -444,7 +451,7 @@ public class MainMod : MelonMod
 
         CharacterData Wizard = makeNewCharacter("Wizard", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It's black magic.\"");
         Wizard.role = new Wizard();
-        Wizard.description = "Game Start: One random Outcast or Minion (not myself), if there is one, is duplicated.\n\nI Lie and Disguise.";
+        Wizard.description = "Game Start: One random Outcast or Minion (not myself) may be duplicated.\n\nI Lie and Disguise.";
         Wizard.additionalPossibleCharacters = MakeAddedCharacters(0, 1, 1, 0);
         Wizard.hints = "The duplicated character can replace any other Villager, Outcast, or Minion.";
 
@@ -1069,6 +1076,7 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Sharpshooter);
             AddRole(script.startingTownsfolks, Guide);
             AddRole(script.startingTownsfolks, Preacher);
+            AddRole(script.startingTownsfolks, Sphinx);
 
             AddRole(script.startingOutsiders, MadScientist);
             AddRole(script.startingOutsiders, Hitman);

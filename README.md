@@ -1,5 +1,5 @@
 # Riddles
-A Demon Bluff mod that adds 61 brand new characters to the game!
+A Demon Bluff mod that adds 62 brand new characters to the game!
 
 ## Compatible Mods
 The following mods should be compatible with this mod.
@@ -56,6 +56,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Crewmate: Learn someone who is Sus.
 - Guide: Each night, learn a character of a different type to the previous night.
 - Preacher: Make someone disguise as the Confessor.
+- Sphinx: Solve my riddles to get advice on who to execute.
 
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.

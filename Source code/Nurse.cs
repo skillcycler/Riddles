@@ -71,15 +71,29 @@ public class Nurse : Role
         curable.Add(ECharacterStatus.Corrupted);
         curable.Add(Accused.accused);
         curable.Add(Confused.confused);
+        curable.Add(SwappedAlignment.turnedEvil);
+        curable.Add(Escaped.evilTurned);
+        // Wingidon's mod
         curable.Add((ECharacterStatus)968); // Evil turned by Venelum and the likes
         curable.Add((ECharacterStatus)918919); // Hypnotised, by Iris
         curable.Add((ECharacterStatus)16118119); // Mutant Evil
         curable.Add((ECharacterStatus)1615919151); // Poisoned by Snake Charmer
-        curable.Add((ECharacterStatus)2051879522);
-        curable.Add((ECharacterStatus)230);
-        curable.Add((ECharacterStatus)200);
-        curable.Add((ECharacterStatus)195);
-        curable.Add((ECharacterStatus)270);
+        curable.Add((ECharacterStatus)2051879522); // Evil (Tergiversator)
+        // Powerplay
+        curable.Add((ECharacterStatus)195); // Dueled by Pirate
+        curable.Add((ECharacterStatus)196); // Unknown Obstacle
+        curable.Add((ECharacterStatus)199); // Hexed
+        curable.Add((ECharacterStatus)200); // Starved
+        curable.Add((ECharacterStatus)230); // Jinxed
+        curable.Add((ECharacterStatus)231); // Poisoned (Powder maker)
+        curable.Add((ECharacterStatus)255); // Hangman Target
+        curable.Add((ECharacterStatus)260); // Mad
+        curable.Add((ECharacterStatus)261); // Mad
+        curable.Add((ECharacterStatus)270); // Scapegoat Sacrifice
+        curable.Add((ECharacterStatus)291); // Roleblocked
+        // Dupery Bluff
+        curable.Add((ECharacterStatus)1853152120); // Recruited
+
         bool sick = false;
         string add = "";
         foreach (Character cha in Gameplay.CurrentCharacters)
