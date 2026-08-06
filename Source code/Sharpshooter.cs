@@ -70,7 +70,7 @@ public class Sharpshooter : Role
             while (possibleLocations.Count < 5)
             {
                 int random;
-                do { random = UnityEngine.Random.Range(1, Gameplay.CurrentCharacters.Count + 1); }
+                do { random = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1); }
                 while (possibleLocations.Contains(random));
                 possibleLocations.Add(random);
             }
@@ -104,7 +104,7 @@ public class Sharpshooter : Role
             while (possibleLocations.Count < 5)
             {
                 int random;
-                do { random = UnityEngine.Random.Range(1, Gameplay.CurrentCharacters.Count + 1); }
+                do { random = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1); }
                 while (possibleLocations.Contains(random) || random == picked.id);
                 possibleLocations.Add(random);
             }
@@ -135,7 +135,7 @@ public class Sharpshooter : Role
                     while (possibleLocations.Count < 5)
                     {
                         int random;
-                        do { random = UnityEngine.Random.Range(1, Gameplay.CurrentCharacters.Count + 1); }
+                        do { random = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1); }
                         while (possibleLocations.Contains(random) || random == picked.id);
                         possibleLocations.Add(random);
                     }

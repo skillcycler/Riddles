@@ -80,7 +80,6 @@ public class Djinn
                 invalidMinions.Add("Sunny_POW");
                 invalidMinions.Add("Stormy_POW");
                 invalidMinions.Add("Foggy_POW");
-                invalidMinions.Add("Baron_04539999"); // Too many outcasts.
                 break;
             case "Atheist":
                 invalidMinions.Add("Swarm_Good_WING"); // from a bug report

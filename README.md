@@ -1,20 +1,17 @@
 # Riddles
-A Demon Bluff mod that adds 62 brand new characters to the game!
+A Demon Bluff mod that adds 60+ brand new characters to the game!
 
 ## Compatible Mods
 The following mods should be compatible with this mod.
 - Wingidon's Expansion Pack
 - The Salem Trials
 - Powerplay
-- Dupery Bluff (probably)
+- Dupery Bluff
 
 Any other mod is not guaranteed to work well with some of the characters in this mod. In particular, Better Lies (also by me) isn't compatible with this mod.
 
 ## Changes from Base Game
-- All Demons will have a Night Cycle to fix duplicate night bugs
-- This now includes all Demons from Wingidon's mod as well
-- This also now includes demons from Powerplay as well, as of v1.8
-- This also now includes demons from Dupery Bluff as well, as of v1.8.6
+- All Vanilla and Modded Demons will have a night cycle
 - Lycanthrope's night cycle is removed since it is now redundant
 - Witness can additionally see many of the effects from these characters
 - Characters can now choose from every out of play character to bluff instead of just 4 options

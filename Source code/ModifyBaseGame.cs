@@ -127,10 +127,11 @@ public class ModifyBaseGame
         {
             if (allDatas[i].characterName == "Witness")
             {
-                allDatas[i].hints += "\n- Demon protected by Guardian" +
+                allDatas[i].hints += "\n- Character protected by Guardian" +
                                      "\n- Character targeted by Accuser, Baffler, Mystifier, or Wizard" +
                                      "\n- Characters summoned by Summoner, Kingmaker, or Rainbow Joker" +
-                                     "\n- Outcast added or turned evil by Escapist";
+                                     "\n- Outcast added or turned evil by Escapist" +
+                                     "\n- Character changed by Pit Hag";
             }
         }
     }
@@ -259,5 +260,151 @@ public class ModifyBaseGame
 
             __result = notInPlayCharacters[UnityEngine.Random.RandomRangeInt(0, notInPlayCharacters.Count)];
         }
+    }
+    // Kingmaker hides evil counter
+    // Must modify after all other mods, since Atheist does things
+    [HarmonyPatch(typeof(ObjectivesUI), nameof(ObjectivesUI.UpdateObjectives))]
+    [HarmonyPriority(Priority.Last)]
+    public static class ChangeCounter
+    {
+        public static void Postfix(ObjectivesUI __instance)
+        {
+            bool Kingmaker = false;
+            bool Atheist = false;
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.dataRef.characterId == "Kingmaker_scm")
+                {
+                    Kingmaker = true;
+                }
+                if (c.dataRef.characterId == "Atheist_scm")
+                {
+                    Atheist = true;
+                }
+            }
+            if (!Kingmaker && !Atheist) return;
+            int minions = Gameplay.CurrentScript.minion;
+            int demons = Gameplay.CurrentScript.demon;
+            var deadCharacters = Gameplay.DeadCharacters;
+            int EvilsKilled = 0;
+
+            foreach (var deadCharacter in deadCharacters)
+            {
+                if (deadCharacter.alignment == EAlignment.Evil)
+                {
+                    EvilsKilled++;
+                }
+            }
+            if (Atheist)
+            {
+                __instance.evilsKilled.text = string.Format("<color=grey>Evils killed:</color> <color=red>?");
+            }
+            else
+            {
+                __instance.evilsKilled.text = string.Format("<color=grey>Evils killed:</color> <color=red>{0}", EvilsKilled);
+            }
+
+
+            string minionCountText = "Minions";
+            if (minions == 1)
+            {
+                minionCountText = "Minion";
+            }
+            string demonCountText = "Demons";
+            if (demons == 1)
+            {
+                demonCountText = "Demon";
+            }
+            __instance.objective.text = string.Format("Find and Execute all Evil Characters<br><color=grey><size=18>(<color=orange>{0}+ {2}</color> and <color=red>{1}+ {3} </color>)", minions, demons, minionCountText, demonCountText);
+            if (Atheist)
+            {
+                __instance.objective.text = "Find and Execute all Evil Characters.";
+            }
+        }
+    }
+    public static void MakeTwelve()
+    {
+        Transform chars = GameObject.Find("Game/Gameplay/Content/Canvas/Panel/Characters").transform;
+        for (int i = 12; i < 15; i++)
+        {
+            checkCreateCircle(chars, i);
+        }
+        checkCreateCircle(chars, 21);
+    }
+    public static void checkCreateCircle(Transform parent, int size)
+    {
+        string name = "Circle_" + size;
+        Transform t = parent.FindChild(name);
+        if (t != null)
+        {
+            MelonLogger.Msg("Object Already exists!: " + name);
+            return;
+        }
+        CreateCircle(size);
+    }
+    public static GameObject CreateCircle(int size)
+    {
+        GameObject circle = new GameObject();
+        circle.name = "Circle_" + size;
+        circle.transform.SetParent(Characters.Instance.gameObject.transform);
+        RectTransform rt = circle.AddComponent<RectTransform>();
+        CharactersPool cp = circle.AddComponent<CharactersPool>();
+        GameObject gameObject = Characters.Instance.gameObject.transform.Find("Circle_6").gameObject;
+        CharactersPool component = gameObject.GetComponent<CharactersPool>();
+        cp.characterPrefab = component.characterPrefab;
+        cp.characters = Array.Empty<Character>();
+        cp.cardPlaceHolders = new CardPlaceholder[size];
+        for (int i = 0; i < size; i++)
+        {
+            GameObject card = new GameObject();
+            card.transform.SetParent(circle.transform);
+            string text = "CardPlaceholder";
+            if (i > 0)
+            {
+                text = text + " (" + i + ")";
+            }
+            card.name = text;
+            RectTransform card_rt = card.AddComponent<RectTransform>();
+            card_rt.anchoredPosition3D = new Vector3(0f, 0f, 0f);
+            CardPlaceholder cardPlaceholder = card.AddComponent<CardPlaceholder>();
+            int num = i * 360 / size;
+            if (num <= 30)
+            {
+                cardPlaceholder.actedSide = EActedSide.Down;
+            }
+            else if (num <= 149)
+            {
+                cardPlaceholder.actedSide = EActedSide.Left;
+            }
+            else if (num <= 210)
+            {
+                cardPlaceholder.actedSide = EActedSide.Up;
+            }
+            else if (num <= 329)
+            {
+                cardPlaceholder.actedSide = EActedSide.Right;
+            }
+            else
+            {
+                cardPlaceholder.actedSide = EActedSide.Down;
+            }
+            cp.cardPlaceHolders[i] = cardPlaceholder;
+        }
+        circle.transform.position = new Vector3(0f, 1f, 85.9444f);
+        circle.transform.localScale = new Vector3(1f, 1f, 1f);
+        circle.SetActive(false);
+        addToCharsPool(cp);
+        return circle;
+    }
+    public static void addToCharsPool(CharactersPool pool)
+    {
+        CharactersPool[] oldpool = Characters.Instance.characterPool;
+        CharactersPool[] newPool = new CharactersPool[oldpool.Length + 1];
+        for (int i = 0; i < oldpool.Length; i++)
+        {
+            newPool[i] = oldpool[i];
+        }
+        newPool[oldpool.Length] = pool;
+        Characters.Instance.characterPool = newPool;
     }
 }

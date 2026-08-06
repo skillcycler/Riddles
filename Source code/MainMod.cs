@@ -14,13 +14,14 @@ using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
 using static Il2Cpp.Interop;
+using static Il2CppRewired.Utils.ExternalTools;
 using static Il2CppSystem.Array;
 using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.11", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.12", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -169,14 +170,6 @@ public class MainMod : MelonMod
         a.count.Add(cd);
         return a;
     }
-    public static void MakeTwelve()
-    {
-        GameObject circle12 = CreateCircle(12);
-        GameObject circle13 = CreateCircle(13);
-        GameObject circle14 = CreateCircle(14);
-        GameObject circle15 = CreateCircle(15);
-        GameObject circleForTesting = CreateCircle(21);
-    }
     public static void AddConfigs()
     {
         MelonPreferences_Category configCategory = MelonPreferences.CreateCategory("RiddlesConfig");
@@ -190,6 +183,7 @@ public class MainMod : MelonMod
         configCategory.CreateEntry("Infestation", true, "Infestation", "Whether Infestation can show up");
         configCategory.CreateEntry("Mystifier", true, "Mystifier", "Whether Mystifier can show up");
         configCategory.CreateEntry("Fracture", true, "Fracture", "Whether Fracture can show up");
+        configCategory.CreateEntry("ExpandedVillages", true, "ExpandedVillages", "If this is enabled, some demons can show up in more village sizes.");
         configCategory.SetFilePath(System.IO.Path.Combine(MelonEnvironment.UserDataDirectory, "RiddlesConfig.cfg"));
         configCategory.SaveToFile();
     }
@@ -197,7 +191,7 @@ public class MainMod : MelonMod
     {
         GameObject content = GameObject.Find("Game/Gameplay/Content");
         NightPhase nightPhase = content.GetComponent<NightPhase>();
-        MakeTwelve();
+        ModifyBaseGame.MakeTwelve();
         ModifyBaseGame.UpdateWitness();
         PatchNights.Patch();
         AddConfigs();
@@ -532,6 +526,58 @@ public class MainMod : MelonMod
         Fracture.role = new Fracture();
         Fracture.description = "Game Start & At night: 1 random character is Erased. Erased characters register as no alignment and no type.";
 
+        bool moreVillageSizes = false;
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Fracture").GetValueAsString().ToLower() == "true") moreVillageSizes = true;
+        // Give names to all the character counts
+        CharactersCount clocktower_8 = setCharacterCount(5, 1, 1, 1);
+        CharactersCount clocktower_9 = setCharacterCount(5, 2, 1, 1);
+        CharactersCount clocktower_10 = setCharacterCount(7, 0, 2, 1);
+        CharactersCount clocktower_11 = setCharacterCount(7, 1, 2, 1);
+        CharactersCount clocktower_12 = setCharacterCount(7, 2, 2, 1);
+        CharactersCount clocktower_13 = setCharacterCount(9, 0, 3, 1);
+        CharactersCount clocktower_14 = setCharacterCount(9, 1, 3, 1);
+        CharactersCount clocktower_15 = setCharacterCount(9, 2, 3, 1);
+
+        CharactersCount summoner_7 = setCharacterCount(6, 0, 0, 1);
+        CharactersCount summoner_8 = setCharacterCount(7, 0, 0, 1);
+        CharactersCount summoner_9 = setCharacterCount(8, 0, 0, 1);
+        CharactersCount summoner_10 = setCharacterCount(9, 0, 0, 1);
+        CharactersCount summoner_11 = setCharacterCount(10, 0, 0, 1);
+        CharactersCount summoner_12 = setCharacterCount(11, 0, 0, 1);
+        CharactersCount summoner_13 = setCharacterCount(12, 0, 0, 1);
+        CharactersCount summoner_14 = setCharacterCount(13, 0, 0, 1);
+        CharactersCount summoner_15 = setCharacterCount(14, 0, 0, 1);
+        //format: cards_outcasts minions
+        CharactersCount six_01 = setCharacterCount(4, 0, 1, 1);
+        CharactersCount six_10 = setCharacterCount(4, 1, 0, 1);
+        CharactersCount seven_11 = setCharacterCount(4, 1, 1, 1);
+        CharactersCount seven_02 = setCharacterCount(4, 0, 2, 1);
+        CharactersCount eight_12 = setCharacterCount(4, 1, 2, 1);
+        CharactersCount eight_20 = setCharacterCount(5, 2, 0, 1);
+        CharactersCount eight_21 = setCharacterCount(4, 2, 1, 1);
+        CharactersCount nine_02 = setCharacterCount(6, 0, 2, 1);
+        CharactersCount nine_12 = setCharacterCount(5, 1, 2, 1);
+        CharactersCount nine_22 = setCharacterCount(4, 2, 2, 1);
+        CharactersCount ten_12 = setCharacterCount(6, 1, 2, 1);
+        CharactersCount ten_21 = setCharacterCount(6, 2, 1, 1);
+        CharactersCount ten_22 = setCharacterCount(5, 2, 2, 1);
+        CharactersCount eleven_03 = setCharacterCount(6, 0, 3, 1);
+        CharactersCount eleven_13 = setCharacterCount(6, 1, 3, 1);
+        CharactersCount eleven_21 = setCharacterCount(7, 2, 1, 1);
+        CharactersCount eleven_22 = setCharacterCount(6, 2, 2, 1);
+        CharactersCount twelve_04 = setCharacterCount(7, 0, 4, 1);
+        CharactersCount twelve_13 = setCharacterCount(7, 1, 3, 1);
+        CharactersCount twelve_23 = setCharacterCount(6, 2, 3, 1);
+        CharactersCount thirteen_12 = setCharacterCount(9, 1, 2, 1);
+        CharactersCount thirteen_13 = setCharacterCount(8, 1, 3, 1);
+        CharactersCount thirteen_22 = setCharacterCount(8, 2, 2, 1);
+        CharactersCount fourteen_03 = setCharacterCount(10, 0, 3, 1);
+        CharactersCount fourteen_04 = setCharacterCount(9, 0, 4, 1);
+        CharactersCount fourteen_23 = setCharacterCount(8, 2, 3, 1);
+        CharactersCount fifteen_04 = setCharacterCount(10, 0, 4, 1);
+        CharactersCount fifteen_13 = setCharacterCount(10, 1, 3, 1);
+        CharactersCount fifteen_14 = setCharacterCount(9, 1, 4, 1);
+
         CustomScriptData followerScriptData = new CustomScriptData();
         followerScriptData.name = "Follower_1";
         ScriptInfo followerScript = new ScriptInfo();
@@ -542,49 +588,32 @@ public class MainMod : MelonMod
         followerScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
         followerScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
         followerScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
-        CharactersCount follower_8a = setCharacterCount(5, 1, 1, 1);
-        CharactersCount follower_8b = setCharacterCount(4, 1, 2, 1);
-        CharactersCount follower_8c = setCharacterCount(4, 2, 1, 1);
-        CharactersCount follower_9a = setCharacterCount(5, 2, 1, 1);
-        CharactersCount follower_9b = setCharacterCount(5, 1, 2, 1);
-        CharactersCount follower_9c = setCharacterCount(4, 2, 2, 1);
-        CharactersCount follower_9d = setCharacterCount(6, 1, 1, 1);
-        CharactersCount follower_10a = setCharacterCount(7, 0, 2, 1);
-        CharactersCount follower_10b = setCharacterCount(6, 1, 2, 1);
-        CharactersCount follower_10c = setCharacterCount(5, 2, 2, 1);
-        CharactersCount follower_11a = setCharacterCount(7, 1, 2, 1);
-        CharactersCount follower_11b = setCharacterCount(6, 2, 2, 1);
-        CharactersCount follower_11c = setCharacterCount(6, 1, 3, 1);
-        CharactersCount follower_11d = setCharacterCount(7, 0, 3, 1);
-        CharactersCount follower_12a = setCharacterCount(7, 2, 2, 1);
-        CharactersCount follower_12b = setCharacterCount(6, 3, 2, 1);
-        CharactersCount follower_12c = setCharacterCount(8, 0, 3, 1);
-        CharactersCount follower_12d = setCharacterCount(7, 1, 3, 1);
-        CharactersCount follower_13a = setCharacterCount(8, 1, 3, 1);
-        CharactersCount follower_13b = setCharacterCount(9, 0, 3, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> followerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
-
-        followerCounterList.Add(follower_8a);
-        followerCounterList.Add(follower_8b);
-        followerCounterList.Add(follower_8c);
-        followerCounterList.Add(follower_9a);
-        followerCounterList.Add(follower_9b);
-        followerCounterList.Add(follower_9c);
-        followerCounterList.Add(follower_9d);
-        followerCounterList.Add(follower_10a);
-        followerCounterList.Add(follower_10b);
-        followerCounterList.Add(follower_10c);
-        followerCounterList.Add(follower_11a);
-        followerCounterList.Add(follower_11b);
-        followerCounterList.Add(follower_11c);
-        followerCounterList.Add(follower_11d);
-        followerCounterList.Add(follower_12a);
-        followerCounterList.Add(follower_12b);
-        followerCounterList.Add(follower_12c);
-        followerCounterList.Add(follower_12d);
-        followerCounterList.Add(follower_13a);
-        followerCounterList.Add(follower_13b);
+        followerCounterList.Add(eight_12);
+        followerCounterList.Add(eight_21);
+        followerCounterList.Add(clocktower_8);
+        followerCounterList.Add(nine_12);
+        followerCounterList.Add(nine_22);
+        followerCounterList.Add(clocktower_9);
+        followerCounterList.Add(ten_12);
+        followerCounterList.Add(ten_22);
+        followerCounterList.Add(clocktower_10);
+        followerCounterList.Add(eleven_13);
+        followerCounterList.Add(eleven_22);
+        followerCounterList.Add(clocktower_11);
+        followerCounterList.Add(twelve_13);
+        followerCounterList.Add(twelve_23);
+        followerCounterList.Add(clocktower_12);
+        if (moreVillageSizes)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                followerCounterList.Add(clocktower_13);
+                followerCounterList.Add(clocktower_14);
+                followerCounterList.Add(clocktower_15);
+            }
+        }
         followerScript.characterCounts = followerCounterList;
         followerScriptData.scriptInfo = followerScript;
         
@@ -598,64 +627,28 @@ public class MainMod : MelonMod
         veilScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
         veilScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
         veilScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
-        CharactersCount veil_9a = setCharacterCount(6, 0, 2, 1);
-        CharactersCount veil_9b = setCharacterCount(6, 1, 1, 1);
-        CharactersCount veil_10a = setCharacterCount(7, 0, 2, 1);
-        CharactersCount veil_10b = setCharacterCount(7, 1, 1, 1);
-        CharactersCount veil_10c = setCharacterCount(6, 1, 2, 1);
-        CharactersCount veil_11a = setCharacterCount(7, 1, 2, 1);
-        CharactersCount veil_11b = setCharacterCount(7, 0, 3, 1);
-        CharactersCount veil_11c = setCharacterCount(8, 0, 2, 1);
-        CharactersCount veil_11d = setCharacterCount(8, 1, 1, 1);
-        CharactersCount veil_12a = setCharacterCount(9, 0, 2, 1);
-        CharactersCount veil_12b = setCharacterCount(8, 0, 3, 1);
-        CharactersCount veil_12c = setCharacterCount(8, 1, 2, 1);
-        CharactersCount veil_13a = setCharacterCount(8, 1, 3, 1);
-        CharactersCount veil_13b = setCharacterCount(9, 0, 3, 1);
-        CharactersCount veil_13c = setCharacterCount(9, 1, 2, 1);
-        CharactersCount veil_13d = setCharacterCount(8, 2, 2, 1);
-        CharactersCount veil_14a = setCharacterCount(8, 2, 3, 1);
-        CharactersCount veil_14b = setCharacterCount(9, 1, 3, 1);
-        CharactersCount veil_14c = setCharacterCount(10, 0, 3, 1);
-        CharactersCount veil_15a = setCharacterCount(11, 0, 3, 1);
-        CharactersCount veil_15b = setCharacterCount(10, 1, 3, 1);
-        CharactersCount veil_15c = setCharacterCount(9, 2, 3, 1);
-
         Il2CppSystem.Collections.Generic.List<CharactersCount> veilCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
-
-        for (int i = 0; i < 5; i++)
+        
+        veilCounterList.Add(thirteen_12);
+        veilCounterList.Add(thirteen_13);
+        veilCounterList.Add(thirteen_22);
+        veilCounterList.Add(clocktower_13);
+        veilCounterList.Add(fourteen_03);
+        veilCounterList.Add(fourteen_04);
+        veilCounterList.Add(fourteen_23);
+        veilCounterList.Add(clocktower_14);
+        veilCounterList.Add(fifteen_04);
+        veilCounterList.Add(fifteen_13);
+        veilCounterList.Add(fifteen_14);
+        veilCounterList.Add(clocktower_15);
+        if (moreVillageSizes)
         {
-            veilCounterList.Add(veil_13a);
-            veilCounterList.Add(veil_13b);
-            veilCounterList.Add(veil_13c);
-            veilCounterList.Add(veil_13d);
-            veilCounterList.Add(veil_14a);
-            veilCounterList.Add(veil_14b);
-            veilCounterList.Add(veil_14c);
-            veilCounterList.Add(veil_15a);
-            veilCounterList.Add(veil_15b);
-            veilCounterList.Add(veil_15c);
-            veilCounterList.Add(veil_14b);
-            veilCounterList.Add(veil_14c);
-            veilCounterList.Add(veil_15a);
-            veilCounterList.Add(veil_15b);
+            veilCounterList.Add(clocktower_8);
+            veilCounterList.Add(nine_12);
+            veilCounterList.Add(ten_12);
+            veilCounterList.Add(clocktower_11);
+            veilCounterList.Add(twelve_13);
         }
-        veilCounterList.Add(veil_9a);
-        veilCounterList.Add(veil_9b);
-        veilCounterList.Add(veil_10a);
-        veilCounterList.Add(veil_10b);
-        veilCounterList.Add(veil_10c);
-        veilCounterList.Add(veil_11a);
-        veilCounterList.Add(veil_11b);
-        veilCounterList.Add(veil_11c);
-        veilCounterList.Add(veil_11d);
-        veilCounterList.Add(veil_11a);
-        veilCounterList.Add(veil_11b);
-        veilCounterList.Add(veil_11c);
-        veilCounterList.Add(veil_11d);
-        veilCounterList.Add(veil_12a);
-        veilCounterList.Add(veil_12b);
-        veilCounterList.Add(veil_12c);
 
         veilScript.characterCounts = veilCounterList;
         veilScriptData.scriptInfo = veilScript;
@@ -670,20 +663,6 @@ public class MainMod : MelonMod
         summonerScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
         summonerScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
         summonerScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
-        // 7-8 cards: 1 summon
-        CharactersCount summoner_7 = setCharacterCount(6, 0, 0, 1);
-        CharactersCount summoner_8 = setCharacterCount(7, 0, 0, 1);
-        // 9-10 cards: 1-2 summons
-        CharactersCount summoner_9 = setCharacterCount(8, 0, 0, 1);
-        CharactersCount summoner_10 = setCharacterCount(9, 0, 0, 1);
-        // 11-12 cards: 2-3 summons
-        CharactersCount summoner_11 = setCharacterCount(10, 0, 0, 1);
-        CharactersCount summoner_12 = setCharacterCount(11, 0, 0, 1);
-        // 13+ cards: 3-4 summons
-        CharactersCount summoner_13 = setCharacterCount(12, 0, 0, 1);
-        CharactersCount summoner_14 = setCharacterCount(13, 0, 0, 1);
-        CharactersCount summoner_15 = setCharacterCount(14, 0, 0, 1);
-
         Il2CppSystem.Collections.Generic.List<CharactersCount> summonerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
         
         CustomScriptData infestationScriptData = new CustomScriptData();
@@ -696,37 +675,14 @@ public class MainMod : MelonMod
         infestationScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
         infestationScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
         infestationScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
-        CharactersCount clocktower_8 = setCharacterCount(5, 1, 1, 1);
-        CharactersCount clocktower_9 = setCharacterCount(5, 2, 1, 1);
-        CharactersCount infestation_9b = setCharacterCount(5, 1, 2, 1);
-        CharactersCount infestation_9c = setCharacterCount(6, 1, 1, 1);
-        CharactersCount clocktower_10 = setCharacterCount(7, 0, 2, 1);
-        CharactersCount infestation_10b = setCharacterCount(7, 1, 1, 1);
-        CharactersCount clocktower_11 = setCharacterCount(7, 1, 2, 1);
-        CharactersCount clocktower_12 = setCharacterCount(7, 2, 2, 1);
-        CharactersCount clocktower_13 = setCharacterCount(9, 0, 3, 1);
-        CharactersCount clocktower_14 = setCharacterCount(9, 1, 3, 1);
-        CharactersCount clocktower_15 = setCharacterCount(9, 2, 3, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> infestationCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
-
-        infestationCounterList.Add(clocktower_8);
         infestationCounterList.Add(clocktower_9);
-        infestationCounterList.Add(infestation_9b);
-        infestationCounterList.Add(infestation_9c);
         infestationCounterList.Add(clocktower_10);
-        infestationCounterList.Add(infestation_10b);
-        infestationCounterList.Add(clocktower_10);
-        infestationCounterList.Add(infestation_10b);
-        infestationCounterList.Add(clocktower_11);
         infestationCounterList.Add(clocktower_11);
         infestationCounterList.Add(clocktower_12);
-        infestationCounterList.Add(clocktower_12);
-        infestationCounterList.Add(clocktower_13);
         infestationCounterList.Add(clocktower_13);
         infestationCounterList.Add(clocktower_14);
-        infestationCounterList.Add(clocktower_14);
-        infestationCounterList.Add(clocktower_15);
         infestationCounterList.Add(clocktower_15);
 
         infestationScript.characterCounts = infestationCounterList;
@@ -742,25 +698,23 @@ public class MainMod : MelonMod
         escapistScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
         escapistScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
         escapistScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
-        CharactersCount escapist_8a = setCharacterCount(5, 2, 0, 1);
-        CharactersCount escapist_8b = setCharacterCount(4, 2, 1, 1);
-        CharactersCount escapist_9 = setCharacterCount(5, 1, 2, 1);
-        CharactersCount escapist_10a = setCharacterCount(6, 1, 2, 1);
-        CharactersCount escapist_10b = setCharacterCount(6, 2, 1, 1);
-        CharactersCount escapist_11 = setCharacterCount(7, 2, 1, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> escapistCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
-
-        escapistCounterList.Add(escapist_8a);
-        escapistCounterList.Add(escapist_8b);
-        escapistCounterList.Add(clocktower_8);
-        escapistCounterList.Add(escapist_9);
+        escapistCounterList.Add(eight_20);
+        escapistCounterList.Add(eight_21);
+        escapistCounterList.Add(nine_12);
         escapistCounterList.Add(clocktower_9);
-        escapistCounterList.Add(escapist_10a);
-        escapistCounterList.Add(escapist_10b);
-        escapistCounterList.Add(escapist_11);
+        escapistCounterList.Add(ten_12);
+        escapistCounterList.Add(ten_21);
+        escapistCounterList.Add(eleven_21);
         escapistCounterList.Add(clocktower_11);
-
+        if (moreVillageSizes)
+        {
+            escapistCounterList.Add(clocktower_12);
+            escapistCounterList.Add(thirteen_22);
+            escapistCounterList.Add(fourteen_23);
+            escapistCounterList.Add(clocktower_15);
+        }
         escapistScript.characterCounts = escapistCounterList;
         escapistScriptData.scriptInfo = escapistScript;
 
@@ -774,47 +728,40 @@ public class MainMod : MelonMod
         kingmakerScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
         kingmakerScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
         kingmakerScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
-        CharactersCount kingmaker_7a = setCharacterCount(4, 1, 1, 1);
-        CharactersCount kingmaker_7b = setCharacterCount(4, 0, 2, 1);
-        CharactersCount kingmaker_8 = setCharacterCount(4, 2, 1, 1);
-        CharactersCount kingmaker_9a = setCharacterCount(5, 1, 2, 1);
-        CharactersCount kingmaker_9b = setCharacterCount(6, 1, 1, 1);
-        CharactersCount kingmaker_10a = setCharacterCount(6, 1, 2, 1);
-        CharactersCount kingmaker_10b = setCharacterCount(6, 2, 1, 1);
-        CharactersCount kingmaker_10c = setCharacterCount(5, 2, 2, 1);
-        CharactersCount kingmaker_10d = setCharacterCount(7, 1, 1, 1);
-        CharactersCount kingmaker_11a = setCharacterCount(8, 0, 2, 1);
-        CharactersCount kingmaker_11b = setCharacterCount(7, 0, 3, 1);
-        CharactersCount kingmaker_11c = setCharacterCount(6, 0, 4, 1);
-        CharactersCount kingmaker_11d = setCharacterCount(6, 1, 3, 1);
-        CharactersCount kingmaker_12a = setCharacterCount(7, 1, 3, 1);
-        CharactersCount kingmaker_12b = setCharacterCount(7, 0, 4, 1);
-        CharactersCount kingmaker_12c = setCharacterCount(8, 0, 3, 1);
-        CharactersCount kingmaker_12d = setCharacterCount(6, 2, 3, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> kingmakerCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
-
-        kingmakerCounterList.Add(kingmaker_7a);
-        kingmakerCounterList.Add(kingmaker_7b);
-        kingmakerCounterList.Add(kingmaker_8);
+        kingmakerCounterList.Add(six_01);
+        kingmakerCounterList.Add(six_10);
+        kingmakerCounterList.Add(seven_11);
+        kingmakerCounterList.Add(seven_02);
+        kingmakerCounterList.Add(eight_21);
         kingmakerCounterList.Add(clocktower_8);
-        kingmakerCounterList.Add(kingmaker_9a);
-        kingmakerCounterList.Add(kingmaker_9b);
+        kingmakerCounterList.Add(nine_12);
         kingmakerCounterList.Add(clocktower_9);
-        kingmakerCounterList.Add(kingmaker_10a);
-        kingmakerCounterList.Add(kingmaker_10b);
-        kingmakerCounterList.Add(kingmaker_10c);
-        kingmakerCounterList.Add(kingmaker_10d);
+        kingmakerCounterList.Add(ten_12);
+        kingmakerCounterList.Add(ten_21);
+        kingmakerCounterList.Add(ten_22);
         kingmakerCounterList.Add(clocktower_10);
-        kingmakerCounterList.Add(kingmaker_11a);
-        kingmakerCounterList.Add(kingmaker_11b);
-        kingmakerCounterList.Add(kingmaker_11c);
-        kingmakerCounterList.Add(kingmaker_11d);
+        kingmakerCounterList.Add(eleven_03);
+        kingmakerCounterList.Add(eleven_13);
+        kingmakerCounterList.Add(eleven_22);
         kingmakerCounterList.Add(clocktower_11);
-        kingmakerCounterList.Add(kingmaker_12a);
-        kingmakerCounterList.Add(kingmaker_12b);
-        kingmakerCounterList.Add(kingmaker_12c);
-        kingmakerCounterList.Add(kingmaker_12d);
+        kingmakerCounterList.Add(twelve_13);
+        kingmakerCounterList.Add(twelve_04);
+        kingmakerCounterList.Add(twelve_23);
+        kingmakerCounterList.Add(clocktower_12);
+
+        if (moreVillageSizes)
+        {
+            kingmakerCounterList.Add(clocktower_13);
+            kingmakerCounterList.Add(thirteen_13);
+            kingmakerCounterList.Add(clocktower_14);
+            kingmakerCounterList.Add(fourteen_04);
+            kingmakerCounterList.Add(fourteen_23);
+            kingmakerCounterList.Add(clocktower_15);
+            kingmakerCounterList.Add(fifteen_14);
+            kingmakerCounterList.Add(fifteen_04);
+        }
 
         kingmakerScript.characterCounts = kingmakerCounterList;
         kingmakerScriptData.scriptInfo = kingmakerScript;
@@ -829,39 +776,25 @@ public class MainMod : MelonMod
         MystifierScript.startingTownsfolks = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingTownsfolks;
         MystifierScript.startingOutsiders = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingOutsiders;
         MystifierScript.startingMinions = ProjectContext.Instance.gameData.advancedAscension.possibleScriptsData[0].scriptInfo.startingMinions;
-        CharactersCount Mystifier_8 = setCharacterCount(4, 1, 2, 1);
-        CharactersCount Mystifier_9a = setCharacterCount(6, 0, 2, 1);
-        CharactersCount Mystifier_9b = setCharacterCount(5, 1, 2, 1);
-        CharactersCount Mystifier_9c = setCharacterCount(6, 1, 1, 1);
-        CharactersCount Mystifier_10a = setCharacterCount(6, 1, 2, 1);
-        CharactersCount Mystifier_10b = setCharacterCount(6, 2, 1, 1);
-        CharactersCount Mystifier_11a = setCharacterCount(7, 0, 3, 1);
-        CharactersCount Mystifier_11b = setCharacterCount(6, 1, 3, 1);
-        CharactersCount Mystifier_11c = setCharacterCount(8, 0, 2, 1);
         Il2CppSystem.Collections.Generic.List<CharactersCount> MystifierCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
         MystifierCounterList.Add(clocktower_8);
-        MystifierCounterList.Add(Mystifier_8);
-        MystifierCounterList.Add(clocktower_8);
-        MystifierCounterList.Add(Mystifier_8);
-        MystifierCounterList.Add(Mystifier_9a);
-        MystifierCounterList.Add(Mystifier_9b);
-        MystifierCounterList.Add(Mystifier_10a);
-        MystifierCounterList.Add(Mystifier_10b);
+        MystifierCounterList.Add(eight_21);
+        MystifierCounterList.Add(nine_02);
+        MystifierCounterList.Add(nine_12);
+        MystifierCounterList.Add(ten_12);
+        MystifierCounterList.Add(ten_21);
         MystifierCounterList.Add(clocktower_10);
-        MystifierCounterList.Add(Mystifier_9a);
-        MystifierCounterList.Add(Mystifier_9b);
-        MystifierCounterList.Add(Mystifier_10a);
-        MystifierCounterList.Add(Mystifier_10b);
-        MystifierCounterList.Add(clocktower_10);
-        MystifierCounterList.Add(Mystifier_11a);
-        MystifierCounterList.Add(Mystifier_11b);
-        MystifierCounterList.Add(Mystifier_11c);
+        MystifierCounterList.Add(eleven_03);
+        MystifierCounterList.Add(eleven_13);
         MystifierCounterList.Add(clocktower_11);
-        MystifierCounterList.Add(clocktower_12);
-        MystifierCounterList.Add(clocktower_13);
-        MystifierCounterList.Add(clocktower_14);
-        MystifierCounterList.Add(clocktower_15);
+        if (moreVillageSizes)
+        {
+            MystifierCounterList.Add(clocktower_12);
+            MystifierCounterList.Add(clocktower_13);
+            MystifierCounterList.Add(clocktower_14);
+            MystifierCounterList.Add(clocktower_15);
+        }
 
         MystifierScript.characterCounts = MystifierCounterList;
         MystifierScriptData.scriptInfo = MystifierScript;
@@ -905,11 +838,19 @@ public class MainMod : MelonMod
         Il2CppSystem.Collections.Generic.List<CharactersCount> AtheistCounterList = new Il2CppSystem.Collections.Generic.List<CharactersCount>();
 
         AtheistCounterList.Add(clocktower_8);
-        AtheistCounterList.Add(setCharacterCount(4, 1, 2, 1));
+        AtheistCounterList.Add(eight_12);
         AtheistCounterList.Add(clocktower_9);
-        AtheistCounterList.Add(setCharacterCount(5, 1, 2, 1));
+        AtheistCounterList.Add(nine_12);
         AtheistCounterList.Add(clocktower_10);
-        AtheistCounterList.Add(setCharacterCount(6, 1, 2, 1));
+        AtheistCounterList.Add(ten_12);
+        if (moreVillageSizes)
+        {
+            AtheistCounterList.Add(clocktower_11);
+            AtheistCounterList.Add(clocktower_12);
+            AtheistCounterList.Add(clocktower_13);
+            AtheistCounterList.Add(clocktower_14);
+            AtheistCounterList.Add(clocktower_15);
+        }
 
         AtheistScript.characterCounts = AtheistCounterList;
         AtheistScriptData.scriptInfo = AtheistScript;
@@ -998,8 +939,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Fracture);
         Characters.Instance.startGameActOrder = InsertAfterAct("Summoner", Kingmaker);
         Characters.Instance.startGameActOrder = InsertAfterAct("Kingmaker", Wizard);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Wizard", Guardian);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", Escapist);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Wizard", Escapist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Recruiter);
         Characters.Instance.startGameActOrder = InsertAfterAct("Recruiter", PitHag);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", MadScientist);
@@ -1008,7 +948,8 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Channeler", Trickster);
         Characters.Instance.startGameActOrder = InsertAfterAct("Witch", Veil);
         Characters.Instance.startGameActOrder = InsertAfterAct("Poisoner", Accuser);
-        Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Baffler);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Accuser", Guardian);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", Baffler);
         Characters.Instance.startGameActOrder = InsertAfterAct("Baffler", Slanderer);
         Characters.Instance.startGameActOrder = InsertAfterAct("Slanderer", Mystifier);
         Characters.Instance.startGameActOrder = InsertAfterAct("Mystifier", Reflector);
@@ -1249,66 +1190,6 @@ public class MainMod : MelonMod
             MainMod.CachedRule = __instance;
         }
     }
-    // Kingmaker hides evil counter
-    // Must modify after all other mods, since Atheist does things
-    [HarmonyPatch(typeof(ObjectivesUI), nameof(ObjectivesUI.UpdateObjectives))]
-    [HarmonyPriority(HarmonyLib.Priority.Last)]
-    public static class ChangeCounter
-    {
-        public static void Postfix(ObjectivesUI __instance)
-        {
-            bool Kingmaker = false;
-            bool Atheist = false;
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                if (c.dataRef.characterId == "Kingmaker_scm")
-                {
-                    Kingmaker = true;
-                }
-                if (c.dataRef.characterId == "Atheist_scm")
-                {
-                    Atheist = true;
-                }
-            }
-            if (!Kingmaker && !Atheist) return;
-            int minions = Gameplay.CurrentScript.minion;
-            int demons = Gameplay.CurrentScript.demon;
-            var deadCharacters = Gameplay.DeadCharacters;
-            int EvilsKilled = 0;
-
-            foreach (var deadCharacter in deadCharacters)
-            {
-                if (deadCharacter.alignment == EAlignment.Evil)
-                {
-                    EvilsKilled++;
-                }
-            }
-            if (Atheist)
-            {
-                __instance.evilsKilled.text = string.Format("<color=grey>Evils killed:</color> <color=red>?");
-            } else
-            {
-                __instance.evilsKilled.text = string.Format("<color=grey>Evils killed:</color> <color=red>{0}", EvilsKilled);
-            }
-
-
-                string minionCountText = "Minions";
-            if (minions == 1)
-            {
-                minionCountText = "Minion";
-            }
-            string demonCountText = "Demons";
-            if (demons == 1)
-            {
-                demonCountText = "Demon";
-            }
-            __instance.objective.text = string.Format("Find and Execute all Evil Characters<br><color=grey><size=18>(<color=orange>{0}+ {2}</color> and <color=red>{1}+ {3} </color>)", minions, demons, minionCountText, demonCountText);
-            if (Atheist)
-            {
-                __instance.objective.text = "Find and Execute all Evil Characters.";
-            }
-        }
-    }
     public static Il2CppSystem.Collections.Generic.List<Character> GetGameplayCurrentCharacters()
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = new();
@@ -1317,71 +1198,5 @@ public class MainMod : MelonMod
             characters.Add(c);
         }
         return characters;
-    }
-    
-    public static GameObject CreateCircle(int size)
-    {
-        GameObject circle = new GameObject();
-        circle.name = "Circle_" + size;
-        circle.transform.SetParent(Characters.Instance.gameObject.transform);
-        RectTransform rt = circle.AddComponent<RectTransform>();
-        CharactersPool cp = circle.AddComponent<CharactersPool>();
-        GameObject gameObject = Characters.Instance.gameObject.transform.Find("Circle_6").gameObject;
-        CharactersPool component = gameObject.GetComponent<CharactersPool>();
-        cp.characterPrefab = component.characterPrefab;
-        cp.characters = Array.Empty<Character>();
-        cp.cardPlaceHolders = new CardPlaceholder[size];
-        for (int i = 0; i < size; i++)
-        {
-            GameObject card = new GameObject();
-            card.transform.SetParent(circle.transform);
-            string text = "CardPlaceholder";
-            if (i > 0)
-            {
-                text = text + " (" + i + ")";
-            }
-            card.name = text;
-            RectTransform card_rt = card.AddComponent<RectTransform>();
-            card_rt.anchoredPosition3D = new Vector3(0f, 0f, 0f);
-            CardPlaceholder cardPlaceholder = card.AddComponent<CardPlaceholder>();
-            int num = i * 360 / size;
-            if (num <= 30)
-            {
-                cardPlaceholder.actedSide = EActedSide.Down;
-            }
-            else if (num <= 149)
-            {
-                cardPlaceholder.actedSide = EActedSide.Left;
-            }
-            else if (num <= 210)
-            {
-                cardPlaceholder.actedSide = EActedSide.Up;
-            }
-            else if (num <= 329)
-            {
-                cardPlaceholder.actedSide = EActedSide.Right;
-            }
-            else
-            {
-                cardPlaceholder.actedSide = EActedSide.Down;
-            }
-            cp.cardPlaceHolders[i] = cardPlaceholder;
-        }
-        circle.transform.position = new Vector3(0f, 1f, 85.9444f);
-        circle.transform.localScale = new Vector3(1f, 1f, 1f);
-        circle.SetActive(false);
-        addToCharsPool(cp);
-        return circle;
-    }
-    public static void addToCharsPool(CharactersPool pool)
-    {
-        CharactersPool[] oldpool = Characters.Instance.characterPool;
-        CharactersPool[] newPool = new CharactersPool[oldpool.Length + 1];
-        for (int i = 0; i < oldpool.Length; i++)
-        {
-            newPool[i] = oldpool[i];
-        }
-        newPool[oldpool.Length] = pool;
-        Characters.Instance.characterPool = newPool;
     }
 }

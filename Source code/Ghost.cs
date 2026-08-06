@@ -35,6 +35,7 @@ public class Ghost : Role
     {
         if (trigger == ETriggerPhase.Day)
         {
+            charRef.ChangeAlignment(EAlignment.Good);
             charRef.state = ECharacterState.Dead;
             PlayerController.PlayerInfo.health.Damage(1);
             ActOnDied(charRef);
@@ -65,6 +66,7 @@ public class Ghost : Role
     {
         if (trigger == ETriggerPhase.Day)
         {
+            charRef.ChangeAlignment(EAlignment.Good);
             charRef.state = ECharacterState.Dead;
             PlayerController.PlayerInfo.health.Damage(1);
             ActOnDied(charRef);
