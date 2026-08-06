@@ -20,7 +20,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.10.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.11", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -61,6 +61,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Guide>();
         ClassInjector.RegisterTypeInIl2Cpp<Preacher>();
         ClassInjector.RegisterTypeInIl2Cpp<Sphinx>();
+        ClassInjector.RegisterTypeInIl2Cpp<Developer>();
 
         // Outcasts
 
@@ -87,6 +88,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Slanderer>();
         ClassInjector.RegisterTypeInIl2Cpp<Enigma>();
         ClassInjector.RegisterTypeInIl2Cpp<Squire>();
+        ClassInjector.RegisterTypeInIl2Cpp<PitHag>();
 
         // Demons
         ClassInjector.RegisterTypeInIl2Cpp<Follower>();
@@ -187,7 +189,7 @@ public class MainMod : MelonMod
         configCategory.CreateEntry("Kingmaker", true, "Kingmaker", "Whether Kingmaker can show up");
         configCategory.CreateEntry("Infestation", true, "Infestation", "Whether Infestation can show up");
         configCategory.CreateEntry("Mystifier", true, "Mystifier", "Whether Mystifier can show up");
-        configCategory.CreateEntry("Fracture", true, "Fracture", "Whether Fracture can show up");
+        //configCategory.CreateEntry("Fracture", true, "Fracture", "Whether Fracture can show up");
         configCategory.SetFilePath(System.IO.Path.Combine(MelonEnvironment.UserDataDirectory, "RiddlesConfig.cfg"));
         configCategory.SaveToFile();
     }
@@ -365,6 +367,10 @@ public class MainMod : MelonMod
         Sphinx.hints = "My questions are always affected by misregistration. Answers are never affected.";
         Sphinx.ifLies = "Learn the worst execution.";
 
+        CharacterData Developer = makeNewCharacter("Developer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Nothing works and I don't know why.\"");
+        Developer.description = "Learn how many in play cards are from a certain mod. This is not affected by misregistration."; // This clause exists because of the Echo from Wingidon's mod.
+        Developer.role = new Developer();
+
         CharacterData MadScientist = makeNewCharacter("MadScientist", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Lil bro is ANGRY at the village\"");
         MadScientist.role = new MadScientist();
         MadScientist.name = "Mad Scientist";
@@ -468,6 +474,12 @@ public class MainMod : MelonMod
         Squire.role = new Squire();
         Squire.description = "I disguise as a Knight and can't be killed unless all other Evils are dead.\nI register as a Truthful and Honest Knight.";
 
+        CharacterData PitHag = makeNewCharacter("PitHag", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Enjoy your role while it lasts.\"");
+        PitHag.role = new PitHag();
+        PitHag.description = "At Night: I turn an unrevealed Villager into an out of play Outcast. There are additional fake Outcasts in the deck.";
+        PitHag.name = "Pit Hag";
+        PitHag.characterName = "Pit Hag";
+
         CharacterData Follower = makeNewCharacter("Follower", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I'm playing chess and you're playing checkers.\"");
         Follower.role = new Follower();
         Follower.description = "You have slightly more HP in larger villages.\nNight falls every 3 ticks.\n<b>At Night:</b>\nKill 1 card, prioritizing more valuable targets.\nDeal 2 damage to you.\n\nI Lie and Disguise.";
@@ -518,7 +530,7 @@ public class MainMod : MelonMod
 
         CharacterData Fracture = makeNewCharacter("Fracture", EAlignment.Evil, ECharacterType.Demon, false, true, "\"And into my pocket dimension you go!\"");
         Fracture.role = new Fracture();
-        Fracture.description = "Game Start & At night: 1 random character is Erased. Erased characters are unable to be mentioned by passive abilities and don't count towards adjacencies or distances.";
+        Fracture.description = "Game Start & At night: 1 random character is Erased. Erased characters register as no alignment and no type.";
 
         CustomScriptData followerScriptData = new CustomScriptData();
         followerScriptData.name = "Follower_1";
@@ -964,6 +976,7 @@ public class MainMod : MelonMod
         summonerScriptData.scriptInfo = summonerScript;
 
         // ------------ NIGHT PHASE ------------
+        nightPhase.nightCharactersOrder.Add(PitHag);
         nightPhase.nightCharactersOrder.Add(Baffler);
         nightPhase.nightCharactersOrder.Add(Mystifier);
         nightPhase.nightCharactersOrder.Add(Infestation);
@@ -988,6 +1001,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAfterAct("Wizard", Guardian);
         Characters.Instance.startGameActOrder = InsertAfterAct("Guardian", Escapist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Chancellor", Recruiter);
+        Characters.Instance.startGameActOrder = InsertAfterAct("Recruiter", PitHag);
         Characters.Instance.startGameActOrder = InsertAfterAct("Shaman", MadScientist);
         Characters.Instance.startGameActOrder = InsertAfterAct("Mad Scientist", Confectioner);
         Characters.Instance.startGameActOrder = InsertAfterAct("Confectioner", Channeler);
@@ -1077,6 +1091,7 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Guide);
             AddRole(script.startingTownsfolks, Preacher);
             AddRole(script.startingTownsfolks, Sphinx);
+            AddRole(script.startingTownsfolks, Developer);
 
             AddRole(script.startingOutsiders, MadScientist);
             AddRole(script.startingOutsiders, Hitman);
@@ -1100,6 +1115,7 @@ public class MainMod : MelonMod
             AddRole(script.startingMinions, Slanderer);
             AddRole(script.startingMinions, Enigma);
             AddRole(script.startingMinions, Squire);
+            AddRole(script.startingMinions, PitHag);
         }
     }
     public void AddRole(Il2CppSystem.Collections.Generic.List<CharacterData> list, CharacterData data)

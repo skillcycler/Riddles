@@ -58,6 +58,7 @@ public class Summoner : Demon
         allowed.Add("Veil_scm");
         allowed.Add("Infestation_scm");
         allowed.Add("Mystifier_scm");
+        allowed.Add("Fracture_scm");
 
         // Wingidon's mod
         allowed.Add("Caedoccidere_WING");

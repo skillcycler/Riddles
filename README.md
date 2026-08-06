@@ -57,6 +57,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Guide: Each night, learn a character of a different type to the previous night.
 - Preacher: Make someone disguise as the Confessor.
 - Sphinx: Solve my riddles to get advice on who to execute.
+- Developer: Learn how many characters are from a specific mod.
 
 ## Outcasts
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
@@ -82,6 +83,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Enigma: There are many fake characters added to the deck.
 - Squire: I disguise as a Knight. I can't die unless I'm the last evil.
 - Baby Minion: I lie and disguise. I cannot appear unless you have other mods installed.
+- Pit Hag: Turns unrevealed characters into Outcasts at night.
 
 ## Demons
 - Follower: Kills smartly. Night is 3 ticks long.

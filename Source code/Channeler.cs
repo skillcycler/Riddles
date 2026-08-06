@@ -57,12 +57,14 @@ public class Channeler : Minion
             whitelistIDs.Add("Baffler_scm");
             whitelistIDs.Add("Accuser_scm");
             whitelistIDs.Add("Enigma_scm");
+            whitelistIDs.Add("PitHag_scm");
 
             whitelistIDs.Add("Follower_scm");
             whitelistIDs.Add("Veil_scm");
             whitelistIDs.Add("Infestation_scm");
             whitelistIDs.Add("Escapist_scm");
             whitelistIDs.Add("Mystifier_scm");
+            whitelistIDs.Add("Fracture_scm");
 
             // Wingidon's Mod
             whitelistIDs.Add("Heretic_WING");

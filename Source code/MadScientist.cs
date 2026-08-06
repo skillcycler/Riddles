@@ -91,6 +91,7 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("Mastermind_scm");
             whitelistMinionCharacterIDs.Add("Wizard_scm");
             whitelistMinionCharacterIDs.Add("Enigma_scm");
+            whitelistMinionCharacterIDs.Add("PitHag_scm");
 
             whitelistOutcastCharacterIDs.Add("Ghost_scm");
             whitelistOutcastCharacterIDs.Add("Muddler_scm");
@@ -121,6 +122,7 @@ public class MadScientist : Role
 
             // Dupery Bluff - only adding the ones that aren't clones of existing characters
             whitelistOutcastCharacterIDs.Add("WING_Dupery_Surgeon");
+            whitelistOutcastCharacterIDs.Add("WING_Dupery_Bounty Hunter");
             whitelistMinionCharacterIDs.Add("WING_Dupery_Barkeep");
             whitelistMinionCharacterIDs.Add("WING_Dupery_Serial Killer");
 
