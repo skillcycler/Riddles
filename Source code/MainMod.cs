@@ -189,7 +189,7 @@ public class MainMod : MelonMod
         configCategory.CreateEntry("Kingmaker", true, "Kingmaker", "Whether Kingmaker can show up");
         configCategory.CreateEntry("Infestation", true, "Infestation", "Whether Infestation can show up");
         configCategory.CreateEntry("Mystifier", true, "Mystifier", "Whether Mystifier can show up");
-        //configCategory.CreateEntry("Fracture", true, "Fracture", "Whether Fracture can show up");
+        configCategory.CreateEntry("Fracture", true, "Fracture", "Whether Fracture can show up");
         configCategory.SetFilePath(System.IO.Path.Combine(MelonEnvironment.UserDataDirectory, "RiddlesConfig.cfg"));
         configCategory.SaveToFile();
     }
