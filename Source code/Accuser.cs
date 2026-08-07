@@ -59,22 +59,7 @@ public class Accuser : Minion
         //just to make sure accused things register as evil
         if (trigger == ETriggerPhase.AfterRoundStart)
         {
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                if (c.statuses.Contains(Accused.accused))
-                {
-                    Il2CppSystem.Collections.Generic.List<CharacterData> allChars = new Il2CppSystem.Collections.Generic.List<CharacterData>();
-                    foreach (CharacterData charData in Gameplay.Instance.GetScriptCharacters())
-                    {
-                        allChars.Add(charData);
-                    }
-                    allChars = Characters.Instance.FilterCharacterType(allChars, ECharacterType.Minion);
-                    if (allChars.Count == 0)
-                        allChars.Add(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
-                    CharacterData randomMinion = allChars[UnityEngine.Random.Range(0, allChars.Count)];
-                    c.UpdateRegisterAsRole(randomMinion);
-                }
-            }
+            Accused.UpdateAccusedRegistration();
         }
     }
     
@@ -88,6 +73,33 @@ public class Accuser : Minion
 public static class Accused
 {
     public static ECharacterStatus accused = (ECharacterStatus)873;
+    public static void UpdateAccusedRegistration()
+    {
+        List<ECharacterType> validTypes = new();
+        validTypes.Add(ECharacterType.Minion);
+        validTypes.Add(ECharacterType.Demon);
+        validTypes.Add((ECharacterType)155);
+        validTypes.Add((ECharacterType)160);
+        validTypes.Add((ECharacterType)165);
+        validTypes.Add((ECharacterType)170);
+
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (c.statuses.Contains(Accused.accused))
+            {
+                Il2CppSystem.Collections.Generic.List<CharacterData> allChars = new Il2CppSystem.Collections.Generic.List<CharacterData>();
+                foreach (CharacterData charData in Gameplay.Instance.GetScriptCharacters())
+                {
+                    if (validTypes.Contains(charData.type) && charData.startingAlignment == EAlignment.Evil)
+                    allChars.Add(charData);
+                }
+                if (allChars.Count == 0)
+                    allChars.Add(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
+                CharacterData randomEvil = allChars[UnityEngine.Random.Range(0, allChars.Count)];
+                c.UpdateRegisterAsRole(randomEvil);
+            }
+        }
+    }
 
     [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
     public static class pvt

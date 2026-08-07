@@ -95,6 +95,10 @@ public class Atheist : Demon
         {
             onActed.Invoke(GetInfo(charRef));
         }
+        if (trigger == ETriggerPhase.AfterRoundStart)
+        {
+            Accused.UpdateAccusedRegistration();
+        }
 
     }
     public override CharacterData GetBluffIfAble(Character charRef)

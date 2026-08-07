@@ -82,6 +82,10 @@ public class Gambler : Role
                 }
             }
         }
+        if (trigger == ETriggerPhase.AfterRoundStart)
+        {
+            Accused.UpdateAccusedRegistration();
+        }
         if (trigger == ETriggerPhase.Night)
         {
             Confused.updateConfusion(charRef);

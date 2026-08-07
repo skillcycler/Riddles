@@ -79,7 +79,7 @@ public static class Broken
         {
             if (__instance.statuses.Contains(erased))
             {
-                __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#FF8000><size=18>\n<Erased></color></size>";
+                __instance.chName.text = __instance.dataRef.name.ToUpper() + "<color=#BB6666><size=18>\n<Erased></color></size>";
             }
         }
     }

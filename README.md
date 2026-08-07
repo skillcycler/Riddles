@@ -19,6 +19,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Scout will no longer point to Good-registering Evils and say that Evil's true role
 - Lying Mediums will no longer point to Good-registering Evils
 - Characters bluffing as roles will now have the bluff roles also act at night
+- There are more keywords that can be hovered over
 
 ## Villagers
 - Riddler: Gives you a fun fact about the game. 

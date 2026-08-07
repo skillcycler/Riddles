@@ -71,16 +71,7 @@ public class Slanderer : Minion
             {
                 if (c.statuses.Contains(Accused.accused))
                 {
-                    Il2CppSystem.Collections.Generic.List<CharacterData> allChars = new Il2CppSystem.Collections.Generic.List<CharacterData>();
-                    foreach (CharacterData charData in Gameplay.Instance.GetScriptCharacters())
-                    {
-                        allChars.Add(charData);
-                    }
-                    allChars = Characters.Instance.FilterCharacterType(allChars, ECharacterType.Minion);
-                    if (allChars.Count == 0)
-                        allChars.Add(ProjectContext.Instance.gameData.GetCharacterDataOfId("Puppet_15989619"));
-                    CharacterData randomMinion = allChars[UnityEngine.Random.Range(0, allChars.Count)];
-                    c.UpdateRegisterAsRole(randomMinion);
+                    Accused.UpdateAccusedRegistration();
                 }
                 else if (c.statuses.Contains(Guarding.guarded))
                 {

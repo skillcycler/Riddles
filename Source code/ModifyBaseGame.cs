@@ -9,6 +9,7 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppRewired.UI.ControlMapper;
 using Il2CppSystem.IO;
+using Il2CppTMPro;
 using MelonLoader;
 using MelonLoader.Utils;
 using RiddlerMod;
@@ -406,5 +407,68 @@ public class ModifyBaseGame
         }
         newPool[oldpool.Length] = pool;
         Characters.Instance.characterPool = newPool;
+    }
+    // new tooltips
+    [HarmonyPatch(typeof(TMP_Text), "set_text")]
+    public static class TMPTextPatch
+    {
+        static void Prefix(ref string value)
+        {
+            if (value != null)
+            {
+                if (value.Contains("Accused"))
+                {
+                    value = value.Replace(
+                        "Accused",
+                        "<link=\"Accused\"><color=#FF8000>Accused</color></link>"
+                    );
+                }
+                if (value.Contains("Erased"))
+                {
+                    value = value.Replace(
+                        "Erased",
+                        "<link=\"Erased\"><color=#BB6666>Erased</color></link>"
+                    );
+                }
+                if (value.Contains("Confused"))
+                {
+                    value = value.Replace(
+                        "Confused",
+                        "<link=\"Confused\"><color=#DDDD00>Confused</color></link>"
+                    );
+                }
+            }
+        }
+    }
+    [HarmonyPatch(typeof(TextTooltipRecognizer), "GetTooltipInfo")]
+    public static class TooltipPatch
+    {
+        static void Postfix(string linkID, ref TooltipInfo __result)
+        {
+            if (linkID == "Accused")
+            {
+                __result = new TooltipInfo(
+                    "Accused characters register as a random Evil character.",
+                    "Accused",
+                    new Color32(255, 128, 0, 255)
+                );
+            }
+            if (linkID == "Erased")
+            {
+                __result = new TooltipInfo(
+                    "Erased characters register as no Alignment and no Type.",
+                    "Erased",
+                    new Color32(187, 102, 102, 255)
+                );
+            }
+            if (linkID == "Confused")
+            {
+                __result = new TooltipInfo(
+                    "Confused characters have a 50% chance of Lying. Lying Confused characters register as Corrupted.",
+                    "Confused",
+                    new Color32(187, 102, 102, 255)
+                );
+            }
+        }
     }
 }

@@ -1,14 +1,15 @@
 global using Il2Cpp;
 using System;
 using System.Data.SqlTypes;
-using System.Reflection;
 using HarmonyLib;
+using Il2CppSystem.Reflection;
 using Il2CppDissolveExample;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppRewired.UI.ControlMapper;
 using Il2CppSystem.IO;
+using Il2CppTMPro;
 using MelonLoader;
 using MelonLoader.Utils;
 using RiddlerMod;
@@ -21,7 +22,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.12", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -206,8 +207,7 @@ public class MainMod : MelonMod
         Swapper.role = new Swapper();
         Swapper.description = "Pick 2 cards: They disguise as each other's apparent role. Refresh both of their statements or abilities.";
         Swapper.hints = "A Swapper cannot swap itself or another Swapper.\n\nIf you have Wingidon's Expansion Pack installed, Swapper also cannot swap Devout claims.";
-        Swapper.ifLies = "Both targets are Corrupted if they are Villagers.";
-
+        Swapper.ifLies = "Both targets will Lie.";
 
         CharacterData Mathematician = makeNewCharacter("Mathematician", EAlignment.Good, ECharacterType.Villager, true, false, "\"21\"");
         Mathematician.role = new Mathematician();
@@ -224,7 +224,7 @@ public class MainMod : MelonMod
 
         CharacterData Scanner = makeNewCharacter("Scanner", EAlignment.Good, ECharacterType.Villager, true, false, "\"I spy with my two little eyes, two Outcasts in disguise!\"");
         Scanner.role = new Scanner();
-        Scanner.description = "Learn how many cards are either Disguised as Outcasts or Outcasts that are Disguised. I ignore outcasts' misregistration abilities.";
+        Scanner.description = "Learn how many cards are either Disguised as Outcasts or Outcasts that are Disguised. I ignore Outcasts' misregistration abilities.";
 
         CharacterData Obsessor = makeNewCharacter("Obsessor", EAlignment.Good, ECharacterType.Villager, true, false, "\"Once snuck into the Lover's house at night. You'll never guess what happened next\"");
         Obsessor.role = new Obsessor();
@@ -233,13 +233,12 @@ public class MainMod : MelonMod
         CharacterData Lawyer = makeNewCharacter("Lawyer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Do you swear to tell the truth, the whole truth, and nothing but the truth?\"");
         Lawyer.role = new Lawyer();
         Lawyer.description = "My neighbors tell the truth. Learn a truthful character.";
-        Lawyer.hints = "If I am not Lying:\nI will only point to my neighbors if they are evil.";
+        Lawyer.hints = "If I am not Lying:\nI will only mention my neighbors if they are Evil.";
 
         CharacterData Psychic = makeNewCharacter("Psychic", EAlignment.Good, ECharacterType.Villager, true, false, "\"I may be able to read your mind.\"");
         Psychic.role = new Psychic();
         Psychic.description = "Learn 2 characters. Exactly 1 is in play.";
         Psychic.hints = "I can see through misregistration.";
-        Psychic.ifLies = "Neither or both are in play.";
 
         CharacterData Weaver = makeNewCharacter("Weaver", EAlignment.Good, ECharacterType.Villager, true, false, "\"The Knitter's younger sister. Still recovering from that incident with the Evil Villagers.\"");
         Weaver.role = new Weaver();
@@ -247,8 +246,8 @@ public class MainMod : MelonMod
 
         CharacterData Nurse = makeNewCharacter("Nurse", EAlignment.Good, ECharacterType.Villager, true, false, "\"I can cure the Drunk, I promise!\"", true);
         Nurse.role = new Nurse();
-        Nurse.description = "Pick 1 alive card: I cure most of their negative status effects.\nIf I cure an Evil character, I also kill them.\n\nIf I am not Lying and there are no curable characters, I will say so.";
-        Nurse.hints = "My ability refreshes every night.\nI can cure any harmful effect you can think of.";
+        Nurse.description = "Pick 1 alive card: I cure most of their negative status effects.\nIf I cure an Evil character, I also kill them.\n\nIf I am not Lying and there are no curable characters, learn this.";
+        Nurse.hints = "My ability refreshes every night.\nI can cure any harmful effect you can think of, even those from other mods.";
         Nurse.ifLies = "\"I couldn't cure #x\"";
         Nurse.abilityUsage = EAbilityUsage.ResetAfterNight;
 
@@ -259,11 +258,11 @@ public class MainMod : MelonMod
 
         CharacterData Coach = makeNewCharacter("Coach", EAlignment.Good, ECharacterType.Villager, true, false, "\"Demon Bluff is a team building game.\"", true);
         Coach.role = new Coach();
-        Coach.description = "Pick 1 card: Learn how many characters near them [Range 2] are the same Type as them.";
+        Coach.description = "Pick 1 card: Learn how many characters near them [Range 2] are the same character type as them.";
 
         CharacterData Comedian = makeNewCharacter("Comedian", EAlignment.Good, ECharacterType.Villager, true, false, "\"You will be blown away by his performance when he teams up with the Jester!\"", true);
         Comedian.role = new Comedian();
-        Comedian.description = "Pick 3 cards: Learn 2 that are both disguised or both not disguised.";
+        Comedian.description = "Pick 3 cards: Learn 2 that are both Disguised or both not Disguised.";
 
         CharacterData Innkeeper = makeNewCharacter("Innkeeper", EAlignment.Good, ECharacterType.Villager, true, false, "\"Need a place to stay? I got you!\"", true);
         Innkeeper.role = new Innkeeper();
@@ -285,7 +284,7 @@ public class MainMod : MelonMod
 
         CharacterData Governor = makeNewCharacter("Governor", EAlignment.Good, ECharacterType.Villager, true, false, "\"I know everyone around here.\"");
         Governor.role = new Governor();
-        Governor.description = "Learn how many Villagers are actually in the village.";
+        Governor.description = "Learn how many characters register as a Villager.";
         Governor.ifLies = "The number will be off by 1.";
 
         CharacterData Officer = makeNewCharacter("Officer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Worried about not knowing if that Undying is safe to stab? Fear not, I'm here to save the day.\"");
@@ -315,7 +314,7 @@ public class MainMod : MelonMod
         CharacterData Necromancer = makeNewCharacter("Necromancer", EAlignment.Good, ECharacterType.Villager, true, false, "\"Second chances are real. Just like Empaths and Mayors.\"", true);
         Necromancer.role = new Necromancer();
         Necromancer.description = "Pick 2 cards (not myself), one alive and one dead. Kill the alive and revive the dead. I cannot revive Evils or the Ghost.";
-        Necromancer.ifLies = "The revived card will lie with its new info.";
+        Necromancer.ifLies = "The revived card will Lie with its new info.";
 
         CharacterData Astronaut = makeNewCharacter("Astronaut", EAlignment.Good, ECharacterType.Villager, true, false, "\"Always has been.\"");
         Astronaut.role = new Astronaut();
@@ -341,7 +340,7 @@ public class MainMod : MelonMod
         Therapist.ifLies = "I point to two cards of the same alignment.";
 
         CharacterData Crewmate = makeNewCharacter("Crewmate", EAlignment.Good, ECharacterType.Villager, true, false, "\"Red.\"");
-        Crewmate.description = "Learn someone who is Sus. (In other words, a Demon or someone that can affect someone else)";
+        Crewmate.description = "Learn someone who is Sus. (In other words, a Demon or someone that can kill.)";
         Crewmate.role = new Crewmate();
 
         CharacterData Guide = makeNewCharacter("Guide", EAlignment.Good, ECharacterType.Villager, true, false, "\"You seem lost. Want a hand?\"");
@@ -370,14 +369,14 @@ public class MainMod : MelonMod
         MadScientist.name = "Mad Scientist";
         MadScientist.characterName = "Mad Scientist";
         MadScientist.description = "I have the ability of a not in play Outcast and Minion. I add 1 fake Outcast and 2 fake Minions to the Deck.";
-        MadScientist.hints = "I cannot be disguised as.\nI will not Disguise or turn Evil if part of my Outcast's ability includes those.";
+        MadScientist.hints = "I cannot be Disguised as.\nI will not Disguise or turn Evil if part of my Outcast's ability includes those.";
         
         CharacterData Hitman = makeNewCharacter("Hitman", EAlignment.Evil, ECharacterType.Outcast, false, true, "\"No one is safe from me, not even myself\"");
         Hitman.role = new Hitman();
         Hitman.name = "Hitman";
         Hitman.characterName = "Hitman";
-        Hitman.description = "I Lie and Disguise.\n\nOn odd numbered nights: Kill a random card.\nOn even numbered nights: lose 3 HP.";
-        Hitman.hints = "I can kill any card, including Knights, Demons, and myself.\nIf there is no night cycle, I'm just a regular Evil Outcast.";
+        Hitman.description = "I Lie and Disguise.\n\nOn odd numbered nights: Kill a random card.\nOn even numbered nights: Lose 3 HP.";
+        Hitman.hints = "I can kill any card, including Knights, Demons, and myself.";
         
         CharacterData Ghost = makeNewCharacter("Ghost", EAlignment.Good, ECharacterType.Outcast, false, false, "\"I would say 'Boo!' but that's not scary anymore.\"");
         Ghost.role = new Ghost();
@@ -395,12 +394,12 @@ public class MainMod : MelonMod
 
         CharacterData Captivator = makeNewCharacter("Captivator", EAlignment.Good, ECharacterType.Outcast, false, true, "\"My information makes sense, I swear!\"");
         Captivator.role = new Captivator();
-        Captivator.description = "I disguise as and say something that neither a truth teller nor liar could say in my position.\n\nI am normally seen as Lying.\n\nYou only take 2 damage if I am Executed.";
+        Captivator.description = "I Disguise as and say something that neither a truth teller nor liar could say in my position.\n\nI am normally seen as Lying.\n\nYou only take 2 damage if I am Executed.";
         Captivator.hints = "Some examples of what I can say are: Empress pointing to 2 Evils, Bishop pointing to 3 Outcasts";
 
         CharacterData Reflector = makeNewCharacter("Reflector", EAlignment.Good, ECharacterType.Outcast, false, true, "\"Look at you, you're so confused!\"");
         Reflector.role = new Reflector();
-        Reflector.description = "I disguise as a Villager and am Confused.\nConfused characters have a 50% chance of Lying.\n\nYou only take 3 damage if I am Executed.";
+        Reflector.description = "I Disguise as a Villager and am Confused.\n\nYou only take 3 damage if I am Executed.";
 
         CharacterData Gambler = makeNewCharacter("Gambler", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Aw dang it!\"");
         Gambler.role = new Gambler();
@@ -422,7 +421,7 @@ public class MainMod : MelonMod
 
         CharacterData Accuser = makeNewCharacter("Accuser", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Uno reverse card!\"");
         Accuser.role = new Accuser();
-        Accuser.description = "Game Start: One adjacent Good character registers a random Evil Minion.\n\nI Lie and Disguise.";
+        Accuser.description = "Game Start: One adjacent Good character is Accused.\n\nI Lie and Disguise.";
 
         CharacterData Hypnotist = makeNewCharacter("Hypnotist", EAlignment.Evil, ECharacterType.Minion, false, true, "\"You are getting sleepy...\"");
         Hypnotist.role = new Hypnotist();
@@ -435,7 +434,7 @@ public class MainMod : MelonMod
         
         CharacterData Sleeper = makeNewCharacter("Sleeper", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Ever feel like you get enough sleep? Not anymore!\"");
         Sleeper.role = new Sleeper();
-        Sleeper.description = "The night cycle is 1 tick shorter if there is one.\n\nI Lie and Disguise.";
+        Sleeper.description = "The night cycle is 1 flip shorter if there is one.\n\nI Lie and Disguise.";
 
         CharacterData Guardian = makeNewCharacter("Guardian", EAlignment.Evil, ECharacterType.Minion, false, true, "\"You're gonna have to get through me first.\"");
         Guardian.role = new Guardian();
@@ -447,7 +446,7 @@ public class MainMod : MelonMod
 
         CharacterData Baffler = makeNewCharacter("Baffler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"");
         Baffler.role = new Baffler();
-        Baffler.description = "Game Start: One adjacent Villager is Confused.\nConfused characters have a 50% chance of Lying.\n\nI Lie and Disguise.";
+        Baffler.description = "Game Start: One adjacent Villager is Confused.\n\nI Lie and Disguise.";
 
         CharacterData Wizard = makeNewCharacter("Wizard", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It's black magic.\"");
         Wizard.role = new Wizard();
@@ -476,7 +475,7 @@ public class MainMod : MelonMod
 
         CharacterData Follower = makeNewCharacter("Follower", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I'm playing chess and you're playing checkers.\"");
         Follower.role = new Follower();
-        Follower.description = "You have slightly more HP in larger villages.\nNight falls every 3 ticks.\n<b>At Night:</b>\nKill 1 card, prioritizing more valuable targets.\nDeal 2 damage to you.\n\nI Lie and Disguise.";
+        Follower.description = "You have slightly more HP in larger villages.\nNight falls in 1 less flip.\n<b>At Night:</b>\nKill 1 card, prioritizing more valuable targets.\nDeal 2 damage to you.\n\nI Lie and Disguise.";
         Follower.hints = "Valuable targets are those with unused active abilities and strong information roles.";
 
         CharacterData Veil = makeNewCharacter("Veil", EAlignment.Evil, ECharacterType.Demon, false, true, "\"You cannot see anyone's role through this dense fog!\"");
@@ -508,8 +507,7 @@ public class MainMod : MelonMod
 
         CharacterData Mystifier = makeNewCharacter("Mystifier", EAlignment.Evil, ECharacterType.Demon, false, true, "\"Puzzled, confounded, or astonished yet?\"");
         Mystifier.role = new Mystifier();
-        Mystifier.description = "At night: One random Villager is Confused.\nConfused characters have a 50% chance of Lying.\n\nI Lie and Disguise.";
-        Mystifier.hints = "Confused characters that are currently Lying also register as Corrupted.";
+        Mystifier.description = "At night: One random Villager is Confused.\n\nI Lie and Disguise.";
 
         CharacterData RainbowJoker = makeNewCharacter("RainbowJoker", EAlignment.Evil, ECharacterType.Demon, false, true, "\"A total wild card.\"");
         RainbowJoker.role = new RainbowJoker();
@@ -524,10 +522,10 @@ public class MainMod : MelonMod
 
         CharacterData Fracture = makeNewCharacter("Fracture", EAlignment.Evil, ECharacterType.Demon, false, true, "\"And into my pocket dimension you go!\"");
         Fracture.role = new Fracture();
-        Fracture.description = "Game Start & At night: 1 random character is Erased. Erased characters register as no alignment and no type.";
+        Fracture.description = "Game Start & At night: 1 random character is Erased.";
 
         bool moreVillageSizes = false;
-        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Fracture").GetValueAsString().ToLower() == "true") moreVillageSizes = true;
+        if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("ExpandedVillages").GetValueAsString().ToLower() == "true") moreVillageSizes = true;
         // Give names to all the character counts
         CharactersCount clocktower_8 = setCharacterCount(5, 1, 1, 1);
         CharactersCount clocktower_9 = setCharacterCount(5, 2, 1, 1);

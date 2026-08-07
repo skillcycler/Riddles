@@ -32,6 +32,8 @@ public class Follower : Demon
         highPriorityIDs.Add("Bishop_58855542");
         highPriorityIDs.Add("Empress_13782227");
         highPriorityIDs.Add("Arithmetician_WING");
+        highPriorityIDs.Add("WING_Dupery_Mathematician");
+        highPriorityIDs.Add("WING_Dupery_Weatherman");
         foreach (string st in Djinn.GetNightlyInfoActors())
         {
             highPriorityIDs.Add(st);
@@ -48,18 +50,28 @@ public class Follower : Demon
         midPriorityIDs.Add("Clairvoyant_WING");
         midPriorityIDs.Add("Prince_WING");
 
-        //good to kill for other reasons than to remove info
+        //good to kill for other reasons than to remove info (mainly just auto self confirms)
         otherPriorityIDs.Add("MadScientist_scm");
         otherPriorityIDs.Add("Swarm_Good_WING");
+        otherPriorityIDs.Add("Gambler_scm");
+        otherPriorityIDs.Add("Trickster_scm");
+        otherPriorityIDs.Add("WING_Dupery_Fall Guy");
+        otherPriorityIDs.Add("Wretch_80988916");
 
         neverAttackIDs.Add("Knight_47970624");
         neverAttackIDs.Add("Ghost_scm");
 
+        // bad to kill because it outs the other one in the pair as evil
+        neverAttackIDs.Add("WING_Dupery_Wannabe");
+        neverAttackIDs.Add("Good Twin_POW");
+
 
         float targetValue = 1f;
-        // corrupted characters are 50% less likely to be attacked
+        // Characters with some harmful statuses are less likely to be attacked
         float statusMult = 1f;
         if (character.statuses.Contains(ECharacterStatus.Corrupted)) statusMult *= 0.5f;
+        if (character.statuses.Contains(Confused.confused)) statusMult = 0.5f;
+        if (character.statuses.Contains(Accused.accused)) statusMult *= 0.75f;
         // don't kill characters that someone already killed tonight
         if (character.statuses.Contains(AvoidingDoubleKills.killed) || character.statuses.Contains(ECharacterStatus.KilledByEvil)) statusMult = 0f;
         // don't attack dead characters
@@ -72,15 +84,16 @@ public class Follower : Demon
 
         if (midPriorityIDs.Contains(character.dataRef.characterId) && !character.revealed) targetValue = 4f;
 
+        // don't attack outcasts unless it's a picking outcast
+        // also don't attack minions or demons, unless they're in the special list
+        if (character.GetCharacterType() == ECharacterType.Outcast) targetValue = 0f;
+        if (character.GetCharacterType() == ECharacterType.Minion) targetValue = 0f;
+        if (character.GetCharacterType() == ECharacterType.Demon) targetValue = 0f;
+
         //for unrevealed characters: 2x as likely to attack certain characters
 
         if (otherPriorityIDs.Contains(character.dataRef.characterId) && !character.revealed) targetValue = 2f;
 
-        // don't attack outcasts unless it's a picking outcast
-        // also don't attack minions or demons
-        if (character.GetCharacterType() == ECharacterType.Outcast) targetValue = 0f;
-        if (character.GetCharacterType() == ECharacterType.Minion) targetValue = 0f;
-        if (character.GetCharacterType() == ECharacterType.Demon) targetValue = 0f;
 
         // de-prioritize revealed characters
         if (character.state == ECharacterState.Alive) targetValue = 0f;
@@ -109,6 +122,8 @@ public class Follower : Demon
         if (character.bluff && neverAttackIDs.Contains(character.bluff.characterId)) targetValue = 0f; // This is so that it doesn't kill characters disguised as the Knight.
         if (character.alignment == EAlignment.Evil) targetValue = 0f;
         if (character.statuses.Contains(ECharacterStatus.UnkillableByDemon)) targetValue = 0f;
+        // don't attack Protected (from Powerplay)
+        if (character.statuses.Contains((ECharacterStatus)210)) targetValue = 0f;
         //MelonLogger.Msg(string.Format("Checking character #{0}: Role is {1}, value is {2}, state: {3}", character.id, character.dataRef.name, Mathf.RoundToInt(targetValue * statusMult), character.state));
         return (Mathf.RoundToInt(targetValue * statusMult));
     }
