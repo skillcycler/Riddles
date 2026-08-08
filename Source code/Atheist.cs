@@ -36,7 +36,7 @@ public class Atheist : Demon
         if (trigger == ETriggerPhase.Start)
         {
             // determine alignment
-            if (Calculator.RollDice(5) < 6)
+            if (Calculator.RollDice(10) < 6)
             {
                 // good
                 charRef.ChangeAlignment(EAlignment.Good);
