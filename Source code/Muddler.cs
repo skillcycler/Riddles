@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
@@ -9,8 +10,8 @@ using Il2CppSystem.Reflection;
 using MelonLoader;
 using UnityEngine;
 using static Il2CppSystem.Collections.SortedList;
+using static MelonLoader.MelonLogger;
 using static MelonLoader.Modules.MelonModule;
-using HarmonyLib;
 
 namespace RiddlerMod;
 
@@ -52,14 +53,27 @@ public static class Muddling
     [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
     public static class pvt
     {
-        [HarmonyPostfix]
-        [HarmonyPriority(Priority.Last)]
         public static void Postfix(Character __instance)
         {
             if (__instance.statuses.Contains(hiddenStatus))
             {
-                __instance.chName.text = __instance.dataRef.name.ToUpper();
+                if (__instance.bluff) __instance.chName.text = __instance.bluff.name.ToUpper();
+                else __instance.chName.text = __instance.dataRef.name.ToUpper();
             }
+        }
+    }
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+    public static class pvt2
+    {
+        public static bool Prefix(Character __instance)
+        {
+            if (__instance.statuses.Contains(hiddenStatus))
+            {
+                if (__instance.bluff) __instance.chName.text = __instance.bluff.name.ToUpper();
+                else __instance.chName.text = __instance.dataRef.name.ToUpper();
+                return false;
+            }
+            return true;
         }
     }
 }

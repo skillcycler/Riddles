@@ -40,22 +40,28 @@ public class Crewmate : Role
         canAffectOthers.Add("Switchblade_WING");
         canAffectOthers.Add("Saboteur_WING");
         canAffectOthers.Add("Snake Charmer_WING");
+        canAffectOthers.Add("Masquerade_WING");
 
         canAffectOthers.Add("Vigilante_POW");
         canAffectOthers.Add("Prosecutor_POW");
-        canAffectOthers.Add("Mayor_POW");
         canAffectOthers.Add("Veteran_POW");
-        canAffectOthers.Add("Pirate_POW");
-        canAffectOthers.Add("Psychopath_POW");
         canAffectOthers.Add("Jinx_POW");
         canAffectOthers.Add("Slinger_POW");
         canAffectOthers.Add("Grenadier_POW");
         canAffectOthers.Add("Balancer_POW");
         canAffectOthers.Add("Gangster_POW");
 
+        canAffectOthers.Add("WING_Dupery_Vigilante");
+
+        List<ECharacterType> validTypes = new();
+        validTypes.Add(ECharacterType.Minion);
+        validTypes.Add(ECharacterType.Outcast);
+        validTypes.Add(ECharacterType.Villager);
+        // Demons & any other custom types are Sus.
+
         foreach (Character c in Gameplay.CurrentCharacters)
         {
-            if (canAffectOthers.Contains(c.dataRef.characterId) || c.GetCharacterType() == ECharacterType.Demon || c.GetCharacterType() == (ECharacterType)155 || c.GetCharacterType() == (ECharacterType)165)
+            if (canAffectOthers.Contains(c.dataRef.characterId) || !validTypes.Contains(c.GetCharacterType()))
             {
                 sus.Add(c);
             } else

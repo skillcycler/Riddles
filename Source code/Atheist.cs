@@ -36,7 +36,7 @@ public class Atheist : Demon
         if (trigger == ETriggerPhase.Start)
         {
             // determine alignment
-            if (Calculator.RollDice(10) < 6)
+            if (Calculator.RollDice(5) < 6)
             {
                 // good
                 charRef.ChangeAlignment(EAlignment.Good);
@@ -52,7 +52,6 @@ public class Atheist : Demon
                     if (c.alignment == EAlignment.Evil)
                     {
                         c.ChangeAlignment(EAlignment.Good);
-                        c.Init(Characters.Instance.GetRandomUniqueVillagerBluff());
                     }
                 }
                 int accuse = Calculator.RollDice((int)(Gameplay.CurrentCharacters.Count / 2))+1;
@@ -70,7 +69,7 @@ public class Atheist : Demon
                 {
                     Character ch = Gameplay.CurrentCharacters[UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count)];
                     while (ch.statuses.statuses.Contains(ECharacterStatus.Corrupted) || ch == charRef)
-                    {
+                    { 
                         ch = Gameplay.CurrentCharacters[UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count)];
                     }
                     ch.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);

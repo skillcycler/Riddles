@@ -1,8 +1,7 @@
 global using Il2Cpp;
-using System;
 using System.Data.SqlTypes;
+using System.Reflection;
 using HarmonyLib;
-using Il2CppSystem.Reflection;
 using Il2CppDissolveExample;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
@@ -14,6 +13,7 @@ using MelonLoader;
 using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
+using UnityEngine.UI;
 using static Il2Cpp.Interop;
 using static Il2CppRewired.Utils.ExternalTools;
 using static Il2CppSystem.Array;
@@ -22,7 +22,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.1", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -188,12 +188,35 @@ public class MainMod : MelonMod
         configCategory.SetFilePath(System.IO.Path.Combine(MelonEnvironment.UserDataDirectory, "RiddlesConfig.cfg"));
         configCategory.SaveToFile();
     }
+    public CharacterData[] allDatas = System.Array.Empty<CharacterData>();
+    public override void OnUpdate()
+    {
+        if (allDatas.Length == 0)
+        {
+            var loadedCharList = Resources.FindObjectsOfTypeAll(Il2CppType.Of<CharacterData>());
+            if (loadedCharList != null)
+            {
+                allDatas = new CharacterData[loadedCharList.Length];
+                for (int i = 0; i < loadedCharList.Length; i++)
+                {
+                    allDatas[i] = loadedCharList[i]!.Cast<CharacterData>();
+                }
+            }
+            for (int i = 0; i < allDatas.Length; i++)
+            {
+                allDatas[i].description = ModifyBaseGame.PatchTooltip(allDatas[i].description);
+                allDatas[i].hints = ModifyBaseGame.PatchTooltip(allDatas[i].hints);
+                allDatas[i].ifLies = ModifyBaseGame.PatchTooltip(allDatas[i].ifLies);
+            }
+        }
+    }
     public override void OnLateInitializeMelon()
     {
         GameObject content = GameObject.Find("Game/Gameplay/Content");
         NightPhase nightPhase = content.GetComponent<NightPhase>();
         ModifyBaseGame.MakeTwelve();
         ModifyBaseGame.UpdateWitness();
+        ModifyBaseGame.DisableRedText();
         PatchNights.Patch();
         AddConfigs();
 
@@ -342,6 +365,7 @@ public class MainMod : MelonMod
         CharacterData Crewmate = makeNewCharacter("Crewmate", EAlignment.Good, ECharacterType.Villager, true, false, "\"Red.\"");
         Crewmate.description = "Learn someone who is Sus. (In other words, a Demon or someone that can kill.)";
         Crewmate.role = new Crewmate();
+        Crewmate.hints = "If Powerplay is installed, I can also mention anyone with an abnormal character type.";
 
         CharacterData Guide = makeNewCharacter("Guide", EAlignment.Good, ECharacterType.Villager, true, false, "\"You seem lost. Want a hand?\"");
         Guide.description = "At night: Learn who is a different character type from the previous character.";
@@ -386,7 +410,7 @@ public class MainMod : MelonMod
 
         CharacterData Muddler = makeNewCharacter("Muddler", EAlignment.Good, ECharacterType.Outcast, true, false, "\"I don't know, was it?\"");
         Muddler.role = new Muddler();
-        Muddler.description = "Status effects (like Corrupted) are not displayed.";
+        Muddler.description = "Disguised characters never undisguise, even if dead. Status effects (like Corrupted) are not displayed.";
         
         CharacterData Confectioner = makeNewCharacter("Confectioner", EAlignment.Good, ECharacterType.Outcast, false, true, "\"She got jealous of the Baker. So she took revenge.\"");
         Confectioner.role = new Confectioner();
@@ -518,7 +542,7 @@ public class MainMod : MelonMod
 
         CharacterData Atheist = makeNewCharacter("Atheist", EAlignment.Evil, ECharacterType.Demon, false, true, "\"I can break whatever rules I feel like.\"");
         Atheist.role = new Atheist();
-        Atheist.description = "Game Start: I have a 50% chance to turn Good. All statuses are hidden.\n\nIf Good:\nLose if you execute me. I might register as Evil.\nIf Evil:\nThere are no Evil characters. Some characters may lie or register as Evil.";
+        Atheist.description = "Game Start: I have a 50% chance to turn Good. Executing a card does not reveal its true role or alignment.\n\nIf Good:\nLose if you execute me. I might register as Evil.\nIf Evil:\nThere are no Evil characters. Some characters may lie or register as Evil.";
 
         CharacterData Fracture = makeNewCharacter("Fracture", EAlignment.Evil, ECharacterType.Demon, false, true, "\"And into my pocket dimension you go!\"");
         Fracture.role = new Fracture();
@@ -1065,7 +1089,6 @@ public class MainMod : MelonMod
         }
         list.Add(data);
     }
-    public CharacterData[] allDatas = Array.Empty<CharacterData>();
     public CharacterData[] InsertAfterAct(string previous, CharacterData data)
     {
         CharacterData[] actList = Characters.Instance.startGameActOrder;

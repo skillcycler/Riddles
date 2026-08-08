@@ -61,7 +61,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Mad Scientist: I have a random out of play Outcast and out of play Minion ability. Learn which abilities I have. I add 1 fake Outcast and 1-2 fake Minions to the deck view.
 - Hitman: An evil outcast that lies and disguises and alternates between killing a random card every night and dealing 3 damage. This can be any card, including normally unkillable cards, Demons, and even itself.
 - Ghost: Dies when revealed, haunting (corrupting) an unrevealed Villager.
-- Muddler: Status effects such as Corrupted are not shown when cards are executed.
+- Muddler: Status effects such as Corrupted are not shown when cards are executed. Disguised characters don't un-disguise.
 - Confectioner: I disguise as a Baker. On game start: One random villager becomes a Corrupted Baker.
 - Captivator: I say something that neither a truth teller nor liar would be able to say.
 - Reflector: I am Confused. I disguise.

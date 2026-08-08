@@ -320,6 +320,18 @@ public class ModifyBaseGame
             if (Atheist)
             {
                 __instance.objective.text = "Find and Execute all Evil Characters.";
+                var texts = __instance.GetComponentsInChildren<TMP_Text>(true);
+
+                foreach (var text in texts)
+                {
+                    if (text == null)
+                        continue;
+
+                    if (text.text != null && text.text.Contains("Score:"))
+                    {
+                        text.text = "<size=20><color=grey>Score: <color=green><size=24>?";
+                    }
+                }
             }
         }
     }
@@ -408,38 +420,6 @@ public class ModifyBaseGame
         newPool[oldpool.Length] = pool;
         Characters.Instance.characterPool = newPool;
     }
-    // new tooltips
-    [HarmonyPatch(typeof(TMP_Text), "set_text")]
-    public static class TMPTextPatch
-    {
-        static void Prefix(ref string value)
-        {
-            if (value != null)
-            {
-                if (value.Contains("Accused"))
-                {
-                    value = value.Replace(
-                        "Accused",
-                        "<link=\"Accused\"><color=#FF8000>Accused</color></link>"
-                    );
-                }
-                if (value.Contains("Erased"))
-                {
-                    value = value.Replace(
-                        "Erased",
-                        "<link=\"Erased\"><color=#BB6666>Erased</color></link>"
-                    );
-                }
-                if (value.Contains("Confused"))
-                {
-                    value = value.Replace(
-                        "Confused",
-                        "<link=\"Confused\"><color=#DDDD00>Confused</color></link>"
-                    );
-                }
-            }
-        }
-    }
     [HarmonyPatch(typeof(TextTooltipRecognizer), "GetTooltipInfo")]
     public static class TooltipPatch
     {
@@ -468,6 +448,57 @@ public class ModifyBaseGame
                     "Confused",
                     new Color32(187, 102, 102, 255)
                 );
+            }
+        }
+    }
+    public static string PatchTooltip(string value)
+    {
+        if (value != null)
+        {
+            if (value.Contains("Accused"))
+            {
+                value = value.Replace(
+                    "Accused",
+                    "<link=\"Accused\"><color=#FF8000>Accused</color></link>"
+                );
+            }
+            if (value.Contains("Erased"))
+            {
+                value = value.Replace(
+                    "Erased",
+                    "<link=\"Erased\"><color=#BB6666>Erased</color></link>"
+                );
+            }
+            if (value.Contains("Confused"))
+            {
+                value = value.Replace(
+                    "Confused",
+                    "<link=\"Confused\"><color=#DDDD00>Confused</color></link>"
+                );
+            }
+        }
+        return value;
+    }
+    public static void DisableRedText()
+    {
+        GameObject[] objects = Resources.FindObjectsOfTypeAll<GameObject>();
+
+        foreach (GameObject obj in objects)
+        {
+            if (obj != null && obj.name == "FloatingScore")
+            {
+                obj.SetActive(false);
+            }
+        }
+    }
+    [HarmonyPatch(typeof(DisguiseIcon), nameof(DisguiseIcon.OnEnable))]
+    public static class HideDisguiseIconPatch
+    {
+        public static void Postfix(DisguiseIcon __instance)
+        {
+            if (__instance != null)
+            {
+                __instance.gameObject.SetActive(false);
             }
         }
     }
