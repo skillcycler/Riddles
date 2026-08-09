@@ -36,6 +36,7 @@ public class Mastermind : Minion
             Il2CppSystem.Collections.Generic.List<Character> minions = Characters.Instance.FilterRealCharacterType(Gameplay.CurrentCharacters, ECharacterType.Minion);
             foreach (Character minion in minions)
             {
+                if (minion.alignment == EAlignment.Evil)
                 minion.statuses.AddStatus(BigBrain.minion, charRef);
             }
         }

@@ -85,29 +85,16 @@ public class ModifyBaseGame
             __result = new ActedInfo(info);
         }
     }
-    //super janky fix
+    // much less janky fix
     [HarmonyPatch(typeof(NightCycle), nameof(NightCycle.ResetClock))]
-    private static class BluffsActivationAtNight
+    public static class BluffsActivationAtNight
     {
+        public static ETriggerPhase NightAct = (ETriggerPhase)61223589;
         private static void Postfix()
         {
             foreach (Character c in Gameplay.CurrentCharacters)
             {
-                if (c.bluff)
-                {
-                    if (Djinn.GetNightlyInfoActors().Contains(c.bluff.characterId))
-                    {
-                        if (!c.statuses.Contains(ECharacterStatus.HealthyBluff))
-                        {
-                            c.bluffRole.BluffAct(ETriggerPhase.Night, c);
-                        }
-                        else
-                        {
-                            c.bluffRole.Act(ETriggerPhase.Night, c);
-                        }
-                    }
-                }
-
+                c.Act(NightAct);
             }
         }
     }
@@ -496,10 +483,34 @@ public class ModifyBaseGame
     {
         public static void Postfix(DisguiseIcon __instance)
         {
-            if (__instance != null)
+            if (__instance != null && CheckForAtheist())
             {
                 __instance.gameObject.SetActive(false);
             }
         }
+    }
+    [HarmonyPatch(typeof(HealthView), "RefreshView")]
+    public static class HealthViewPatch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(HealthView __instance)
+        {
+            if (__instance.text != null && CheckForAtheist())
+            {
+                __instance.text.text = "?";
+            }
+        }
+    }
+    public static bool CheckForAtheist()
+    {
+        if (Gameplay.CurrentCharacters != null)
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (c.dataRef.characterId == "Atheist_scm")
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

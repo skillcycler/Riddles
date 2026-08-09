@@ -22,7 +22,7 @@ using static MelonLoader.MelonLaunchOptions;
 using static MelonLoader.MelonLogger;
 using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -1046,15 +1046,15 @@ public class MainMod : MelonMod
             AddRole(script.startingTownsfolks, Tracker);
             AddRole(script.startingTownsfolks, Pioneer);
             AddRole(script.startingTownsfolks, Necromancer);
-            AddRole(script.startingTownsfolks, Astronaut);
             AddRole(script.startingTownsfolks, Motivator);
             AddRole(script.startingTownsfolks, Therapist);
             AddRole(script.startingTownsfolks, Crewmate);
-            AddRole(script.startingTownsfolks, Sharpshooter);
-            AddRole(script.startingTownsfolks, Guide);
             AddRole(script.startingTownsfolks, Preacher);
             AddRole(script.startingTownsfolks, Sphinx);
             AddRole(script.startingTownsfolks, Developer);
+            AddRole(script.startingTownsfolks, Astronaut);
+            AddRole(script.startingTownsfolks, Sharpshooter);
+            AddRole(script.startingTownsfolks, Guide);
 
             AddRole(script.startingOutsiders, MadScientist);
             AddRole(script.startingOutsiders, Hitman);
@@ -1147,9 +1147,7 @@ public class MainMod : MelonMod
     }
     public CharactersCount setCharacterCount(int Villagers, int Outcasts, int Minions, int Demons)
     {
-        CharactersCount myCharacterCount = new CharactersCount(Villagers + Outcasts + Minions + Demons, Villagers, Demons, Outcasts, Minions);
-        myCharacterCount.dOuts = Outcasts + 1;
-        return myCharacterCount;
+        return new CharactersCount(Villagers + Outcasts + Minions + Demons, Villagers, Demons, Outcasts, Minions);
     }
     public void addDemonRole(AscensionsData advancedAscension, CharacterData? data, string oldScriptName, string newScriptName, CustomScriptData NewScript, int weight = 1)
     {

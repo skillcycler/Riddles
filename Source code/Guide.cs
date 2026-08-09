@@ -10,6 +10,7 @@ using MelonLoader;
 using UnityEngine;
 using static Il2CppSystem.Collections.SortedList;
 using static MelonLoader.Modules.MelonModule;
+using static RiddlerMod.ModifyBaseGame;
 
 namespace RiddlerMod;
 
@@ -85,7 +86,7 @@ public class Guide : Role
     }
     public override void BluffAct(ETriggerPhase trigger, Character charRef)
     {
-        if (trigger == ETriggerPhase.Night)
+        if (trigger == BluffsActivationAtNight.NightAct)
         {
             if (charRef.state == ECharacterState.Dead) return;
             Il2CppSystem.Collections.Generic.List<Character> ch = Gameplay.CurrentCharacters;
@@ -123,7 +124,7 @@ public class Guide : Role
         }
         if (trigger == ETriggerPhase.Day)
         {
-            if (characters == null) characters = new List<int>();
+            /*if (characters == null) characters = new List<int>();
             if (characters.Count == 0)
             { // Completely random info if lying
                 int add = Gameplay.Instance.currentDay;
@@ -135,7 +136,7 @@ public class Guide : Role
                     characters.Add(next);
                     previous = next;
                 }
-            }
+            }*/
             charRef.revealed = true;
             onActed?.Invoke(GetInfo(charRef));
         }
