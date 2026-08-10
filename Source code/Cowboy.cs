@@ -29,6 +29,8 @@ public class Cowboy : Role
         List<int> evilVillagers = new();
         List<int> evilOutcasts = new();
         List<int> evilNeutrals = new(); // from Powerplay
+        List<int> evilMinions = new();
+        List<int> evilDemons = new();
         foreach (Character character in characters)
         {
             if (character.dataRef.type == ECharacterType.Villager && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil))
@@ -43,17 +45,33 @@ public class Cowboy : Role
             {
                 evilNeutrals.Add(character.id);
             }
+            if (character.dataRef.type == ECharacterType.Minion && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil))
+            {
+                evilMinions.Add(character.id);
+            }
+            if (character.dataRef.type == ECharacterType.Demon && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil))
+            {
+                evilDemons.Add(character.id);
+            }
         }
-        string info = "There are no Evil Villagers or Outcasts";
+        string info = "There are NO Evil characters";
         if (evilVillagers.Count > 0) {
-            info = string.Format("#{0} is an Evil Villager", evilVillagers[UnityEngine.Random.RandomRangeInt(0, evilVillagers.Count)]);
+            info = string.Format("#{0} is the most sneaky", evilVillagers[UnityEngine.Random.RandomRangeInt(0, evilVillagers.Count)]);
         } else if (evilOutcasts.Count > 0)
         {
-            info = string.Format("#{0} is an Evil Outcast", evilOutcasts[UnityEngine.Random.RandomRangeInt(0, evilOutcasts.Count)]);
+            info = string.Format("#{0} is the most sneaky", evilOutcasts[UnityEngine.Random.RandomRangeInt(0, evilOutcasts.Count)]);
         }
         else if (evilNeutrals.Count > 0)
         {
-            info = string.Format("#{0} is an Evil Neutral", evilNeutrals[UnityEngine.Random.RandomRangeInt(0, evilNeutrals.Count)]);
+            info = string.Format("#{0} is the most sneaky", evilNeutrals[UnityEngine.Random.RandomRangeInt(0, evilNeutrals.Count)]);
+        }
+        else if (evilMinions.Count > 0)
+        {
+            info = string.Format("#{0} is the most sneaky", evilMinions[UnityEngine.Random.RandomRangeInt(0, evilMinions.Count)]);
+        }
+        else if (evilDemons.Count > 0)
+        {
+            info = string.Format("#{0} is the most sneaky", evilDemons[UnityEngine.Random.RandomRangeInt(0, evilDemons.Count)]);
         }
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
@@ -62,16 +80,55 @@ public class Cowboy : Role
     public override ActedInfo GetBluffInfo(Character charRef)
     {
         Il2CppSystem.Collections.Generic.List<Character> characters = Gameplay.CurrentCharacters;
-        List<int> notevilVillagersOutcasts = new();
+        List<int> notevilVillagers = new();
+        List<int> notevilOutcasts = new();
+        List<int> notevilNeutrals = new(); // from Powerplay
+        List<int> notevilMinions = new();
+        List<int> notevilDemons = new();
         foreach (Character character in characters)
         {
-            if (!((character.dataRef.type == ECharacterType.Villager || character.dataRef.type == ECharacterType.Outcast || character.dataRef.type == (ECharacterType)150) && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil)))
+            if (!(character.dataRef.type == ECharacterType.Villager && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil)))
             {
-                notevilVillagersOutcasts.Add(character.id);
+                notevilVillagers.Add(character.id);
+            }
+            if (!(character.dataRef.type == ECharacterType.Outcast && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil)))
+            {
+                notevilOutcasts.Add(character.id);
+            }
+            if (!(character.dataRef.type == (ECharacterType)150 && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil)))
+            {
+                notevilNeutrals.Add(character.id);
+            }
+            if (!(character.dataRef.type == ECharacterType.Minion && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil)))
+            {
+                notevilMinions.Add(character.id);
+            }
+            if (!(character.dataRef.type == ECharacterType.Demon && (character.alignment == EAlignment.Evil || character.GetRegisterAlignment() == EAlignment.Evil)))
+            {
+                notevilDemons.Add(character.id);
             }
         }
-        notevilVillagersOutcasts.Remove(charRef.id);
-        string info = string.Format("#{0} is an Evil {1}", notevilVillagersOutcasts[UnityEngine.Random.RandomRangeInt(0, notevilVillagersOutcasts.Count)], UnityEngine.Random.RandomRangeInt(0, 2) == 1 ? "Outcast" : "Villager");
+        string info = "There are NO Evil characters";
+        if (notevilVillagers.Count < Gameplay.CurrentCharacters.Count)
+        {
+            info = string.Format("#{0} is the most sneaky", notevilVillagers[UnityEngine.Random.RandomRangeInt(0, notevilVillagers.Count)]);
+        }
+        else if (notevilOutcasts.Count < Gameplay.CurrentCharacters.Count)
+        {
+            info = string.Format("#{0} is the most sneaky", notevilOutcasts[UnityEngine.Random.RandomRangeInt(0, notevilOutcasts.Count)]);
+        }
+        else if (notevilNeutrals.Count < Gameplay.CurrentCharacters.Count)
+        {
+            info = string.Format("#{0} is the most sneaky", notevilNeutrals[UnityEngine.Random.RandomRangeInt(0, notevilNeutrals.Count)]);
+        }
+        else if (notevilMinions.Count < Gameplay.CurrentCharacters.Count)
+        {
+            info = string.Format("#{0} is the most sneaky", notevilMinions[UnityEngine.Random.RandomRangeInt(0, notevilMinions.Count)]);
+        }
+        else if (notevilDemons.Count < Gameplay.CurrentCharacters.Count)
+        {
+            info = string.Format("#{0} is the most sneaky", notevilDemons[UnityEngine.Random.RandomRangeInt(0, notevilDemons.Count)]);
+        }
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }

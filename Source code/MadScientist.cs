@@ -42,6 +42,41 @@ public class MadScientist : Role
             }
             else { info += string.Format("\nI invited #{0} to my casino", targetForGambler); }
         }
+        else if (fakeOutcast.name == "Bounty Hunter")
+        {
+            List<int> corrupted = new();
+            List<int> notcorrupted = new();
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.statuses.Contains(ECharacterStatus.Corrupted)) corrupted.Add(c.id);
+                else notcorrupted.Add(c.id);
+            }
+            List<int> say = new();
+            say.Add(corrupted[UnityEngine.Random.RandomRangeInt(0, corrupted.Count)]);
+            say.Add(notcorrupted[UnityEngine.Random.RandomRangeInt(0, notcorrupted.Count)]);
+            say.Sort();
+            if (corrupted.Count > 0)
+            info += $"\n\n#{say[0]} or #{say[1]} is corrupted";
+        }
+        else if (fakeOutcast.name == "Chatterbox")
+        {
+            List<int> corrupted = new();
+            List<int> notcorrupted = new();
+            foreach (Character c in Gameplay.CurrentCharacters)
+            {
+                if (c.statuses.Contains(ECharacterStatus.Corrupted)) corrupted.Add(c.id);
+                else notcorrupted.Add(c.id);
+            }
+            List<int> say = new();
+            say.Add(corrupted[UnityEngine.Random.RandomRangeInt(0, corrupted.Count)]);
+            int notcorrupted1 = notcorrupted[UnityEngine.Random.RandomRangeInt(0, notcorrupted.Count)];
+            notcorrupted.Remove(notcorrupted1);
+            say.Add(notcorrupted[UnityEngine.Random.RandomRangeInt(0, notcorrupted.Count)]);
+            say.Add(notcorrupted1);
+            say.Sort();
+            if (corrupted.Count > 0)
+                info += $"\n\nOne is corrupted: #{say[0]}, #{say[1]}, #{say[2]}";
+        }
         return new ActedInfo(info);
     }
     public override ActedInfo GetBluffInfo(Character charRef)

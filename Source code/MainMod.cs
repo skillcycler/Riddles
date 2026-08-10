@@ -13,16 +13,8 @@ using MelonLoader;
 using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
-using UnityEngine.UI;
-using static Il2Cpp.Interop;
-using static Il2CppRewired.Utils.ExternalTools;
-using static Il2CppSystem.Array;
-using static Il2CppSystem.Runtime.Remoting.RemotingServices;
-using static MelonLoader.MelonLaunchOptions;
-using static MelonLoader.MelonLogger;
-using static UnityEngine.TouchScreenKeyboard;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.2", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.3", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -317,8 +309,8 @@ public class MainMod : MelonMod
 
         CharacterData Cowboy = makeNewCharacter("Cowboy", EAlignment.Good, ECharacterType.Villager, true, false, "\"Never approach a bull from the front, a horse from the rear or a fool from any direction.\"");
         Cowboy.role = new Cowboy();
-        Cowboy.description = "Learn an Evil or Evil-registering Villager or Outcast.";
-        Cowboy.hints = "For example, I see the Wretch as an Evil-registering Outcast.\n\nIf the Powerplay mod is installed, I can also see Evil Neutrals.";
+        Cowboy.description = "Learn the least Suspicious Evil or Evil-registering character.";
+        Cowboy.hints = "For example, I see the Wretch as an Evil-registering Outcast.\n\nIf the Powerplay mod is installed, I can also see Evil Neutrals, which are between Outcast and Minion.";
 
         CharacterData Surveyor = makeNewCharacter("Surveyor", EAlignment.Good, ECharacterType.Villager, true, false, "This land belongs to the Outcasts, not the Minions. Wretch, you're not welcome here.");
         Surveyor.role = new Surveyor();

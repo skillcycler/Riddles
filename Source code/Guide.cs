@@ -91,7 +91,21 @@ public class Guide : Role
             if (charRef.state == ECharacterState.Dead) return;
             Il2CppSystem.Collections.Generic.List<Character> ch = Gameplay.CurrentCharacters;
             if (characters == null) characters = new List<int>();
-            if (characters.Count == 0) characters.Add(UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1));
+            if (characters.Count == 0) {
+                List<int> validFirstCharacters = new();
+                foreach (Character c in Gameplay.CurrentCharacters)
+                {
+                    foreach (Character c2 in Gameplay.CurrentCharacters)
+                    {
+                        if (c.GetCharacterType() == c2.GetCharacterType())
+                        {
+                            validFirstCharacters.Add(c.id);
+                            break;
+                        }
+                    }
+                }
+                characters.Add(validFirstCharacters[UnityEngine.Random.RandomRangeInt(0, validFirstCharacters.Count)]);
+            }
             int last = characters.Last();
             Il2CppSystem.Collections.Generic.List<Character> valid = new();
             ECharacterType lastType = ECharacterType.None;
