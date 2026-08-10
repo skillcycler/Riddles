@@ -21,7 +21,7 @@ public class Fracture : Demon
         sr.Add(new NightModeRule(4));
         return sr;
     }
-    public CharacterData GetNothing()
+    public static CharacterData GetNothing()
     {
         CharacterData character = new CharacterData();
         character.name = "Nothing";

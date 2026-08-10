@@ -82,6 +82,7 @@ public class PitHag : Minion
             CharacterData newOutcast = notInPlayOutsiders[UnityEngine.Random.RandomRangeInt(0, villagers.Count)];
             Character v = villagers[UnityEngine.Random.RandomRangeInt(0, villagers.Count)];
             v.Init(newOutcast);
+            v.Act(ETriggerPhase.Start);
             v.statuses.AddStatus(ECharacterStatus.AlteredCharacter, charRef);
             v.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
         }

@@ -38,6 +38,55 @@ public class Gambler : Role
         int fake = Calculator.RemoveNumberAndGetRandomNumberFromList(charRef.id, 1, Gameplay.CurrentCharacters.Count+1);
         return new ActedInfo($"I invited #{fake} to my casino.");
     }
+    public static void ApplyRandomStatus(Character picked, Character charRef)
+    {
+
+        bool isAtheist = false;
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (c.dataRef.characterId == "Atheist_scm" && c.alignment == EAlignment.Evil) isAtheist = true;
+        }
+        if (picked.alignment == EAlignment.Evil || isAtheist)
+        {
+            switch (Calculator.RollDice(3))
+            {
+                case 1:
+                    picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
+                case 2:
+                    picked.statuses.AddStatus(Confused.confused, charRef);
+                    Confused.updateConfusion(charRef);
+                    break;
+                case 3:
+                    picked.statuses.AddStatus(Broken.erased, charRef);
+                    picked.UpdateRegisterAsRole(Fracture.GetNothing());
+                    break;
+
+            }
+        }
+        else
+        {
+            switch (Calculator.RollDice(4))
+            {
+                case 1:
+                    picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
+                case 2:
+                    picked.statuses.AddStatus(Escaped.evilTurned, charRef);
+                    picked.ChangeAlignment(EAlignment.Evil);
+                    break;
+                case 3:
+                    picked.statuses.AddStatus(Accused.accused, charRef); break;
+                case 4:
+                    picked.statuses.AddStatus(Confused.confused, charRef);
+                    Confused.updateConfusion(charRef);
+                    break;
+                case 5:
+                    picked.statuses.AddStatus(Broken.erased, charRef);
+                    picked.UpdateRegisterAsRole(Fracture.GetNothing());
+                    break;
+
+            }
+        }
+    }
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
         if (trigger == ETriggerPhase.Start)
@@ -45,42 +94,7 @@ public class Gambler : Role
             Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
             Character picked = chars[Calculator.RemoveNumberAndGetRandomNumberFromList(charRef.id, 0, chars.Count)];
             affected = picked.id;
-            bool isAtheist = false;
-            foreach (Character c in Gameplay.CurrentCharacters)
-            {
-                if (c.dataRef.characterId == "Atheist_scm" && c.alignment == EAlignment.Evil) isAtheist = true;
-            }
-            if (picked.alignment == EAlignment.Evil || isAtheist)
-            {
-                switch (Calculator.RollDice(2))
-                {
-                    case 1:
-                        picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
-                    case 2:
-                        picked.statuses.AddStatus(Confused.confused, charRef);
-                        Confused.updateConfusion(charRef);
-                        break;
-
-                }
-            } else
-            {
-                switch (Calculator.RollDice(4))
-                {
-                    case 1:
-                        picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
-                    case 2:
-                        picked.statuses.AddStatus(Escaped.evilTurned, charRef);
-                        picked.ChangeAlignment(EAlignment.Evil);
-                        break;
-                    case 3:
-                        picked.statuses.AddStatus(Accused.accused, charRef); break;
-                    case 4:
-                        picked.statuses.AddStatus(Confused.confused, charRef);
-                        Confused.updateConfusion(charRef);
-                        break;
-
-                }
-            }
+            ApplyRandomStatus(picked, charRef);
         }
         if (trigger == ETriggerPhase.AfterRoundStart)
         {

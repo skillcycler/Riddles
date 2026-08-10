@@ -73,6 +73,7 @@ public class Trickster : Role
         int converted = 0;
         foreach (Character ch in Gameplay.CurrentCharacters)
         {
+            if (ch.bluff) if (ch.bluff.characterId == "Trickster_scm") return new ActedInfo($"One of us has turned into the {ch.dataRef.characterName}");
             if (ch.dataRef.characterId == "Trickster_scm")
                 converted++;
         }

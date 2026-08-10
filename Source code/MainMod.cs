@@ -14,7 +14,7 @@ using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.3", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.4", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -419,7 +419,7 @@ public class MainMod : MelonMod
 
         CharacterData Gambler = makeNewCharacter("Gambler", EAlignment.Good, ECharacterType.Outcast, false, false, "\"Aw dang it!\"");
         Gambler.role = new Gambler();
-        Gambler.description = "Game Start: 1 random character (not myself) is afflicted with a random status effect: Accused, Corrupted, Confused, Evil-turned. Learn who I affected.";
+        Gambler.description = "Game Start: 1 random character (not myself) is afflicted with a random status effect: Accused, Corrupted, Confused, Evil-turned, Erased. Learn who I affected.";
 
         CharacterData Anchor = makeNewCharacter("Anchor", EAlignment.Good, ECharacterType.Outcast, true, false, "\"Where do you think you're going?\"");
         Anchor.role = new Anchor();

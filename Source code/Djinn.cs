@@ -83,6 +83,7 @@ public class Djinn
                 break;
             case "Atheist":
                 invalidMinions.Add("Swarm_Good_WING"); // from a bug report
+                invalidMinions.Add("Supporter_POW"); // Free win
                 break;
             case "Veil":
                 invalidMinions.Add("Sunny_POW");

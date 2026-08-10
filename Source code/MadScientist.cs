@@ -242,43 +242,7 @@ public class MadScientist : Role
                     Character picked = charss[UnityEngine.Random.RandomRangeInt(0, charss.Count)];
                     
                     targetForGambler = picked.id;
-                    bool isAtheist = false;
-                    foreach (Character c in Gameplay.CurrentCharacters)
-                    {
-                        if (c.dataRef.characterId == "Atheist_scm" && c.alignment == EAlignment.Evil) isAtheist = true;
-                    }
-                    if (picked.alignment == EAlignment.Evil || isAtheist)
-                    {
-                        switch (Calculator.RollDice(2))
-                        {
-                            case 1:
-                                picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
-                            case 2:
-                                picked.statuses.AddStatus(Confused.confused, charRef);
-                                Confused.updateConfusion(charRef);
-                                break;
-
-                        }
-                    }
-                    else
-                    {
-                        switch (Calculator.RollDice(4))
-                        {
-                            case 1:
-                                picked.statuses.AddStatus(ECharacterStatus.Corrupted, charRef); break;
-                            case 2:
-                                picked.statuses.AddStatus(Escaped.evilTurned, charRef);
-                                picked.ChangeAlignment(EAlignment.Evil);
-                                break;
-                            case 3:
-                                picked.statuses.AddStatus(Accused.accused, charRef); break;
-                            case 4:
-                                picked.statuses.AddStatus(Confused.confused, charRef);
-                                Confused.updateConfusion(charRef);
-                                break;
-
-                        }
-                    }
+                    Gambler.ApplyRandomStatus(picked, charRef);
                 }
                 else
                 {
@@ -355,51 +319,7 @@ public class MadScientist : Role
         }
         if (charRef.GetCharacterData().characterId == "MadScientist_scm" && trigger != ETriggerPhase.Start)
         {
-            /*if (fakeOutcast.characterId == "Hitman_scm")
-            {
-                if (trigger == ETriggerPhase.Night && charRef.state != ECharacterState.Dead)
-                {
-                    if (!killedLastNight)
-                    {
-                        Il2CppSystem.Collections.Generic.List<Character> newList = Gameplay.CurrentCharacters;
-                        newList = Characters.Instance.FilterAliveCharacters(newList);
-                        Il2CppSystem.Collections.Generic.List<Character> validTargets = new();
-                        // not gonna have this guy try to kill the Undying or the Mad Scientist with the Undying ability. It causes too many bugs.
-                        foreach (Character target in newList)
-                        {
-                            if (target.dataRef.characterId != "Undying_WING" && !target.statuses.Contains(SpecialMadScientistTags.hasUndyingAbility))
-                            {
-                                if (!target.statuses.Contains(AvoidingDoubleKills.killed) && !target.statuses.Contains(ECharacterStatus.KilledByEvil))
-                                    validTargets.Add(target);
-                            }
-                        }
-                        if (!(newList.Count == 0))
-                        {
-                            Character myTarget = validTargets[UnityEngine.Random.Range(0, validTargets.Count)];
-                            myTarget.statuses.AddStatus(ECharacterStatus.KilledByEvil, charRef);
-                            myTarget.statuses.AddStatus(CriminalKill.criminalKill, charRef);
-                            myTarget.statuses.AddStatus(AvoidingDoubleKills.killed, charRef);
-                            myTarget.statuses.statuses.Remove(ECharacterStatus.UnkillableByDemon);
-                            myTarget.KillByDemon(charRef);
-                            myTarget.Reveal();
-                            myTarget.onReveal.Invoke();
-                            myTarget.RevealReal();
-                            if (myTarget.dataRef.picking)
-                            {
-                                myTarget.pickableUses = 0;
-                                myTarget.pickable.SetActive(false);
-                            }
-                        }
-                        killedLastNight = true;
-                    }
-                    else
-                    {
-                        Health health = PlayerController.PlayerInfo.health;
-                        health.Damage(3);
-                        killedLastNight = false;
-                    }
-                }
-            } else */if (fakeOutcast.characterId == "Gambler_scm")
+            if (fakeOutcast.characterId == "Gambler_scm")
             {
                 if (trigger == ETriggerPhase.Night)
                 {

@@ -35,7 +35,7 @@ public class Recruiter : Role
             List<int> ids = new();
             foreach (Character c in Gameplay.CurrentCharacters)
             {
-                if (c.dataRef.type == ECharacterType.Outcast) { 
+                if (c.dataRef.type == ECharacterType.Outcast || c.dataRef.type == (ECharacterType)150) { 
                     thereIsAnOutcast = true;
                     ids.Add(c.id);
                 }

@@ -141,6 +141,15 @@ public class Sphinx : Role
                     if (character.dataRef.characterId == id && character.alignment == EAlignment.Good) return character;
             }
         }
+        //round 1.5: Leviathan from Wingidon's Expansion Pack
+        bool isLeviathan = false;
+        foreach (Character c in Gameplay.CurrentCharacters) if (c.dataRef.characterId == "Leviathan_WING") isLeviathan = true;
+        if (isLeviathan)
+        {
+            //villagers
+            foreach (Character c in Gameplay.CurrentCharacters) if (c.dataRef.type == ECharacterType.Villager) return c;
+        }
+
         // round 2: Undying, if it can't die
 
         foreach (Character character in possible)
@@ -173,7 +182,10 @@ public class Sphinx : Role
         foreach (Character character in possible)
         {
             if (character.state != ECharacterState.Dead)
+            {
                 if (character.dataRef.characterId == "Knight_47970624" && character.statuses.Contains(ECharacterStatus.Corrupted)) return character;
+                if (character.dataRef.characterId == "Revolutionary_WING") return character;
+            }
         }
         foreach (Character character in possible)
         {

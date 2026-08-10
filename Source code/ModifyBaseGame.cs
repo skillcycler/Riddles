@@ -431,7 +431,7 @@ public class ModifyBaseGame
             if (linkID == "Confused")
             {
                 __result = new TooltipInfo(
-                    "Confused characters have a 50% chance of Lying. Lying Confused characters register as Corrupted.",
+                    "Confused characters have a 50% chance of telling the truth or Lying, even if they are Evil. Lying Confused characters register as Corrupted.",
                     "Confused",
                     new Color32(187, 102, 102, 255)
                 );

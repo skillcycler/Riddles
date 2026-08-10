@@ -97,7 +97,7 @@ public class Guide : Role
                 {
                     foreach (Character c2 in Gameplay.CurrentCharacters)
                     {
-                        if (c.GetCharacterType() == c2.GetCharacterType())
+                        if (c.GetCharacterType() == c2.GetCharacterType() && c.id != c2.id)
                         {
                             validFirstCharacters.Add(c.id);
                             break;
@@ -115,7 +115,7 @@ public class Guide : Role
             }
             foreach (Character c in ch)
             {
-                if (c.GetCharacterType() != lastType)
+                if (c.GetCharacterType() == lastType)
                 {
                     valid.Add(c);
                 }
@@ -138,19 +138,6 @@ public class Guide : Role
         }
         if (trigger == ETriggerPhase.Day)
         {
-            /*if (characters == null) characters = new List<int>();
-            if (characters.Count == 0)
-            { // Completely random info if lying
-                int add = Gameplay.Instance.currentDay;
-                int previous = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
-                for (int i = 0; i < add; i++)
-                {
-                    int next = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
-                    while (next == previous) next = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
-                    characters.Add(next);
-                    previous = next;
-                }
-            }*/
             charRef.revealed = true;
             onActed?.Invoke(GetInfo(charRef));
         }
