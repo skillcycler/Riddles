@@ -34,6 +34,7 @@ public class Kingmaker : Demon
             notInPlayMinions = Characters.Instance.FilterNotInPlayCharactersUnique(notInPlayMinions);
             notInPlayMinions = Characters.Instance.FilterNotInDeckCharactersUnique(notInPlayMinions);
             notInPlayMinions = Characters.Instance.FilterRealCharacterType(notInPlayMinions, ECharacterType.Minion);
+            notInPlayMinions = Characters.Instance.FilterAlignmentCharacters(notInPlayMinions, EAlignment.Evil);
             foreach (Character c in Characters.Instance.GetAdjacentCharacters(charRef))
             { // always have 2 extra minions in the deck list
                 c.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
@@ -53,7 +54,7 @@ public class Kingmaker : Demon
             {
                 if (ch.dataRef.characterId == "Marionette_WING")
                 {
-                    ch.Init(ProjectContext.Instance.gameData.GetCharacterDataOfId("Drunk_15369527"));
+                    ch.ChangeAlignment(EAlignment.Evil);
                 }
             }
         }

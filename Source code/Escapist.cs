@@ -44,7 +44,6 @@ public class Escapist : Demon
             Il2CppSystem.Collections.Generic.List<CharacterData> validOutcasts = new();
             List<string> invalidOutcastIds = new();
             invalidOutcastIds.Add("Bombardier_79093372"); // Evil bombardier still makes you lose.
-            invalidOutcastIds.Add("Doppleganger_52694042"); // Too many bugs.
             invalidOutcastIds.Add("Hitman_scm"); // This outcast is already evil.
             invalidOutcastIds.Add("Ghost_scm"); // This would just die and out itself immediately
             invalidOutcastIds.Add("Renegade_WING"); // This outcast is already evil.
@@ -71,30 +70,23 @@ public class Escapist : Demon
 
                 Character pickedCharacter = viableCharacters[UnityEngine.Random.Range(0, viableCharacters.Count)];
                 pickedCharacter.Init(pickedOutsider);
+                // turn it evil
+                pickedCharacter.ChangeAlignment(EAlignment.Evil);
+                pickedCharacter.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
+                pickedCharacter.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
                 pickedCharacter.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
-            }
-            // One outcast is evil.
-            Il2CppSystem.Collections.Generic.List<Character> outcasts = Gameplay.CurrentCharacters;
-            outcasts = Characters.Instance.FilterRealCharacterType(outcasts, ECharacterType.Outcast);
-            outcasts = Characters.Instance.FilterAliveCharacters(outcasts);
-            outcasts = Characters.Instance.FilterRealAlignmentCharacters(outcasts, EAlignment.Good);
-            Il2CppSystem.Collections.Generic.List<Character> filter = new();
-            foreach (Character character in outcasts)
+                pickedCharacter.statuses.AddStatus(Escaped.evilTurned, charRef);
+                pickedCharacter.statuses.AddStatus(Escaped.EscapistTarget, charRef);
+            } else
             {
-                if (!invalidOutcastIds.Contains(character.dataRef.characterId))
-                {
-                    filter.Add(character);
-                }
+                MelonLogger.Msg("Escapist: There were somehow no valid Outcasts to add.");
             }
-
-            if (filter.Count > 0)
+        }
+        if (trigger == ETriggerPhase.AfterRoundStart)
+        {
+            foreach (Character c in Gameplay.CurrentCharacters)
             {
-                Character pickedOutsider2 = filter[UnityEngine.Random.Range(0, filter.Count - 1)];
-                pickedOutsider2.ChangeAlignment(EAlignment.Evil);
-                pickedOutsider2.statuses.AddStatus(ECharacterStatus.Corrupted, charRef);
-                pickedOutsider2.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
-                pickedOutsider2.statuses.AddStatus(ECharacterStatus.MessedUpByEvil, charRef);
-                pickedOutsider2.statuses.AddStatus(Escaped.evilTurned, charRef);
+                if (c.statuses.Contains(Escaped.EscapistTarget)) c.statuses.statuses.Remove(ECharacterStatus.HealthyBluff);
             }
         }
     }
@@ -117,6 +109,7 @@ public class Escapist : Demon
 public static class Escaped // or rather, just literally any evil-turned thing
 {
     public static ECharacterStatus evilTurned = (ECharacterStatus)880;
+    public static ECharacterStatus EscapistTarget = (ECharacterStatus)912;
 
     [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
     public static class pvt

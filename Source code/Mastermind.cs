@@ -86,12 +86,21 @@ public static class BigBrain
     [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
     public static class pvt2
     {
-        public static void Postfix(Character __instance)
+        public static bool Prefix(Character __instance)
         {
             if (__instance.statuses.Contains(minion))
             {
-                __instance.chName.text = "MASTERMIND";
+                Il2CppSystem.Collections.Generic.List<CharacterData> findThatMastermindData = Gameplay.Instance.GetAscensionAllStartingCharacters();
+                CharacterData mastermindData = new();
+                foreach (CharacterData character in findThatMastermindData)
+                {
+                    if (character.characterId == "Mastermind_scm")
+                    {
+                        __instance.dataRef = mastermindData;
+                    }
+                }
             }
+            return true;
         }
     }
 }

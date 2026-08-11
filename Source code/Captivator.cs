@@ -107,6 +107,7 @@ public class Captivator : Role
         whitelistCharacterIDs.Add("Knave_WING");
         whitelistCharacterIDs.Add("Politician_WING");
         whitelistCharacterIDs.Add("Puzzlemaster_WING");
+        whitelistCharacterIDs.Add("WING_Dupery_Mailman");
         for (int i = 0; i < villagers.Count; i++)
         {
             if (whitelistCharacterIDs.Contains(villagers[i].characterId))

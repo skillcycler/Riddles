@@ -77,4 +77,18 @@ public static class Muddling
             return true;
         }
     }
+    [HarmonyPatch(typeof(Character), nameof(Character.ShowDescription))]
+    public static class ChangeKillByDemonText
+    {
+        [HarmonyPriority(Priority.Last)]
+        public static void Postfix(Character __instance)
+        {
+            if (__instance.statuses.Contains(hiddenStatus))
+            {
+                HintInfo info = new HintInfo();
+                info.text = "True Role's ability text is hidden.";
+                UIEvents.OnShowHint.Invoke(info, __instance.hintPivot);
+            }
+        }
+    }
 }

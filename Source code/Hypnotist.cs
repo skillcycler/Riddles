@@ -138,13 +138,8 @@ public class Hypnotist : Minion
         {
             if (charRef.statuses.Contains(Preacher.fakePreacher))
             {
-                if (Calculator.RollDice(10) <= 5)
-                {
-                    __result = new ActedInfo("I am Good");
-                } else
-                {
-                    __result = new ActedInfo("I am dizzy");
-                }
+                if (__result.desc == "I am dizzy") __result = new ActedInfo("I am Good");
+                else __result = new ActedInfo("I am dizzy");
                 return;
             }
             if (charRef.dataRef.characterId != "Hypnotist_scm") return;

@@ -54,31 +54,30 @@ public class Sharpshooter : Role
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     { 
-        if (trigger == ETriggerPhase.Night)
+        if (trigger == BluffsActivationAtNight.NightAct)
         {
             if (charRef.state == ECharacterState.Dead) return;
+            Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
+            Il2CppSystem.Collections.Generic.List<Character> evils = new();
+            foreach (Character c in chars)
+            {
+                if (c.GetRegisterAlignment() == EAlignment.Evil && c.alignment == EAlignment.Evil) { evils.Add(c); }
+            }
+            Character picked = evils[UnityEngine.Random.RandomRangeInt(0, evils.Count)];
+            characterDatas.Add(picked.GetRegisterAs());
+            List<int> possibleLocations = new();
+            possibleLocations.Add(picked.id);
+
+            while (possibleLocations.Count < 5)
+            {
+                int random;
+                do { random = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1); }
+                while (possibleLocations.Contains(random));
+                possibleLocations.Add(random);
+            }
+            characters.Add(possibleLocations);
             if (charRef.revealed)
             {
-                Il2CppSystem.Collections.Generic.List<Character> chars = Gameplay.CurrentCharacters;
-                Il2CppSystem.Collections.Generic.List<Character> evils = new();
-                foreach (Character c in chars)
-                {
-                    if (c.GetRegisterAlignment() == EAlignment.Evil && c.alignment == EAlignment.Evil) { evils.Add(c); }
-                }
-                Character picked = evils[UnityEngine.Random.RandomRangeInt(0, evils.Count)];
-                characterDatas.Add(picked.GetRegisterAs());
-                List<int> possibleLocations = new();
-                possibleLocations.Add(picked.id);
-
-                while (possibleLocations.Count < 5)
-                {
-                    int random;
-                    do { random = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1); }
-                    while (possibleLocations.Contains(random));
-                    possibleLocations.Add(random);
-                }
-
-                characters.Add(possibleLocations);
                 onActed.Invoke(GetInfo(charRef));
             }
         }

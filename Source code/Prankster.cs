@@ -84,6 +84,7 @@ public class Prankster : Role
             evil.statuses.AddStatus(SwappedAlignment.turnedGood, charRef);
             good.ChangeAlignment(EAlignment.Evil);
             evil.ChangeAlignment(EAlignment.Good);
+            evil.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
         }
         if (trigger == ETriggerPhase.Day)
         {

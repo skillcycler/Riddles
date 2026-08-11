@@ -14,7 +14,7 @@ using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.4", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.5", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -367,7 +367,7 @@ public class MainMod : MelonMod
         CharacterData Preacher = makeNewCharacter("Preacher", EAlignment.Good, ECharacterType.Villager, true, false, "\"Confess all your sins to me.\"", true);
         Preacher.description = "Pick 1 alive character: They disguise as a Confessor. My ability refreshes at night.";
         Preacher.role = new Preacher();
-        Preacher.ifLies = "The Confessor will be randomly good or dizzy";
+        Preacher.ifLies = "The Confessor says the wrong information";
         Preacher.abilityUsage = EAbilityUsage.ResetAfterNight;
 
         CharacterData Sphinx = makeNewCharacter("Sphinx", EAlignment.Good, ECharacterType.Villager, true, false, "\"Answer my riddles!\"");
@@ -517,7 +517,7 @@ public class MainMod : MelonMod
 
         CharacterData Kingmaker = makeNewCharacter("Kingmaker", EAlignment.Evil, ECharacterType.Demon, false, true, "\"'Puppet Master' is more like it.\"");
         Kingmaker.role = new Kingmaker();
-        Kingmaker.description = "Game Start: Both my neighbors become Minions. I act before any Minions do.\n\nYou don't know how many Evils there are.\n\nI tell the truth and Disguise.";
+        Kingmaker.description = "Game Start: Both my neighbors become Evil Minions. I act before any Minions do.\n\nYou don't know how many Evils there are.\n\nI tell the truth and Disguise.";
         Kingmaker.hints = "There may be fewer Outcasts in play than expected.";
         Kingmaker.additionalPossibleCharacters = MakeAddedCharacters(0, -2, 2, 0);
 
@@ -940,11 +940,7 @@ public class MainMod : MelonMod
         nightPhase.nightCharactersOrder.Add(Hitman);
         nightPhase.nightCharactersOrder.Add(Sleeper);
         nightPhase.nightCharactersOrder.Add(Fracture);
-        // and now for the villagers that will act at night
-        nightPhase.nightCharactersOrder.Add(Astronaut);
-        nightPhase.nightCharactersOrder.Add(Sharpshooter);
         nightPhase.nightCharactersOrder.Add(Motivator);
-        nightPhase.nightCharactersOrder.Add(Guide);
 
         // ------------ GAME START ------------
         Characters.Instance.startGameActOrder = InsertAtStartOfActOrder(Summoner);

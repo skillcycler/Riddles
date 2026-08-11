@@ -53,7 +53,7 @@ public class Guide : Role
         {
             characters.Add(UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1));
         }
-        if (trigger == ETriggerPhase.Night)
+        if (trigger == BluffsActivationAtNight.NightAct)
         {
             if (charRef.state == ECharacterState.Dead) return;
             Il2CppSystem.Collections.Generic.List<Character> ch = Gameplay.CurrentCharacters;
