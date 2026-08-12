@@ -133,6 +133,7 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Confectioner_scm");
             whitelistOutcastCharacterIDs.Add("Gambler_scm");
             whitelistOutcastCharacterIDs.Add("Prankster_scm");
+            whitelistOutcastCharacterIDs.Add("Damsel_scm");
 
             // Wingidon
             whitelistMinionCharacterIDs.Add("Saboteur_WING");
@@ -158,8 +159,11 @@ public class MadScientist : Role
             // Dupery Bluff - only adding the ones that aren't clones of existing characters
             whitelistOutcastCharacterIDs.Add("WING_Dupery_Surgeon");
             whitelistOutcastCharacterIDs.Add("WING_Dupery_Bounty Hunter");
+            whitelistOutcastCharacterIDs.Add("WING_Dupery_Belfry");
             whitelistMinionCharacterIDs.Add("WING_Dupery_Barkeep");
             whitelistMinionCharacterIDs.Add("WING_Dupery_Serial Killer");
+            whitelistMinionCharacterIDs.Add("WING_Dupery_Landlord");
+            whitelistMinionCharacterIDs.Add("WING_Dupery_Sniper");
 
 
             for (int i = 0; i < minions.Count; i++)

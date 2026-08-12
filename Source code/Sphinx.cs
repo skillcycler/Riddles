@@ -330,6 +330,76 @@ public class Sphinx : Role
         if (id == liarsPairs) questions.Add("How many pairs of Lying characters are there?");
         if (id == truthersPairs) questions.Add("How many pairs of Truthful characters are there?");
 
+        // Miscellaneous questions
+        Il2CppSystem.Collections.Generic.List<Character> disguisedCharacters = new();
+        foreach (Character c in Gameplay.CurrentCharacters)
+        {
+            if (CharacterHelper.CheckIfDisguisedAppearance(c) && c.bluff != null) disguisedCharacters.Add(c);
+        }
+        // don't ask about characters that have 2 of them somewhere
+        Il2CppSystem.Collections.Generic.List<Character> nodupe = new();
+        foreach (Character c1 in disguisedCharacters)
+        {
+            int m = 0;
+            foreach (Character c2 in Gameplay.CurrentCharacters)
+            {
+                if (c2.GetRegisterAs().characterName == c1.GetRegisterAs().characterName) m++;
+            }
+            if (m == 1 && c1.GetRegisterAs().characterId == c1.dataRef.characterId)
+            {
+                nodupe.Add(c1);
+            }
+        }
+        if (id < Gameplay.CurrentCharacters.Count / 2)
+        {
+            foreach (Character c in nodupe)
+            {
+                foreach (Character c2 in nodupe)
+                {
+                    int distance = Math.Max(c.id - c2.id, c2.id - c.id);
+                    if (distance > Gameplay.CurrentCharacters.Count / 2)
+                    {
+                        distance = Gameplay.CurrentCharacters.Count - distance;
+                    }
+                    if (distance == id)
+                    {
+                        questions.Add($"How far is the {c.GetRegisterAs().characterName} from the {c2.GetRegisterAs().characterName}?");
+                    }
+                }
+            }
+        }
+        if (questions.Count == 0)
+        {
+            // if none of the above, add 2 of these together
+            Dictionary<int, string> sumthing = new();
+            sumthing.Add(goods, "Good characters");
+            sumthing.Add(evils, "Evils");
+            sumthing.Add(villagers, "Villagers");
+            sumthing.Add(outcasts, "Outcasts");
+            sumthing.Add(minions, "Minions");
+            sumthing.Add(demons, "Demons");
+            sumthing.Add(liars, "Liars");
+            sumthing.Add(truthers, "Truthful characters");
+            sumthing.Add(disguised, "Disguised characters");
+            sumthing.Add(honest, "Non-Disguised characters");
+            sumthing.Add(corrupted, "Corrupted characters");
+            sumthing.Add(goodPairs, "pairs of Good characters");
+            sumthing.Add(evilPairs, "pairs of Evils");
+            sumthing.Add(villagerPairs, "pairs of Villagers");
+            sumthing.Add(honestPairs, "pairs of Non-Disguised characters");
+            sumthing.Add(disguisedPairs, "pairs of Disguised characters");
+            sumthing.Add(liarsPairs, "pairs of Liars");
+            sumthing.Add(truthersPairs, "pairs of Truthful characters");
+            foreach (var pair in sumthing)
+            {
+                foreach (var pair2 in sumthing)
+                {
+                    if (pair.Value == pair2.Value) questions.Add($"What is 2x the number of {pair.Value}?");
+                    else questions.Add($"What is the number of {pair.Value} + {pair2.Value}?");
+                }
+            }
+        }
+        //if, somehow, no sum works:
         if (questions.Count == 0)
         {
             if (id > goods) questions.Add($"What is {id - goods} + the number of Good characters?");

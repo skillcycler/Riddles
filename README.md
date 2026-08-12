@@ -68,6 +68,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Gambler: I apply a random status effect to a random other character. Learn who I gambled with.
 - Anchor: You have 9 max hp. Anything else that affects max hp is disabled.
 - Prankster: Two cards' real alignments are swapped. Learn who I swapped.
+- Damsel: Do not let the evils pick the Damsel!
 
 ## Minions
 - Accuser: One random adjacent Villager registers as Evil.

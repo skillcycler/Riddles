@@ -14,7 +14,7 @@ using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.5", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.6", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -69,6 +69,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Gambler>();
         ClassInjector.RegisterTypeInIl2Cpp<Anchor>();
         ClassInjector.RegisterTypeInIl2Cpp<Prankster>();
+        ClassInjector.RegisterTypeInIl2Cpp<Damsel>();
 
         // Minions
         ClassInjector.RegisterTypeInIl2Cpp<Accuser>();
@@ -428,6 +429,10 @@ public class MainMod : MelonMod
         CharacterData Prankster = makeNewCharacter("Prankster", EAlignment.Good, ECharacterType.Outcast, true, false, "\"Oh no, here we go again...\"");
         Prankster.role = new Prankster();
         Prankster.description = "Game Start: 2 cards of different alignments swap alignments. Learn who.";
+
+        CharacterData Damsel = makeNewCharacter("Damsel", EAlignment.Good, ECharacterType.Outcast, false, true, "\"Pick me!\"");
+        Damsel.role = new Damsel();
+        Damsel.description = "I Lie and Disguise. If an Evil picks me with an active ability, lose 5 HP.";
 
         CharacterData BabyMinion = makeNewCharacter("BabyMinion", EAlignment.Evil, ECharacterType.Minion, false, true, "\"The youngest member of the Minion family.\"");
         BabyMinion.role = new BabyMinion();
@@ -985,25 +990,25 @@ public class MainMod : MelonMod
         else
         {
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Follower").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 2);
+                addDemonRole(advancedAscension, Follower, "Baa_Difficult", "Follower_1", followerScriptData, 3);
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Veil").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 2);
+                addDemonRole(advancedAscension, Veil, "Baa_Difficult", "Veil_1", veilScriptData, 3);
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Summoner").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 2);
+                addDemonRole(advancedAscension, Summoner, "Baa_Difficult", "Summoner_1", summonerScriptData, 3);
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Infestation").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 2);
+                addDemonRole(advancedAscension, Infestation, "Baa_Difficult", "Infestation_1", infestationScriptData, 3);
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Escapist").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, Escapist, "Baa_Difficult", "Escapist_1", escapistScriptData, 2);
+                addDemonRole(advancedAscension, Escapist, "Baa_Difficult", "Escapist_1", escapistScriptData, 3);
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Kingmaker").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 2);
+                addDemonRole(advancedAscension, Kingmaker, "Baa_Difficult", "Kingmaker_1", kingmakerScriptData, 3);
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Mystifier").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, Mystifier, "Baa_Difficult", "Mystifier_1", MystifierScriptData, 2);
+                addDemonRole(advancedAscension, Mystifier, "Baa_Difficult", "Mystifier_1", MystifierScriptData, 3);
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Rainbow Joker").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, RainbowJoker, "Baa_Difficult", "RainbowJoker_1", RainbowJokerScriptData, 2);
+                addDemonRole(advancedAscension, RainbowJoker, "Baa_Difficult", "RainbowJoker_1", RainbowJokerScriptData, 3);
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Atheist").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, Atheist, "Baa_Difficult", "Atheist_1", AtheistScriptData, 2);
+                addDemonRole(advancedAscension, Atheist, "Baa_Difficult", "Atheist_1", AtheistScriptData, 3);
             if (MelonPreferences.GetCategory("RiddlesConfig").GetEntry("Fracture").GetValueAsString().ToLower() == "true")
-                addDemonRole(advancedAscension, Fracture, "Baa_Difficult", "Fracture_1", FractureScriptData, 2);
+                addDemonRole(advancedAscension, Fracture, "Baa_Difficult", "Fracture_1", FractureScriptData, 3);
         }
 
         foreach (CustomScriptData scriptData in advancedAscension.possibleScriptsData)
@@ -1054,6 +1059,7 @@ public class MainMod : MelonMod
             AddRole(script.startingOutsiders, Gambler);
             AddRole(script.startingOutsiders, Anchor);
             AddRole(script.startingOutsiders, Prankster);
+            AddRole(script.startingOutsiders, Damsel);
 
             AddRole(script.startingMinions, Wizard);
             AddRole(script.startingMinions, Accuser);

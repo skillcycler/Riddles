@@ -183,6 +183,7 @@ public class PatchNights
             demons.Add("Crazed");
             demons.Add("Starspawn");
             demons.Add("Auditor");
+            demons.Add("Godfather");
             demons.Add("w_Dupe_Critic");
             demons.Add("w_Dupe_Idol");
             demons.Add("w_Dupe_Recruiter");
