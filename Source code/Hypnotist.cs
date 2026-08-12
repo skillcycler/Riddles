@@ -138,9 +138,8 @@ public class Hypnotist : Minion
         {
             if (charRef.statuses.Contains(Preacher.fakePreacher))
             {
-                if (__result.desc == "I am dizzy") __result = new ActedInfo("I am Good");
+                if (charRef.GetRegisterAlignment() == EAlignment.Evil || charRef.statuses.Contains(ECharacterStatus.Corrupted)) __result = new ActedInfo("I am Good");
                 else __result = new ActedInfo("I am dizzy");
-                return;
             }
             if (charRef.dataRef.characterId != "Hypnotist_scm") return;
             string info = "I am Good";
@@ -211,10 +210,18 @@ public class Hypnotist : Minion
                 Il2CppSystem.Collections.Generic.List<Character> allEvils = MainMod.GetGameplayCurrentCharacters();
                 allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
                 allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
+                Il2CppSystem.Collections.Generic.List<Character> say = new();
+                foreach (Character c in allEvils)
+                {
+                    if (c.dataRef.startingAlignment == EAlignment.Evil)
+                    {
+                        say.Add(c);
+                    }
+                }
 
-                Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+                Character pickedEvil = say[UnityEngine.Random.Range(0, say.Count)];
 
-                while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+                while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = say[UnityEngine.Random.Range(0, say.Count)];
 
                 int closestEvil = __instance.GetClosestEvilToEvil(pickedEvil, charRef);
 

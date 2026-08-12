@@ -14,7 +14,7 @@ using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.6", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.8", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -210,7 +210,6 @@ public class MainMod : MelonMod
         ModifyBaseGame.MakeTwelve();
         ModifyBaseGame.UpdateWitness();
         ModifyBaseGame.DisableRedText();
-        PatchNights.Patch();
         AddConfigs();
 
         CharacterData Riddler = makeNewCharacter("Riddler", EAlignment.Good, ECharacterType.Villager, true, false, "\"One day I'll cause a paradox.\"");

@@ -73,10 +73,18 @@ public class ModifyBaseGame
             Il2CppSystem.Collections.Generic.List<Character> allEvils = MainMod.GetGameplayCurrentCharacters();
             allEvils = Characters.Instance.FilterRealAlignmentCharacters(allEvils, EAlignment.Evil);
             allEvils = Characters.Instance.FilterAlignmentCharacters(allEvils, EAlignment.Evil);
+            Il2CppSystem.Collections.Generic.List<Character> say = new();
+            foreach (Character c in allEvils)
+            {
+                if (c.dataRef.startingAlignment == EAlignment.Evil)
+                {
+                    say.Add(c);
+                }
+            }
 
-            Character pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+            Character pickedEvil = say[UnityEngine.Random.Range(0, say.Count)];
 
-            while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = allEvils[UnityEngine.Random.Range(0, allEvils.Count)];
+            while (pickedEvil.dataRef.characterId == "Atheist_scm") pickedEvil = say[UnityEngine.Random.Range(0, say.Count)];
 
             int id = __instance.GetClosestEvilToEvil(pickedEvil, charRef);
             id = Calculator.RemoveNumberAndGetRandomNumberFromList(id, 0, 3);
@@ -512,5 +520,37 @@ public class ModifyBaseGame
             }
         }
         return false;
+    }
+    private static int getRulesCall;
+
+    [HarmonyPatch(typeof(Gameplay), "UpdateRules")]
+    public static class UpdateRulesPatch
+    {
+        public static void Prefix()
+        {
+            getRulesCall = 0;
+        }
+    }
+
+    [HarmonyPatch(typeof(Role), "GetRules")]
+    public static class GetRulesPatch
+    {
+        public static void Postfix(Role __instance, ref Il2CppSystem.Collections.Generic.List<SpecialRule> __result)
+        {
+            getRulesCall++;
+            if (__result == null)
+                __result = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
+
+            if (getRulesCall < 3)
+            {
+                var rules = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
+                rules.Add(new NightModeRule(4));
+                __result = rules;
+            }
+            else
+            {
+                __result = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
+            }
+        }
     }
 }

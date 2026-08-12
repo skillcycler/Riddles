@@ -16,12 +16,12 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class Summoner : Demon
 {
-    public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
+    /*public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
     {
         Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
         sr.Add(new NightModeRule(4));
         return sr;
-    }
+    }*/
     public CharacterData[] allDatas = Il2CppSystem.Array.Empty<CharacterData>();
     
     public override void Act(ETriggerPhase trigger, Character charRef)

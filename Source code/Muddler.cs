@@ -78,12 +78,12 @@ public static class Muddling
         }
     }
     [HarmonyPatch(typeof(Character), nameof(Character.ShowDescription))]
-    public static class ChangeKillByDemonText
+    public static class HideTrueDescription
     {
         [HarmonyPriority(Priority.Last)]
         public static void Postfix(Character __instance)
         {
-            if (__instance.statuses.Contains(hiddenStatus))
+            if (__instance.statuses.Contains(hiddenStatus) && !Characters.Instance.FilterAliveCharacters(Gameplay.CurrentCharacters).Contains(__instance))
             {
                 HintInfo info = new HintInfo();
                 info.text = "True Role's ability text is hidden.";

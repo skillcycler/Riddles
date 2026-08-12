@@ -14,12 +14,12 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class RainbowJoker : Demon
 {
-    public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
+    /*public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
     {
         Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
         sr.Add(new NightModeRule(4));
         return sr;
-    }
+    }*/
     public override string Description
     {
         get

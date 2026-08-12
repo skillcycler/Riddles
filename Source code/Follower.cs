@@ -15,12 +15,12 @@ namespace RiddlerMod;
 [RegisterTypeInIl2Cpp]
 public class Follower : Demon
 {
-    public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
+    /*public override Il2CppSystem.Collections.Generic.List<SpecialRule> GetRules()
     {
         Il2CppSystem.Collections.Generic.List<SpecialRule> sr = new Il2CppSystem.Collections.Generic.List<SpecialRule>();
         sr.Add(new NightModeRule(4));
         return sr;
-    }
+    }*/
     public int CheckRolePriority(Character character)
     {
         // General priority: High priority 8x-> Refresh at night 6x-> Mid priority 4x-> One time use unspent 3x-> Other priority 2x-> Normal priority -> Reduced priority (like corrupted) -> Deprioritized -> Never attack

@@ -373,29 +373,32 @@ public class Sphinx : Role
             // if none of the above, add 2 of these together
             Dictionary<int, string> sumthing = new();
             sumthing.Add(goods, "Good characters");
-            sumthing.Add(evils, "Evils");
-            sumthing.Add(villagers, "Villagers");
-            sumthing.Add(outcasts, "Outcasts");
-            sumthing.Add(minions, "Minions");
-            sumthing.Add(demons, "Demons");
-            sumthing.Add(liars, "Liars");
-            sumthing.Add(truthers, "Truthful characters");
-            sumthing.Add(disguised, "Disguised characters");
-            sumthing.Add(honest, "Non-Disguised characters");
-            sumthing.Add(corrupted, "Corrupted characters");
-            sumthing.Add(goodPairs, "pairs of Good characters");
-            sumthing.Add(evilPairs, "pairs of Evils");
-            sumthing.Add(villagerPairs, "pairs of Villagers");
-            sumthing.Add(honestPairs, "pairs of Non-Disguised characters");
-            sumthing.Add(disguisedPairs, "pairs of Disguised characters");
-            sumthing.Add(liarsPairs, "pairs of Liars");
-            sumthing.Add(truthersPairs, "pairs of Truthful characters");
+            sumthing.Add(evils + 1000, "Evils");
+            sumthing.Add(villagers + 2000, "Villagers");
+            sumthing.Add(outcasts + 3000, "Outcasts");
+            sumthing.Add(minions + 4000, "Minions");
+            sumthing.Add(demons + 5000, "Demons");
+            sumthing.Add(liars + 6000, "Liars");
+            sumthing.Add(truthers + 7000, "Truthful characters");
+            sumthing.Add(disguised + 8000, "Disguised characters");
+            sumthing.Add(honest + 9000, "Non-Disguised characters");
+            sumthing.Add(corrupted + 10000, "Corrupted characters");
+            sumthing.Add(goodPairs + 11000, "pairs of Good characters");
+            sumthing.Add(evilPairs + 12000, "pairs of Evils");
+            sumthing.Add(villagerPairs + 13000, "pairs of Villagers");
+            sumthing.Add(honestPairs + 14000, "pairs of Non-Disguised characters");
+            sumthing.Add(disguisedPairs + 15000, "pairs of Disguised characters");
+            sumthing.Add(liarsPairs + 16000, "pairs of Liars");
+            sumthing.Add(truthersPairs + 17000, "pairs of Truthful characters");
             foreach (var pair in sumthing)
             {
                 foreach (var pair2 in sumthing)
                 {
-                    if (pair.Value == pair2.Value) questions.Add($"What is 2x the number of {pair.Value}?");
-                    else questions.Add($"What is the number of {pair.Value} + {pair2.Value}?");
+                    if ((pair.Key + pair2.Key) % 1000 == id)
+                    {
+                        if (pair.Value == pair2.Value) questions.Add($"What is 2x the number of {pair.Value}?");
+                        else questions.Add($"What is the number of {pair.Value} + {pair2.Value}?");
+                    }
                 }
             }
         }

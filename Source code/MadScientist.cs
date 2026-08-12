@@ -330,7 +330,8 @@ public class MadScientist : Role
                     Confused.updateConfusion(charRef);
                 }
             } else if (fakeOutcast.characterId != "Ghost_scm" && fakeOutcast.characterId != "Prankster_scm")
-                fakeOutcast.role.Act(trigger, charRef);
+                if (!(fakeOutcast.picking && trigger == ETriggerPhase.Day))
+                    fakeOutcast.role.Act(trigger, charRef);
             fakeMinion.role.Act(trigger, charRef);
         }
     }

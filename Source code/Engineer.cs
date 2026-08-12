@@ -38,11 +38,11 @@ public class Engineer : Role
         int bottomEvils = 0;
         foreach (int evil in evils)
         {
-            if (evil <= Gameplay.CurrentCharacters.Count / 4 || evil >= Gameplay.CurrentCharacters.Count * 3 / 4)
+            if (evil <= Gameplay.CurrentCharacters.Count * 0.25f || evil >= Gameplay.CurrentCharacters.Count * 0.75f)
             {
                 topEvils++;
             }
-            if (evil >= Gameplay.CurrentCharacters.Count / 4 && evil <= Gameplay.CurrentCharacters.Count * 3 / 4)
+            if (evil >= Gameplay.CurrentCharacters.Count * 0.25f && evil <= Gameplay.CurrentCharacters.Count * 0.75f)
             {
                 bottomEvils++;
             }
@@ -68,11 +68,11 @@ public class Engineer : Role
         int bottomEvils = 0;
         foreach (int evil in evils)
         {
-            if (evil <= Gameplay.CurrentCharacters.Count / 4 || evil >= Gameplay.CurrentCharacters.Count * 3 / 4)
+            if (evil <= Gameplay.CurrentCharacters.Count * 0.25f || evil >= Gameplay.CurrentCharacters.Count * 0.75f)
             {
                 topEvils++;
             }
-            if (evil >= Gameplay.CurrentCharacters.Count / 4 && evil <= Gameplay.CurrentCharacters.Count * 3 / 4)
+            if (evil >= Gameplay.CurrentCharacters.Count * 0.25f && evil <= Gameplay.CurrentCharacters.Count * 0.75f)
             {
                 bottomEvils++;
             }

@@ -76,7 +76,7 @@ public class Commander : Role
             onActed?.Invoke(new ActedInfo(info, chars));
         } else
         {
-            string info = string.Format("Everyone is the same type as #{0} or #{1}, characters[0].id, characters[1].id");
+            string info = string.Format("Everyone is the same type as #{0} or #{1}", CharacterPicker.PickedCharacters[0].id, CharacterPicker.PickedCharacters[1].id);
             onActed?.Invoke(new ActedInfo(info, chars));
         }
     }

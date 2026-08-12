@@ -98,6 +98,7 @@ public class Djinn
                 invalidMinions.Add("Recruiter_scm");
                 invalidMinions.Add("Tracker_scm");
                 invalidMinions.Add("Surveyor_scm");
+                invalidMinions.Add("Trickster_scm");
                 invalidMinions.Add("Marksman_POW");
                 invalidMinions.Add("Executive_POW"); // some of the things this can become don't work without minions
                 invalidMinions.Add("Trapper_TST");
