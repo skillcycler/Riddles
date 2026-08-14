@@ -70,4 +70,8 @@ public class Damsel : Role
             }
         }
     }
+    public override int GetDamageToYou()
+    {
+        return 4;
+    }
 }

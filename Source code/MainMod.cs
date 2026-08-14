@@ -14,7 +14,7 @@ using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.13.8", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.14", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;
@@ -77,7 +77,7 @@ public class MainMod : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<Channeler>();
         ClassInjector.RegisterTypeInIl2Cpp<Sleeper>();
         ClassInjector.RegisterTypeInIl2Cpp<Guardian>();
-        ClassInjector.RegisterTypeInIl2Cpp<Mastermind>();
+        //ClassInjector.RegisterTypeInIl2Cpp<Mastermind>();
         ClassInjector.RegisterTypeInIl2Cpp<Baffler>();
         ClassInjector.RegisterTypeInIl2Cpp<Wizard>();
         ClassInjector.RegisterTypeInIl2Cpp<Slanderer>();
@@ -431,7 +431,7 @@ public class MainMod : MelonMod
 
         CharacterData Damsel = makeNewCharacter("Damsel", EAlignment.Good, ECharacterType.Outcast, false, true, "\"Pick me!\"");
         Damsel.role = new Damsel();
-        Damsel.description = "I Lie and Disguise. If an Evil picks me with an active ability, lose 5 HP.";
+        Damsel.description = "I Lie and Disguise. If an Evil picks me with an active ability, lose 5 HP. You only take 4 damage if I am Executed.";
 
         CharacterData BabyMinion = makeNewCharacter("BabyMinion", EAlignment.Evil, ECharacterType.Minion, false, true, "\"The youngest member of the Minion family.\"");
         BabyMinion.role = new BabyMinion();
@@ -460,9 +460,9 @@ public class MainMod : MelonMod
         Guardian.role = new Guardian();
         Guardian.description = "Adjacent non-Accused characters register as Good, as their Disguise, and as Honest.";
 
-        CharacterData Mastermind = makeNewCharacter("Mastermind", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It all comes back to me.\"");
+        /*CharacterData Mastermind = makeNewCharacter("Mastermind", EAlignment.Evil, ECharacterType.Minion, false, true, "\"It all comes back to me.\"");
         Mastermind.role = new Mastermind();
-        Mastermind.description = "Game Start: All Minions register as the Mastermind and appear as a Mastermind on death.\n\nI Lie and Disguise.";
+        Mastermind.description = "Game Start: All Minions register as the Mastermind and appear as a Mastermind on death.\n\nI Lie and Disguise.";*/
 
         CharacterData Baffler = makeNewCharacter("Baffler", EAlignment.Evil, ECharacterType.Minion, false, true, "\"Want to reliably know whether someone's lying? Well too bad. You're not getting it this time.\"");
         Baffler.role = new Baffler();
@@ -974,7 +974,7 @@ public class MainMod : MelonMod
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Lawyer);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Muddler);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Enigma);
-        Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind); // This must act after any minions.
+        //Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Mastermind); // This must act after any minions.
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Anchor);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Astronaut);
         Characters.Instance.startGameActOrder = InsertAtEndOfActOrder(Prankster);
@@ -1066,7 +1066,7 @@ public class MainMod : MelonMod
             AddRole(script.startingMinions, Channeler);
             AddRole(script.startingMinions, Sleeper);
             AddRole(script.startingMinions, Guardian);
-            AddRole(script.startingMinions, Mastermind);
+            //AddRole(script.startingMinions, Mastermind);
             AddRole(script.startingMinions, Baffler);
             AddRole(script.startingMinions, Slanderer);
             AddRole(script.startingMinions, Enigma);

@@ -72,14 +72,14 @@ public class Therapist : Role
     public override ActedInfo GetBluffInfo(Character charRef)
     {
         // 2 of the same alignment
-        int id1 = Calculator.RollDice(Gameplay.CurrentCharacters.Count);
-        int id2 = Calculator.RemoveNumberAndGetRandomNumberFromList(id1, 1, Gameplay.CurrentCharacters.Count);
-        while (Gameplay.CurrentCharacters[id1 - 1].GetRegisterAlignment() != Gameplay.CurrentCharacters[id2 - 1].GetRegisterAlignment())
+        Character ch1 = Gameplay.CurrentCharacters[UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count)];
+        Character ch2 = Gameplay.CurrentCharacters[UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count)];
+        while (ch1.id == ch2.id || ch1.GetRegisterAlignment() != ch2.GetRegisterAlignment())
         {
-            id1 = Calculator.RollDice(Gameplay.CurrentCharacters.Count);
-            id2 = Calculator.RemoveNumberAndGetRandomNumberFromList(id1, 1, Gameplay.CurrentCharacters.Count);
+            ch1 = Gameplay.CurrentCharacters[UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count)];
+            ch2 = Gameplay.CurrentCharacters[UnityEngine.Random.RandomRangeInt(0, Gameplay.CurrentCharacters.Count)];
         }
-        string info = string.Format("#{0} and #{1} are the most different from each other", id1, id2);
+        string info = string.Format("#{0} and #{1} are the most different from each other", ch1.id, ch2.id);
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
     }

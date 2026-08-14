@@ -136,7 +136,7 @@ public class Hypnotist : Minion
     {
         private static void Postfix(Confessor __instance, Character charRef, ref ActedInfo __result)
         {
-            if (charRef.statuses.Contains(Preacher.fakePreacher))
+            if (charRef.statuses.Contains(PreacherLies.fakePreacher))
             {
                 if (charRef.GetRegisterAlignment() == EAlignment.Evil || charRef.statuses.Contains(ECharacterStatus.Corrupted)) __result = new ActedInfo("I am Good");
                 else __result = new ActedInfo("I am dizzy");

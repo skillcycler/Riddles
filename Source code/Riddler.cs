@@ -83,6 +83,39 @@ public class Riddler : Role
         infos.Add("The top and bottom cards count towards both sides for the Architect.");
         infos.Add("Hint arrows for the Enlightened will show up even if next to a Rambler.");
         infos.Add("The Christmas Confessor skin can change to dizzy even if next to a Rambler.");
+
+        // modded
+        infos.Add("There is always a night cycle.");
+        infos.Add("The Accuser can Accuse Outcasts.");
+        infos.Add("The Hypnotist can disguise as the Alchemist.");
+        infos.Add("The Hypnotist can disguise as the Riddler.");
+        infos.Add("The Follower will make better kills than the Lilis.");
+        infos.Add("The Ghost's target is always Good.");
+        infos.Add("The Nurse can kill Evils.");
+        infos.Add("The Obsessor's mentioned role is always in play.");
+        infos.Add("The Atheist can apply Confusion to characters.");
+        infos.Add("The Kingmaker will always be next to 2 Minions.");
+        infos.Add("A lying Innkeeper will deal 1 damage to you.");
+        infos.Add("Tricksters come in groups of 3.");
+        infos.Add("The Wizard cannot duplicate the Squire.");
+        infos.Add("A lying Swapper will corrupt both of its choices.");
+        infos.Add("The Sphinx has more possible questions than my possible lines.");
+        infos.Add("A truthful Lawyer will make both adjacent characters truthful.");
+        infos.Add("This mod is compatible with Powerplay.");
+        infos.Add("This mod is compatible with Wingidon's Expansion Pack.");
+        infos.Add("This mod is compatible with Dupery Bluff.");
+        infos.Add("The Enigma can add fake Demons to the deck.");
+        infos.Add("The Hitman can kill Evils.");
+        infos.Add("The Captivator can disguise as the Empress.");
+        infos.Add("The Captivator can disguise as the Bishop.");
+        infos.Add("The Reflector can sometimes tell the truth.");
+        infos.Add("Having multiple Sleepers will shorten the night cycle by more than 1 tick.");
+        infos.Add("Executing a Damsel deals more damage than executing a Reflector.");
+        infos.Add("The Mystifier acts on Game Start and every night.");
+        infos.Add("The Kingmaker adds Minions to the deck list.");
+        infos.Add("The Hitman can kill the Knight.");
+        infos.Add("The Gambler can apply the Erased status.");
+
         string info = infos[UnityEngine.Random.RandomRangeInt(0, infos.Count)];
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;
@@ -157,6 +190,39 @@ public class Riddler : Role
 
         // misc
         infos.Add("Endless Mode unlocks at Ascension 4.");
+
+        // modded
+        infos.Add("The Accuser can only target Good Villagers.");
+        infos.Add("The Crewmate thinks the Poisoner is Suspicious.");
+        infos.Add("The Channeler can copy the Werewolf's ability.");
+        infos.Add("The Hypnotist can disguise as the Knitter.");
+        infos.Add("The Hypnotist can disguise as the Bard.");
+        infos.Add("The Escapist can turn the Bombardier Evil.");
+        infos.Add("The Gambler can Accuse Evils.");
+        infos.Add("The Necromancer can revive Evils.");
+        infos.Add("The Necromancer can revive the Ghost.");
+        infos.Add("The Sharpshooter can mention out of play roles.");
+        infos.Add("The Wizard can duplicate the Squire.");
+        infos.Add("The Rambler has more possible lines than I do.");
+        infos.Add("A lying Lawyer will corrupt both adjacent characters.");
+        infos.Add("Veil will always block 3 cards from being revealed.");
+        infos.Add("The Enigma can add fake undisguised Outcasts to the deck.");
+        infos.Add("The Squire's check if it can die is fooled by misregistration.");
+        infos.Add("The Mad Scientist can copy every Outcast and Minion ability.");
+        infos.Add("A lying Motivator will refresh adjacent liars.");
+        infos.Add("A lying Therapist can point to 2 characters of different alignments.");
+        infos.Add("The Nurse can cure the Erased status from characters.");
+        infos.Add("The Guardian always sits next to an Evil.");
+        infos.Add("The Psychic is fooled by misregistration.");
+        infos.Add("The Guarded status is visible after a character dies.");
+        infos.Add("The Pit Hag can turn Minions into Evil Outcasts.");
+        infos.Add("The Pit Hag can turn Outcasts into other Outcasts.");
+        infos.Add("The Summoner adds summoned Demons to the deck list.");
+        infos.Add("The Rainbow Joker adds Minions and Outcasts to the deck list.");
+        infos.Add("The Cowboy will point to the Demon before any Minions.");
+        infos.Add("A truthful Sphinx can point to the Good Bombardier.");
+        infos.Add("The Baby Minion can show up without any other mods installed.");
+        infos.Add("Executing the Squire will deal damage if it doesn't die.");
         string info = infos[UnityEngine.Random.RandomRangeInt(0, infos.Count)];
         ActedInfo actedInfo = new ActedInfo(info);
         return actedInfo;

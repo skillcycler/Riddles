@@ -96,7 +96,7 @@ public static class BigBrain
                 {
                     if (character.characterId == "Mastermind_scm")
                     {
-                        __instance.Init(mastermindData);
+                        __instance.InitWithNoReset(mastermindData);
                     }
                 }
             }

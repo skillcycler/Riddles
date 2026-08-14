@@ -22,7 +22,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - There are more keywords that can be hovered over
 
 ## Villagers
-- Riddler: Gives you a fun fact about the game. 
+- Riddler: Gives you a fun fact about the game or this mod. 
 - Swapper: Swaps the disguises of two cards. Corrupts chosen characters if lying.
 - Mathematician: Tells you the sum of two evil characters' positions.
 - Commander: Pick 2 cards. Tells you a character with a different character type than those 2 cards.
@@ -75,7 +75,7 @@ Any other mod is not guaranteed to work well with some of the characters in this
 - Hypnotist: Always disguises and says something that would otherwise never be a lie.
 - Channeler: Copies the ability of another Evil.
 - Sleeper: The night cycle is 1 tick shorter.
-- Mastermind: All minions register and appear as Masterminds.
+- Mastermind: All minions register and appear as Masterminds. (Temporarily disabled)
 - Guardian: Adjacent characters register as Good, Honest, & their Disguise.
 - Baffler: One adjacent Villager is Confused. Confused characters have a 50% chance to Lie.
 - Wizard: There are two of the same Outcast or Minion in play.

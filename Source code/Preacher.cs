@@ -10,6 +10,7 @@ using Il2CppSystem.Reflection;
 using MelonLoader;
 using UnityEngine;
 using UnityEngine.Playables;
+using HarmonyLib;
 
 namespace RiddlerMod;
 
@@ -72,7 +73,6 @@ public class Preacher : Role
         onActed?.Invoke(new ActedInfo(inf, chars));
     }
 
-    public static ECharacterStatus fakePreacher = (ECharacterStatus)910;
     private void CharacterPickedLiar()
     {
 
@@ -85,8 +85,8 @@ public class Preacher : Role
         {
             return;
         }
-        c.statuses.AddStatus(fakePreacher, charRef);
         c.GiveBluff(ProjectContext.Instance.gameData.GetCharacterDataOfId("Confessor_18741708"));
+        c.statuses.AddStatus(PreacherLies.fakePreacher, charRef);
         c.RevealBluff();
         c.RefreshCharacter();
         c.Act(ETriggerPhase.Day);
@@ -112,5 +112,25 @@ public class Preacher : Role
         action1 = new System.Action(CharacterPicked);
         action2 = new System.Action(StopPick);
         action3 = new System.Action(CharacterPickedLiar);
+    }
+}
+
+public static class PreacherLies
+{
+    public static ECharacterStatus fakePreacher = (ECharacterStatus)910;
+    [HarmonyPatch(typeof(Confessor), nameof(Confessor.GetBluffInfo))]
+    private static class LyingConfessor
+    {
+        private static void Postfix(Confessor __instance, Character charRef, ref ActedInfo __result)
+        {
+            if (charRef.statuses.Contains(PreacherLies.fakePreacher))
+            {
+                if (charRef.GetRegisterAlignment() == EAlignment.Evil || charRef.statuses.Contains(ECharacterStatus.Corrupted)) __result = new ActedInfo("I am Good");
+                else __result = new ActedInfo("I am dizzy");
+            }
+            if (charRef.dataRef.characterId != "Hypnotist_scm") return;
+            string info = "I am Good";
+            __result = new ActedInfo(info);
+        }
     }
 }

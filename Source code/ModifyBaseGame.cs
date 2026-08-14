@@ -553,4 +553,16 @@ public class ModifyBaseGame
             }
         }
     }
+    [HarmonyPatch(typeof(Gameplay), nameof(Gameplay.UpdateCharacters))]
+    public static class LogCharacters
+    {
+        public static void Postfix(Gameplay __instance)
+        {
+            MelonLogger.Msg("Debug: Logging all characters");
+            foreach (Character c in MainMod.GetGameplayCurrentCharacters())
+            {
+                MelonLogger.Msg($"#{c.id} is the {c.dataRef.characterName}");
+            }
+        }
+    }
 }
