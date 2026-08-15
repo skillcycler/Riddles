@@ -53,7 +53,7 @@ public class PitHag : Minion
                 }
             }
         }
-        if (trigger == ETriggerPhase.Night)
+        if (trigger == ETriggerPhase.Night && charRef.state != ECharacterState.Dead)
         {
             Il2CppSystem.Collections.Generic.List<Character> villagers = MainMod.GetGameplayCurrentCharacters();
             villagers = Characters.Instance.FilterRealCharacterType(villagers, ECharacterType.Villager);

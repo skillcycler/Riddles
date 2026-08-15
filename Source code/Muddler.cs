@@ -59,7 +59,7 @@ public static class Muddling
             {
                 if (__instance.bluff) __instance.chName.text = __instance.bluff.name.ToUpper();
                 else __instance.chName.text = __instance.dataRef.name.ToUpper();
-                MelonLogger.Msg($"Muddled: #{__instance.id} is the {__instance.dataRef.characterName}");
+                //MelonLogger.Msg($"Muddled: #{__instance.id} is the {__instance.dataRef.characterName}");
             }
         }
     }

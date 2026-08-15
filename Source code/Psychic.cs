@@ -37,11 +37,11 @@ public class Psychic : Role
                 if (character.dataRef.characterId == c.characterId)
                     inPlay = true;
             }
-            if (!inPlay && c.name != "Psychic")
+            if (!inPlay && c.characterName != "Psychic")
             {
                 outOfPlay.Add(c);
             }
-            else if (c.name != "Psychic")
+            else if (c.characterName != "Psychic")
             {
                 inPlayChars.Add(c);
             }
@@ -71,11 +71,11 @@ public class Psychic : Role
                 if (character.dataRef.characterId == c.characterId)
                     inPlay = true;
             }
-            if (!inPlay && c.name != "Psychic")
+            if (!inPlay && c.characterName != "Psychic")
             {
                 outOfPlay.Add(c);
             }
-            else if (c.name != "Psychic")
+            else if (c.characterName != "Psychic")
             {
                 inPlayChars.Add(c);
             }

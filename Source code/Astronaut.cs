@@ -49,15 +49,13 @@ public class Astronaut : Role
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
-        if (trigger == ETriggerPhase.Start)
-        {
-            characters.Add(UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count+1));
-        }
         if (trigger == BluffsActivationAtNight.NightAct)
         {
             if (charRef.state == ECharacterState.Dead) return;
             Il2CppSystem.Collections.Generic.List<Character> ch = Gameplay.CurrentCharacters;
-            if (characters.Count == 0) characters.Add(UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1));
+            int first = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
+            while (first == charRef.id) first = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
+            if (characters.Count == 0) characters.Add(first);
             int last = characters.Last();
             Il2CppSystem.Collections.Generic.List<Character> valid = new();
             bool evil = false;
@@ -67,6 +65,7 @@ public class Astronaut : Role
             }
             foreach (Character c in ch)
             {
+                if (c.id == charRef.id) continue;
                 if (!evil && c.GetRegisterAlignment() == EAlignment.Evil)
                 {
                     valid.Add(c);
@@ -94,7 +93,9 @@ public class Astronaut : Role
             if (charRef.state == ECharacterState.Dead) return;
             Il2CppSystem.Collections.Generic.List<Character> ch = Gameplay.CurrentCharacters;
             if (characters == null) characters = new List<int>();
-            if (characters.Count == 0) characters.Add(UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1));
+            int first = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
+            while (first == charRef.id) first = UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1);
+            if (characters.Count == 0) characters.Add(first);
             int last = characters.Last();
             Il2CppSystem.Collections.Generic.List<Character> valid = new();
             bool evil = false;
@@ -104,6 +105,7 @@ public class Astronaut : Role
             }
             foreach (Character c in ch)
             {
+                if (c.id == charRef.id) continue;
                 if (evil && c.GetRegisterAlignment() == EAlignment.Evil)
                 {
                     valid.Add(c);

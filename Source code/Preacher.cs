@@ -66,6 +66,7 @@ public class Preacher : Role
             return;
         }
         c.GiveBluff(ProjectContext.Instance.gameData.GetCharacterDataOfId("Confessor_18741708"));
+        c.statuses.AddStatus(ECharacterStatus.AppearTruthfull, charRef);
         c.RevealBluff();
         c.RefreshCharacter();
         c.Act(ETriggerPhase.Day);

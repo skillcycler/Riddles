@@ -163,7 +163,6 @@ public class MadScientist : Role
             whitelistMinionCharacterIDs.Add("WING_Dupery_Barkeep");
             whitelistMinionCharacterIDs.Add("WING_Dupery_Serial Killer");
             whitelistMinionCharacterIDs.Add("WING_Dupery_Landlord");
-            whitelistMinionCharacterIDs.Add("WING_Dupery_Sniper");
 
 
             for (int i = 0; i < minions.Count; i++)

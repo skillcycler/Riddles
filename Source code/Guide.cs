@@ -49,10 +49,6 @@ public class Guide : Role
 
     public override void Act(ETriggerPhase trigger, Character charRef)
     {
-        if (trigger == ETriggerPhase.Start)
-        {
-            characters.Add(UnityEngine.Random.RandomRangeInt(1, Gameplay.CurrentCharacters.Count + 1));
-        }
         if (trigger == BluffsActivationAtNight.NightAct)
         {
             if (charRef.state == ECharacterState.Dead) return;

@@ -132,13 +132,13 @@ public class Nurse : Role
             }
             else
             {
+                c.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
                 if (c.bluff)
                 {
                     if (c.bluff.picking)
                     {
                         c.pickableUses = 1;
                         c.pickable.SetActive(true);
-                        c.statuses.AddStatus(ECharacterStatus.HealthyBluff, charRef);
                     }
                 }
                 else

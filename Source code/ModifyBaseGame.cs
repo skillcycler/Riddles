@@ -167,6 +167,22 @@ public class ModifyBaseGame
             return false;
         }
     }
+    // Fix a bug where Channeler kills the same character that Lilis kills
+    [HarmonyPatch(typeof(Demon), nameof(Demon.KillHidden))]
+    public class FixChannelerLilis
+    {
+        public static bool Prefix(Character demonRef)
+        {
+            Il2CppSystem.Collections.Generic.List<Character> possibleCharacters = Characters.Instance.FilterAliveCharacters(Gameplay.CurrentCharacters);
+            possibleCharacters = Characters.Instance.FilterAlignmentCharacters(possibleCharacters, EAlignment.Good);
+            possibleCharacters = Characters.Instance.FilterHiddenCharacters(possibleCharacters);
+            possibleCharacters = Characters.Instance.FilterCharacterMissingStatus(possibleCharacters, ECharacterStatus.UnkillableByDemon);
+            Character pick = Characters.Instance.GetRandomAliveCharacter(possibleCharacters);
+            pick.statuses.AddStatus(AvoidingDoubleKills.killed, demonRef);
+            pick.KillByDemon(demonRef);
+            return false;
+        }
+    }
     // messing with the disguise functions to give more bluff variety
     [HarmonyPatch(typeof(Characters), nameof(Characters.PickRoundBluffs))]
     public class MoreBluffVariety
@@ -563,6 +579,7 @@ public class ModifyBaseGame
             {
                 MelonLogger.Msg($"#{c.id} is the {c.dataRef.characterName}");
             }
+            MainMod.Instance.shortenNight = 0;
         }
     }
 }
