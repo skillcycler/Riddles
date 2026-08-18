@@ -83,8 +83,10 @@ public class Djinn
                 break;
             case "Atheist":
                 invalidMinions.Add("Swarm_Good_WING"); // from a bug report
+                invalidMinions.Add("Baron_04539999"); // from a bug report
                 invalidMinions.Add("Supporter_POW"); // Free win
                 invalidMinions.Add("Mezepheles_09511163"); // I had a village where there was an evil Atheist and an evil Puppet.
+                invalidMinions.Add("Advisor_POW"); // from a bug report
                 break;
             case "Veil":
                 invalidMinions.Add("Sunny_POW");

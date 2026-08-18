@@ -96,6 +96,8 @@ public class Hypnotist : Minion
         }
         whitelistCharacterIDs.Add("Underling_V_WING"); // will always say "I am Good" if disguised as this
         whitelistCharacterIDs.Add("Monarch_POW");
+        whitelistCharacterIDs.Add("Royal Knight_POW");
+        whitelistCharacterIDs.Add("Huntress_POW");
         whitelistCharacterIDs.Add("WING_Dupery_Priest");
         foreach (Character c in Gameplay.CurrentCharacters)
         {

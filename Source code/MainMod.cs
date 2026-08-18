@@ -14,7 +14,7 @@ using MelonLoader.Utils;
 using RiddlerMod;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.14.1", "Skill Cycler")]
+[assembly: MelonInfo(typeof(MainMod), "Skill Cycler's Riddles", "1.14.2", "Skill Cycler")]
 [assembly: MelonGame("UmiArt", "Demon Bluff")]
 
 namespace RiddlerMod;

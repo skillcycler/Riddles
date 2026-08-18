@@ -50,13 +50,6 @@ public class Kingmaker : Demon
                 }
                 notInPlayMinions.Remove(picked);
             }
-            foreach (Character ch in Gameplay.CurrentCharacters)
-            {
-                if (ch.dataRef.characterId == "Marionette_WING")
-                {
-                    ch.ChangeAlignment(EAlignment.Evil);
-                }
-            }
         }
         if (trigger == ETriggerPhase.AfterRoundStart)
         {

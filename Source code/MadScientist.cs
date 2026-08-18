@@ -151,17 +151,14 @@ public class MadScientist : Role
             whitelistOutcastCharacterIDs.Add("Moonchild_LRZH");
 
             // Powerplay - Not everything that "works" will be added, for balance.
-            whitelistMinionCharacterIDs.Add("Supporter_POW");
             whitelistMinionCharacterIDs.Add("Manipulator_POW");
             whitelistMinionCharacterIDs.Add("Wildling_POW");
             whitelistOutcastCharacterIDs.Add("Industrialist_POW");
 
             // Dupery Bluff - only adding the ones that aren't clones of existing characters
-            whitelistOutcastCharacterIDs.Add("WING_Dupery_Surgeon");
             whitelistOutcastCharacterIDs.Add("WING_Dupery_Bounty Hunter");
             whitelistOutcastCharacterIDs.Add("WING_Dupery_Belfry");
             whitelistMinionCharacterIDs.Add("WING_Dupery_Barkeep");
-            whitelistMinionCharacterIDs.Add("WING_Dupery_Serial Killer");
             whitelistMinionCharacterIDs.Add("WING_Dupery_Landlord");
 
 
