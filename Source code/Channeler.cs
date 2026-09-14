@@ -97,6 +97,7 @@ public class Channeler : Minion
             whitelistIDs.Add("WING_Dupery_Idol");
             whitelistIDs.Add("WING_Dupery_Kingpin");
             whitelistIDs.Add("WING_Dupery_Hitman");
+            whitelistIDs.Add("WING_Dupery_Spectre");
 
 
             foreach (Character character in characters) {

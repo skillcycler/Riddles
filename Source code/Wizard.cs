@@ -39,15 +39,12 @@ public class Wizard : Minion
         List<string> banned = Djinn.GetCharactersThatCannotDie();
         // Stuff that moves around... isn't the best to duplicate
         banned.Add("Marionette_WING");
-        //banned.Add("Guardian_scm"); should no longer be a problem
-        //banned.Add("MadScientist_scm");
+        banned.Add("Flutist_POW");
         // The following are very unbalanced with multiple of them in play (mainly just the ones that do damage)
         banned.Add("Ritualist_WING");
         banned.Add("Snake Charmer_WING");
         banned.Add("Grenadier_POW");
         banned.Add("Balancer_POW");
-        // Broken if 2 of these are in play
-        //banned.Add("Supporter_POW"); got fixed apparently
         foreach (Character character in characters)
         {
             if (character.dataRef.type == ECharacterType.Outcast || character.dataRef.type == ECharacterType.Minion)

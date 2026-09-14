@@ -111,7 +111,7 @@ public static class Escaped // or rather, just literally any evil-turned thing
     public static ECharacterStatus evilTurned = (ECharacterStatus)880;
     public static ECharacterStatus EscapistTarget = (ECharacterStatus)912;
 
-    [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealStatusesIfAble))]
     public static class pvt
     {
         public static void Postfix(Character __instance)

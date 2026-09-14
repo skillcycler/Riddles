@@ -72,7 +72,7 @@ public static class Broken
 {
     public static ECharacterStatus erased = (ECharacterStatus)911;
 
-    [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealStatusesIfAble))]
     public static class pvt
     {
         public static void Postfix(Character __instance)

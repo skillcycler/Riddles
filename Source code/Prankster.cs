@@ -108,7 +108,7 @@ public static class SwappedAlignment
 {
     public static ECharacterStatus turnedGood = (ECharacterStatus)906;
     public static ECharacterStatus turnedEvil = (ECharacterStatus)907;
-    [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealStatusesIfAble))]
     public static class pvt
     {
         public static void Postfix(Character __instance)

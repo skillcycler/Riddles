@@ -70,7 +70,7 @@ public static class Confused
 {
     public static ECharacterStatus confused = (ECharacterStatus)881;
 
-    [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealStatusesIfAble))]
     public static class pvt
     {
         public static void Postfix(Character __instance)

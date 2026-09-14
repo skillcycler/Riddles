@@ -6,7 +6,7 @@ The following mods should be compatible with this mod.
 - Wingidon's Expansion Pack
 - The Salem Trials
 - Powerplay
-- Dupery Bluff
+- Dupery Bluff v1.4.1
 
 Any other mod is not guaranteed to work well with some of the characters in this mod. In particular, Better Lies (also by me) isn't compatible with this mod.
 

@@ -101,7 +101,7 @@ public static class Accused
         }
     }
 
-    [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealStatusesIfAble))]
     public static class pvt
     {
         public static void Postfix(Character __instance)

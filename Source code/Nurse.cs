@@ -93,6 +93,7 @@ public class Nurse : Role
         curable.Add((ECharacterStatus)291); // Roleblocked
         // Dupery Bluff
         curable.Add((ECharacterStatus)1853152120); // Recruited
+        curable.Add((ECharacterStatus)1521932118); // Obscured
 
         bool sick = false;
         string add = "";

@@ -250,7 +250,7 @@ public class TricksterRegister
     public static ECharacterStatus Outcast = (ECharacterStatus)902;
     public static ECharacterStatus Minion = (ECharacterStatus)903;
     public static ECharacterStatus NotBugged = (ECharacterStatus)904;
-    [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealStatusesIfAble))]
     public static class pvt
     {
         public static void Postfix(Character __instance)

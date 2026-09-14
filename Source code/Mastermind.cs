@@ -83,7 +83,7 @@ public static class BigBrain
             }
         }
     }
-    [HarmonyPatch(typeof(Character), nameof(Character.RevealAllReal))]
+    [HarmonyPatch(typeof(Character), nameof(Character.RevealStatusesIfAble))]
     public static class pvt2
     {
         public static bool Prefix(Character __instance)
